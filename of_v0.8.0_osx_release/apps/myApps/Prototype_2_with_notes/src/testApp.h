@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Note.h"
+#include "Object.h"
 
 #define numNotes 15
 
@@ -28,5 +28,5 @@ class testApp : public ofBaseApp{
     void staffPosSet();
     
     // Store all the notes.
-    vector< Note > noteList;
+    vector< Object > objectList;
 };

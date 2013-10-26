@@ -28,9 +28,9 @@ void testApp::setup(){
 void testApp::update(){
     
     // Update the notes.
-    if ( noteList.size() != 0 ) {
-        for ( int i = 0; i < noteList.size(); i++ ) {
-            noteList[ i ].update();
+    if ( objectList.size() != 0 ) {
+        for ( int i = 0; i < objectList.size(); i++ ) {
+            objectList[ i ].update();
         }
     }
 }
@@ -50,9 +50,9 @@ void testApp::draw(){
     
     
     // Draw the notes.
-    if ( noteList.size() != 0 ) {
-        for ( int i = 0; i < noteList.size(); i++ ) {
-            noteList[ i ].draw();
+    if ( objectList.size() != 0 ) {
+        for ( int i = 0; i < objectList.size(); i++ ) {
+            objectList[ i ].draw();
         }
     }
     
@@ -91,10 +91,10 @@ void testApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
     
-    Note tmp;
+    Object tmp;
     int i = int( ofRandom( 0, numNotes - 1 ));
     tmp.setup( i, staffPosList[ i ] );
-    noteList.push_back( tmp );
+    objectList.push_back( tmp );
 }
 
 //--------------------------------------------------------------

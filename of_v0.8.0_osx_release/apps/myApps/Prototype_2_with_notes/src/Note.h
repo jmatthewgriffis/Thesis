@@ -1,27 +1,26 @@
 //
 //  Note.h
-//  Prototype_1_Killer_Riff
+//  Prototype_2_with_notes
 //
-//  Created by J. Matthew Griffis on 10/2/13.
+//  Created by J. Matthew Griffis on 10/26/13.
 //
 //
 
 #pragma once
+
 #include "ofMain.h"
+
+#define NUMNOTES 8
 
 class Note {
 public:
-    Note();
+    // Notes are simply sounds, carried by Objects. They are not drawn, themselves, but only come into and out of being with their Objects, changing pitch as the Objects change yPos and changing volume in relation to the player's pos.
     
-    void setup( int _whichNote, float y );
-    void update();
-    void draw();
+    Note( int _whichNote = -1 );
     
-    int whichNote;
+    void update( int _whichNote, float _vol );
     
-    ofVec2f pos;
-    float vel;
-    float tall;
-    float wide;
-    float guideLineLength;
+    ofSoundPlayer sound;
+    
+    vector < string > loadList;
 };

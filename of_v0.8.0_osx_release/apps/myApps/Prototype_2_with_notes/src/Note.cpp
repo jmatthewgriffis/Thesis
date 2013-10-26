@@ -1,56 +1,33 @@
 //
 //  Note.cpp
-//  Prototype_1_Killer_Riff
+//  Prototype_2_with_notes
 //
-//  Created by J. Matthew Griffis on 10/2/13.
+//  Created by J. Matthew Griffis on 10/26/13.
 //
 //
 
 #include "Note.h"
 
-Note::Note() {
+Note::Note( int _whichNote ) {
     
-    vel = -5;
-    tall = ( ofGetHeight() / 8.0 ) - 20;
-    wide = tall * 1.5;
-    guideLineLength = wide * 0.75;
-}
-
-void Note::setup( int _whichNote, float y ) {
-    
-    whichNote = _whichNote;
-    pos.y = y;
-    
-    pos.x = ofGetWidth();
-}
-
-void Note::update() {
-    
-    // Move!
-    pos.x += vel;
-    
-    // Pac-Man to the other side when off-screen.
-    if ( pos.x < 0 ) {
-        pos.x = ofGetWidth();
-    } else if ( pos.x > ofGetWidth() ) {
-        pos.x = 0;
+    // Store the paths to each note in a vector so the Note instance can access them and update as needed.
+    for ( int i = 0; i < NUMNOTES-1; i++) {
+        
+        string loadLocation;
+        
+        if (i == 0) loadLocation = "notes/middleC.mp3";
+        else if (i == 1) loadLocation = "notes/d.mp3";
+        else if (i == 2) loadLocation = "notes/e.mp3";
+        else if (i == 3) loadLocation = "notes/f.mp3";
+        else if (i == 4) loadLocation = "notes/g.mp3";
+        else if (i == 5) loadLocation = "notes/a.mp3";
+        else if (i == 6) loadLocation = "notes/b.mp3";
+        else if (i == 7) loadLocation = "notes/highC.mp3";
+        
+        loadList.push_back( loadLocation );
     }
 }
 
-void Note::draw() {
+void Note::update( int _whichNote, float _vol ) {
     
-    ofSetColor( 0 );
-    ofEllipse( pos, wide, tall);
-    /*
-    // Make it a whole note.
-    ofSetColor( 255 );
-    ofCircle( pos, tall/2 );
-     */
-    
-    // Draw guidelines as needed to indicate A above the staff and C below.
-    if ( whichNote < 2 ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ), pos.x + guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ) );
-    } else if ( whichNote > 12 ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() / 8.0, pos.x + guideLineLength, ofGetHeight() / 8.0 );
-    }
 }
