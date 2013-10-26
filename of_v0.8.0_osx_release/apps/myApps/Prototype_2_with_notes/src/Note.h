@@ -20,6 +20,8 @@ public:
     
     void update( int _whichNote, float _vol );
     
+    void storePaths();
+    
     ofSoundPlayer sound;
     
     vector < string > loadList;

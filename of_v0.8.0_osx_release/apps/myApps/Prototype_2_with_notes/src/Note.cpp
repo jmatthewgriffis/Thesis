@@ -10,6 +10,25 @@
 
 Note::Note( int _whichNote ) {
     
+    // Maintenance
+    loadList.clear();
+    storePaths();
+    
+    // Load the appropriate sound on creation.
+    sound.loadSound( loadList[ _whichNote ] );
+    // Initial volume of zero.
+    sound.setVolume(1.0f);
+    // Loop it and play it.
+    sound.setLoop(true);
+    sound.play();
+}
+
+void Note::update( int _whichNote, float _vol ) {
+    
+}
+
+void Note::storePaths() {
+    
     // Store the paths to each note in a vector so the Note instance can access them and update as needed.
     for ( int i = 0; i < NUMNOTES-1; i++) {
         
@@ -26,8 +45,4 @@ Note::Note( int _whichNote ) {
         
         loadList.push_back( loadLocation );
     }
-}
-
-void Note::update( int _whichNote, float _vol ) {
-    
 }

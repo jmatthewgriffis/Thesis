@@ -21,6 +21,8 @@ public:
     
     int whichNote;
     
+    void addNote();
+    
     ofVec2f pos;
     float vel;
     float tall;
