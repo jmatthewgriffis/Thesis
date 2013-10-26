@@ -23,9 +23,11 @@ void Object::setup( int _whichNote, float y ) {
     
     pos.x = ofGetWidth();
     
-    if ( whichNote < NUMNOTES - 1 ) {
-        Note myNote( whichNote );
-    }
+    myNote.setup( _whichNote );
+    
+//    if ( whichNote < NUMNOTES - 1 ) {
+//        Note myNote( whichNote );
+//    }
 }
 
 void Object::update() {

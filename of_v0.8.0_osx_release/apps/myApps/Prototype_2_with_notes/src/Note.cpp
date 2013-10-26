@@ -8,11 +8,14 @@
 
 #include "Note.h"
 
-Note::Note( int _whichNote ) {
+Note::Note() {
     
     // Maintenance
     loadList.clear();
     storePaths();
+}
+
+void Note::setup( int _whichNote ) {
     
     // Load the appropriate sound on creation.
     sound.loadSound( loadList[ _whichNote ] );

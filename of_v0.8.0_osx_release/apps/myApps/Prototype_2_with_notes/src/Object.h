@@ -28,4 +28,6 @@ public:
     float tall;
     float wide;
     float guideLineLength;
+    
+    Note myNote;
 };

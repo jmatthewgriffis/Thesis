@@ -3,6 +3,9 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     
+    // Support r-restart:
+    cleanup();
+    
     // Maintenance
     ofSetVerticalSync( true );
     ofSetFrameRate( 60 );
@@ -38,6 +41,10 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
+    /*if ( objectList.size() != 0 ) {
+     cout<<objectList[0].myNote.loadList[3]<<endl;
+     }*/
+    
     // Draw the staff, should be its own class.
     ofSetColor( 0 );
     //    ofLine( 0, ( ofGetHeight() / 8.0 ) * 1.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 1.0 ); // A above the staff.
@@ -59,6 +66,27 @@ void testApp::draw(){
 }
 
 //--------------------------------------------------------------
+void testApp::exit() {
+    
+    cleanup();
+}
+
+//--------------------------------------------------------------
+void testApp::cleanup() {
+    
+    // Run this function when exiting or restarting the app, just to be safe.
+    
+    // Stop any music playing.
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        
+        objectList[ i ].myNote.sound.stop();
+    }
+    
+    // Clear the vector.
+    objectList.clear();
+}
+
+//--------------------------------------------------------------
 void testApp::staffPosSet() {
     
     // Define the y-pos of each musical note and store it in the vector, starting from the bottom.
@@ -71,6 +99,13 @@ void testApp::staffPosSet() {
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
     
+    switch ( key ) {
+            // Reset
+        case 'r':
+        case 'R':
+            setup();
+            break;
+    }
 }
 
 //--------------------------------------------------------------
@@ -92,7 +127,8 @@ void testApp::mouseDragged(int x, int y, int button){
 void testApp::mousePressed(int x, int y, int button){
     
     Object tmp;
-    int i = int( ofRandom( 0, numNotes - 1 ));
+    //    int i = int( ofRandom( 0, numNotes - 1 ));
+    int i = 3;
     tmp.setup( i, staffPosList[ i ] );
     objectList.push_back( tmp );
 }
