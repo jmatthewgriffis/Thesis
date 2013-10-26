@@ -1,3 +1,9 @@
+# stuff I added
+
+*.mp3
+
+#------------------------------------
+# boilerplate
 
 # OF-specific ignore patterns
 
@@ -85,7 +91,3 @@ Desktop.ini
 
 # Miscellaneous
 .mailmap
-
-of_v0.8.0_osx_release/algo2013/
-
-of_v0.8.0_osx_release/addons/ofxUI/
