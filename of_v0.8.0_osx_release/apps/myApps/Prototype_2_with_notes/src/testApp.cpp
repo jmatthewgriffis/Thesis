@@ -127,8 +127,7 @@ void testApp::mouseDragged(int x, int y, int button){
 void testApp::mousePressed(int x, int y, int button){
     
     Object tmp;
-    //    int i = int( ofRandom( 0, numNotes - 1 ));
-    int i = 3;
+    int i = int( ofRandom( 0, NUMNOTES - 1 ));
     tmp.setup( i, staffPosList[ i ] );
     objectList.push_back( tmp );
 }
