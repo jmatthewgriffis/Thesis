@@ -10,6 +10,7 @@
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		CDC60D79181C76B500A26838 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D77181C76B500A26838 /* Object.cpp */; };
 		CDC60D7C181C77B900A26838 /* Note.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D7A181C77B800A26838 /* Note.cpp */; };
+		CDC60D80181C929B00A26838 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D7E181C929B00A26838 /* Player.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -67,6 +68,8 @@
 		CDC60D78181C76B500A26838 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		CDC60D7A181C77B800A26838 /* Note.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Note.cpp; sourceTree = "<group>"; };
 		CDC60D7B181C77B900A26838 /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
+		CDC60D7E181C929B00A26838 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		CDC60D7F181C929B00A26838 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -197,6 +200,8 @@
 				CDC60D78181C76B500A26838 /* Object.h */,
 				CDC60D7A181C77B800A26838 /* Note.cpp */,
 				CDC60D7B181C77B900A26838 /* Note.h */,
+				CDC60D7E181C929B00A26838 /* Player.cpp */,
+				CDC60D7F181C929B00A26838 /* Player.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -301,6 +306,7 @@
 				CDC60D79181C76B500A26838 /* Object.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				CDC60D7C181C77B900A26838 /* Note.cpp in Sources */,
+				CDC60D80181C929B00A26838 /* Player.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

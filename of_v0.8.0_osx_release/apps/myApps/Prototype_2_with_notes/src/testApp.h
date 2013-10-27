@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "Object.h"
+#include "Note.h"
+#include "Player.h"
 
 #define numNotes 15
 
@@ -31,6 +33,8 @@ public:
     vector< float > staffPosList;
     // Use a function to define all of them.
     void staffPosSet();
+    
+    Player myPlayer;
     
     // Store all the notes.
     vector< Object > objectList;

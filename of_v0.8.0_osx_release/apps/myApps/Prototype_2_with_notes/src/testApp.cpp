@@ -25,6 +25,8 @@ void testApp::setup(){
      noteList.push_back( tmp );
      }
      */
+    
+    myPlayer.setup();
 }
 
 //--------------------------------------------------------------
@@ -39,6 +41,8 @@ bool bShouldIErase( Object &a ){
 
 //--------------------------------------------------------------
 void testApp::update(){
+    
+    myPlayer.update();
     
     // Update the notes.
     if ( objectList.size() != 0 ) {
@@ -68,6 +72,7 @@ void testApp::draw(){
     ofLine( 0, ( ofGetHeight() / 8.0 ) * 6.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 6.0 );
     //    ofLine( 0, ( ofGetHeight() / 8.0 ) * 7.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 7.0 ); // C below the staff (middle C).
     
+    myPlayer.draw();
     
     // Draw the notes.
     if ( objectList.size() != 0 ) {
@@ -118,12 +123,57 @@ void testApp::keyPressed(int key){
         case 'R':
             setup();
             break;
+            
+            // Movement
+        case 'w':
+        case 'W':
+        case OF_KEY_UP:
+            myPlayer.moveU = true;
+            break;
+        case 'a':
+        case 'A':
+        case OF_KEY_LEFT:
+            myPlayer.moveL = true;
+            break;
+        case 's':
+        case 'S':
+        case OF_KEY_DOWN:
+            myPlayer.moveD = true;
+            break;
+        case 'd':
+        case 'D':
+        case OF_KEY_RIGHT:
+            myPlayer.moveR = true;
+            break;
     }
 }
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){
     
+    switch ( key ) {
+            // Movement
+        case 'w':
+        case 'W':
+        case OF_KEY_UP:
+            myPlayer.moveU = false;
+            break;
+        case 'a':
+        case 'A':
+        case OF_KEY_LEFT:
+            myPlayer.moveL = false;
+            break;
+        case 's':
+        case 'S':
+        case OF_KEY_DOWN:
+            myPlayer.moveD = false;
+            break;
+        case 'd':
+        case 'D':
+        case OF_KEY_RIGHT:
+            myPlayer.moveR = false;
+            break;
+    }
 }
 
 //--------------------------------------------------------------
