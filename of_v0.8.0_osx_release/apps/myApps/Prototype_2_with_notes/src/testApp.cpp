@@ -28,6 +28,16 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
+bool bShouldIErase( Object &a ){
+    
+    // Zach Lieberman showed me this method to remove an element from a vector. We create a boolean function, feed it a class, and pass a reference label that we make up (in this case 'a') so we can refer to the applicable object. Then we check for a certain condition which if met returns a boolean value of 'true.' Otherwise it returns 'false.'
+    
+    if ( a.destroyMe ) return true;
+    else return false;
+    
+}
+
+//--------------------------------------------------------------
 void testApp::update(){
     
     // Update the notes.
@@ -36,6 +46,9 @@ void testApp::update(){
             objectList[ i ].update();
         }
     }
+    
+    // Following up the boolean function we created above, this oF function sorts the vector according to the values of the booleans and then removes any with a 'true' value:
+    ofRemove( objectList, bShouldIErase );
 }
 
 //--------------------------------------------------------------

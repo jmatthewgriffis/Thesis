@@ -29,5 +29,7 @@ public:
     float wide;
     float guideLineLength;
     
+    bool destroyMe;
+    
     Note myNote;
 };

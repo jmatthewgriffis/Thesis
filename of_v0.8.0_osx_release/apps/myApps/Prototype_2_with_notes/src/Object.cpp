@@ -14,6 +14,8 @@ Object::Object() {
     tall = ( ofGetHeight() / 8.0 ) - 20;
     wide = tall * 1.5;
     guideLineLength = wide * 0.75;
+    
+    destroyMe = false;
 }
 
 void Object::setup( int _whichNote, float y ) {
@@ -25,9 +27,9 @@ void Object::setup( int _whichNote, float y ) {
     
     myNote.setup( _whichNote );
     
-//    if ( whichNote < NUMNOTES - 1 ) {
-//        Note myNote( whichNote );
-//    }
+    //    if ( whichNote < NUMNOTES - 1 ) {
+    //        Note myNote( whichNote );
+    //    }
 }
 
 void Object::update() {
@@ -35,11 +37,11 @@ void Object::update() {
     // Move!
     pos.x += vel;
     
-    // Pac-Man to the other side when off-screen.
-    if ( pos.x < 0 ) {
-        pos.x = ofGetWidth();
-    } else if ( pos.x > ofGetWidth() ) {
-        pos.x = 0;
+    // Destroy the Object when it gets offscreen.
+    if ( pos.x < 0 || pos.x > ofGetWidth() ) {
+        // Stop playing the Note just in case.
+        myNote.sound.stop();
+        destroyMe = true;
     }
 }
 
