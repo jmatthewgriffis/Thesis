@@ -17,16 +17,44 @@ void testApp::setup(){
     // Make the vector of y-pos.
     staffPosSet();
     
-    /*
-     // Make some notes and add them to the vector of notes.
-     for ( int i = 0; i < staffPosList.size(); i++ ) {
-     Note tmp;
-     tmp.setup( i, staffPosList[ i ] );
-     noteList.push_back( tmp );
-     }
-     */
+    // Run a test pattern.
+    testPattern();
     
     myPlayer.setup();
+}
+
+//--------------------------------------------------------------
+void testApp::testPattern() {
+    
+    Object tmp;
+    tmp.setup( 1, staffPosList[ 1 ] );
+    tmp.pos.x = 200;
+    objectList.push_back( tmp );
+    
+    Object tmp2;
+    tmp2.setup( 3, staffPosList[ 3 ] );
+    tmp2.pos.x = 400;
+    objectList.push_back( tmp2 );
+    
+    Object tmp3;
+    tmp3.setup( 5, staffPosList[ 5 ] );
+    tmp3.pos.x = 600;
+    objectList.push_back( tmp3 );
+    
+    Object tmp4;
+    tmp4.setup( 1, staffPosList[ 1 ] );
+    tmp4.pos.x = 800;
+    objectList.push_back( tmp4 );
+    
+    Object tmp5;
+    tmp5.setup( 1, staffPosList[ 1 ] );
+    tmp5.pos.x = 1000;
+    objectList.push_back( tmp5 );
+    
+    Object tmp6;
+    tmp6.setup( 4, staffPosList[ 4 ] );
+    tmp6.pos.x = 1000;
+    objectList.push_back( tmp6 );
 }
 
 //--------------------------------------------------------------
@@ -122,6 +150,13 @@ void testApp::keyPressed(int key){
         case 'r':
         case 'R':
             setup();
+            break;
+            
+            // Turn Object movement on and off.
+        case '1':
+            for ( int i = 0; i < objectList.size(); i++ ) {
+                objectList[ i ].moveObject = !objectList[ i ].moveObject;
+            }
             break;
             
             // Movement

@@ -16,6 +16,7 @@ Object::Object() {
     guideLineLength = wide * 0.75;
     
     destroyMe = false;
+    moveObject = false;
 }
 
 void Object::setup( int _whichNote, float y ) {
@@ -32,10 +33,10 @@ void Object::setup( int _whichNote, float y ) {
 void Object::update( ofVec2f _pos ) {
     
     // Move!
-    pos.x += vel;
+    if ( moveObject ) pos.x += vel;
     
     // Map the volume onto the distance between the player and the Object. Closer = louder.
-    float tooFar = ofGetWidth() * 0.25;
+    float tooFar = ofGetWidth() * 0.25 * 0.75;
 //    float dist = ofDist( _pos.x, _pos.y, pos.x, pos.y );
     float dist = ofDist( _pos.x, 0, pos.x, 0 );
     if ( dist > tooFar ) {

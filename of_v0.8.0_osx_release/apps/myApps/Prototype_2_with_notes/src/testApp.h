@@ -34,6 +34,8 @@ public:
     // Use a function to define all of them.
     void staffPosSet();
     
+    void testPattern();
+    
     Player myPlayer;
     
     // Store all the notes.
