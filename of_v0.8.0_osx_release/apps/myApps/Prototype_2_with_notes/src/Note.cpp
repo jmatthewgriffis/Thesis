@@ -20,7 +20,7 @@ void Note::setup( int _whichNote ) {
     // Load the appropriate sound on creation.
     sound.loadSound( loadList[ _whichNote ] );
     // Initial volume of zero.
-    sound.setVolume(1.0f);
+    sound.setVolume(0.0f);
     // Loop it and play it.
     sound.setLoop(true);
     sound.play();
@@ -28,6 +28,7 @@ void Note::setup( int _whichNote ) {
 
 void Note::update( int _whichNote, float _vol ) {
     
+    sound.setVolume( _vol );
 }
 
 void Note::storePaths() {

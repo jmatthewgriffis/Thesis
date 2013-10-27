@@ -32,4 +32,6 @@ public:
     bool destroyMe;
     
     Note myNote;
+    
+    float vol; // Volume
 };

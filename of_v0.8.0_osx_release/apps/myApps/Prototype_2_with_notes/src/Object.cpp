@@ -26,16 +26,22 @@ void Object::setup( int _whichNote, float y ) {
     pos.x = ofGetWidth();
     
     myNote.setup( _whichNote );
-    
-    //    if ( whichNote < NUMNOTES - 1 ) {
-    //        Note myNote( whichNote );
-    //    }
+    vol = 0.0f;
 }
 
 void Object::update() {
     
     // Move!
     pos.x += vel;
+    
+    // Map the volume onto the position, getting louder as it approaches the middle and getting quieter as it moves away.
+    if ( pos.x <= ofGetWidth() / 2 ) {
+        vol = ofMap( pos.x, 0, ofGetWidth() / 2, 0.0f, 1.0f );
+    } else {
+        vol = ofMap( pos.x, ofGetWidth() / 2, ofGetWidth(), 1.0f, 0.0f );
+    }
+    
+    myNote.update( whichNote, vol );
     
     // Destroy the Object when it gets offscreen.
     if ( pos.x < 0 || pos.x > ofGetWidth() ) {
