@@ -16,11 +16,10 @@ public:
     Object();
     
     void setup( int _whichNote, float y );
-    void update();
+    void update( ofVec2f _pos );
     void draw();
     
     int whichNote;
-    
     void addNote();
     
     ofVec2f pos;

@@ -47,7 +47,7 @@ void testApp::update(){
     // Update the notes.
     if ( objectList.size() != 0 ) {
         for ( int i = 0; i < objectList.size(); i++ ) {
-            objectList[ i ].update();
+            objectList[ i ].update( myPlayer.pos );
         }
     }
     

@@ -29,18 +29,31 @@ void Object::setup( int _whichNote, float y ) {
     vol = 0.0f;
 }
 
-void Object::update() {
+void Object::update( ofVec2f _pos ) {
     
     // Move!
     pos.x += vel;
     
+    // Map the volume onto the distance between the player and the Object. Closer = louder.
+    float tooFar = ofGetWidth() * 0.25;
+//    float dist = ofDist( _pos.x, _pos.y, pos.x, pos.y );
+    float dist = ofDist( _pos.x, 0, pos.x, 0 );
+    if ( dist > tooFar ) {
+        vol = 0.0f;
+    } else {
+        vol = ofMap( dist, tooFar, 0, 0.0f, 1.0f );
+    }
+    
+    /*
     // Map the volume onto the position, getting louder as it approaches the middle and getting quieter as it moves away.
     if ( pos.x <= ofGetWidth() / 2 ) {
         vol = ofMap( pos.x, 0, ofGetWidth() / 2, 0.0f, 1.0f );
     } else {
         vol = ofMap( pos.x, ofGetWidth() / 2, ofGetWidth(), 1.0f, 0.0f );
     }
+     */
     
+    // Update the note.
     myNote.update( whichNote, vol );
     
     // Destroy the Object when it gets offscreen.
