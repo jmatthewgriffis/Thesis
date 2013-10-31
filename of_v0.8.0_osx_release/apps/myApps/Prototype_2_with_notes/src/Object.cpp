@@ -60,16 +60,15 @@ void Object::update( ofVec2f _pos ) {
     // Update the note.
     myNote.update( whichNote, vol );
     
-    /*
-    // Destroy the Object when it gets offscreen.
-    if ( pos.x < 0 || pos.x > ofGetWidth() ) {
+    // What happens when the Object goes offscreen?
+    float farEnoughForRhythm = 600;
+    // Goes off on the right, destroy it.
+    if ( pos.x > ofGetWidth() + farEnoughForRhythm ) {
         // Stop playing the Note just in case.
         myNote.sound.stop();
         destroyMe = true;
     }
-     */
-    // Warp the Object to the other side.
-    float farEnoughForRhythm = 600;
+    // Goes off on the left, warp to the other side.
     if ( pos.x < 0 ) pos.x = ofGetWidth() + farEnoughForRhythm;
 }
 
