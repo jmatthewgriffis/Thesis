@@ -30,6 +30,7 @@ public:
     
     bool destroyMe;
     bool moveObject;
+    bool drawAttention;
     
     Note myNote;
     

@@ -17,6 +17,7 @@ Object::Object() {
     
     destroyMe = false;
     moveObject = false;
+    drawAttention = false;
 }
 
 void Object::setup( int _whichNote, float y ) {
@@ -36,13 +37,14 @@ void Object::update( ofVec2f _pos ) {
     if ( moveObject ) pos.x += vel;
     
     // Map the volume onto the distance between the player and the Object. Closer = louder.
-    float tooFar = ofGetWidth() * 0.25 * 0.75;
+    float tooFar = ofGetWidth() * 0.25 * 0.25;
 //    float dist = ofDist( _pos.x, _pos.y, pos.x, pos.y );
     float dist = ofDist( _pos.x, 0, pos.x, 0 );
     if ( dist > tooFar ) {
         vol = 0.0f;
     } else {
-        vol = ofMap( dist, tooFar, 0, 0.0f, 1.0f );
+//        vol = ofMap( dist, tooFar, 0, 0.0f, 1.0f );
+        vol = 1.0;
     }
     
     /*
@@ -67,18 +69,22 @@ void Object::update( ofVec2f _pos ) {
 
 void Object::draw() {
     
+    // Draw guidelines as needed to indicate A above the staff and C below.
     ofSetColor( 0 );
+    if ( whichNote < 2 ) {
+        ofLine( pos.x - guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ), pos.x + guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ) );
+    } else if ( whichNote > 12 ) {
+        ofLine( pos.x - guideLineLength, ofGetHeight() / 8.0, pos.x + guideLineLength, ofGetHeight() / 8.0 );
+    }
+    
+    // Draw the notes. Red if needed, black otherwise.
+    if ( drawAttention ) ofSetColor( 255, 0, 0 );
+    else ofSetColor( 0 );
+    
     ofEllipse( pos, wide, tall);
     /*
      // Make it a whole note.
      ofSetColor( 255 );
      ofCircle( pos, tall/2 );
      */
-    
-    // Draw guidelines as needed to indicate A above the staff and C below.
-    if ( whichNote < 2 ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ), pos.x + guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ) );
-    } else if ( whichNote > 12 ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() / 8.0, pos.x + guideLineLength, ofGetHeight() / 8.0 );
-    }
 }
