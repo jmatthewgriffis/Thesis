@@ -5,6 +5,7 @@ void testApp::setup(){
     
     // Support r-restart:
     cleanup();
+    lastTime = ofGetElapsedTimef();
     
     // Maintenance
     ofSetVerticalSync( true );
@@ -17,8 +18,9 @@ void testApp::setup(){
     // Make the vector of y-pos.
     staffPosSet();
     
-    // Run a test pattern.
+    // Run a test pattern and highlight the first element.
     testPattern();
+    getThisOne = 0;
     
     myPlayer.setup();
 }
@@ -75,6 +77,10 @@ void testApp::update(){
     // Update the notes.
     if ( objectList.size() != 0 ) {
         for ( int i = 0; i < objectList.size(); i++ ) {
+            // Highlight a specific Object.
+            if ( i == getThisOne ) objectList[ i ].drawAttention = true;
+            else objectList[ i ].drawAttention = false;
+            
             objectList[ i ].update( myPlayer.pos );
         }
     }

@@ -40,4 +40,9 @@ public:
     
     // Store all the notes.
     vector< Object > objectList;
+    // Highlight one.
+    int getThisOne;
+    
+    // This will be used to time certain events.
+    double lastTime;
 };

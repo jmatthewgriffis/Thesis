@@ -18,6 +18,7 @@ Object::Object() {
     destroyMe = false;
     moveObject = false;
     drawAttention = false;
+    
 }
 
 void Object::setup( int _whichNote, float y ) {
@@ -59,12 +60,17 @@ void Object::update( ofVec2f _pos ) {
     // Update the note.
     myNote.update( whichNote, vol );
     
+    /*
     // Destroy the Object when it gets offscreen.
     if ( pos.x < 0 || pos.x > ofGetWidth() ) {
         // Stop playing the Note just in case.
         myNote.sound.stop();
         destroyMe = true;
     }
+     */
+    // Warp the Object to the other side.
+    float farEnoughForRhythm = 600;
+    if ( pos.x < 0 ) pos.x = ofGetWidth() + farEnoughForRhythm;
 }
 
 void Object::draw() {
