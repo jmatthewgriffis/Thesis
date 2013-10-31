@@ -54,6 +54,7 @@ void testApp::addReplayedObject( int _note, float _xPos ) {
     Object tmp;
     tmp.setup( _note, staffPosList[ _note ] );
     tmp.pos.x = myPlayer.pos.x;
+    tmp.moveObject = true;
     tmp.vel *= -1;
     replayedList.push_back( tmp );
 }
@@ -84,6 +85,30 @@ void testApp::update(){
     
     if ( getThisOne < 0 ) getThisOne = objectList.size() - 1;
     if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
+    
+    // Replay mode pauses movement and runs until all Objects have been replayed.
+    if ( replay ) {
+        myPlayer.allowMove = false;
+        
+        if ( recordedList.size() != 0 ) {
+            
+            float xDist;
+            if ( replayedList.size() != 0 ) {
+                xDist = replayedList[ replayedList.size() - 1 ].pos.x - myPlayer.pos.x;
+            } else {
+                xDist = 0;
+            }
+            
+            if ( xDist >= recordedList[ 0 ].spacing ) {
+                addReplayedObject( recordedList[ 0 ].whichNote, myPlayer.pos.x );
+                recordedList[ 0 ].destroyMe = true;
+            }
+        } else {
+            replay = false;
+        }
+    } else {
+        myPlayer.allowMove = true;
+    }
     
     myPlayer.update();
     
@@ -116,6 +141,11 @@ void testApp::update(){
             objectList[ i ].update( myPlayer.pos );
         }
     }
+    if ( replayedList.size() != 0 ) {
+        for ( int i = 0; i < replayedList.size(); i++ ) {
+            replayedList[ i ].update( myPlayer.pos );
+        }
+    }
     
     // Following up the boolean function we created above, this oF function sorts the vector according to the values of the booleans and then removes any with a 'true' value:
     ofRemove( objectList, bShouldIErase );
@@ -145,6 +175,11 @@ void testApp::draw(){
     if ( objectList.size() != 0 ) {
         for ( int i = 0; i < objectList.size(); i++ ) {
             objectList[ i ].draw();
+        }
+    }
+    if ( replayedList.size() != 0 ) {
+        for ( int i = 0; i < replayedList.size(); i++ ) {
+            replayedList[ i ].draw();
         }
     }
     

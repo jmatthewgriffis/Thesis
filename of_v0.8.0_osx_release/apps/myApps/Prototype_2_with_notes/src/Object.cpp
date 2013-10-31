@@ -40,37 +40,39 @@ void Object::update( ofVec2f _pos ) {
     
     // Map the volume onto the distance between the player and the Object. Closer = louder.
     float tooFar = ofGetWidth() * 0.25 * 0.25;
-//    float dist = ofDist( _pos.x, _pos.y, pos.x, pos.y );
+    //    float dist = ofDist( _pos.x, _pos.y, pos.x, pos.y );
     float dist = ofDist( _pos.x, 0, pos.x, 0 );
     if ( dist > tooFar ) {
         vol = 0.0f;
     } else {
-//        vol = ofMap( dist, tooFar, 0, 0.0f, 1.0f );
+        //        vol = ofMap( dist, tooFar, 0, 0.0f, 1.0f );
         vol = 1.0;
     }
     
     /*
-    // Map the volume onto the position, getting louder as it approaches the middle and getting quieter as it moves away.
-    if ( pos.x <= ofGetWidth() / 2 ) {
-        vol = ofMap( pos.x, 0, ofGetWidth() / 2, 0.0f, 1.0f );
-    } else {
-        vol = ofMap( pos.x, ofGetWidth() / 2, ofGetWidth(), 1.0f, 0.0f );
-    }
+     // Map the volume onto the position, getting louder as it approaches the middle and getting quieter as it moves away.
+     if ( pos.x <= ofGetWidth() / 2 ) {
+     vol = ofMap( pos.x, 0, ofGetWidth() / 2, 0.0f, 1.0f );
+     } else {
+     vol = ofMap( pos.x, ofGetWidth() / 2, ofGetWidth(), 1.0f, 0.0f );
+     }
      */
     
     // Update the note.
     myNote.update( whichNote, vol );
     
     // What happens when the Object goes offscreen?
-    float farEnoughForRhythm = 600;
-    // Goes off on the right, destroy it.
-    if ( pos.x > ofGetWidth() + farEnoughForRhythm ) {
-        // Stop playing the Note just in case.
-        myNote.sound.stop();
-        destroyMe = true;
+    {
+        // Goes off on the right, destroy it.
+        if ( pos.x > ofGetWidth() && vel > 0 ) {
+            // Stop playing the Note just in case.
+            myNote.sound.stop();
+            destroyMe = true;
+        }
+        // Goes off on the left, warp to the other side.
+        float farEnoughForRhythm = 600;
+        if ( pos.x < 0 ) pos.x = ofGetWidth() + farEnoughForRhythm;
     }
-    // Goes off on the left, warp to the other side.
-    if ( pos.x < 0 ) pos.x = ofGetWidth() + farEnoughForRhythm;
 }
 
 void Object::draw() {

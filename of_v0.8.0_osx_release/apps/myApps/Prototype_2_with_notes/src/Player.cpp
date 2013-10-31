@@ -11,6 +11,7 @@
 Player::Player() {
     
     moveU = moveL = moveD = moveR = record = false;
+    allowMove = true;
 }
 
 void Player::setup() {
@@ -22,17 +23,19 @@ void Player::setup() {
 void Player::update() {
     
     // Movement
-    if ( moveU ) {
-        pos.y -= vel.y;
-    }
-    if ( moveL ) {
-        pos.x -= vel.x;
-    }
-    if ( moveD ) {
-        pos.y += vel.y;
-    }
-    if ( moveR ) {
-        pos.x += vel.x;
+    if ( allowMove ) {
+        if ( moveU ) {
+            pos.y -= vel.y;
+        }
+        if ( moveL ) {
+            pos.x -= vel.x;
+        }
+        if ( moveD ) {
+            pos.y += vel.y;
+        }
+        if ( moveR ) {
+            pos.x += vel.x;
+        }
     }
 }
 
