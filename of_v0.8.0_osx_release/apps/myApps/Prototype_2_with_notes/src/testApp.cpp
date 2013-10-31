@@ -26,37 +26,33 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
-void testApp::testPattern() {
+void testApp::addObject( int _note, float _xPos ) {
     
     Object tmp;
-    tmp.setup( 1, staffPosList[ 1 ] );
-    tmp.pos.x = 200;
+    tmp.setup( _note, staffPosList[ _note ] );
+    tmp.pos.x = _xPos;
     objectList.push_back( tmp );
+}
+
+//--------------------------------------------------------------
+void testApp::addRecordedObject( int _note, float _xDist ) {
     
-    Object tmp2;
-    tmp2.setup( 3, staffPosList[ 3 ] );
-    tmp2.pos.x = 400;
-    objectList.push_back( tmp2 );
+    Object tmp;
+    tmp.setup( _note, staffPosList[ _note ] );
+    tmp.spacing = _xDist;
+    tmp.vel *= -1;
+    recordedList.push_back( tmp );
+}
+
+//--------------------------------------------------------------
+void testApp::testPattern() {
     
-    Object tmp3;
-    tmp3.setup( 5, staffPosList[ 5 ] );
-    tmp3.pos.x = 600;
-    objectList.push_back( tmp3 );
-    
-    Object tmp4;
-    tmp4.setup( 1, staffPosList[ 1 ] );
-    tmp4.pos.x = 800;
-    objectList.push_back( tmp4 );
-    
-    Object tmp5;
-    tmp5.setup( 1, staffPosList[ 1 ] );
-    tmp5.pos.x = 1000;
-    objectList.push_back( tmp5 );
-    
-    Object tmp6;
-    tmp6.setup( 4, staffPosList[ 4 ] );
-    tmp6.pos.x = 1000;
-    objectList.push_back( tmp6 );
+    addObject( 1, 200 );
+    addObject( 3, 400 );
+    addObject( 5, 600 );
+    addObject( 1, 800 );
+    addObject( 1, 1000 );
+    addObject( 4, 1000 );
 }
 
 //--------------------------------------------------------------
@@ -72,8 +68,8 @@ bool bShouldIErase( Object &a ){
 //--------------------------------------------------------------
 void testApp::update(){
     
-    if ( getThisOne > 5 ) getThisOne = 0;
-    if ( getThisOne < 0 ) getThisOne = 5;
+    if ( getThisOne < 0 ) getThisOne = objectList.size() - 1;
+    if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
     
     myPlayer.update();
     
@@ -81,10 +77,20 @@ void testApp::update(){
     if ( objectList.size() != 0 ) {
         for ( int i = 0; i < objectList.size(); i++ ) {
             
-            // Detect for collision with player's recorder.
+            // Detect for collision with player's recorder, if the note is selected.
             if ( i == getThisOne ) {
+                
                 ofVec2f dist = myPlayer.pos - objectList[ i ].pos;
                 if ( dist.lengthSquared() < ( 50 * 50 ) && myPlayer.record ) {
+                    
+                    // Check the spacing between the recorded note and the previous note.
+                    float xDist;
+                    if ( i == 0 ) {
+                        xDist = 0;
+                    } else {
+                        xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
+                    }
+                    addRecordedObject( objectList[ i ].whichNote, xDist );
                     getThisOne++;
                 }
             }
@@ -125,7 +131,7 @@ void testApp::draw(){
         }
     }
     
-     myPlayer.draw();
+    myPlayer.draw();
 }
 
 //--------------------------------------------------------------
@@ -141,12 +147,15 @@ void testApp::cleanup() {
     
     // Stop any music playing.
     for ( int i = 0; i < objectList.size(); i++ ) {
-        
         objectList[ i ].myNote.sound.stop();
+    }
+    for ( int i = 0; i < recordedList.size(); i++ ) {
+        recordedList[ i ].myNote.sound.stop();
     }
     
     // Clear the vector.
     objectList.clear();
+    recordedList.clear();
 }
 
 //--------------------------------------------------------------
@@ -198,16 +207,16 @@ void testApp::keyPressed(int key){
             myPlayer.moveR = true;
             break;
             
-            case ' ':
+        case ' ':
             myPlayer.record = true;
             break;
             
             // Debug
-            case 'm':
+        case 'm':
             getThisOne++;
             break;
             
-            case 'n':
+        case 'n':
             getThisOne--;
             break;
     }

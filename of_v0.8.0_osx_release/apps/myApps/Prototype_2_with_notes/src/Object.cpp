@@ -10,6 +10,7 @@
 
 Object::Object() {
     
+    spacing = 0;
     vel = -5;
     tall = ( ofGetHeight() / 8.0 ) - 20;
     wide = tall * 1.5;

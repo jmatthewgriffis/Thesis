@@ -28,6 +28,8 @@ public:
     void gotMessage(ofMessage msg);
     
     void cleanup();
+    void addObject( int _note, float _xPos );
+    void addRecordedObject( int _note, float _xDist );
     
     // Store all the y-pos of the notes on the musical staff.
     vector< float > staffPosList;
@@ -40,6 +42,7 @@ public:
     
     // Store all the notes.
     vector< Object > objectList;
+    vector< Object > recordedList;
     // Highlight one.
     int getThisOne;
     
