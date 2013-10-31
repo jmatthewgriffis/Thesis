@@ -90,10 +90,10 @@ void testApp::update(){
     if ( replay ) {
         myPlayer.allowMove = false;
         
-        if ( recordedList.size() != 0 ) {
+        if ( recordedList.size() > 0 ) {
             
             float xDist;
-            if ( replayedList.size() != 0 ) {
+            if ( replayedList.size() > 0 ) {
                 xDist = replayedList[ replayedList.size() - 1 ].pos.x - myPlayer.pos.x;
             } else {
                 xDist = 0;
@@ -103,6 +103,7 @@ void testApp::update(){
                 addReplayedObject( recordedList[ 0 ].whichNote, myPlayer.pos.x );
                 recordedList[ 0 ].destroyMe = true;
             }
+            
         } else {
             replay = false;
         }
@@ -124,9 +125,9 @@ void testApp::update(){
                     
                     // Check the spacing between the recorded note and the previous note.
                     float xDist;
-                    if ( i == 0 ) {
+                    if ( recordedList.size() == 0 ) {
                         xDist = 0;
-                    } else {
+                    } else { // FIND ME--I may need to adjust the below in case notes aren't captured linearly.
                         xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
                     }
                     addRecordedObject( objectList[ i ].whichNote, xDist );
