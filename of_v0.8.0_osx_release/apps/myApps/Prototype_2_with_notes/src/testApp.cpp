@@ -22,12 +22,15 @@ void testApp::setup(){
     testPattern();
     getThisOne = 0;
     
+    replay = false;
+    
     myPlayer.setup();
 }
 
 //--------------------------------------------------------------
 void testApp::addObject( int _note, float _xPos ) {
     
+    // This function adds an NPC Object.
     Object tmp;
     tmp.setup( _note, staffPosList[ _note ] );
     tmp.pos.x = _xPos;
@@ -37,11 +40,22 @@ void testApp::addObject( int _note, float _xPos ) {
 //--------------------------------------------------------------
 void testApp::addRecordedObject( int _note, float _xDist ) {
     
+    // This function stores a recorded NPC Object in a static vector that gets neither updated nor drawn.
     Object tmp;
     tmp.setup( _note, staffPosList[ _note ] );
     tmp.spacing = _xDist;
-    tmp.vel *= -1;
     recordedList.push_back( tmp );
+}
+
+//--------------------------------------------------------------
+void testApp::addReplayedObject( int _note, float _xPos ) {
+    
+    // This function copies an Object in the "recorded" vector to an active "replayed" vector that gets updated and drawn. It also reverses velocity so the Object can travel the other direction.
+    Object tmp;
+    tmp.setup( _note, staffPosList[ _note ] );
+    tmp.pos.x = myPlayer.pos.x;
+    tmp.vel *= -1;
+    replayedList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
@@ -105,6 +119,9 @@ void testApp::update(){
     
     // Following up the boolean function we created above, this oF function sorts the vector according to the values of the booleans and then removes any with a 'true' value:
     ofRemove( objectList, bShouldIErase );
+    ofRemove( recordedList, bShouldIErase );
+    ofRemove( replayedList, bShouldIErase );
+    
 }
 
 //--------------------------------------------------------------
@@ -152,10 +169,14 @@ void testApp::cleanup() {
     for ( int i = 0; i < recordedList.size(); i++ ) {
         recordedList[ i ].myNote.sound.stop();
     }
+    for ( int i = 0; i < replayedList.size(); i++ ) {
+        replayedList[ i ].myNote.sound.stop();
+    }
     
     // Clear the vector.
     objectList.clear();
     recordedList.clear();
+    replayedList.clear();
 }
 
 //--------------------------------------------------------------
@@ -208,10 +229,18 @@ void testApp::keyPressed(int key){
             break;
             
         case ' ':
-            myPlayer.record = true;
+            // Don't allow recording if the player is currently replaying.
+            if ( !replay ) {
+                myPlayer.record = true;
+            }
+            break;
+            
+        case OF_KEY_SHIFT:
+            replay = true;
             break;
             
             // Debug
+        {
         case 'm':
             getThisOne++;
             break;
@@ -219,6 +248,7 @@ void testApp::keyPressed(int key){
         case 'n':
             getThisOne--;
             break;
+        }
     }
 }
 
@@ -267,10 +297,10 @@ void testApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
     
-    Object tmp;
-    int i = int( ofRandom( 0, NUMNOTES - 1 ));
-    tmp.setup( i, staffPosList[ i ] );
-    objectList.push_back( tmp );
+    /*Object tmp;
+     int i = int( ofRandom( 0, NUMNOTES - 1 ));
+     tmp.setup( i, staffPosList[ i ] );
+     objectList.push_back( tmp );*/
 }
 
 //--------------------------------------------------------------

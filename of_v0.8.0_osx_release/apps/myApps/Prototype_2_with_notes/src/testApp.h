@@ -30,6 +30,7 @@ public:
     void cleanup();
     void addObject( int _note, float _xPos );
     void addRecordedObject( int _note, float _xDist );
+    void addReplayedObject( int _note, float _xPos );
     
     // Store all the y-pos of the notes on the musical staff.
     vector< float > staffPosList;
@@ -41,11 +42,15 @@ public:
     Player myPlayer;
     
     // Store all the notes.
-    vector< Object > objectList;
-    vector< Object > recordedList;
+    vector< Object > objectList; // Enemies, objects, etc.
+    vector< Object > recordedList; // Store recorded Objects for later use.
+    vector< Object > replayedList; // Deploy the recorded Objects.
     // Highlight one.
     int getThisOne;
     
     // This will be used to time certain events.
     double lastTime;
+    
+    // Replay recorded notes.
+    bool replay;
 };
