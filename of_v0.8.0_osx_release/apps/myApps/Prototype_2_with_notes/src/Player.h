@@ -21,4 +21,5 @@ public:
     ofVec2f pos;
     ofVec2f vel;
     bool moveU, moveL, moveD, moveR;
+    bool record;
 };

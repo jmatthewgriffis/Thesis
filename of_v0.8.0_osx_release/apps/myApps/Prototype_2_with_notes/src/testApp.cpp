@@ -72,11 +72,23 @@ bool bShouldIErase( Object &a ){
 //--------------------------------------------------------------
 void testApp::update(){
     
+    if ( getThisOne > 5 ) getThisOne = 0;
+    if ( getThisOne < 0 ) getThisOne = 5;
+    
     myPlayer.update();
     
     // Update the notes.
     if ( objectList.size() != 0 ) {
         for ( int i = 0; i < objectList.size(); i++ ) {
+            
+            // Detect for collision with player's recorder.
+            if ( i == getThisOne ) {
+                ofVec2f dist = myPlayer.pos - objectList[ i ].pos;
+                if ( dist.lengthSquared() < ( 50 * 50 ) && myPlayer.record ) {
+                    getThisOne++;
+                }
+            }
+            
             // Highlight a specific Object.
             if ( i == getThisOne ) objectList[ i ].drawAttention = true;
             else objectList[ i ].drawAttention = false;
@@ -106,8 +118,6 @@ void testApp::draw(){
     ofLine( 0, ( ofGetHeight() / 8.0 ) * 6.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 6.0 );
     //    ofLine( 0, ( ofGetHeight() / 8.0 ) * 7.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 7.0 ); // C below the staff (middle C).
     
-    myPlayer.draw();
-    
     // Draw the notes.
     if ( objectList.size() != 0 ) {
         for ( int i = 0; i < objectList.size(); i++ ) {
@@ -115,6 +125,7 @@ void testApp::draw(){
         }
     }
     
+     myPlayer.draw();
 }
 
 //--------------------------------------------------------------
@@ -186,6 +197,19 @@ void testApp::keyPressed(int key){
         case OF_KEY_RIGHT:
             myPlayer.moveR = true;
             break;
+            
+            case ' ':
+            myPlayer.record = true;
+            break;
+            
+            // Debug
+            case 'm':
+            getThisOne++;
+            break;
+            
+            case 'n':
+            getThisOne--;
+            break;
     }
 }
 
@@ -213,6 +237,10 @@ void testApp::keyReleased(int key){
         case 'D':
         case OF_KEY_RIGHT:
             myPlayer.moveR = false;
+            break;
+            
+        case ' ':
+            myPlayer.record = false;
             break;
     }
 }

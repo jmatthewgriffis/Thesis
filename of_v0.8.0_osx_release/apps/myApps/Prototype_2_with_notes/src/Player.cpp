@@ -10,7 +10,7 @@
 
 Player::Player() {
     
-    moveU = moveL = moveD = moveR = false;
+    moveU = moveL = moveD = moveR = record = false;
 }
 
 void Player::setup() {
@@ -41,4 +41,10 @@ void Player::draw() {
     ofSetColor( 0 );
     ofSetRectMode( OF_RECTMODE_CENTER );
     ofRect( pos, 50, 50 );
+    
+    // Draw a recording box if called.
+    if ( record ) {
+        ofSetColor( 0, 255, 0 );
+        ofRect( pos.x + 50, pos.y, 20, 20 );
+    }
 }
