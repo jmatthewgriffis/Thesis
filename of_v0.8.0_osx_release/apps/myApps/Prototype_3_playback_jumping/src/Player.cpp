@@ -19,7 +19,7 @@ Player::Player() {
 void Player::setup() {
     
     pos.set( 100, 100 );
-    vel.set( 5, 0 );
+    vel.set( 0 );
     acc.set( 0 );
 }
 
@@ -45,18 +45,18 @@ void Player::update() {
             allowJump = false;
         }
         if ( moveL ) {
-            pos.x -= vel.x;
+            vel.x = -5;
         }
         if ( moveD ) {
             //            pos.y += vel.y;
         }
         if ( moveR ) {
-            pos.x += vel.x;
+            vel.x = 5;
         }
     }
     
     vel += acc;
-    pos.y += vel.y;
+    pos += vel;
     
     // Land on the ground.
     if ( pos.y >= ofGetHeight() - tall / 2.0 ) {
@@ -68,11 +68,13 @@ void Player::update() {
         }
     }
     
+    // Debug
     cout<<vel.y<<endl;
     
     // Manage forces.
     float damping = 0.97;
     vel.y *= damping;
+    vel.x *= damping / 2.0;
     acc.set( 0 );
 }
 

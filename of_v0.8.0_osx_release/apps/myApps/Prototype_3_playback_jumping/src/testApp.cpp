@@ -60,6 +60,17 @@ void testApp::addReplayedObject( int _note, float _xPos ) {
 }
 
 //--------------------------------------------------------------
+void testApp::playerCollidesWithObject() {
+    
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        
+        if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
+            myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
+        }
+    }
+}
+
+//--------------------------------------------------------------
 void testApp::testPattern() {
     
     addObject( 1, 200 );

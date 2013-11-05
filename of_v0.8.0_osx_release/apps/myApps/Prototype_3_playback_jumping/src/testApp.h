@@ -28,9 +28,14 @@ public:
     void gotMessage(ofMessage msg);
     
     void cleanup();
+    
+    // Manage the objects.
     void addObject( int _note, float _xPos );
     void addRecordedObject( int _note, float _xDist );
     void addReplayedObject( int _note, float _xPos );
+    
+    // Handle collision.
+    void playerCollidesWithObject();
     
     // Store all the y-pos of the notes on the musical staff.
     vector< float > staffPosList;
