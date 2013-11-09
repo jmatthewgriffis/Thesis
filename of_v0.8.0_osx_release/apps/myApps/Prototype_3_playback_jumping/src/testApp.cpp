@@ -75,21 +75,45 @@ void testApp::playerCollidesWithObject() {
          myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
          }*/
         
-        if (
-            // Player right edge right of object left edge.
-            myPlayer.pos.x + myPlayer.wide / 2 >= objectList[ i ].pos.x - objectList[ i ].wide / 2
-            // Player left edge left of object right edge.
-            && myPlayer.pos.x - myPlayer.wide / 2 <= objectList[ i ].pos.x + objectList[ i ].wide / 2
-            // Player bottom edge below object top edge.
-            && myPlayer.pos.y + myPlayer.tall / 2 >= objectList[ i ].pos.y - objectList[ i ].tall / 2
-            // Player top edge above object bottom edge.
-            && myPlayer.pos.y - myPlayer.tall / 2 <= objectList[ i ].pos.y + objectList[ i ].tall / 2
-            ) {
-            //            cout<<"yes"<<endl;
-            //                myPlayer.vel.y = 0;
-            myPlayer.pos.y = objectList[ i ].pos.y - objectList[ i ].tall / 2 - myPlayer.tall / 2;
-            myPlayer.onSurface = true;
-            myPlayer.vel.set( objectList[ i ].vel );
+        /*if (
+         // Player right edge right of object left edge.
+         myPlayer.pos.x + myPlayer.wide / 2 >= objectList[ i ].pos.x - objectList[ i ].wide / 2
+         // Player left edge left of object right edge.
+         && myPlayer.pos.x - myPlayer.wide / 2 <= objectList[ i ].pos.x + objectList[ i ].wide / 2
+         // Player bottom edge below object top edge.
+         && myPlayer.pos.y + myPlayer.tall / 2 >= objectList[ i ].pos.y - objectList[ i ].tall / 2
+         // Player top edge above object bottom edge.
+         && myPlayer.pos.y - myPlayer.tall / 2 <= objectList[ i ].pos.y + objectList[ i ].tall / 2
+         ) {
+         //            cout<<"yes"<<endl;
+         //                myPlayer.vel.y = 0;
+         myPlayer.pos.y = objectList[ i ].pos.y - objectList[ i ].tall / 2 - myPlayer.tall / 2;
+         myPlayer.onSurface = true;
+         myPlayer.vel.set( objectList[ i ].vel );
+         }*/
+        
+        // Let's try something different. Make some floats for shorthand...
+        float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
+        float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
+        float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
+        float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
+        float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
+        float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
+        float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
+        float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
+        
+        // First, check if the player is in the same horizontal region as the object.
+        if ( playerBottom >= objectTop && playerTop <= objectBottom ) {
+            // Is there something directly to the right?
+            if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
+                // Prevent the player from moving past the object.
+                myPlayer.pos.x = objectLeft - myPlayer.wide / 2.0;
+            }
+            // OK, is there something directly to the left?
+            else if ( playerLeft <= objectRight && playerLeft > objectList[ i ].pos.x ) {
+                // Prevent the player from moving past the object.
+                myPlayer.pos.x = objectRight + myPlayer.wide / 2.0;
+            }
         }
     }
 }
