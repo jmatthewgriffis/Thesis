@@ -23,5 +23,6 @@ public:
     ofVec2f pos, vel, acc;
     float wide, tall;
     bool allowMove, allowJump, moveU, moveL, moveD, moveR;
+    bool onSurface;
     bool record;
 };

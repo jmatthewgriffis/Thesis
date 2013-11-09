@@ -10,7 +10,7 @@
 
 Player::Player() {
     
-    allowJump = moveU = moveL = moveD = moveR = record = false;
+    allowJump = moveU = moveL = moveD = moveR = onSurface = record = false;
     allowMove = true;
     wide = 50;
     tall = wide;
@@ -30,11 +30,14 @@ void Player::applyForce( ofVec2f _force ) {
 
 void Player::update() {
     
+    //    onSurface = false;
+    
     // Gravity
     // Come back to this. Use it to fake analog sensitivity with jump height proportional to how long the button is held. Gravity only applies sometimes.
-//    if ( !moveU ) {
-        applyForce( ofVec2f( 0.0, 0.3 ) );
-//    }
+    //    if ( !moveU ) {
+    // Gravity only applies when not on a surface.
+    if ( !onSurface ) applyForce( ofVec2f( 0.0, 0.3 ) );
+    //    }
     
     // Movement
     if ( allowMove ) {
@@ -61,15 +64,19 @@ void Player::update() {
     // Land on the ground.
     if ( pos.y >= ofGetHeight() - tall / 2.0 ) {
         pos.y = ofGetHeight() - tall / 2.0;
-        // Negate velocity on the ground.
         if ( !moveU ) {
-            vel.y = 0;
-            allowJump = true;
+            onSurface = true;
         }
     }
     
+    // Negate velocity on a surface.
+    if ( onSurface ) {
+        vel.y = 0;
+        allowJump = true;
+    }
+    
     // Debug
-    cout<<vel.y<<endl;
+    //    cout<<vel.y<<endl;
     
     // Manage forces.
     float damping = 0.97;

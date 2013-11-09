@@ -89,7 +89,8 @@ void Object::draw() {
     if ( drawAttention ) ofSetColor( 255, 0, 0 );
     else ofSetColor( 0 );
     
-    ofEllipse( pos, wide, tall);
+//    ofEllipse( pos, wide, tall);
+    ofRect( pos, wide, tall);
     /*
      // Make it a whole note.
      ofSetColor( 255 );

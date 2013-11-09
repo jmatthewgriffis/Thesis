@@ -64,8 +64,24 @@ void testApp::playerCollidesWithObject() {
     
     for ( int i = 0; i < objectList.size(); i++ ) {
         
-        if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
+        /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
             myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
+        }*/
+        
+        if (
+            // Player right edge right of object left edge.
+            myPlayer.pos.x + myPlayer.wide / 2 >= objectList[ i ].pos.x - objectList[ i ].wide / 2
+            // Player left edge left of object right edge.
+            && myPlayer.pos.x - myPlayer.wide / 2 <= objectList[ i ].pos.x + objectList[ i ].wide / 2
+            // Player bottom edge below object top edge.
+            && myPlayer.pos.y + myPlayer.tall / 2 >= objectList[ i ].pos.y - objectList[ i ].tall / 2
+            // Player top edge above object bottom edge.
+            && myPlayer.pos.y - myPlayer.tall / 2 <= objectList[ i ].pos.y + objectList[ i ].tall / 2
+            ) {
+//            cout<<"yes"<<endl;
+                myPlayer.onSurface = true;
+//                myPlayer.vel.y = 0;
+                myPlayer.pos.y = objectList[ i ].pos.y - objectList[ i ].tall / 2 - myPlayer.tall / 2;
         }
     }
 }
@@ -94,8 +110,13 @@ bool bShouldIErase( Object &a ){
 //--------------------------------------------------------------
 void testApp::update(){
     
+    cout << myPlayer.onSurface <<endl;
+    myPlayer.onSurface = false;
+    
     if ( getThisOne < 0 ) getThisOne = objectList.size() - 1;
     if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
+    
+    playerCollidesWithObject();
     
     // Replay mode pauses movement and runs until all Objects have been replayed.
     if ( replay ) {
@@ -294,6 +315,10 @@ void testApp::keyPressed(int key){
             
         case 'n':
             getThisOne--;
+            break;
+            
+            case 'j':
+            myPlayer.onSurface = !myPlayer.onSurface;
             break;
         }
     }
