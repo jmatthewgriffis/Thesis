@@ -10,8 +10,8 @@
 
 Player::Player() {
     
-    allowJump = up = left = down = right = onSurface = record = false;
-    allowMove = true;
+    up = left = down = right = onSurface = record = false;
+    allowMove = allowJump = true;
     wide = 50;
     tall = wide;
 }

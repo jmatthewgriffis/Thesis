@@ -22,9 +22,8 @@ public:
     int whichNote;
     void addNote();
     
-    ofVec2f pos;
+    ofVec2f pos, vel;
     float spacing;
-    float vel;
     float tall;
     float wide;
     float guideLineLength;

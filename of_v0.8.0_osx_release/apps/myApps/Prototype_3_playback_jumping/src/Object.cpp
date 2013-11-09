@@ -11,7 +11,7 @@
 Object::Object() {
     
     spacing = 0;
-    vel = -5;
+    vel.set( 0.0, 0.0 );
     tall = ( ofGetHeight() / 8.0 ) - 20;
     wide = tall * 1.5;
     guideLineLength = wide * 0.75;
@@ -35,8 +35,11 @@ void Object::setup( int _whichNote, float y ) {
 
 void Object::update( ofVec2f _pos ) {
     
+    if ( moveObject ) vel.set( -5.0, 0.0 );
+    else vel.set( 0 );
+    
     // Move!
-    if ( moveObject ) pos.x += vel;
+    pos += vel;
     
     // Map the volume onto the distance between the player and the Object. Closer = louder.
     float tooFar = ofGetWidth() * 0.25 * 0.25;
@@ -64,7 +67,7 @@ void Object::update( ofVec2f _pos ) {
     // What happens when the Object goes offscreen?
     {
         // Goes off on the right, destroy it.
-        if ( pos.x > ofGetWidth() && vel > 0 ) {
+        if ( pos.x > ofGetWidth() && vel.x > 0 ) {
             // Stop playing the Note just in case.
             myNote.sound.stop();
             destroyMe = true;

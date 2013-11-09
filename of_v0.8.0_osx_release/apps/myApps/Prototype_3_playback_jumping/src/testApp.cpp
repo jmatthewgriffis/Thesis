@@ -89,6 +89,7 @@ void testApp::playerCollidesWithObject() {
             //                myPlayer.vel.y = 0;
             myPlayer.pos.y = objectList[ i ].pos.y - objectList[ i ].tall / 2 - myPlayer.tall / 2;
             myPlayer.onSurface = true;
+            myPlayer.vel.set( objectList[ i ].vel );
         }
     }
 }
