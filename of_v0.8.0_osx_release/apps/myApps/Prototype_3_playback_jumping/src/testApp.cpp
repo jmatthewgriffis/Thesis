@@ -62,11 +62,18 @@ void testApp::addReplayedObject( int _note, float _xPos ) {
 //--------------------------------------------------------------
 void testApp::playerCollidesWithObject() {
     
+    // Collision with the ground.
+    if ( myPlayer.pos.y >= ofGetHeight() - myPlayer.tall / 2.0 ) {
+        myPlayer.pos.y = ofGetHeight() - myPlayer.tall / 2.0;
+        myPlayer.onSurface = true;
+    }
+    
+    // Collision with main objects vector.
     for ( int i = 0; i < objectList.size(); i++ ) {
         
         /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
-            myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
-        }*/
+         myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
+         }*/
         
         if (
             // Player right edge right of object left edge.
@@ -78,10 +85,10 @@ void testApp::playerCollidesWithObject() {
             // Player top edge above object bottom edge.
             && myPlayer.pos.y - myPlayer.tall / 2 <= objectList[ i ].pos.y + objectList[ i ].tall / 2
             ) {
-//            cout<<"yes"<<endl;
-                myPlayer.onSurface = true;
-//                myPlayer.vel.y = 0;
-                myPlayer.pos.y = objectList[ i ].pos.y - objectList[ i ].tall / 2 - myPlayer.tall / 2;
+            //            cout<<"yes"<<endl;
+            //                myPlayer.vel.y = 0;
+            myPlayer.pos.y = objectList[ i ].pos.y - objectList[ i ].tall / 2 - myPlayer.tall / 2;
+            myPlayer.onSurface = true;
         }
     }
 }
@@ -110,12 +117,17 @@ bool bShouldIErase( Object &a ){
 //--------------------------------------------------------------
 void testApp::update(){
     
-    cout << myPlayer.onSurface <<endl;
+    // Reset essential conditionals.
     myPlayer.onSurface = false;
     
     if ( getThisOne < 0 ) getThisOne = objectList.size() - 1;
     if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
     
+    // Apply gravity to the player.
+    // Come back to this. Use it to fake analog sensitivity with jump height proportional to how long the button is held. Gravity only applies sometimes.
+    myPlayer.applyForce( ofVec2f( 0.0, 0.3 ) );
+    
+    // Run collision detection.
     playerCollidesWithObject();
     
     // Replay mode pauses movement and runs until all Objects have been replayed.
@@ -189,6 +201,8 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
+    cout << myPlayer.onSurface << endl;
     
     /*if ( objectList.size() != 0 ) {
      cout<<objectList[0].myNote.loadList[3]<<endl;
@@ -278,22 +292,22 @@ void testApp::keyPressed(int key){
         case 'w':
         case 'W':
         case OF_KEY_UP:
-            myPlayer.moveU = true;
+            myPlayer.up = true;
             break;
         case 'a':
         case 'A':
         case OF_KEY_LEFT:
-            myPlayer.moveL = true;
+            myPlayer.left = true;
             break;
         case 's':
         case 'S':
         case OF_KEY_DOWN:
-            myPlayer.moveD = true;
+            myPlayer.down = true;
             break;
         case 'd':
         case 'D':
         case OF_KEY_RIGHT:
-            myPlayer.moveR = true;
+            myPlayer.right = true;
             break;
             
         case ' ':
@@ -316,10 +330,6 @@ void testApp::keyPressed(int key){
         case 'n':
             getThisOne--;
             break;
-            
-            case 'j':
-            myPlayer.onSurface = !myPlayer.onSurface;
-            break;
         }
     }
 }
@@ -332,22 +342,23 @@ void testApp::keyReleased(int key){
         case 'w':
         case 'W':
         case OF_KEY_UP:
-            myPlayer.moveU = false;
+            myPlayer.up = false;
+            myPlayer.allowJump = true;
             break;
         case 'a':
         case 'A':
         case OF_KEY_LEFT:
-            myPlayer.moveL = false;
+            myPlayer.left = false;
             break;
         case 's':
         case 'S':
         case OF_KEY_DOWN:
-            myPlayer.moveD = false;
+            myPlayer.down = false;
             break;
         case 'd':
         case 'D':
         case OF_KEY_RIGHT:
-            myPlayer.moveR = false;
+            myPlayer.right = false;
             break;
             
         case ' ':

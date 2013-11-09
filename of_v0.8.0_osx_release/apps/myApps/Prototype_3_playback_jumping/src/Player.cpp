@@ -10,7 +10,7 @@
 
 Player::Player() {
     
-    allowJump = moveU = moveL = moveD = moveR = onSurface = record = false;
+    allowJump = up = left = down = right = onSurface = record = false;
     allowMove = true;
     wide = 50;
     tall = wide;
@@ -30,59 +30,41 @@ void Player::applyForce( ofVec2f _force ) {
 
 void Player::update() {
     
-    //    onSurface = false;
-    
-    // Gravity
-    // Come back to this. Use it to fake analog sensitivity with jump height proportional to how long the button is held. Gravity only applies sometimes.
-    //    if ( !moveU ) {
-    // Gravity only applies when not on a surface.
-    if ( !onSurface ) applyForce( ofVec2f( 0.0, 0.3 ) );
-    //    }
-    
     // Movement
     if ( allowMove ) {
-        if ( moveU && allowJump ) {
+        if ( up && onSurface && allowJump ) {
             //            pos.y -= vel.y;
+            onSurface = false;
+            allowJump = false;
             // Jump! And prevent additional jumps.
             applyForce( ofVec2f( 0.0, -10.0 ) );
-            allowJump = false;
         }
-        if ( moveL ) {
+        if ( left ) {
             vel.x = -5;
         }
-        if ( moveD ) {
+        if ( down ) {
             //            pos.y += vel.y;
         }
-        if ( moveR ) {
+        if ( right ) {
             vel.x = 5;
         }
-    }
-    
-    vel += acc;
-    pos += vel;
-    
-    // Land on the ground.
-    if ( pos.y >= ofGetHeight() - tall / 2.0 ) {
-        pos.y = ofGetHeight() - tall / 2.0;
-        if ( !moveU ) {
-            onSurface = true;
+        
+        vel += acc;
+        
+        // Negate velocity on a surface.
+        if ( onSurface ) {
+            vel.y = 0;
         }
-    }
-    
-    // Negate velocity on a surface.
-    if ( onSurface ) {
-        vel.y = 0;
-        allowJump = true;
-    }
-    
-    // Debug
-    //    cout<<vel.y<<endl;
-    
-    // Manage forces.
-    float damping = 0.97;
-    vel.y *= damping;
-    vel.x *= damping / 2.0;
-    acc.set( 0 );
+        
+        pos += vel;
+        
+        // Manage forces.
+        float damping = 0.97;
+        vel.y *= damping;
+        vel.x *= damping / 2.0;
+        acc.set( 0 );
+        
+    } // End "if allowMove"
 }
 
 void Player::draw() {
