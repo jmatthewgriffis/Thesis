@@ -71,28 +71,8 @@ void testApp::playerCollidesWithObject() {
     // Collision with main objects vector.
     for ( int i = 0; i < objectList.size(); i++ ) {
         
-        /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
-         myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
-         }*/
-        
-        /*if (
-         // Player right edge right of object left edge.
-         myPlayer.pos.x + myPlayer.wide / 2 >= objectList[ i ].pos.x - objectList[ i ].wide / 2
-         // Player left edge left of object right edge.
-         && myPlayer.pos.x - myPlayer.wide / 2 <= objectList[ i ].pos.x + objectList[ i ].wide / 2
-         // Player bottom edge below object top edge.
-         && myPlayer.pos.y + myPlayer.tall / 2 >= objectList[ i ].pos.y - objectList[ i ].tall / 2
-         // Player top edge above object bottom edge.
-         && myPlayer.pos.y - myPlayer.tall / 2 <= objectList[ i ].pos.y + objectList[ i ].tall / 2
-         ) {
-         //            cout<<"yes"<<endl;
-         //                myPlayer.vel.y = 0;
-         myPlayer.pos.y = objectList[ i ].pos.y - objectList[ i ].tall / 2 - myPlayer.tall / 2;
-         myPlayer.onSurface = true;
-         myPlayer.vel.set( objectList[ i ].vel );
-         }*/
-        
-        // Let's try something different. Make some floats for shorthand...
+        // Make some floats for shorthand...
+        float margin = 5.0;
         float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
         float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
         float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
@@ -103,7 +83,7 @@ void testApp::playerCollidesWithObject() {
         float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
         
         // First, check if the player is in the same horizontal region as the object.
-        if ( playerBottom >= objectTop && playerTop <= objectBottom ) {
+        if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
             // Is there something directly to the right?
             if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
                 // Prevent the player from moving to the right.
@@ -116,13 +96,14 @@ void testApp::playerCollidesWithObject() {
             }
         }
         // Next, check if the player is in the same vertical region as the object.
-        if ( playerRight >= objectLeft && playerLeft <= objectRight ) {
+        if ( playerRight >= objectLeft + margin && playerLeft <= objectRight - margin ) {
             // Is there something directly below?
             if ( playerBottom >= objectTop && playerBottom < objectList[ i ].pos.y ) {
                 // Prevent the player from moving downward.
                 myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
                 myPlayer.onSurface = true;
-                myPlayer.vel.set( objectList[ i ].vel );
+//                myPlayer.vel.set( objectList[ i ].vel );
+                myPlayer.applyForce( objectList[ i ].vel );
             }
             // OK, is there something directly above?
             else if ( playerTop <= objectBottom && playerTop > objectList[ i ].pos.y ) {
@@ -134,6 +115,10 @@ void testApp::playerCollidesWithObject() {
                 }
             }
         }
+        
+        /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
+         myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
+         }*/
     }
 }
 
@@ -245,8 +230,6 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    
-    cout << myPlayer.onSurface << endl;
     
     /*if ( objectList.size() != 0 ) {
      cout<<objectList[0].myNote.loadList[3]<<endl;
