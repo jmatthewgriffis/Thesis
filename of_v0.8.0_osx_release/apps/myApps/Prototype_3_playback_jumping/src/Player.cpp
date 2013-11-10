@@ -12,7 +12,7 @@ Player::Player() {
     
     up = left = down = right = onSurface = record = false;
     allowMove = allowJump = true;
-    wide = 50;
+    wide = 25;
     tall = wide;
 }
 

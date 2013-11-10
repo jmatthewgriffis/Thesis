@@ -106,13 +106,32 @@ void testApp::playerCollidesWithObject() {
         if ( playerBottom >= objectTop && playerTop <= objectBottom ) {
             // Is there something directly to the right?
             if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
-                // Prevent the player from moving past the object.
+                // Prevent the player from moving to the right.
                 myPlayer.pos.x = objectLeft - myPlayer.wide / 2.0;
             }
             // OK, is there something directly to the left?
             else if ( playerLeft <= objectRight && playerLeft > objectList[ i ].pos.x ) {
-                // Prevent the player from moving past the object.
+                // Prevent the player from moving to the left.
                 myPlayer.pos.x = objectRight + myPlayer.wide / 2.0;
+            }
+        }
+        // Next, check if the player is in the same vertical region as the object.
+        if ( playerRight >= objectLeft && playerLeft <= objectRight ) {
+            // Is there something directly below?
+            if ( playerBottom >= objectTop && playerBottom < objectList[ i ].pos.y ) {
+                // Prevent the player from moving downward.
+                myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
+                myPlayer.onSurface = true;
+                myPlayer.vel.set( objectList[ i ].vel );
+            }
+            // OK, is there something directly above?
+            else if ( playerTop <= objectBottom && playerTop > objectList[ i ].pos.y ) {
+                // Prevent the player from moving upward.
+                myPlayer.pos.y = objectBottom + myPlayer.tall / 2.0;
+                // Cancel any upward velocity.
+                if ( myPlayer.vel.y < 0 ) {
+                    myPlayer.vel.y = 0;
+                }
             }
         }
     }
