@@ -19,12 +19,15 @@ public:
     void draw();
     
     void applyForce( ofVec2f _force );
+    void fPressingRecord();
+    void fPressingReplay();
+    void fActing();
     
     ofVec2f pos, vel, acc, actPos;
     float wide, tall;
     float xVel, jumpVel;
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;
-    bool record, bAllowRecord, bIsActing;
+    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing;
     float radius, angle, angleVel;
 };

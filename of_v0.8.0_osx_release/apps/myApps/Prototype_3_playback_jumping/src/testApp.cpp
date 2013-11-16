@@ -421,23 +421,13 @@ void testApp::keyPressed(int key){
             
         case 'a':
         case 'A':
-            if ( bIsLefty ) {
-                // Don't allow recording if the player is currently replaying.
-                if ( !myPlayer.bIsActing && !bIsReplaying && myPlayer.bAllowRecord ) {
-                    myPlayer.record = true;
-                }
-            }
+            if ( bIsLefty ) myPlayer.record = true;
             else myPlayer.left = true;
             break;
             
         case OF_KEY_LEFT:
             if ( bIsLefty ) myPlayer.left = true;
-            else {
-                // Don't allow recording if the player is currently replaying.
-                if ( !myPlayer.bIsActing && !bIsReplaying && myPlayer.bAllowRecord ) {
-                    myPlayer.record = true;
-                }
-            }
+            else myPlayer.record = true;
             break;
             
         case 's':
@@ -453,13 +443,19 @@ void testApp::keyPressed(int key){
             
         case 'd':
         case 'D':
-            if ( bIsLefty ) bIsReplaying = true;
+            if ( bIsLefty ) {
+                bIsReplaying = true;
+                myPlayer.replay = true;
+            }
             else myPlayer.right = true;
             break;
             
         case OF_KEY_RIGHT:
             if ( bIsLefty ) myPlayer.right = true;
-            else bIsReplaying = true;
+            else {
+                bIsReplaying = true;
+                myPlayer.replay = true;
+            }
             break;
             
             // Debug
@@ -507,7 +503,6 @@ void testApp::keyReleased(int key){
             else {
                 myPlayer.up = false;
                 myPlayer.allowJump = true;
-                if ( !myPlayer.bIsActing ) myPlayer.bAllowRecord = true;
             }
             break;
             
@@ -527,10 +522,7 @@ void testApp::keyReleased(int key){
             
         case OF_KEY_LEFT:
             if ( bIsLefty ) myPlayer.left = false;
-            else {
-                myPlayer.record = false;
-                if ( !myPlayer.bIsActing ) myPlayer.bAllowRecord = true;
-            }
+            else myPlayer.record = false;
             break;
             
         case 's':
@@ -546,13 +538,13 @@ void testApp::keyReleased(int key){
             
         case 'd':
         case 'D':
-            if ( bIsLefty ) {}
+            if ( bIsLefty ) myPlayer.replay = false;
             else myPlayer.right = false;
             break;
             
         case OF_KEY_RIGHT:
             if ( bIsLefty ) myPlayer.right = false;
-            else {}
+            else myPlayer.replay = false;
             break;
     }
 }
