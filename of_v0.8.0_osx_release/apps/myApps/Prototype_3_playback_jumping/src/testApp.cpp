@@ -79,19 +79,11 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    /*if ( objectList.size() != 0 ) {
-     cout<<objectList[0].myNote.loadList[3]<<endl;
-     }*/
-    
-    // Draw the staff, should be its own class.
+    // Draw the staff.
     ofSetColor( 0 );
-    //    ofLine( 0, ( ofGetHeight() / 8.0 ) * 1.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 1.0 ); // A above the staff.
-    ofLine( 0, ( ofGetHeight() / 8.0 ) * 2.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 2.0 );
-    ofLine( 0, ( ofGetHeight() / 8.0 ) * 3.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 3.0 );
-    ofLine( 0, ( ofGetHeight() / 8.0 ) * 4.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 4.0 );
-    ofLine( 0, ( ofGetHeight() / 8.0 ) * 5.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 5.0 );
-    ofLine( 0, ( ofGetHeight() / 8.0 ) * 6.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 6.0 );
-    //    ofLine( 0, ( ofGetHeight() / 8.0 ) * 7.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 7.0 ); // C below the staff (middle C).
+    for ( int i = 2; i < 7; i++ ) {
+        ofLine( 0, ( ofGetHeight() / 8.0 ) * i, ofGetWidth(), ( ofGetHeight() / 8.0 ) * i );
+    }
     
     // Draw the notes.
     //    if ( objectList.size() != 0 ) {
