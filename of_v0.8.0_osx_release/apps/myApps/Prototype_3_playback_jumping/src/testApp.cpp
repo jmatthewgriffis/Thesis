@@ -395,7 +395,6 @@ void testApp::keyPressed(int key){
             setup();
             break;
             
-            // Movement and action (depends on the control scheme).
             
         case OF_KEY_RETURN:
             if ( gameState == 0 ) gameState = 1;
@@ -407,21 +406,38 @@ void testApp::keyPressed(int key){
             }
             break;
             
+            // Movement and action (depends on the control scheme).
+            
         case 'w':
         case 'W':
             if ( bIsLefty ) {}
             else myPlayer.up = true;
             break;
             
+        case OF_KEY_UP:
+            if ( bIsLefty ) myPlayer.up = true;
+            else {}
+            break;
+            
         case 'a':
         case 'A':
             if ( bIsLefty ) {
                 // Don't allow recording if the player is currently replaying.
-                if ( !bIsReplaying ) {
+                if ( !myPlayer.bIsActing && !bIsReplaying && myPlayer.bAllowRecord ) {
                     myPlayer.record = true;
                 }
             }
             else myPlayer.left = true;
+            break;
+            
+        case OF_KEY_LEFT:
+            if ( bIsLefty ) myPlayer.left = true;
+            else {
+                // Don't allow recording if the player is currently replaying.
+                if ( !myPlayer.bIsActing && !bIsReplaying && myPlayer.bAllowRecord ) {
+                    myPlayer.record = true;
+                }
+            }
             break;
             
         case 's':
@@ -430,30 +446,15 @@ void testApp::keyPressed(int key){
             else myPlayer.down = true;
             break;
             
+        case OF_KEY_DOWN:
+            if ( bIsLefty ) myPlayer.down = true;
+            else {}
+            break;
+            
         case 'd':
         case 'D':
             if ( bIsLefty ) bIsReplaying = true;
             else myPlayer.right = true;
-            break;
-            
-        case OF_KEY_UP:
-            if ( bIsLefty ) myPlayer.up = true;
-            else {}
-            break;
-            
-        case OF_KEY_LEFT:
-            if ( bIsLefty ) myPlayer.left = true;
-            else {
-                // Don't allow recording if the player is currently replaying.
-                if ( !bIsReplaying ) {
-                    myPlayer.record = true;
-                }
-            }
-            break;
-            
-        case OF_KEY_DOWN:
-            if ( bIsLefty ) myPlayer.down = true;
-            else {}
             break;
             
         case OF_KEY_RIGHT:
@@ -506,25 +507,8 @@ void testApp::keyReleased(int key){
             else {
                 myPlayer.up = false;
                 myPlayer.allowJump = true;
+                if ( !myPlayer.bIsActing ) myPlayer.bAllowRecord = true;
             }
-            break;
-            
-        case 'a':
-        case 'A':
-            if ( bIsLefty ) myPlayer.record = false;
-            else myPlayer.left = false;
-            break;
-            
-        case 's':
-        case 'S':
-            if ( bIsLefty ) {}
-            else myPlayer.down = false;
-            break;
-            
-        case 'd':
-        case 'D':
-            if ( bIsLefty ) {}
-            else myPlayer.right = false;
             break;
             
         case OF_KEY_UP:
@@ -535,14 +519,35 @@ void testApp::keyReleased(int key){
             else {}
             break;
             
+        case 'a':
+        case 'A':
+            if ( bIsLefty ) myPlayer.record = false;
+            else myPlayer.left = false;
+            break;
+            
         case OF_KEY_LEFT:
             if ( bIsLefty ) myPlayer.left = false;
-            else myPlayer.record = false;
+            else {
+                myPlayer.record = false;
+                if ( !myPlayer.bIsActing ) myPlayer.bAllowRecord = true;
+            }
+            break;
+            
+        case 's':
+        case 'S':
+            if ( bIsLefty ) {}
+            else myPlayer.down = false;
             break;
             
         case OF_KEY_DOWN:
             if ( bIsLefty ) myPlayer.down = false;
             else {}
+            break;
+            
+        case 'd':
+        case 'D':
+            if ( bIsLefty ) {}
+            else myPlayer.right = false;
             break;
             
         case OF_KEY_RIGHT:

@@ -10,19 +10,24 @@
 
 Player::Player() {
     
-    up = left = down = right = onSurface = record = false;
-    allowMove = allowJump = true;
     wide = 50;
     tall = wide;
     xVel = 5;
     jumpVel = 10;
+    radius = 50;
+    angleVel = 10;
 }
 
 void Player::setup() {
+
+    up = left = down = right = onSurface = record = bIsActing = false;
+    allowMove = allowJump = bAllowRecord = true;
+    angle = 0;
     
     pos.set( 100, 100 );
     vel.set( 0 );
     acc.set( 0 );
+    actPos.set( 0 );
 }
 
 void Player::applyForce( ofVec2f _force ) {
@@ -73,6 +78,24 @@ void Player::update() {
         acc.set( 0 );
         
     } // End "if allowMove"
+    
+    if ( record ) {
+        angle = 225;
+        bIsActing = true;
+        record = false;
+        bAllowRecord = false;
+    }
+    
+    if ( bIsActing ) {
+        angle -= angleVel;
+    }
+    
+    actPos.x = radius * sin( ofDegToRad( angle ) );
+    actPos.y = radius * cos( ofDegToRad( angle ) );
+    
+    if ( angle < -135 || angle > 585 ) {
+        bIsActing = false;
+    }
 }
 
 void Player::draw() {
@@ -81,9 +104,12 @@ void Player::draw() {
     ofSetRectMode( OF_RECTMODE_CENTER );
     ofRect( pos, wide, tall );
     
-    // Draw a recording box if called.
-    if ( record ) {
+    // Draw the action if called.
+    if ( bIsActing ) {
         ofSetColor( 0, 255, 0 );
-        ofRect( pos.x + 50, pos.y, 20, 20 );
+        ofPushMatrix();{
+            ofTranslate( pos );
+            ofCircle( actPos, 10 );
+        }ofPopMatrix();
     }
 }
