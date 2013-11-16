@@ -12,6 +12,8 @@ void testApp::setup(){
     ofSetFrameRate( 60 );
     ofSetCircleResolution( 100 );
     
+    helvetica.loadFont( "fonts/helvetica.otf", 24 );
+    
     // Background
     ofBackground( 255 );
     
@@ -22,9 +24,12 @@ void testApp::setup(){
     testPattern();
     getThisOne = 0;
     
-    bIsReplaying = false;
+    bIsLefty = bIsReplaying = false;
     
     myPlayer.setup();
+    
+    // 0 is title screen, 1 is game screen.
+    gameState = 0;
 }
 
 //--------------------------------------------------------------
@@ -39,6 +44,12 @@ bool bShouldIErase( Object &a ){
 
 //--------------------------------------------------------------
 void testApp::update(){
+    
+    // Update the control text based on the player's choice.
+    if ( gameState == 0 ) fWriteControls();
+    
+    // Don't update anything else if not on the game screen.
+    if ( gameState != 1 ) return;
     
     // Reset essential conditionals.
     myPlayer.onSurface = false;
@@ -78,6 +89,35 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
+    if ( gameState == 0 ) {
+        
+        ofSetRectMode( OF_RECTMODE_CORNER );
+        
+        ofSetColor( 0 );
+        helvetica.drawString( "Hello! Welcome to Demoville, home of the demo.", 150, 75 );
+        helvetica.drawString( "Please choose your control affiliation.", 225, 125 );
+        
+        if ( bIsLefty) ofSetColor( 0 );
+        else {
+            ofSetColor( 0 );
+            ofRect( 190, 170, 670, 50 );
+            ofSetColor( 255 );
+        }
+        helvetica.drawString( "I am so dextrous (right-handed): Press 1", 200, 200 );
+        if ( bIsLefty) {
+            ofSetColor( 0 );
+            ofRect( 190, 220, 670, 50 );
+            ofSetColor( 255 );
+        } else ofSetColor( 0 );
+        helvetica.drawString( "I feel quite sinister (left-handed): Press 2", 200, 250 );
+        
+        ofSetColor( 0 );
+        helvetica.drawString( "Press ENTER to continue.", 300, 325 );
+    }
+    
+    // Don't draw anything else if not on the game screen.
+    if ( gameState != 1 ) return;
     
     // Draw the staff.
     ofSetColor( 0 );
@@ -304,6 +344,45 @@ void testApp::staffPosSet() {
 }
 
 //--------------------------------------------------------------
+void testApp::fWriteControls() {
+    
+    // Here we store the controls as strings we can display on-screen.
+    
+    if ( !bIsLefty ) {
+        
+        // Movement
+        
+        sUp = "<w>";
+        sLeft = "<a>";
+        sDown = "<s>";
+        sRight = "<d>";
+        
+        // Action
+        
+        sAltUp = "<UP>";
+        sAltLeft = "<LEFT>";
+        sAltDown = "<DOWN>";
+        sAltRight = "<RIGHT>";
+    }
+    else {
+        
+        // Action
+        
+        sAltUp = "<w>";
+        sAltLeft = "<a>";
+        sAltDown = "<s>";
+        sAltRight = "<d>";
+        
+        // Movement
+        
+        sUp = "<UP>";
+        sLeft = "<LEFT>";
+        sDown = "<DOWN>";
+        sRight = "<RIGHT>";
+    }
+}
+
+//--------------------------------------------------------------
 void testApp::keyPressed(int key){
     
     switch ( key ) {
@@ -313,44 +392,70 @@ void testApp::keyPressed(int key){
             setup();
             break;
             
-            // Turn Object movement on and off.
-        case '1':
-            for ( int i = 0; i < objectList.size(); i++ ) {
-                objectList[ i ].moveObject = !objectList[ i ].moveObject;
+            // Movement and action (depends on the control scheme).
+            
+        case OF_KEY_RETURN:
+            if ( gameState == 0 ) gameState = 1;
+            break;
+            
+        case '2':
+            if ( gameState == 0 ) {
+                bIsLefty = true;
             }
             break;
             
-            // Movement
         case 'w':
         case 'W':
-        case OF_KEY_UP:
-            myPlayer.up = true;
-            break;
-        case 'a':
-        case 'A':
-        case OF_KEY_LEFT:
-            myPlayer.left = true;
-            break;
-        case 's':
-        case 'S':
-        case OF_KEY_DOWN:
-            myPlayer.down = true;
-            break;
-        case 'd':
-        case 'D':
-        case OF_KEY_RIGHT:
-            myPlayer.right = true;
+            if ( bIsLefty ) {}
+            else myPlayer.up = true;
             break;
             
-        case ' ':
-            // Don't allow recording if the player is currently replaying.
-            if ( !bIsReplaying ) {
-                myPlayer.record = true;
+        case 'a':
+        case 'A':
+            if ( bIsLefty ) {
+                // Don't allow recording if the player is currently replaying.
+                if ( !bIsReplaying ) {
+                    myPlayer.record = true;
+                }
+            }
+            else myPlayer.left = true;
+            break;
+            
+        case 's':
+        case 'S':
+            if ( bIsLefty ) {}
+            else myPlayer.down = true;
+            break;
+            
+        case 'd':
+        case 'D':
+            if ( bIsLefty ) bIsReplaying = true;
+            else myPlayer.right = true;
+            break;
+            
+        case OF_KEY_UP:
+            if ( bIsLefty ) myPlayer.up = true;
+            else {}
+            break;
+            
+        case OF_KEY_LEFT:
+            if ( bIsLefty ) myPlayer.left = true;
+            else {
+                // Don't allow recording if the player is currently replaying.
+                if ( !bIsReplaying ) {
+                    myPlayer.record = true;
+                }
             }
             break;
             
-        case OF_KEY_SHIFT:
-            bIsReplaying = true;
+        case OF_KEY_DOWN:
+            if ( bIsLefty ) myPlayer.down = true;
+            else {}
+            break;
+            
+        case OF_KEY_RIGHT:
+            if ( bIsLefty ) myPlayer.right = true;
+            else bIsReplaying = true;
             break;
             
             // Debug
@@ -363,6 +468,25 @@ void testApp::keyPressed(int key){
             getThisOne--;
             break;
         }
+            
+            // Debug
+        case 'p':
+            if ( gameState == 0 ) gameState = 1;
+            else if ( gameState == 1 ) gameState = 0;
+            break;
+            
+        case '1':
+            if ( gameState == 0 ) {
+                bIsLefty = false;
+            }
+            // Debug
+            else {
+                // Turn Object movement on and off.
+                for ( int i = 0; i < objectList.size(); i++ ) {
+                    objectList[ i ].moveObject = !objectList[ i ].moveObject;
+                }
+            }
+            break;
     }
 }
 
@@ -371,30 +495,84 @@ void testApp::keyReleased(int key){
     
     switch ( key ) {
             // Movement
+            /*case 'w':
+             case 'W':
+             case OF_KEY_UP:
+             myPlayer.up = false;
+             myPlayer.allowJump = true;
+             break;
+             case 'a':
+             case 'A':
+             case OF_KEY_LEFT:
+             myPlayer.left = false;
+             break;
+             case 's':
+             case 'S':
+             case OF_KEY_DOWN:
+             myPlayer.down = false;
+             break;
+             case 'd':
+             case 'D':
+             case OF_KEY_RIGHT:
+             myPlayer.right = false;
+             break;
+             
+             case ' ':
+             myPlayer.record = false;
+             break;
+             */
+            
+            
+            // Movement and action (depends on the control scheme).
+            
         case 'w':
         case 'W':
-        case OF_KEY_UP:
-            myPlayer.up = false;
-            myPlayer.allowJump = true;
-            break;
-        case 'a':
-        case 'A':
-        case OF_KEY_LEFT:
-            myPlayer.left = false;
-            break;
-        case 's':
-        case 'S':
-        case OF_KEY_DOWN:
-            myPlayer.down = false;
-            break;
-        case 'd':
-        case 'D':
-        case OF_KEY_RIGHT:
-            myPlayer.right = false;
+            if ( bIsLefty ) {}
+            else {
+                myPlayer.up = false;
+                myPlayer.allowJump = true;
+            }
             break;
             
-        case ' ':
-            myPlayer.record = false;
+        case 'a':
+        case 'A':
+            if ( bIsLefty ) myPlayer.record = false;
+            else myPlayer.left = false;
+            break;
+            
+        case 's':
+        case 'S':
+            if ( bIsLefty ) {}
+            else myPlayer.down = false;
+            break;
+            
+        case 'd':
+        case 'D':
+            if ( bIsLefty ) {}
+            else myPlayer.right = false;
+            break;
+            
+        case OF_KEY_UP:
+            if ( bIsLefty ) {
+                myPlayer.up = false;
+                myPlayer.allowJump = true;
+            }
+            else {}
+            break;
+            
+        case OF_KEY_LEFT:
+            if ( bIsLefty ) myPlayer.left = false;
+            else myPlayer.record = false;
+            break;
+            
+        case OF_KEY_DOWN:
+            if ( bIsLefty ) myPlayer.down = false;
+            else {}
+            break;
+            
+        case OF_KEY_RIGHT:
+            if ( bIsLefty ) myPlayer.right = false;
+            else {}
             break;
     }
 }
