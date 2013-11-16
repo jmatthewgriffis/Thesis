@@ -29,6 +29,8 @@ public:
     void cleanup();
     void exit(); // Technically this is built-in.
     
+    void fDrawTitleScreen();
+    
     // Manage the objects.
     void addObject( int _note, float _xPos );
     void addRecordedObject( int _note, float _xDist );

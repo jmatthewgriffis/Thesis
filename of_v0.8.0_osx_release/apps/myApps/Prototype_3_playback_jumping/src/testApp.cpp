@@ -45,7 +45,7 @@ bool bShouldIErase( Object &a ){
 //--------------------------------------------------------------
 void testApp::update(){
     
-    // Update the control text based on the player's choice.
+    // Update the control text based on the player's choice on the title screen.
     if ( gameState == 0 ) fWriteControls();
     
     // Don't update anything else if not on the game screen.
@@ -90,31 +90,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    if ( gameState == 0 ) {
-        
-        ofSetRectMode( OF_RECTMODE_CORNER );
-        
-        ofSetColor( 0 );
-        helvetica.drawString( "Hello! Welcome to Demoville, home of the demo.", 150, 75 );
-        helvetica.drawString( "Please choose your control affiliation.", 225, 125 );
-        
-        if ( bIsLefty) ofSetColor( 0 );
-        else {
-            ofSetColor( 0 );
-            ofRect( 190, 170, 670, 50 );
-            ofSetColor( 255 );
-        }
-        helvetica.drawString( "I am so dextrous (right-handed): Press 1", 200, 200 );
-        if ( bIsLefty) {
-            ofSetColor( 0 );
-            ofRect( 190, 220, 670, 50 );
-            ofSetColor( 255 );
-        } else ofSetColor( 0 );
-        helvetica.drawString( "I feel quite sinister (left-handed): Press 2", 200, 250 );
-        
-        ofSetColor( 0 );
-        helvetica.drawString( "Press ENTER to continue.", 300, 325 );
-    }
+    if ( gameState == 0 ) fDrawTitleScreen();
     
     // Don't draw anything else if not on the game screen.
     if ( gameState != 1 ) return;
@@ -138,6 +114,33 @@ void testApp::draw(){
     //    }
     
     myPlayer.draw();
+}
+
+//--------------------------------------------------------------
+void testApp::fDrawTitleScreen() {
+    
+    ofSetRectMode( OF_RECTMODE_CORNER );
+    
+    ofSetColor( 0 );
+    helvetica.drawString( "Hello! Welcome to Demoville, home of the demo.", 150, 75 );
+    helvetica.drawString( "Please choose your control affiliation.", 225, 125 );
+    
+    if ( bIsLefty) ofSetColor( 0 );
+    else {
+        ofSetColor( 0 );
+        ofRect( 190, 170, 670, 50 );
+        ofSetColor( 255 );
+    }
+    helvetica.drawString( "I am so dextrous (right-handed): Press 1", 200, 200 );
+    if ( bIsLefty) {
+        ofSetColor( 0 );
+        ofRect( 190, 220, 670, 50 );
+        ofSetColor( 255 );
+    } else ofSetColor( 0 );
+    helvetica.drawString( "I feel quite sinister (left-handed): Press 2", 200, 250 );
+    
+    ofSetColor( 0 );
+    helvetica.drawString( "Press ENTER to continue.", 300, 325 );
 }
 
 //--------------------------------------------------------------
@@ -494,34 +497,6 @@ void testApp::keyPressed(int key){
 void testApp::keyReleased(int key){
     
     switch ( key ) {
-            // Movement
-            /*case 'w':
-             case 'W':
-             case OF_KEY_UP:
-             myPlayer.up = false;
-             myPlayer.allowJump = true;
-             break;
-             case 'a':
-             case 'A':
-             case OF_KEY_LEFT:
-             myPlayer.left = false;
-             break;
-             case 's':
-             case 'S':
-             case OF_KEY_DOWN:
-             myPlayer.down = false;
-             break;
-             case 'd':
-             case 'D':
-             case OF_KEY_RIGHT:
-             myPlayer.right = false;
-             break;
-             
-             case ' ':
-             myPlayer.record = false;
-             break;
-             */
-            
             
             // Movement and action (depends on the control scheme).
             
