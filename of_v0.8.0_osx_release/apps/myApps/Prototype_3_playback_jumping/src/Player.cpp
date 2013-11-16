@@ -60,7 +60,7 @@ void Player::update() {
         
         pos += vel;
         
-        cout<<vel.x<<endl;
+//        cout<<vel.x<<endl;
         
 //        if ( onSurface ) {
             vel.x = 0;

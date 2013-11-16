@@ -38,14 +38,14 @@ void Note::storePaths() {
         
         string loadLocation;
         
-        if (i == 0) loadLocation = "notes/middleC.mp3";
-        else if (i == 1) loadLocation = "notes/d.mp3";
-        else if (i == 2) loadLocation = "notes/e.mp3";
-        else if (i == 3) loadLocation = "notes/f.mp3";
-        else if (i == 4) loadLocation = "notes/g.mp3";
-        else if (i == 5) loadLocation = "notes/a.mp3";
-        else if (i == 6) loadLocation = "notes/b.mp3";
-        else if (i == 7) loadLocation = "notes/highC.mp3";
+        if (i == 1) loadLocation = "notes/middleC.mp3";
+        else if (i == 2) loadLocation = "notes/d.mp3";
+        else if (i == 3) loadLocation = "notes/e.mp3";
+        else if (i == 4) loadLocation = "notes/f.mp3";
+        else if (i == 5) loadLocation = "notes/g.mp3";
+        else if (i == 6) loadLocation = "notes/a.mp3";
+        else if (i == 7) loadLocation = "notes/b.mp3";
+        else if (i == 8) loadLocation = "notes/highC.mp3";
         
         loadList.push_back( loadLocation );
     }

@@ -125,12 +125,12 @@ void testApp::playerCollidesWithObject() {
 //--------------------------------------------------------------
 void testApp::testPattern() {
     
-    addObject( 1, 200 );
-    addObject( 3, 400 );
-    addObject( 5, 600 );
-    addObject( 1, 800 );
-    addObject( 1, 1000 );
-    addObject( 4, 1000 );
+    addObject( 2, 200 );
+    addObject( 4, 400 );
+    addObject( 6, 600 );
+    addObject( 2, 800 );
+    addObject( 2, 1000 );
+    addObject( 5, 1000 );
 }
 
 //--------------------------------------------------------------
