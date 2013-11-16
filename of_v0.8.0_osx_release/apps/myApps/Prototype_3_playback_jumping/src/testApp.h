@@ -33,6 +33,7 @@ public:
     void addObject( int _note, float _xPos );
     void addRecordedObject( int _note, float _xDist );
     void addReplayedObject( int _note, float _xPos );
+    void updateObjectList();
     
     // Handle collision.
     void playerCollidesWithObject();

@@ -53,49 +53,21 @@ void testApp::update(){
     // Run collision detection.
     playerCollidesWithObject();
     
-    // Replay mode pauses movement and runs until all Objects have been replayed.
-    if ( bIsReplaying ) {
-        fReplay();
-    } else {
-        myPlayer.allowMove = true;
-    }
+    // Trigger replay mode.
+    if ( bIsReplaying ) fReplay();
+    else myPlayer.allowMove = true;
     
+    // Update the player (duh).
     myPlayer.update();
     
     // Update the notes.
-    if ( objectList.size() != 0 ) {
-        for ( int i = 0; i < objectList.size(); i++ ) {
-            
-            // Detect for collision with player's recorder, if the note is selected.
-            if ( i == getThisOne ) {
-                
-                ofVec2f dist = myPlayer.pos - objectList[ i ].pos;
-                if ( dist.lengthSquared() < ( 50 * 50 ) && myPlayer.record ) {
-                    
-                    // Check the spacing between the recorded note and the previous note.
-                    float xDist;
-                    if ( recordedList.size() == 0 ) {
-                        xDist = 0;
-                    } else { // FIND ME--I may need to adjust the below in case notes aren't captured linearly.
-                        xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
-                    }
-                    addRecordedObject( objectList[ i ].whichNote, xDist );
-                    getThisOne++;
-                }
-            }
-            
-            // Highlight a specific Object.
-            if ( i == getThisOne ) objectList[ i ].drawAttention = true;
-            else objectList[ i ].drawAttention = false;
-            
-            objectList[ i ].update( myPlayer.pos );
-        }
+    updateObjectList();
+    
+    //    if ( replayedList.size() != 0 ) {
+    for ( int i = 0; i < replayedList.size(); i++ ) {
+        replayedList[ i ].update( myPlayer.pos );
     }
-    if ( replayedList.size() != 0 ) {
-        for ( int i = 0; i < replayedList.size(); i++ ) {
-            replayedList[ i ].update( myPlayer.pos );
-        }
-    }
+    //    }
     
     // Following up the boolean function we created above, this oF function sorts the vector according to the values of the booleans and then removes any with a 'true' value:
     ofRemove( objectList, bShouldIErase );
@@ -122,16 +94,16 @@ void testApp::draw(){
     //    ofLine( 0, ( ofGetHeight() / 8.0 ) * 7.0, ofGetWidth(), ( ofGetHeight() / 8.0 ) * 7.0 ); // C below the staff (middle C).
     
     // Draw the notes.
-    if ( objectList.size() != 0 ) {
-        for ( int i = 0; i < objectList.size(); i++ ) {
-            objectList[ i ].draw();
-        }
+    //    if ( objectList.size() != 0 ) {
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        objectList[ i ].draw();
     }
-    if ( replayedList.size() != 0 ) {
-        for ( int i = 0; i < replayedList.size(); i++ ) {
-            replayedList[ i ].draw();
-        }
+    //    }
+    //    if ( replayedList.size() != 0 ) {
+    for ( int i = 0; i < replayedList.size(); i++ ) {
+        replayedList[ i ].draw();
     }
+    //    }
     
     myPlayer.draw();
 }
@@ -169,7 +141,42 @@ void testApp::addReplayedObject( int _note, float _xPos ) {
 }
 
 //--------------------------------------------------------------
+void testApp::updateObjectList() {
+    
+    //    if ( objectList.size() != 0 ) {
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        
+        // Detect for collision with player's recorder, if the note is selected.
+        if ( i == getThisOne ) {
+            
+            ofVec2f dist = myPlayer.pos - objectList[ i ].pos;
+            if ( dist.lengthSquared() < ( 50 * 50 ) && myPlayer.record ) {
+                
+                // Check the spacing between the recorded note and the previous note.
+                float xDist;
+                if ( recordedList.size() == 0 ) {
+                    xDist = 0;
+                } else { // FIND ME--I may need to adjust the below in case notes aren't captured linearly.
+                    xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
+                }
+                addRecordedObject( objectList[ i ].whichNote, xDist );
+                getThisOne++;
+            }
+        }
+        
+        // Highlight a specific Object.
+        if ( i == getThisOne ) objectList[ i ].drawAttention = true;
+        else objectList[ i ].drawAttention = false;
+        
+        objectList[ i ].update( myPlayer.pos );
+    }
+    //    }
+}
+
+//--------------------------------------------------------------
 void testApp::fReplay() {
+    
+    // Replay mode pauses movement and runs until all Objects have been replayed.
     
     myPlayer.allowMove = false;
     
@@ -235,7 +242,7 @@ void testApp::playerCollidesWithObject() {
                 // Prevent the player from moving downward.
                 myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
                 myPlayer.onSurface = true;
-//                myPlayer.vel.set( objectList[ i ].vel );
+                //                myPlayer.vel.set( objectList[ i ].vel );
                 myPlayer.applyForce( objectList[ i ].vel );
             }
             // OK, is there something directly above?
