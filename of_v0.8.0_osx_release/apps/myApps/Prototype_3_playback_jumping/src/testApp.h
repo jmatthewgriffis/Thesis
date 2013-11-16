@@ -57,5 +57,6 @@ public:
     double lastTime;
     
     // Replay recorded notes.
-    bool replay;
+    bool bIsReplaying;
+    void fReplay();
 };

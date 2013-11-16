@@ -22,115 +22,9 @@ void testApp::setup(){
     testPattern();
     getThisOne = 0;
     
-    replay = false;
+    bIsReplaying = false;
     
     myPlayer.setup();
-}
-
-//--------------------------------------------------------------
-void testApp::addObject( int _note, float _xPos ) {
-    
-    // This function adds an NPC Object.
-    Object tmp;
-    tmp.setup( _note, staffPosList[ _note ] );
-    tmp.pos.x = _xPos;
-    objectList.push_back( tmp );
-}
-
-//--------------------------------------------------------------
-void testApp::addRecordedObject( int _note, float _xDist ) {
-    
-    // This function stores a recorded NPC Object in a static vector that gets neither updated nor drawn.
-    Object tmp;
-    tmp.setup( _note, staffPosList[ _note ] );
-    tmp.spacing = _xDist;
-    recordedList.push_back( tmp );
-}
-
-//--------------------------------------------------------------
-void testApp::addReplayedObject( int _note, float _xPos ) {
-    
-    // This function copies an Object in the "recorded" vector to an active "replayed" vector that gets updated and drawn. It also reverses velocity so the Object can travel the other direction.
-    Object tmp;
-    tmp.setup( _note, staffPosList[ _note ] );
-    tmp.pos.x = myPlayer.pos.x;
-    tmp.moveObject = true;
-    tmp.vel *= -1;
-    replayedList.push_back( tmp );
-}
-
-//--------------------------------------------------------------
-void testApp::playerCollidesWithObject() {
-    
-    // Collision with the ground.
-    if ( myPlayer.pos.y >= ofGetHeight() - myPlayer.tall / 2.0 ) {
-        myPlayer.pos.y = ofGetHeight() - myPlayer.tall / 2.0;
-        myPlayer.onSurface = true;
-    }
-    
-    // Collision with main objects vector.
-    for ( int i = 0; i < objectList.size(); i++ ) {
-        
-        // Make some floats for shorthand...
-        float margin = 5.0;
-        float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
-        float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
-        float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
-        float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
-        float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
-        float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
-        float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
-        float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
-        
-        // First, check if the player is in the same horizontal region as the object.
-        if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
-            // Is there something directly to the right?
-            if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
-                // Prevent the player from moving to the right.
-                myPlayer.pos.x = objectLeft - myPlayer.wide / 2.0;
-            }
-            // OK, is there something directly to the left?
-            else if ( playerLeft <= objectRight && playerLeft > objectList[ i ].pos.x ) {
-                // Prevent the player from moving to the left.
-                myPlayer.pos.x = objectRight + myPlayer.wide / 2.0;
-            }
-        }
-        // Next, check if the player is in the same vertical region as the object.
-        if ( playerRight >= objectLeft + margin && playerLeft <= objectRight - margin ) {
-            // Is there something directly below?
-            if ( playerBottom >= objectTop && playerBottom < objectList[ i ].pos.y ) {
-                // Prevent the player from moving downward.
-                myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
-                myPlayer.onSurface = true;
-//                myPlayer.vel.set( objectList[ i ].vel );
-                myPlayer.applyForce( objectList[ i ].vel );
-            }
-            // OK, is there something directly above?
-            else if ( playerTop <= objectBottom && playerTop > objectList[ i ].pos.y ) {
-                // Prevent the player from moving upward.
-                myPlayer.pos.y = objectBottom + myPlayer.tall / 2.0;
-                // Cancel any upward velocity.
-                if ( myPlayer.vel.y < 0 ) {
-                    myPlayer.vel.y = 0;
-                }
-            }
-        }
-        
-        /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
-         myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
-         }*/
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::testPattern() {
-    
-    addObject( 2, 200 );
-    addObject( 4, 400 );
-    addObject( 6, 600 );
-    addObject( 2, 800 );
-    addObject( 2, 1000 );
-    addObject( 5, 1000 );
 }
 
 //--------------------------------------------------------------
@@ -160,26 +54,8 @@ void testApp::update(){
     playerCollidesWithObject();
     
     // Replay mode pauses movement and runs until all Objects have been replayed.
-    if ( replay ) {
-        myPlayer.allowMove = false;
-        
-        if ( recordedList.size() > 0 ) {
-            
-            float xDist;
-            if ( replayedList.size() > 0 ) {
-                xDist = replayedList[ replayedList.size() - 1 ].pos.x - myPlayer.pos.x;
-            } else {
-                xDist = 0;
-            }
-            
-            if ( xDist >= recordedList[ 0 ].spacing ) {
-                addReplayedObject( recordedList[ 0 ].whichNote, myPlayer.pos.x );
-                recordedList[ 0 ].destroyMe = true;
-            }
-            
-        } else {
-            replay = false;
-        }
+    if ( bIsReplaying ) {
+        fReplay();
     } else {
         myPlayer.allowMove = true;
     }
@@ -261,6 +137,136 @@ void testApp::draw(){
 }
 
 //--------------------------------------------------------------
+void testApp::addObject( int _note, float _xPos ) {
+    
+    // This function adds an NPC Object.
+    Object tmp;
+    tmp.setup( _note, staffPosList[ _note ] );
+    tmp.pos.x = _xPos;
+    objectList.push_back( tmp );
+}
+
+//--------------------------------------------------------------
+void testApp::addRecordedObject( int _note, float _xDist ) {
+    
+    // This function stores a recorded NPC Object in a static vector that gets neither updated nor drawn.
+    Object tmp;
+    tmp.setup( _note, staffPosList[ _note ] );
+    tmp.spacing = _xDist;
+    recordedList.push_back( tmp );
+}
+
+//--------------------------------------------------------------
+void testApp::addReplayedObject( int _note, float _xPos ) {
+    
+    // This function copies an Object in the "recorded" vector to an active "replayed" vector that gets updated and drawn. It also reverses velocity so the Object can travel the other direction.
+    Object tmp;
+    tmp.setup( _note, staffPosList[ _note ] );
+    tmp.pos.x = myPlayer.pos.x;
+    tmp.moveObject = true;
+    tmp.vel *= -1;
+    replayedList.push_back( tmp );
+}
+
+//--------------------------------------------------------------
+void testApp::fReplay() {
+    
+    myPlayer.allowMove = false;
+    
+    if ( recordedList.size() > 0 ) {
+        
+        float xDist;
+        if ( replayedList.size() > 0 ) {
+            xDist = replayedList[ replayedList.size() - 1 ].pos.x - myPlayer.pos.x;
+        } else {
+            xDist = 0;
+        }
+        
+        if ( xDist >= recordedList[ 0 ].spacing ) {
+            addReplayedObject( recordedList[ 0 ].whichNote, myPlayer.pos.x );
+            recordedList[ 0 ].destroyMe = true;
+        }
+        
+    } else {
+        bIsReplaying = false;
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::playerCollidesWithObject() {
+    
+    // Collision with the ground.
+    if ( myPlayer.pos.y >= ofGetHeight() - myPlayer.tall / 2.0 ) {
+        myPlayer.pos.y = ofGetHeight() - myPlayer.tall / 2.0;
+        myPlayer.onSurface = true;
+    }
+    
+    // Collision with main objects vector.
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        
+        // Make some floats for shorthand...
+        float margin = 5.0;
+        float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
+        float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
+        float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
+        float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
+        float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
+        float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
+        float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
+        float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
+        
+        // First, check if the player is in the same horizontal region as the object.
+        if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
+            // Is there something directly to the right?
+            if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
+                // Prevent the player from moving to the right.
+                myPlayer.pos.x = objectLeft - myPlayer.wide / 2.0;
+            }
+            // OK, is there something directly to the left?
+            else if ( playerLeft <= objectRight && playerLeft > objectList[ i ].pos.x ) {
+                // Prevent the player from moving to the left.
+                myPlayer.pos.x = objectRight + myPlayer.wide / 2.0;
+            }
+        }
+        // Next, check if the player is in the same vertical region as the object.
+        if ( playerRight >= objectLeft + margin && playerLeft <= objectRight - margin ) {
+            // Is there something directly below?
+            if ( playerBottom >= objectTop && playerBottom < objectList[ i ].pos.y ) {
+                // Prevent the player from moving downward.
+                myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
+                myPlayer.onSurface = true;
+//                myPlayer.vel.set( objectList[ i ].vel );
+                myPlayer.applyForce( objectList[ i ].vel );
+            }
+            // OK, is there something directly above?
+            else if ( playerTop <= objectBottom && playerTop > objectList[ i ].pos.y ) {
+                // Prevent the player from moving upward.
+                myPlayer.pos.y = objectBottom + myPlayer.tall / 2.0;
+                // Cancel any upward velocity.
+                if ( myPlayer.vel.y < 0 ) {
+                    myPlayer.vel.y = 0;
+                }
+            }
+        }
+        
+        /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
+         myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
+         }*/
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::testPattern() {
+    
+    addObject( 2, 200 );
+    addObject( 4, 400 );
+    addObject( 6, 600 );
+    addObject( 2, 800 );
+    addObject( 2, 1000 );
+    addObject( 5, 1000 );
+}
+
+//--------------------------------------------------------------
 void testApp::exit() {
     
     cleanup();
@@ -339,13 +345,13 @@ void testApp::keyPressed(int key){
             
         case ' ':
             // Don't allow recording if the player is currently replaying.
-            if ( !replay ) {
+            if ( !bIsReplaying ) {
                 myPlayer.record = true;
             }
             break;
             
         case OF_KEY_SHIFT:
-            replay = true;
+            bIsReplaying = true;
             break;
             
             // Debug
