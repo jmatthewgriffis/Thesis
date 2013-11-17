@@ -7,6 +7,13 @@
 
 #define numNotes 15
 
+/*
+ So much thanks to:
+ Michael Kahane (helped with the camera, among other things.
+ Zach Lieberman (provided the audio examples in AVSYS last year.
+ Charlie Whitney (taught me loads in Algo)
+ */
+
 class testApp : public ofBaseApp{
     
 public:
