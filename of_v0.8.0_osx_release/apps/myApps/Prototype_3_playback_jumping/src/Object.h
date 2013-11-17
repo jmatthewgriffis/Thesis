@@ -29,7 +29,6 @@ public:
     float guideLineLength;
     
     bool destroyMe;
-    bool moveObject;
     bool drawAttention;
     
     Note myNote;

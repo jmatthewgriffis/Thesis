@@ -154,24 +154,25 @@ void testApp::addObject( int _note, float _xPos ) {
 }
 
 //--------------------------------------------------------------
-void testApp::addRecordedObject( int _note, float _xDist ) {
+void testApp::addRecordedObject( int _note, float _xDist, ofVec2f _vel ) {
     
     // This function stores a recorded NPC Object in a static vector that gets neither updated nor drawn.
     Object tmp;
     tmp.setup( _note, staffPosList[ _note ] );
+    tmp.vel.set( _vel );
     tmp.spacing = _xDist;
     recordedList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
-void testApp::addReplayedObject( int _note, float _xPos ) {
+void testApp::addReplayedObject( int _note, float _xPos, ofVec2f _vel ) {
     
     // This function copies an Object in the "recorded" vector to an active "replayed" vector that gets updated and drawn. It also reverses velocity so the Object can travel the other direction.
     Object tmp;
     tmp.setup( _note, staffPosList[ _note ] );
     tmp.pos.x = myPlayer.pos.x;
-    tmp.moveObject = true;
-    tmp.vel *= -1;
+    tmp.vel.set( _vel );
+    tmp.vel.x *= -1;
     replayedList.push_back( tmp );
 }
 
@@ -194,7 +195,7 @@ void testApp::updateObjectList() {
                 } else { // FIND ME--I may need to adjust the below in case notes aren't captured linearly.
                     xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
                 }
-                addRecordedObject( objectList[ i ].whichNote, xDist );
+                addRecordedObject( objectList[ i ].whichNote, xDist, objectList[ i ].vel );
                 getThisOne++;
             }
         }
@@ -225,7 +226,7 @@ void testApp::fReplay() {
         }
         
         if ( xDist >= recordedList[ 0 ].spacing ) {
-            addReplayedObject( recordedList[ 0 ].whichNote, myPlayer.pos.x );
+            addReplayedObject( recordedList[ 0 ].whichNote, myPlayer.pos.x, recordedList[ 0 ].vel );
             recordedList[ 0 ].destroyMe = true;
         }
         
@@ -483,7 +484,11 @@ void testApp::keyPressed(int key){
             else {
                 // Turn Object movement on and off.
                 for ( int i = 0; i < objectList.size(); i++ ) {
-                    objectList[ i ].moveObject = !objectList[ i ].moveObject;
+                    if ( objectList[ i ].vel == ofVec2f ( 0 ) ) {
+                        objectList[ i ].vel.set( -5, 0 );
+                    } else {
+                        objectList[ i ].vel.set( 0 );
+                    }
                 }
             }
             break;

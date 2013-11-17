@@ -66,13 +66,13 @@ void Player::update() {
         vel.x = 0;
         //        }
         
-        // Manage forces.
-        float damping = 0.97;
-        vel.y *= damping;
-        vel.x *= damping / 2.0;
-        acc.set( 0 );
-        
     } // End "if allowMove"
+    
+    // Manage forces.
+    float damping = 0.97;
+    vel.y *= damping;
+    vel.x *= damping / 2.0;
+    acc.set( 0 );
     
     fPressingRecord();
     fPressingReplay();

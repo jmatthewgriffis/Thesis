@@ -11,15 +11,9 @@
 Object::Object() {
     
     spacing = 0;
-    vel.set( 0.0, 0.0 );
     tall = ( ofGetHeight() / 8.0 ) - 20;
     wide = tall * 1.5;
     guideLineLength = wide * 0.75;
-    
-    destroyMe = false;
-    moveObject = false;
-    drawAttention = false;
-    
 }
 
 void Object::setup( int _whichNote, float y ) {
@@ -29,14 +23,17 @@ void Object::setup( int _whichNote, float y ) {
     
     pos.x = ofGetWidth();
     
+    vel.set( 0.0, 0.0 );
+    
+    destroyMe = false;
+    drawAttention = false;
+    
+    // Note stuff.
     myNote.setup( _whichNote );
     vol = 0.0f;
 }
 
 void Object::update( ofVec2f _pos ) {
-    
-    if ( moveObject ) vel.set( -5.0, 0.0 );
-    else vel.set( 0 );
     
     // Move!
     pos += vel;

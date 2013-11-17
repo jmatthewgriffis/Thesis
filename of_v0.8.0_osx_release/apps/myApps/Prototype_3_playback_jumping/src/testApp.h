@@ -33,8 +33,8 @@ public:
     
     // Manage the objects.
     void addObject( int _note, float _xPos );
-    void addRecordedObject( int _note, float _xDist );
-    void addReplayedObject( int _note, float _xPos );
+    void addRecordedObject( int _note, float _xDist, ofVec2f _vel );
+    void addReplayedObject( int _note, float _xPos, ofVec2f _vel );
     void updateObjectList();
     void fReplay();
     void testPattern();
