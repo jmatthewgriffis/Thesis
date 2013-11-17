@@ -15,12 +15,14 @@ class Object {
 public:
     Object();
     
-    void setup( int _whichNote, float y );
+    void setup( int _whichNote, float y, int _age );
     void update( ofVec2f _pos );
     void draw();
     
     int whichNote;
-    void addNote();
+    void fLimitLife();
+    
+    int age;
     
     ofVec2f pos, vel;
     float tall;

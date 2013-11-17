@@ -7,9 +7,13 @@ void testApp::setup(){
     cleanup();
     lastTime = ofGetElapsedTimef();
     
+    frameRate = 60;
+    objectLife = 7 * frameRate;
+    
     // Maintenance
     ofSetVerticalSync( true );
-    ofSetFrameRate( 60 );
+    ofEnableAlphaBlending();
+    ofSetFrameRate( frameRate );
     ofSetCircleResolution( 100 );
     
     helvetica.loadFont( "fonts/helvetica.otf", 24 );
@@ -100,31 +104,31 @@ void testApp::draw(){
 }
 
 //--------------------------------------------------------------
-void testApp::addObject( int _note, float _xPos ) {
+void testApp::addObject( int _note, float _xPos, int _age ) {
     
     // This function adds an NPC Object.
     Object tmp;
-    tmp.setup( _note, staffPosList[ _note ] );
+    tmp.setup( _note, staffPosList[ _note ], _age );
     tmp.pos.x = _xPos;
     objectList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
-void testApp::addRecordedObject( int _note, ofVec2f _vel ) {
+void testApp::addRecordedObject( int _note, ofVec2f _vel, int _age ) {
     
     // This function copies a recorded Object into a static vector that gets neither updated nor drawn.
     Object tmp;
-    tmp.setup( _note, staffPosList[ _note ] );
+    tmp.setup( _note, staffPosList[ _note ], _age );
     tmp.vel.set( _vel );
     recordedList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
-void testApp::addReplayedObject( int _note, ofVec2f _vel ) {
+void testApp::addReplayedObject( int _note, ofVec2f _vel, int _age ) {
     
     // This function copies an Object from the "recorded" vector to the main Object vector. It also reverses horizontal velocity if needed so the Object can travel the other direction.
     Object tmp;
-    tmp.setup( _note, staffPosList[ _note ] );
+    tmp.setup( _note, staffPosList[ _note ], _age );
     tmp.pos.x = myPlayer.pos.x;
     tmp.vel.set( _vel );
     if ( tmp.vel.x < 0 ) tmp.vel.x *= -1;
@@ -151,7 +155,7 @@ void testApp::updateObjectList() {
                     xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
                 }*/
                 float xDist = 0;
-                addRecordedObject( objectList[ i ].whichNote, objectList[ i ].vel );
+                addRecordedObject( objectList[ i ].whichNote, objectList[ i ].vel, objectLife );
                 getThisOne++;
             }
         }
@@ -183,7 +187,7 @@ void testApp::fReplay() {
         }*/
         
         //if ( xDist >= recordedList[ 0 ].spacing ) {
-            addReplayedObject( recordedList[ 0 ].whichNote, recordedList[ 0 ].vel );
+            addReplayedObject( recordedList[ 0 ].whichNote, recordedList[ 0 ].vel, recordedList[ 0 ].age );
             recordedList[ 0 ].destroyMe = true;
         //}
         
@@ -256,12 +260,12 @@ void testApp::playerCollidesWithObject() {
 //--------------------------------------------------------------
 void testApp::testPattern() {
     
-    addObject( 2, 200 );
-    addObject( 4, 400 );
-    addObject( 6, 600 );
-    addObject( 2, 800 );
-    addObject( 2, 1000 );
-    addObject( 5, 1000 );
+    addObject( 2, 200, -1 );
+    addObject( 4, 400, -1 );
+    addObject( 6, 600, -1 );
+    addObject( 2, 800, -1 );
+    addObject( 2, 1000, -1 );
+    addObject( 5, 1000, -1 );
 }
 
 //--------------------------------------------------------------

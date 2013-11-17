@@ -32,9 +32,9 @@ public:
     void fDrawTitleScreen();
     
     // Manage the objects.
-    void addObject( int _note, float _xPos );
-    void addRecordedObject( int _note, ofVec2f _vel );
-    void addReplayedObject( int _note, ofVec2f _vel );
+    void addObject( int _note, float _xPos, int _age );
+    void addRecordedObject( int _note, ofVec2f _vel, int _age );
+    void addReplayedObject( int _note, ofVec2f _vel, int _age );
     void updateObjectList();
     void fReplay();
     void testPattern();
@@ -61,6 +61,8 @@ public:
     
     // Switch between game modes.
     int gameState;
+    
+    int frameRate, objectLife;
     
     // Highlight a specific object.
     int getThisOne;

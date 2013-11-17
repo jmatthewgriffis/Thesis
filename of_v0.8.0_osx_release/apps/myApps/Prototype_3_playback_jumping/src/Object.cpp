@@ -15,10 +15,11 @@ Object::Object() {
     guideLineLength = wide * 0.75;
 }
 
-void Object::setup( int _whichNote, float y ) {
+void Object::setup( int _whichNote, float y, int _age ) {
     
     whichNote = _whichNote;
     pos.y = y;
+    age = _age;
     
     pos.x = ofGetWidth();
     
@@ -33,6 +34,8 @@ void Object::setup( int _whichNote, float y ) {
 }
 
 void Object::update( ofVec2f _pos ) {
+    
+    fLimitLife();
     
     // Move!
     pos += vel;
@@ -88,9 +91,14 @@ void Object::draw() {
         ofLine( pos.x - guideLineLength, ofGetHeight() / 8.0, pos.x + guideLineLength, ofGetHeight() / 8.0 );
     }
     
+    // Make the Object turn transparent as it ages.
+    float alpha;
+    if ( age >= 0 && age <= 255 ) alpha = age;
+    else alpha = 255;
+    
     // Draw the notes. Red if needed, black otherwise.
-    if ( drawAttention ) ofSetColor( 255, 0, 0 );
-    else ofSetColor( 0 );
+    if ( drawAttention ) ofSetColor( 255, 0, 0, alpha );
+    else ofSetColor( 0, alpha );
     
 //    ofEllipse( pos, wide, tall);
     ofRect( pos, wide, tall);
@@ -99,4 +107,20 @@ void Object::draw() {
      ofSetColor( 255 );
      ofCircle( pos, tall/2 );
      */
+}
+
+void Object::fLimitLife() {
+    
+    // Age the Object and destroy if it gets too old. Try not to feel too morbid.
+    
+    // Certain Objects live forever.
+    if ( age == -1 ) return;
+    // Others do not.
+    if ( age > 0 ) {
+        
+        age--;
+    } else {
+        myNote.sound.stop();
+        destroyMe = true;
+    }
 }
