@@ -203,6 +203,11 @@ void testApp::fRecord( int _i ) {
     // This prevents additional recording calls before the action completes.
     bIsRecording = true;
     if ( bIsEmpty ) bIsEmpty = false;
+    
+    if ( _i != getThisOne ) {
+//        cout<<"yes!"<<endl;
+        getThisOne = 0;
+    }
 }
 
 //--------------------------------------------------------------
