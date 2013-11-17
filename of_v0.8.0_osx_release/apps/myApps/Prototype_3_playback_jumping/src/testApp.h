@@ -53,7 +53,6 @@ public:
     // Store all the notes.
     vector< Object > objectList; // Enemies, objects, etc.
     vector< Object > recordedList; // Store recorded Objects for later use.
-    vector< Object > replayedList; // Deploy the recorded Objects.
     
     Player myPlayer;
     

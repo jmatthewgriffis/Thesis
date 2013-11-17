@@ -70,17 +70,9 @@ void testApp::update(){
     // Update the notes.
     updateObjectList();
     
-    //    if ( replayedList.size() != 0 ) {
-    for ( int i = 0; i < replayedList.size(); i++ ) {
-        replayedList[ i ].update( myPlayer.pos );
-    }
-    //    }
-    
     // Following up the boolean function we created above, this oF function sorts the vector according to the values of the booleans and then removes any with a 'true' value:
     ofRemove( objectList, bShouldIErase );
     ofRemove( recordedList, bShouldIErase );
-    ofRemove( replayedList, bShouldIErase );
-    
 }
 
 //--------------------------------------------------------------
@@ -103,11 +95,6 @@ void testApp::draw(){
         objectList[ i ].draw();
     }
     //    }
-    //    if ( replayedList.size() != 0 ) {
-    for ( int i = 0; i < replayedList.size(); i++ ) {
-        replayedList[ i ].draw();
-    }
-    //    }
     
     myPlayer.draw();
 }
@@ -125,7 +112,7 @@ void testApp::addObject( int _note, float _xPos ) {
 //--------------------------------------------------------------
 void testApp::addRecordedObject( int _note, ofVec2f _vel ) {
     
-    // This function stores a recorded NPC Object in a static vector that gets neither updated nor drawn.
+    // This function copies a recorded Object into a static vector that gets neither updated nor drawn.
     Object tmp;
     tmp.setup( _note, staffPosList[ _note ] );
     tmp.vel.set( _vel );
@@ -135,13 +122,13 @@ void testApp::addRecordedObject( int _note, ofVec2f _vel ) {
 //--------------------------------------------------------------
 void testApp::addReplayedObject( int _note, ofVec2f _vel ) {
     
-    // This function copies an Object in the "recorded" vector to an active "replayed" vector that gets updated and drawn. It also reverses velocity so the Object can travel the other direction.
+    // This function copies an Object from the "recorded" vector to the main Object vector. It also reverses horizontal velocity if needed so the Object can travel the other direction.
     Object tmp;
     tmp.setup( _note, staffPosList[ _note ] );
     tmp.pos.x = myPlayer.pos.x;
     tmp.vel.set( _vel );
-    tmp.vel.x *= -1;
-    replayedList.push_back( tmp );
+    if ( tmp.vel.x < 0 ) tmp.vel.x *= -1;
+    objectList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
@@ -295,14 +282,10 @@ void testApp::cleanup() {
     for ( int i = 0; i < recordedList.size(); i++ ) {
         recordedList[ i ].myNote.sound.stop();
     }
-    for ( int i = 0; i < replayedList.size(); i++ ) {
-        replayedList[ i ].myNote.sound.stop();
-    }
     
     // Clear the vector.
     objectList.clear();
     recordedList.clear();
-    replayedList.clear();
 }
 
 //--------------------------------------------------------------
