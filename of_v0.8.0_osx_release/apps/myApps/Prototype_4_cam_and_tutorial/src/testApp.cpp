@@ -15,6 +15,7 @@ void testApp::setup(){
     ofEnableAlphaBlending();
     ofSetFrameRate( frameRate );
     ofSetCircleResolution( 100 );
+    myCam.disableMouseInput();
     
     helvetica.loadFont( "fonts/helvetica.otf", 24 );
     
