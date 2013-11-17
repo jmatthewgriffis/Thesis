@@ -68,6 +68,11 @@ void Player::update() {
         
     } // End "if allowMove"
     
+    // Prevent going offscreen.
+    if ( pos.x <= wide / 2.0 ) {
+        pos.x = wide / 2.0;
+    }
+    
     // Manage forces.
     float damping = 0.97;
     vel.y *= damping;

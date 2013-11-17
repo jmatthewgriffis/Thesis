@@ -91,7 +91,10 @@ void testApp::draw(){
     // Don't draw anything else if not on the game screen.
     else if ( gameState == 1 ) {
         
-        myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
+        // Move the camera with the player, as long as it dosn't move out of bounds.
+        if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
+            myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
+        }
         
         // Draw the staff.
         ofSetColor( 0 );
