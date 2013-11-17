@@ -29,6 +29,7 @@ public:
     float wide;
     float guideLineLength;
     ofColor c;
+    int colorTimer;
     
     bool destroyMe;
     bool drawAttention, bIsRecorded;

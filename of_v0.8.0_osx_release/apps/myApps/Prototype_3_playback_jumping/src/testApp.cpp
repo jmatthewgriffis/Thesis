@@ -101,8 +101,6 @@ void testApp::draw(){
     //    }
     
     myPlayer.draw();
-    
-    cout<<recordedList.size()<<endl;
 }
 
 //--------------------------------------------------------------

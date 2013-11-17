@@ -26,6 +26,8 @@ void Object::setup( int _whichNote, float y, int _age ) {
     
     vel.set( 0.0, 0.0 );
     
+    colorTimer = 0;
+    
     destroyMe = false;
     drawAttention = false;
     bIsRecorded = false;
@@ -87,12 +89,17 @@ void Object::update( ofVec2f _pos ) {
     if ( age >= 0 && age <= 255 ) alpha = age;
     else alpha = 255;
     
+    if ( colorTimer > 0 ) {
+        colorTimer--;
+    }
+    
     // Set the color depending on the condition.
     if ( bIsRecorded ) {
         c = ofColor( 0, 255, 0, alpha );
-    } else if ( drawAttention ) {
+        colorTimer = 10;
+    } else if ( drawAttention && colorTimer == 0 ) {
         c = ofColor( 255, 0, 0, alpha );
-    } else {
+    } else if ( colorTimer == 0 ) {
         c = ofColor( 0, alpha );
     }
     
