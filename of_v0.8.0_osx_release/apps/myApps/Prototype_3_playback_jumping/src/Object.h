@@ -23,7 +23,6 @@ public:
     void addNote();
     
     ofVec2f pos, vel;
-    float spacing;
     float tall;
     float wide;
     float guideLineLength;

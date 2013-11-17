@@ -10,7 +10,6 @@
 
 Object::Object() {
     
-    spacing = 0;
     tall = ( ofGetHeight() / 8.0 ) - 20;
     wide = tall * 1.5;
     guideLineLength = wide * 0.75;

@@ -24,7 +24,7 @@ void testApp::setup(){
     testPattern();
     getThisOne = 0;
     
-    bIsLefty = bIsReplaying = false;
+    bIsLefty = false;
     
     myPlayer.setup();
     
@@ -63,10 +63,6 @@ void testApp::update(){
     
     // Run collision detection.
     playerCollidesWithObject();
-    
-    // Trigger replay mode.
-    if ( bIsReplaying ) fReplay();
-    else myPlayer.allowMove = true;
     
     // Update the player (duh).
     myPlayer.update();
@@ -117,33 +113,6 @@ void testApp::draw(){
 }
 
 //--------------------------------------------------------------
-void testApp::fDrawTitleScreen() {
-    
-    ofSetRectMode( OF_RECTMODE_CORNER );
-    
-    ofSetColor( 0 );
-    helvetica.drawString( "Hello! Welcome to Demoville, home of the demo.", 150, 75 );
-    helvetica.drawString( "Please choose your control affiliation.", 225, 125 );
-    
-    if ( bIsLefty) ofSetColor( 0 );
-    else {
-        ofSetColor( 0 );
-        ofRect( 190, 170, 670, 50 );
-        ofSetColor( 255 );
-    }
-    helvetica.drawString( "I am so dextrous (right-handed): Press 1", 200, 200 );
-    if ( bIsLefty) {
-        ofSetColor( 0 );
-        ofRect( 190, 220, 670, 50 );
-        ofSetColor( 255 );
-    } else ofSetColor( 0 );
-    helvetica.drawString( "I feel quite sinister (left-handed): Press 2", 200, 250 );
-    
-    ofSetColor( 0 );
-    helvetica.drawString( "Press ENTER to continue.", 300, 325 );
-}
-
-//--------------------------------------------------------------
 void testApp::addObject( int _note, float _xPos ) {
     
     // This function adds an NPC Object.
@@ -154,18 +123,17 @@ void testApp::addObject( int _note, float _xPos ) {
 }
 
 //--------------------------------------------------------------
-void testApp::addRecordedObject( int _note, float _xDist, ofVec2f _vel ) {
+void testApp::addRecordedObject( int _note, ofVec2f _vel ) {
     
     // This function stores a recorded NPC Object in a static vector that gets neither updated nor drawn.
     Object tmp;
     tmp.setup( _note, staffPosList[ _note ] );
     tmp.vel.set( _vel );
-    tmp.spacing = _xDist;
     recordedList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
-void testApp::addReplayedObject( int _note, float _xPos, ofVec2f _vel ) {
+void testApp::addReplayedObject( int _note, ofVec2f _vel ) {
     
     // This function copies an Object in the "recorded" vector to an active "replayed" vector that gets updated and drawn. It also reverses velocity so the Object can travel the other direction.
     Object tmp;
@@ -189,13 +157,14 @@ void testApp::updateObjectList() {
             if ( dist.lengthSquared() < ( 50 * 50 ) && myPlayer.bIsRecording ) {
                 
                 // Check the spacing between the recorded note and the previous note.
-                float xDist;
+                /*float xDist;
                 if ( recordedList.size() == 0 ) {
                     xDist = 0;
                 } else { // FIND ME--I may need to adjust the below in case notes aren't captured linearly.
                     xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
-                }
-                addRecordedObject( objectList[ i ].whichNote, xDist, objectList[ i ].vel );
+                }*/
+                float xDist = 0;
+                addRecordedObject( objectList[ i ].whichNote, objectList[ i ].vel );
                 getThisOne++;
             }
         }
@@ -214,25 +183,24 @@ void testApp::fReplay() {
     
     // Replay mode pauses movement and runs until all Objects have been replayed.
     
-    myPlayer.allowMove = false;
-    
-    if ( recordedList.size() > 0 ) {
+    // Don't proceed if there are zero recorded notes.
+    if ( recordedList.size() == 0 ) return;
         
-        float xDist;
+        myPlayer.allowMove = false;
+        
+        /*float xDist;
         if ( replayedList.size() > 0 ) {
             xDist = replayedList[ replayedList.size() - 1 ].pos.x - myPlayer.pos.x;
         } else {
             xDist = 0;
-        }
+        }*/
         
-        if ( xDist >= recordedList[ 0 ].spacing ) {
-            addReplayedObject( recordedList[ 0 ].whichNote, myPlayer.pos.x, recordedList[ 0 ].vel );
+        //if ( xDist >= recordedList[ 0 ].spacing ) {
+            addReplayedObject( recordedList[ 0 ].whichNote, recordedList[ 0 ].vel );
             recordedList[ 0 ].destroyMe = true;
-        }
+        //}
         
-    } else {
-        bIsReplaying = false;
-    }
+        myPlayer.allowMove = true;
 }
 
 //--------------------------------------------------------------
@@ -348,6 +316,33 @@ void testApp::staffPosSet() {
 }
 
 //--------------------------------------------------------------
+void testApp::fDrawTitleScreen() {
+    
+    ofSetRectMode( OF_RECTMODE_CORNER );
+    
+    ofSetColor( 0 );
+    helvetica.drawString( "Hello! Welcome to Demoville, home of the demo.", 150, 75 );
+    helvetica.drawString( "Please choose your control affiliation.", 225, 125 );
+    
+    if ( bIsLefty) ofSetColor( 0 );
+    else {
+        ofSetColor( 0 );
+        ofRect( 190, 170, 670, 50 );
+        ofSetColor( 255 );
+    }
+    helvetica.drawString( "I am so dextrous (right-handed): Press 1", 200, 200 );
+    if ( bIsLefty) {
+        ofSetColor( 0 );
+        ofRect( 190, 220, 670, 50 );
+        ofSetColor( 255 );
+    } else ofSetColor( 0 );
+    helvetica.drawString( "I feel quite sinister (left-handed): Press 2", 200, 250 );
+    
+    ofSetColor( 0 );
+    helvetica.drawString( "Press ENTER to continue.", 300, 325 );
+}
+
+//--------------------------------------------------------------
 void testApp::fWriteControls() {
     
     // Here we store the controls as strings we can display on-screen.
@@ -445,8 +440,8 @@ void testApp::keyPressed(int key){
         case 'd':
         case 'D':
             if ( bIsLefty ) {
-                bIsReplaying = true;
                 myPlayer.replay = true;
+                if ( myPlayer.bAllowReplay ) fReplay();
             }
             else myPlayer.right = true;
             break;
@@ -454,8 +449,8 @@ void testApp::keyPressed(int key){
         case OF_KEY_RIGHT:
             if ( bIsLefty ) myPlayer.right = true;
             else {
-                bIsReplaying = true;
                 myPlayer.replay = true;
+                if ( myPlayer.bAllowReplay ) fReplay();
             }
             break;
             
