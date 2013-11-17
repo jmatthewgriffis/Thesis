@@ -62,6 +62,7 @@ public:
     
     // Prevent multiple record calls from the same action.
     bool bIsRecording;
+    bool bIsEmpty;
     
     // Switch between game modes.
     int gameState;

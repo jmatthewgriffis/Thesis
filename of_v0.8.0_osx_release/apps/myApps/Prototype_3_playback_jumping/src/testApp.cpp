@@ -101,6 +101,11 @@ void testApp::draw(){
     //    }
     
     myPlayer.draw();
+    
+    ofSetColor( 0 );
+    if ( myPlayer.bIsReplaying && bIsEmpty ) {
+        helvetica.drawString("?", myPlayer.pos.x + 30, myPlayer.pos.y - 30 );
+    }
 }
 
 //--------------------------------------------------------------
@@ -185,6 +190,7 @@ void testApp::fRecord( int _i ) {
     
     // This prevents additional recording calls before the action completes.
     bIsRecording = true;
+    if ( bIsEmpty ) bIsEmpty = false;
 }
 
 //--------------------------------------------------------------
@@ -193,7 +199,10 @@ void testApp::fReplay() {
     // Replay mode pauses movement and runs until all Objects have been replayed.
     
     // Don't proceed if there are zero recorded notes.
-    if ( recordedList.size() == 0 ) return;
+    if ( recordedList.size() == 0 ) {
+        bIsEmpty = true;
+        return;
+    }
     
     myPlayer.allowMove = false;
     
