@@ -87,11 +87,9 @@ void Player::draw() {
     
     // Draw the action if called, orbiting around the player's pos.
     if ( bIsActing ) {
-        ofSetColor( 0, 255, 0 );
-        ofPushMatrix();{
-            ofTranslate( pos );
-            ofCircle( actPos, 10 );
-        }ofPopMatrix();
+        if ( bIsRecording ) ofSetColor( 0, 255, 0 );
+        else if ( bIsReplaying ) ofSetColor( 0, 0, 255 );
+        ofCircle( actPos, 10 );
     }
 }
 
@@ -154,7 +152,7 @@ void Player::fActing() {
     
     // Calculate the position of the action circle.
     if ( bIsActing ) {
-        actPos.x = radius * sin( ofDegToRad( angle ) );
-        actPos.y = radius * cos( ofDegToRad( angle ) );
+        actPos.x = pos.x + radius * sin( ofDegToRad( angle ) );
+        actPos.y = pos.y + radius * cos( ofDegToRad( angle ) );
     }
 }

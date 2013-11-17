@@ -184,8 +184,8 @@ void testApp::updateObjectList() {
         // Detect for collision with player's recorder, if the note is selected.
         if ( i == getThisOne ) {
             
-            ofVec2f dist = myPlayer.pos - objectList[ i ].pos;
-            if ( dist.lengthSquared() < ( 50 * 50 ) && myPlayer.record ) {
+            ofVec2f dist = myPlayer.actPos - objectList[ i ].pos;
+            if ( dist.lengthSquared() < ( 50 * 50 ) && myPlayer.bIsRecording ) {
                 
                 // Check the spacing between the recorded note and the previous note.
                 float xDist;
