@@ -374,86 +374,6 @@ void testApp::keyPressed(int key){
             setup();
             break;
             
-            
-        case OF_KEY_RETURN:
-            if ( gameState == 0 ) gameState = 1;
-            break;
-            
-        case '2':
-            if ( gameState == 0 ) {
-                bIsLefty = true;
-            }
-            break;
-            
-            // Movement and action (depends on the control scheme).
-            
-        case 'w':
-        case 'W':
-            if ( bIsLefty ) {}
-            else myPlayer.up = true;
-            break;
-            
-        case OF_KEY_UP:
-            if ( bIsLefty ) myPlayer.up = true;
-            else {}
-            break;
-            
-        case 'a':
-        case 'A':
-            if ( bIsLefty ) myPlayer.record = true;
-            else myPlayer.left = true;
-            break;
-            
-        case OF_KEY_LEFT:
-            if ( bIsLefty ) myPlayer.left = true;
-            else myPlayer.record = true;
-            break;
-            
-        case 's':
-        case 'S':
-            if ( bIsLefty ) {}
-            else myPlayer.down = true;
-            break;
-            
-        case OF_KEY_DOWN:
-            if ( bIsLefty ) myPlayer.down = true;
-            else {}
-            break;
-            
-        case 'd':
-        case 'D':
-            if ( bIsLefty ) {
-                myPlayer.replay = true;
-                if ( myPlayer.bAllowReplay ) fReplay();
-            }
-            else myPlayer.right = true;
-            break;
-            
-        case OF_KEY_RIGHT:
-            if ( bIsLefty ) myPlayer.right = true;
-            else {
-                myPlayer.replay = true;
-                if ( myPlayer.bAllowReplay ) fReplay();
-            }
-            break;
-            
-            // Debug
-        {
-        case 'm':
-            getThisOne++;
-            break;
-            
-        case 'n':
-            getThisOne--;
-            break;
-        }
-            
-            // Debug
-        case 'p':
-            if ( gameState == 0 ) gameState = 1;
-            else if ( gameState == 1 ) gameState = 0;
-            break;
-            
         case '1':
             if ( gameState == 0 ) {
                 bIsLefty = false;
@@ -470,6 +390,83 @@ void testApp::keyPressed(int key){
                 }
             }
             break;
+            
+        case '2':
+            if ( gameState == 0 ) {
+                bIsLefty = true;
+            }
+            break;
+            
+        case OF_KEY_RETURN:
+            if ( gameState == 0 ) gameState = 1;
+            break;
+            
+            // Movement and action (depends on the control scheme).
+            
+            // UP
+        case 'w':
+        case 'W':
+            if ( bIsLefty ) {}
+            else myPlayer.up = true;
+            break;
+        case OF_KEY_UP:
+            if ( bIsLefty ) myPlayer.up = true;
+            else {}
+            break;
+            
+            // LEFT
+        case 'a':
+        case 'A':
+            if ( bIsLefty ) myPlayer.record = true;
+            else myPlayer.left = true;
+            break;
+        case OF_KEY_LEFT:
+            if ( bIsLefty ) myPlayer.left = true;
+            else myPlayer.record = true;
+            break;
+            
+            // DOWN
+        case 's':
+        case 'S':
+            if ( bIsLefty ) {}
+            else myPlayer.down = true;
+            break;
+        case OF_KEY_DOWN:
+            if ( bIsLefty ) myPlayer.down = true;
+            else {}
+            break;
+            
+            // RIGHT
+        case 'd':
+        case 'D':
+            if ( bIsLefty ) {
+                myPlayer.replay = true;
+                if ( myPlayer.bAllowReplay ) fReplay();
+            }
+            else myPlayer.right = true;
+            break;
+        case OF_KEY_RIGHT:
+            if ( bIsLefty ) myPlayer.right = true;
+            else {
+                myPlayer.replay = true;
+                if ( myPlayer.bAllowReplay ) fReplay();
+            }
+            break;
+            
+        { // Start debug
+        case 'm':
+            getThisOne++;
+            break;
+            
+        case 'n':
+            getThisOne--;
+            break;
+            
+        case 'p':
+            if ( gameState == 0 ) gameState = 1;
+            else if ( gameState == 1 ) gameState = 0;
+            break;
+        } // End debug
     }
 }
 
@@ -480,6 +477,7 @@ void testApp::keyReleased(int key){
             
             // Movement and action (depends on the control scheme).
             
+            // UP
         case 'w':
         case 'W':
             if ( bIsLefty ) {}
@@ -488,7 +486,6 @@ void testApp::keyReleased(int key){
                 myPlayer.allowJump = true;
             }
             break;
-            
         case OF_KEY_UP:
             if ( bIsLefty ) {
                 myPlayer.up = false;
@@ -497,34 +494,34 @@ void testApp::keyReleased(int key){
             else {}
             break;
             
+            // LEFT
         case 'a':
         case 'A':
             if ( bIsLefty ) myPlayer.record = false;
             else myPlayer.left = false;
             break;
-            
         case OF_KEY_LEFT:
             if ( bIsLefty ) myPlayer.left = false;
             else myPlayer.record = false;
             break;
             
+            // DOWN
         case 's':
         case 'S':
             if ( bIsLefty ) {}
             else myPlayer.down = false;
             break;
-            
         case OF_KEY_DOWN:
             if ( bIsLefty ) myPlayer.down = false;
             else {}
             break;
             
+            // RIGHT
         case 'd':
         case 'D':
             if ( bIsLefty ) myPlayer.replay = false;
             else myPlayer.right = false;
             break;
-            
         case OF_KEY_RIGHT:
             if ( bIsLefty ) myPlayer.right = false;
             else myPlayer.replay = false;
