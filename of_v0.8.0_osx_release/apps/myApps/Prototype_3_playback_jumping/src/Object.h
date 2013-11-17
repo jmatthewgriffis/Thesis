@@ -28,9 +28,10 @@ public:
     float tall;
     float wide;
     float guideLineLength;
+    ofColor c;
     
     bool destroyMe;
-    bool drawAttention;
+    bool drawAttention, bIsRecorded;
     
     Note myNote;
     

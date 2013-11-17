@@ -13,6 +13,7 @@ Object::Object() {
     tall = ( ofGetHeight() / 8.0 ) - 20;
     wide = tall * 1.5;
     guideLineLength = wide * 0.75;
+    c = ofColor( 0 );
 }
 
 void Object::setup( int _whichNote, float y, int _age ) {
@@ -27,6 +28,7 @@ void Object::setup( int _whichNote, float y, int _age ) {
     
     destroyMe = false;
     drawAttention = false;
+    bIsRecorded = false;
     
     // Note stuff.
     myNote.setup( _whichNote );
@@ -79,6 +81,23 @@ void Object::update( ofVec2f _pos ) {
         float farEnoughForRhythm = 600;
         if ( pos.x < 0 && vel.x < 0 ) pos.x = ofGetWidth() + farEnoughForRhythm;
     }
+    
+    // Make the Object turn transparent as it ages.
+    float alpha;
+    if ( age >= 0 && age <= 255 ) alpha = age;
+    else alpha = 255;
+    
+    // Set the color depending on the condition.
+    if ( bIsRecorded ) {
+        c = ofColor( 0, 255, 0, alpha );
+    } else if ( drawAttention ) {
+        c = ofColor( 255, 0, 0, alpha );
+    } else {
+        c = ofColor( 0, alpha );
+    }
+    
+    // Reset this so the color goes back to normal.
+    bIsRecorded = false;
 }
 
 void Object::draw() {
@@ -91,15 +110,8 @@ void Object::draw() {
         ofLine( pos.x - guideLineLength, ofGetHeight() / 8.0, pos.x + guideLineLength, ofGetHeight() / 8.0 );
     }
     
-    // Make the Object turn transparent as it ages.
-    float alpha;
-    if ( age >= 0 && age <= 255 ) alpha = age;
-    else alpha = 255;
-    
-    // Draw the notes. Red if needed, black otherwise.
-    if ( drawAttention ) ofSetColor( 255, 0, 0, alpha );
-    else ofSetColor( 0, alpha );
-    
+    // Draw!
+    ofSetColor( c );
 //    ofEllipse( pos, wide, tall);
     ofRect( pos, wide, tall);
     /*

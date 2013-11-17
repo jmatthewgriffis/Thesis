@@ -36,6 +36,7 @@ public:
     void addRecordedObject( int _note, ofVec2f _vel, int _age );
     void addReplayedObject( int _note, ofVec2f _vel, int _age );
     void updateObjectList();
+    void fRecord( int _i );
     void fReplay();
     void testPattern();
     
@@ -58,6 +59,9 @@ public:
     
     // Accomodate right-handed and left-handed.
     bool bIsLefty;
+    
+    // Prevent multiple record calls from the same action.
+    bool bIsRecording;
     
     // Switch between game modes.
     int gameState;

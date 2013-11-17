@@ -28,7 +28,7 @@ void testApp::setup(){
     testPattern();
     getThisOne = 0;
     
-    bIsLefty = false;
+    bIsLefty = bIsRecording = false;
     
     myPlayer.setup();
     
@@ -101,6 +101,8 @@ void testApp::draw(){
     //    }
     
     myPlayer.draw();
+    
+    cout<<recordedList.size()<<endl;
 }
 
 //--------------------------------------------------------------
@@ -141,23 +143,20 @@ void testApp::updateObjectList() {
     //    if ( objectList.size() != 0 ) {
     for ( int i = 0; i < objectList.size(); i++ ) {
         
-        // Detect for collision with player's recorder, if the note is selected.
-        if ( i == getThisOne ) {
+        // Detect for collision with player's recorder and check if a note has already been recorded in this action.
+        
+        if ( myPlayer.bIsRecording ) {
             
             ofVec2f dist = myPlayer.actPos - objectList[ i ].pos;
-            if ( dist.lengthSquared() < ( 50 * 50 ) && myPlayer.bIsRecording ) {
+            if ( dist.lengthSquared() < ( 50 * 50 ) ) {
                 
-                // Check the spacing between the recorded note and the previous note.
-                /*float xDist;
-                if ( recordedList.size() == 0 ) {
-                    xDist = 0;
-                } else { // FIND ME--I may need to adjust the below in case notes aren't captured linearly.
-                    xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
-                }*/
-                float xDist = 0;
-                addRecordedObject( objectList[ i ].whichNote, objectList[ i ].vel, objectLife );
-                getThisOne++;
+                fRecord( i );
+                
+                // Advance the counter if recorded a selected note.
+                if ( i == getThisOne) getThisOne++;
             }
+        } else {
+            bIsRecording = false;
         }
         
         // Highlight a specific Object.
@@ -170,28 +169,49 @@ void testApp::updateObjectList() {
 }
 
 //--------------------------------------------------------------
+void testApp::fRecord( int _i ) {
+    
+    if ( bIsRecording ) return;
+    
+    // Set the color to be different to indicate recording.
+    objectList[ _i ].bIsRecorded = true;
+    
+    // Check the spacing between the recorded note and the previous note.
+    /*float xDist;
+     if ( recordedList.size() == 0 ) {
+     xDist = 0;
+     } else { // FIND ME--I may need to adjust the below in case notes aren't captured linearly.
+     xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
+     }*/
+    addRecordedObject( objectList[ _i ].whichNote, objectList[ _i ].vel, objectLife );
+    
+    // This prevents additional recording calls before the action completes.
+    bIsRecording = true;
+}
+
+//--------------------------------------------------------------
 void testApp::fReplay() {
     
     // Replay mode pauses movement and runs until all Objects have been replayed.
     
     // Don't proceed if there are zero recorded notes.
     if ( recordedList.size() == 0 ) return;
-        
-        myPlayer.allowMove = false;
-        
-        /*float xDist;
-        if ( replayedList.size() > 0 ) {
-            xDist = replayedList[ replayedList.size() - 1 ].pos.x - myPlayer.pos.x;
-        } else {
-            xDist = 0;
-        }*/
-        
-        //if ( xDist >= recordedList[ 0 ].spacing ) {
-            addReplayedObject( recordedList[ 0 ].whichNote, recordedList[ 0 ].vel, recordedList[ 0 ].age );
-            recordedList[ 0 ].destroyMe = true;
-        //}
-        
-        myPlayer.allowMove = true;
+    
+    myPlayer.allowMove = false;
+    
+    /*float xDist;
+     if ( replayedList.size() > 0 ) {
+     xDist = replayedList[ replayedList.size() - 1 ].pos.x - myPlayer.pos.x;
+     } else {
+     xDist = 0;
+     }*/
+    
+    //if ( xDist >= recordedList[ 0 ].spacing ) {
+    addReplayedObject( recordedList[ 0 ].whichNote, recordedList[ 0 ].vel, recordedList[ 0 ].age );
+    recordedList[ 0 ].destroyMe = true;
+    //}
+    
+    myPlayer.allowMove = true;
 }
 
 //--------------------------------------------------------------
