@@ -103,11 +103,9 @@ void testApp::draw(){
         }
         
         // Draw the notes.
-        //    if ( objectList.size() != 0 ) {
         for ( int i = 0; i < objectList.size(); i++ ) {
             objectList[ i ].draw();
         }
-        //    }
         
         myPlayer.draw();
         
@@ -155,7 +153,6 @@ void testApp::addReplayedObject( int _note, ofVec2f _vel, int _age ) {
 //--------------------------------------------------------------
 void testApp::updateObjectList() {
     
-    //    if ( objectList.size() != 0 ) {
     for ( int i = 0; i < objectList.size(); i++ ) {
         
         // Detect for collision with player's recorder and check if a note has already been recorded in this action.
@@ -180,7 +177,6 @@ void testApp::updateObjectList() {
         
         objectList[ i ].update( myPlayer.pos );
     }
-    //    }
 }
 
 //--------------------------------------------------------------
@@ -213,7 +209,7 @@ void testApp::fRecord( int _i ) {
 //--------------------------------------------------------------
 void testApp::fReplay() {
     
-    // Replay mode pauses movement and runs until all Objects have been replayed.
+    // Replay mode pauses movement.
     
     // Don't proceed if there are zero recorded notes.
     if ( recordedList.size() == 0 ) {
@@ -590,10 +586,6 @@ void testApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
     
-    /*Object tmp;
-     int i = int( ofRandom( 0, NUMNOTES - 1 ));
-     tmp.setup( i, staffPosList[ i ] );
-     objectList.push_back( tmp );*/
 }
 
 //--------------------------------------------------------------
