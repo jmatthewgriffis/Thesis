@@ -42,7 +42,7 @@ void testApp::setup(){
     gameState = 0;
     
     Obstacle tmp;
-    tmp.setup( ofVec2f( 600, ofGetHeight() ), 200, 100, true );
+    tmp.setup( ofVec2f( 1000, ofGetHeight() ), 100, 75, true );
     obstacleList.push_back( tmp );
 }
 
@@ -136,7 +136,7 @@ void testApp::draw(){
         // Left and right
         helvetica.drawString( sLeft + " / " + sRight, 100, 100 );
         // Up
-        helvetica.drawString( sUp, 600, 100 );
+        helvetica.drawString( sUp, 1350, 100 );
         
         // Draw the notes.
         for ( int i = 0; i < objectList.size(); i++ ) {
