@@ -14,7 +14,7 @@ Player::Player() {
     tall = wide;
     xVel = 5;
     jumpVel = 10;
-    radius = 50;
+    radius = 40;
     angleVel = 10;
     
     headphones.loadImage( "images/headphones.png" );

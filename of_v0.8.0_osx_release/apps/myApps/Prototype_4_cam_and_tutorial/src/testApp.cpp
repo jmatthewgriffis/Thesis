@@ -38,32 +38,49 @@ void testApp::setup(){
     
     bIsLefty = bIsRecording = false;
     
-    myPlayer.setup( ofVec2f( 4300, 100 ) );
+    myPlayer.setup();
+//    myPlayer.setup( ofVec2f( 4300, 100 ) );
     
     // 0 is title screen, 1 is game screen.
     gameState = 0;
     
     
     // TUTORIAL STUFF----------------------
-    Obstacle tmp;
-    tmp.setup( ofVec2f( 1000, ofGetHeight() ), 100, 75, true );
-    obstacleList.push_back( tmp );
-    
-    addObject( 2, 1800, -1 );
-    
-    Obstacle tmp2;
-    tmp2.setup( ofVec2f( 2000, ofGetHeight() ), 100, 150, true );
-    obstacleList.push_back( tmp2 );
-    
-    addObject( 2, 2300, -1 );
-    
-    Obstacle tmp3;
-    tmp3.setup( ofVec2f( 4300, ofGetHeight() ), 100, 150, true );
-    obstacleList.push_back( tmp3 );
-    
-    addObject( 8, 4600, -1 );
-    
-    
+    {
+        // Jump!
+        float x = 1000;
+        Obstacle tmp;
+        tmp.setup( ofVec2f( x, ofGetHeight() ), 100, 75, true );
+        obstacleList.push_back( tmp );
+        
+        // Jump off a note to overcome an obstacle.
+        float x2 = 1800;
+        addObject( 2, x2, -1 );
+        Obstacle tmp2;
+        tmp2.setup( ofVec2f( x2 + 200, ofGetHeight() ), 100, 150, true );
+        obstacleList.push_back( tmp2 );
+        
+        // Record and replay a note to overcome an obstacle.
+        float x3 = 2300;
+        addObject( 2, x3, -1 );
+        Obstacle tmp3;
+        tmp3.setup( ofVec2f( x3 + 2000, ofGetHeight() ), 100, 150, true );
+        obstacleList.push_back( tmp3 );
+        
+        // Spring off notes to get to higher notes and overcome a tall obstacle.
+        float x4 = 4600;
+        addObject( 2, x4, -1 );
+        //    addObject( 5, x4 + 200, -1 );
+        addObject( 8, x4 + 400, -1 );
+        addObject( 5, x4 + 700, -1 );
+        float x5 = x4 + 1100;
+        addObject( 5, x5, -1 );
+        addObject( 2, x5 + 100, -1 );
+        //    addObject( 8, x5 + 200, -1 );
+        Obstacle tmp4;
+        tmp4.setup( ofVec2f( x5 + 400, ofGetHeight() ), 100, 300, true );
+        obstacleList.push_back( tmp4 );
+    }
     //----------------------END TUTORIAL STUFF
 }
 
