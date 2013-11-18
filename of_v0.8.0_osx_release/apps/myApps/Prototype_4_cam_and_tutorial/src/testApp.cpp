@@ -43,11 +43,26 @@ void testApp::setup(){
     // 0 is title screen, 1 is game screen.
     gameState = 0;
     
+    
+    // TUTORIAL STUFF----------------------
     Obstacle tmp;
     tmp.setup( ofVec2f( 1000, ofGetHeight() ), 100, 75, true );
     obstacleList.push_back( tmp );
     
     addObject( 2, 1800, -1 );
+    
+    Obstacle tmp2;
+    tmp2.setup( ofVec2f( 2000, ofGetHeight() ), 100, 150, true );
+    obstacleList.push_back( tmp2 );
+    
+    addObject( 2, 2300, -1 );
+    
+    Obstacle tmp3;
+    tmp3.setup( ofVec2f( 4300, ofGetHeight() ), 100, 150, true );
+    obstacleList.push_back( tmp3 );
+    
+    
+    //----------------------END TUTORIAL STUFF
 }
 
 //--------------------------------------------------------------
@@ -106,8 +121,6 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    cout<<getThisOne<<endl;
-    
     myCam.begin();
     myCam.setupPerspective();
     
@@ -137,14 +150,18 @@ void testApp::draw(){
         
         // LOCATION-DEPENDENT
         
-        // Tutorial
-        
-        // Instructions
-        
-        // Left and right
-        helvetica.drawString( sLeft + " / " + sRight, 100, 100 );
-        // Up
-        helvetica.drawString( sUp, 1350, 100 );
+        // Tutorial Instructions
+        {
+            float y = 100;
+            // Left and right
+            helvetica.drawString( sLeft + " / " + sRight, 100, y );
+            // Up
+            helvetica.drawString( sUp, 1350, y );
+            // Record
+            helvetica.drawString( sAltLeft, 3000, y );
+            // Replay
+            helvetica.drawString( sAltRight, 3800, y );
+        }
         
         // Draw the notes.
         for ( int i = 0; i < objectList.size(); i++ ) {
