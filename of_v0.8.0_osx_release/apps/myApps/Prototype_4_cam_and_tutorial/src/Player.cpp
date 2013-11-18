@@ -20,13 +20,13 @@ Player::Player() {
     headphones.loadImage( "images/headphones.png" );
 }
 
-void Player::setup() {
+void Player::setup( ofVec2f _pos ) {
     
     up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = false;
     allowMove = allowJump = bAllowRecord = bAllowReplay = true;
     angle = 0;
     
-    pos.set( 100, 100 );
+    pos.set( _pos );
     vel.set( 0 );
     acc.set( 0 );
     actPos.set( 0 );

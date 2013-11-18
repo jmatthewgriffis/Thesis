@@ -33,7 +33,7 @@ void Object::setup( int _whichNote, float y, int _age ) {
     bIsRecorded = false;
     
     // Note stuff.
-    myNote.setup( _whichNote );
+    myNote.setup( whichNote );
     vol = 0.0f;
 }
 

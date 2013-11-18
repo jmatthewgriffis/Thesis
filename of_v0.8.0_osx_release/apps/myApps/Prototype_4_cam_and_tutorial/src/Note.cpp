@@ -33,8 +33,8 @@ void Note::update( int _whichNote, float _vol ) {
 
 void Note::storePaths() {
     
-    // Store the paths to each note in a vector so the Note instance can access them and update as needed.
-    for ( int i = 0; i < NUMNOTES-1; i++) {
+    // Store the paths to each note in a vector so the Note instance can access them and update as needed. 0 is the bottom B.
+    for ( int i = 0; i < NUMNOTES - 1; i++) {
         
         string loadLocation;
         

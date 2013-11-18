@@ -38,7 +38,7 @@ void testApp::setup(){
     
     bIsLefty = bIsRecording = false;
     
-    myPlayer.setup();
+    myPlayer.setup( ofVec2f( 4300, 100 ) );
     
     // 0 is title screen, 1 is game screen.
     gameState = 0;
@@ -60,6 +60,8 @@ void testApp::setup(){
     Obstacle tmp3;
     tmp3.setup( ofVec2f( 4300, ofGetHeight() ), 100, 150, true );
     obstacleList.push_back( tmp3 );
+    
+    addObject( 8, 4600, -1 );
     
     
     //----------------------END TUTORIAL STUFF
@@ -625,13 +627,13 @@ void testApp::keyPressed(int key){
             break;
             
         { // Start debug
-        case 'm':
+        /*case 'm':
             getThisOne++;
             break;
             
         case 'n':
             getThisOne--;
-            break;
+            break;*/
             
         case 'p':
             if ( gameState == 0 ) gameState = 1;

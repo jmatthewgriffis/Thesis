@@ -14,7 +14,7 @@ class Player {
 public:
     Player();
     
-    void setup();
+    void setup( ofVec2f _pos = ofVec2f( 100, 100 ) );
     void update();
     void draw();
     
