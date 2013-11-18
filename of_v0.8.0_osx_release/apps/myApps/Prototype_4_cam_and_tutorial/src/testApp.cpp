@@ -113,6 +113,12 @@ void testApp::draw(){
             ofLine( myPlayer.pos.x - ofGetWidth(), ( ofGetHeight() / 8.0 ) * i, myPlayer.pos.x + ofGetWidth(), ( ofGetHeight() / 8.0 ) * i );
         }
         
+        // Draw some lines on the ground to give something to move against.
+        ofSetColor( 0 );
+        for ( int i = 0; i < 3000; i += 50 ) {
+            ofLine( 50 + ( i * 2 ), ofGetHeight(), 50 + i, ofGetHeight() - 25 );
+        }
+        
         // Draw the notes.
         for ( int i = 0; i < objectList.size(); i++ ) {
             objectList[ i ].draw();
