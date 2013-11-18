@@ -41,7 +41,9 @@ void testApp::setup(){
     // 0 is title screen, 1 is game screen.
     gameState = 0;
     
-    tmp.setup( ofVec2f( 600, ofGetHeight() ), 50, 100, true );
+    Obstacle tmp;
+    tmp.setup( ofVec2f( 600, ofGetHeight() ), 200, 100, true );
+    obstacleList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
@@ -80,6 +82,8 @@ void testApp::update(){
     myPlayer.applyForce( ofVec2f( 0.0, 0.3 ) );
     
     // Run collision detection.
+    playerCollidesWithGround();
+    playerCollidesWithObstacle();
     playerCollidesWithObject();
     
     // Update the player (duh).
@@ -139,7 +143,10 @@ void testApp::draw(){
             objectList[ i ].draw();
         }
         
-        tmp.draw();
+        // Draw the obstacles.
+        for ( int i = 0; i < obstacleList.size(); i++ ) {
+            obstacleList[ i ].draw();
+        }
         
         myPlayer.draw();
         
@@ -269,19 +276,24 @@ void testApp::fReplay() {
 }
 
 //--------------------------------------------------------------
-void testApp::playerCollidesWithObject() {
+void testApp::playerCollidesWithGround() {
     
-    // Collision with the ground.
     if ( myPlayer.pos.y >= ofGetHeight() - myPlayer.tall / 2.0 ) {
         myPlayer.pos.y = ofGetHeight() - myPlayer.tall / 2.0;
         myPlayer.onSurface = true;
     }
+}
+
+//--------------------------------------------------------------
+void testApp::playerCollidesWithObject() {
     
     // Collision with main objects vector.
     for ( int i = 0; i < objectList.size(); i++ ) {
         
         // Make some floats for shorthand...
-        float margin = 5.0;
+        // Player is drawn from the center.
+        // Obstacles are drawn from the corner.
+        float margin = 10.0;
         float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
         float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
         float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
@@ -328,6 +340,61 @@ void testApp::playerCollidesWithObject() {
         /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
          myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
          }*/
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::playerCollidesWithObstacle() {
+    
+    // Collision with Obstacle vector.
+    for ( int i = 0; i < obstacleList.size(); i++ ) {
+        
+        // Make some floats for shorthand...
+        // Player is drawn from the center.
+        // Obstacles are drawn from the corner.
+        float margin = 10.0;
+        float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
+        float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
+        float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
+        float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
+        float obstacleTop = obstacleList[ i ].pos.y;
+        float obstacleLeft = obstacleList[ i ].pos.x;
+        float obstacleBottom = obstacleList[ i ].pos.y + obstacleList[ i ].tall;
+        float obstacleRight = obstacleList[ i ].pos.x + obstacleList[ i ].wide;
+        
+        // First, check if the player is in the same horizontal region as the obstacle.
+        if ( playerBottom >= obstacleTop + margin && playerTop <= obstacleBottom - margin ) {
+            // Is there something directly to the right?
+            if ( playerRight >= obstacleLeft && playerRight < obstacleList[ i ].pos.x + obstacleList[ i ].wide / 2.0 ) {
+                // Prevent the player from moving to the right.
+                myPlayer.pos.x = obstacleLeft - myPlayer.wide / 2.0;
+            }
+            // OK, is there something directly to the left?
+            else if ( playerLeft <= obstacleRight && playerLeft > obstacleList[ i ].pos.x + obstacleList[ i ].wide / 2.0 ) {
+                // Prevent the player from moving to the left.
+                myPlayer.pos.x = obstacleRight + myPlayer.wide / 2.0;
+            }
+        }
+        // Next, check if the player is in the same vertical region as the obstacle.
+        if ( playerRight >= obstacleLeft + margin && playerLeft <= obstacleRight - margin ) {
+            // Is there something directly below?
+            if ( playerBottom >= obstacleTop && playerBottom < obstacleList[ i ].pos.y + obstacleList[ i ].tall / 2.0 ) {
+                // Prevent the player from moving downward.
+                myPlayer.pos.y = obstacleTop - myPlayer.tall / 2.0;
+                myPlayer.onSurface = true;
+                //                myPlayer.vel.set( objectList[ i ].vel );
+                //myPlayer.applyForce( objectList[ i ].vel );
+            }
+            // OK, is there something directly above?
+            else if ( playerTop <= obstacleBottom && playerTop > obstacleList[ i ].pos.y + obstacleList[ i ].tall / 2.0 ) {
+                // Prevent the player from moving upward.
+                myPlayer.pos.y = obstacleBottom + myPlayer.tall / 2.0;
+                // Cancel any upward velocity.
+                if ( myPlayer.vel.y < 0 ) {
+                    myPlayer.vel.y = 0;
+                }
+            }
+        }
     }
 }
 

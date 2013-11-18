@@ -48,8 +48,10 @@ public:
     void fReplay();
     void testPattern();
     
-    // Handle player-object collision.
+    // Handle player collision.
+    void playerCollidesWithGround();
     void playerCollidesWithObject();
+    void playerCollidesWithObstacle();
     
     // Define all the staff positions.
     void staffPosSet();
@@ -58,6 +60,9 @@ public:
     
     // Store all the y-pos of the notes on the musical staff.
     vector< float > staffPosList;
+    
+    // Store all the obstacles.
+    vector< Obstacle > obstacleList;
     
     // Store all the notes.
     vector< Object > objectList; // Enemies, objects, etc.
@@ -93,6 +98,4 @@ public:
     string sUp, sLeft, sDown, sRight, sAltUp, sAltLeft, sAltDown, sAltRight;
     
     ofEasyCam myCam;
-    
-    Obstacle tmp;
 };
