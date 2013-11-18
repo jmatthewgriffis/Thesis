@@ -70,15 +70,15 @@ void Object::update( ofVec2f _pos ) {
     // What happens when the Object goes offscreen?
     {
         // Goes off on the right, warp to the other side.
-        float margin = 100;
-        if ( pos.x > ofGetWidth() + margin && vel.x > 0 ) {
-            pos.x = -margin;
+        //float margin = 100;
+        //if ( pos.x > ofGetWidth() + margin && vel.x > 0 ) {
+            //pos.x = -margin;
             /*
             // Stop playing the Note just in case.
             myNote.sound.stop();
             destroyMe = true;
              */
-        }
+        //}
         // Goes off on the left, warp to the other side.
         float farEnoughForRhythm = 600;
         if ( pos.x < 0 && vel.x < 0 ) pos.x = ofGetWidth() + farEnoughForRhythm;

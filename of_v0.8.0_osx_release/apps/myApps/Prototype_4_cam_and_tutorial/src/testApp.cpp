@@ -29,6 +29,11 @@ void testApp::setup(){
     testPattern();
     getThisOne = 0;
     
+    iStaffAlphaMin = 10;
+    iStaffAlphaMax = 200;
+    iStaffAlpha = iStaffAlphaMin;
+    iStaffAlphaVel = 0.5;
+    
     bIsLefty = bIsRecording = false;
     
     myPlayer.setup();
@@ -55,6 +60,12 @@ void testApp::update(){
     
     // Don't update anything else if not on the game screen.
     if ( gameState != 1 ) return;
+    
+    // Update the alpha for the staff lines.
+    iStaffAlpha += iStaffAlphaVel;
+    if ( iStaffAlpha < iStaffAlphaMin || iStaffAlpha > iStaffAlphaMax ) {
+        iStaffAlphaVel *= -1;
+    }
     
     // Reset essential conditionals.
     myPlayer.onSurface = false;
@@ -96,10 +107,10 @@ void testApp::draw(){
             myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
         }
         
-        // Draw the staff.
-        ofSetColor( 0 );
+        // Draw the staff with transparency.
+        ofSetColor( 0, int( iStaffAlpha ) );
         for ( int i = 2; i < 7; i++ ) {
-            ofLine( 0, ( ofGetHeight() / 8.0 ) * i, ofGetWidth(), ( ofGetHeight() / 8.0 ) * i );
+            ofLine( myPlayer.pos.x - ofGetWidth(), ( ofGetHeight() / 8.0 ) * i, myPlayer.pos.x + ofGetWidth(), ( ofGetHeight() / 8.0 ) * i );
         }
         
         // Draw the notes.

@@ -76,6 +76,10 @@ public:
     
     int frameRate, objectLife;
     
+    // Control the staff lines' transparency.
+    int iStaffAlphaMin, iStaffAlphaMax;
+    float iStaffAlpha, iStaffAlphaVel;
+    
     // Highlight a specific object.
     int getThisOne;
     
