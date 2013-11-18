@@ -88,6 +88,7 @@ public:
     
     // Highlight a specific object.
     int getThisOne;
+    bool bHighlightNote;
     
     // This will be used to time certain events.
     double lastTime;

@@ -27,7 +27,9 @@ void testApp::setup(){
     
     // Run a test pattern and highlight the first element.
 //    testPattern();
-    getThisOne = 0;
+    bHighlightNote = false;
+    if ( bHighlightNote ) getThisOne = 0;
+    else getThisOne = -1;
     
     iStaffAlphaMin = 10;
     iStaffAlphaMax = 200;
@@ -76,8 +78,10 @@ void testApp::update(){
     // Reset essential conditionals.
     myPlayer.onSurface = false;
     
-    if ( getThisOne < 0 ) getThisOne = objectList.size() - 1;
-    if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
+    if ( bHighlightNote ) {
+        if ( getThisOne < 0 ) getThisOne = objectList.size() - 1;
+        if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
+    }
     
     // Apply gravity to the player.
     // Come back to this. Use it to fake analog sensitivity with jump height proportional to how long the button is held. Gravity only applies sometimes.
@@ -101,6 +105,8 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
+    cout<<getThisOne<<endl;
     
     myCam.begin();
     myCam.setupPerspective();
@@ -208,7 +214,7 @@ void testApp::updateObjectList() {
                 fRecord( i );
                 
                 // Advance the counter if recorded a selected note.
-                if ( i == getThisOne) getThisOne++;
+                if ( bHighlightNote && i == getThisOne) getThisOne++;
             }
         } else {
             bIsRecording = false;
@@ -243,7 +249,7 @@ void testApp::fRecord( int _i ) {
     bIsRecording = true;
     if ( bIsEmpty ) bIsEmpty = false;
     
-    if ( _i != getThisOne ) {
+    if ( bHighlightNote && _i != getThisOne ) {
 //        cout<<"yes!"<<endl;
         getThisOne = 0;
     }
