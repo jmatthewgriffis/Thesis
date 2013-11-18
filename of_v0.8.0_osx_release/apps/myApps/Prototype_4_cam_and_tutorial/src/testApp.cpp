@@ -39,7 +39,7 @@ void testApp::setup(){
     bIsLefty = bIsRecording = false;
     
     myPlayer.setup();
-//    myPlayer.setup( ofVec2f( 4300, 100 ) );
+//    myPlayer.setup( ofVec2f( 6200, 100 ) );
     
     // 0 is title screen, 1 is game screen.
     gameState = 0;
@@ -180,6 +180,9 @@ void testApp::draw(){
             helvetica.drawString( sAltLeft, 3000, y );
             // Replay
             helvetica.drawString( sAltRight, 3800, y );
+            
+            // Sly note
+            helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press <r> to restart.)", 7000, y );
         }
         
         // Draw the notes.
