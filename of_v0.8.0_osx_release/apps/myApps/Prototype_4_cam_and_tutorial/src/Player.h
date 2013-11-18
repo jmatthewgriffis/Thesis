@@ -30,4 +30,6 @@ public:
     bool onSurface;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing;
     float radius, angle, angleVel;
+    
+    ofImage headphones; // For some baffling reason the image is not moving when it should.
 };

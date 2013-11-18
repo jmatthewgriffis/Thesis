@@ -11,6 +11,7 @@
 		CDC60D79181C76B500A26838 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D77181C76B500A26838 /* Object.cpp */; };
 		CDC60D7C181C77B900A26838 /* Note.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D7A181C77B800A26838 /* Note.cpp */; };
 		CDC60D80181C929B00A26838 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D7E181C929B00A26838 /* Player.cpp */; };
+		CDC8500D183A6F9B00959567 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC8500B183A6F9B00959567 /* Obstacle.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -70,6 +71,8 @@
 		CDC60D7B181C77B900A26838 /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
 		CDC60D7E181C929B00A26838 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		CDC60D7F181C929B00A26838 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		CDC8500B183A6F9B00959567 /* Obstacle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Obstacle.cpp; sourceTree = "<group>"; };
+		CDC8500C183A6F9B00959567 /* Obstacle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obstacle.h; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -202,6 +205,8 @@
 				CDC60D7B181C77B900A26838 /* Note.h */,
 				CDC60D7E181C929B00A26838 /* Player.cpp */,
 				CDC60D7F181C929B00A26838 /* Player.h */,
+				CDC8500B183A6F9B00959567 /* Obstacle.cpp */,
+				CDC8500C183A6F9B00959567 /* Obstacle.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -304,6 +309,7 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				CDC60D79181C76B500A26838 /* Object.cpp in Sources */,
+				CDC8500D183A6F9B00959567 /* Obstacle.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				CDC60D7C181C77B900A26838 /* Note.cpp in Sources */,
 				CDC60D80181C929B00A26838 /* Player.cpp in Sources */,

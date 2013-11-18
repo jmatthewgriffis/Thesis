@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Note.h"
 #include "Player.h"
+#include "Obstacle.h"
 
 #define numNotes 15
 
@@ -92,4 +93,6 @@ public:
     string sUp, sLeft, sDown, sRight, sAltUp, sAltLeft, sAltDown, sAltRight;
     
     ofEasyCam myCam;
+    
+    Obstacle tmp;
 };

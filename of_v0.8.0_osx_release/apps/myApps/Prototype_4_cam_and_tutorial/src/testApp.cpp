@@ -26,7 +26,7 @@ void testApp::setup(){
     staffPosSet();
     
     // Run a test pattern and highlight the first element.
-    testPattern();
+//    testPattern();
     getThisOne = 0;
     
     iStaffAlphaMin = 10;
@@ -40,6 +40,8 @@ void testApp::setup(){
     
     // 0 is title screen, 1 is game screen.
     gameState = 0;
+    
+    tmp.setup( ofVec2f( 600, ofGetHeight() ), 50, 100, true );
 }
 
 //--------------------------------------------------------------
@@ -102,6 +104,8 @@ void testApp::draw(){
     // Don't draw anything else if not on the game screen.
     else if ( gameState == 1 ) {
         
+        // LOCATION-INDEPENDENT
+        
         // Move the camera with the player, as long as it dosn't move out of bounds.
         if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
             myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
@@ -119,10 +123,23 @@ void testApp::draw(){
             ofLine( 50 + ( i * 2 ), ofGetHeight(), 50 + i, ofGetHeight() - 25 );
         }
         
+        // LOCATION-DEPENDENT
+        
+        // Tutorial
+        
+        // Instructions
+        
+        // Left and right
+        helvetica.drawString( sLeft + " / " + sRight, 100, 100 );
+        // Up
+        helvetica.drawString( sUp, 600, 100 );
+        
         // Draw the notes.
         for ( int i = 0; i < objectList.size(); i++ ) {
             objectList[ i ].draw();
         }
+        
+        tmp.draw();
         
         myPlayer.draw();
         

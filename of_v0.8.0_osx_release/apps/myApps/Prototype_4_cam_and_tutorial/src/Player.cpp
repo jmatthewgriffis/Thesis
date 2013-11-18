@@ -16,6 +16,8 @@ Player::Player() {
     jumpVel = 10;
     radius = 50;
     angleVel = 10;
+    
+    headphones.loadImage( "images/headphones.png" );
 }
 
 void Player::setup() {
@@ -86,9 +88,13 @@ void Player::update() {
 
 void Player::draw() {
     
-    ofSetColor( 0 );
     ofSetRectMode( OF_RECTMODE_CENTER );
+    
+    ofSetColor( 0 );
     ofRect( pos, wide, tall );
+    
+    ofSetColor( 255 );
+//    headphones.draw( pos, 50, 50 );
     
     // Draw the action if called, orbiting around the player's pos.
     if ( bIsActing ) {
