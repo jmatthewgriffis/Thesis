@@ -44,6 +44,8 @@ void testApp::setup(){
     Obstacle tmp;
     tmp.setup( ofVec2f( 1000, ofGetHeight() ), 100, 75, true );
     obstacleList.push_back( tmp );
+    
+    addObject( 2, 1800, -1 );
 }
 
 //--------------------------------------------------------------
@@ -467,7 +469,8 @@ void testApp::fDrawTitleScreen() {
     helvetica.drawString( "I feel quite sinister (left-handed): Press 2", 200, 250 );
     
     ofSetColor( 0 );
-    helvetica.drawString( "Press ENTER to continue.", 300, 325 );
+    helvetica.drawString( "Audio is recommended.", 320, 310 );
+    helvetica.drawString( "Press ENTER to continue.", 300, 360 );
 }
 
 //--------------------------------------------------------------
