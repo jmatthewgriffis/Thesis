@@ -148,6 +148,11 @@ void testApp::draw(){
     
     if ( gameState == 0 ) fDrawTitleScreen();
     
+    else if ( gameState == -1 ) {
+        
+        helvetica.drawString( "Are you sure you want to restart? Y / N ", 200, ofGetHeight() / 2.0 );
+    }
+    
     // Don't draw anything else if not on the game screen.
     else if ( gameState == 1 ) {
         
@@ -525,7 +530,7 @@ void testApp::fDrawTitleScreen() {
         helvetica.drawString( "[^]", 15, 17 );
     }ofPopMatrix();
     
-    helvetica.drawString( "Audio is recommended.", 320, 310 );
+    helvetica.drawString( "Headphones recommended.", 300, 310 );
     helvetica.drawString( "Press ENTER to continue.", 300, 360 );
 }
 
@@ -575,7 +580,23 @@ void testApp::keyPressed(int key){
             // Reset
         case 'r':
         case 'R':
-            setup();
+            if ( gameState == 1 ) {
+                gameState = -1;
+            }
+            break;
+            
+        case 'y':
+        case 'Y':
+            if ( gameState == -1 ) {
+                setup();
+            }
+            break;
+            
+        case 'n':
+        case 'N':
+            if ( gameState == -1 ) {
+                gameState = 1;
+            }
             break;
             
             // Proceed on menu.
@@ -649,15 +670,15 @@ void testApp::keyPressed(int key){
             
             // Debug mode-----------------------------------------
         {
-        case 'm':
+        case '[':
             if ( bIsDebugging ) {
-                getThisOne++;
+                getThisOne--;
             }
             break;
             
-        case 'n':
+        case ']':
             if ( bIsDebugging ) {
-                getThisOne--;
+                getThisOne++;
             }
             break;
             
