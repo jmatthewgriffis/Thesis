@@ -3,6 +3,9 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     
+    // Switch debug mode on and off.
+    bIsDebugging = false;
+    
     // Support r-restart:
     cleanup();
     lastTime = ofGetElapsedTimef();
@@ -26,7 +29,7 @@ void testApp::setup(){
     staffPosSet();
     
     // Run a test pattern and highlight the first element.
-//    testPattern();
+    //    testPattern();
     bHighlightNote = false;
     if ( bHighlightNote ) getThisOne = 0;
     else getThisOne = -1;
@@ -39,7 +42,7 @@ void testApp::setup(){
     bIsLefty = bIsRecording = false;
     
     myPlayer.setup();
-//    myPlayer.setup( ofVec2f( 6200, 100 ) );
+    //    myPlayer.setup( ofVec2f( 6200, 100 ) );
     
     // 0 is title screen, 1 is game screen.
     gameState = 0;
@@ -289,7 +292,7 @@ void testApp::fRecord( int _i ) {
     if ( bIsEmpty ) bIsEmpty = false;
     
     if ( bHighlightNote && _i != getThisOne ) {
-//        cout<<"yes!"<<endl;
+        //        cout<<"yes!"<<endl;
         getThisOne = 0;
     }
 }
@@ -567,29 +570,6 @@ void testApp::keyPressed(int key){
             setup();
             break;
             
-        case '1':
-            if ( gameState == 0 ) {
-                bIsLefty = false;
-            }
-            // Debug
-            else {
-                // Turn Object movement on and off.
-                for ( int i = 0; i < objectList.size(); i++ ) {
-                    if ( objectList[ i ].vel == ofVec2f ( 0 ) ) {
-                        objectList[ i ].vel.set( -5, 0 );
-                    } else {
-                        objectList[ i ].vel.set( 0 );
-                    }
-                }
-            }
-            break;
-            
-        case '2':
-            if ( gameState == 0 ) {
-                bIsLefty = true;
-            }
-            break;
-            
         case OF_KEY_RETURN:
             if ( gameState == 0 ) gameState = 1;
             break;
@@ -603,8 +583,12 @@ void testApp::keyPressed(int key){
             else myPlayer.up = true;
             break;
         case OF_KEY_UP:
-            if ( bIsLefty ) myPlayer.up = true;
-            else {}
+            if ( gameState == 0 ) {
+                bIsLefty = !bIsLefty;
+            } else {
+                if ( bIsLefty ) myPlayer.up = true;
+                else {}
+            }
             break;
             
             // LEFT
@@ -625,8 +609,12 @@ void testApp::keyPressed(int key){
             else myPlayer.down = true;
             break;
         case OF_KEY_DOWN:
-            if ( bIsLefty ) myPlayer.down = true;
-            else {}
+            if ( gameState == 0 ) {
+                bIsLefty = !bIsLefty;
+            } else {
+                if ( bIsLefty ) myPlayer.down = true;
+                else {}
+            }
             break;
             
             // RIGHT
@@ -646,18 +634,38 @@ void testApp::keyPressed(int key){
             }
             break;
             
-        { // Start debug
-        /*case 'm':
-            getThisOne++;
+            // Debug mode.
+        {
+        case 'm':
+            if ( bIsDebugging ) {
+                getThisOne++;
+            }
             break;
             
         case 'n':
-            getThisOne--;
-            break;*/
+            if ( bIsDebugging ) {
+                getThisOne--;
+            }
+            break;
             
         case 'p':
-            if ( gameState == 0 ) gameState = 1;
-            else if ( gameState == 1 ) gameState = 0;
+            if ( bIsDebugging ) {
+                if ( gameState == 0 ) gameState = 1;
+                else if ( gameState == 1 ) gameState = 0;
+            }
+            break;
+            
+        case '1':
+            if ( bIsDebugging ) {
+                // Turn Object movement on and off.
+                for ( int i = 0; i < objectList.size(); i++ ) {
+                    if ( objectList[ i ].vel == ofVec2f ( 0 ) ) {
+                        objectList[ i ].vel.set( -5, 0 );
+                    } else {
+                        objectList[ i ].vel.set( 0 );
+                    }
+                }
+            }
             break;
         } // End debug
     }

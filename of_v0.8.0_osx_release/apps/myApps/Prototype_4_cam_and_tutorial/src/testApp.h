@@ -79,6 +79,7 @@ public:
     
     // Switch between game modes.
     int gameState;
+    bool bIsDebugging;
     
     int frameRate, objectLife;
     
