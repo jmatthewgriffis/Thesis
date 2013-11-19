@@ -499,7 +499,7 @@ void testApp::fDrawTitleScreen() {
     ofSetRectMode( OF_RECTMODE_CORNER );
     
     ofSetColor( 0 );
-    helvetica.drawString( "Hello! Welcome to Demoville, home of the demo.", 150, 75 );
+    helvetica.drawString( "Hello! Welcome to Protoville, home of the prototype.", 125, 75 );
     helvetica.drawString( "Please choose your control affiliation.", 225, 125 );
     
     if ( bIsLefty) ofSetColor( 0 );
@@ -508,15 +508,23 @@ void testApp::fDrawTitleScreen() {
         ofRect( 190, 170, 670, 50 );
         ofSetColor( 255 );
     }
-    helvetica.drawString( "I am so dextrous (right-handed): Press 1", 200, 200 );
+    helvetica.drawString( "I am so dextrous (right-handed).", 275, 200 );
     if ( bIsLefty) {
         ofSetColor( 0 );
         ofRect( 190, 220, 670, 50 );
         ofSetColor( 255 );
     } else ofSetColor( 0 );
-    helvetica.drawString( "I feel quite sinister (left-handed): Press 2", 200, 250 );
+    helvetica.drawString( "I feel quite sinister (left-handed).", 275, 250 );
     
     ofSetColor( 0 );
+    
+    ofPushMatrix();{
+        ofTranslate( ofGetWidth() - 75, 225 );
+        helvetica.drawString( "[^]", 0, 0 );
+        ofRotate( 180 );
+        helvetica.drawString( "[^]", 15, 17 );
+    }ofPopMatrix();
+    
     helvetica.drawString( "Audio is recommended.", 320, 310 );
     helvetica.drawString( "Press ENTER to continue.", 300, 360 );
 }
@@ -570,10 +578,12 @@ void testApp::keyPressed(int key){
             setup();
             break;
             
+            // Proceed on menu.
         case OF_KEY_RETURN:
             if ( gameState == 0 ) gameState = 1;
             break;
             
+            //----------------------------------------------------
             // Movement and action (depends on the control scheme).
             
             // UP
@@ -634,7 +644,10 @@ void testApp::keyPressed(int key){
             }
             break;
             
-            // Debug mode.
+            // End movement and action.
+            //----------------------------------------------------
+            
+            // Debug mode-----------------------------------------
         {
         case 'm':
             if ( bIsDebugging ) {
@@ -667,7 +680,8 @@ void testApp::keyPressed(int key){
                 }
             }
             break;
-        } // End debug
+        }
+            // End debug------------------------------------------
     }
 }
 
@@ -676,6 +690,7 @@ void testApp::keyReleased(int key){
     
     switch ( key ) {
             
+            //----------------------------------------------------
             // Movement and action (depends on the control scheme).
             
             // UP
@@ -727,6 +742,9 @@ void testApp::keyReleased(int key){
             if ( bIsLefty ) myPlayer.right = false;
             else myPlayer.replay = false;
             break;
+            
+            // End movement and action.
+            //----------------------------------------------------
     }
 }
 
