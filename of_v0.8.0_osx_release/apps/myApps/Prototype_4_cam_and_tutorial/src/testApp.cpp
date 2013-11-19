@@ -41,8 +41,8 @@ void testApp::setup(){
     
     bIsLefty = bIsRecording = false;
     
-    //    myPlayer.setup();
-    myPlayer.setup( ofVec2f( 9250, 100 ) );
+    //myPlayer.setup();
+    myPlayer.setup( ofVec2f( 10200, 100 ) );
     
     // 0 is title screen, 1 is game screen (-1 is restart screen).
     gameState = 0;
@@ -557,7 +557,10 @@ void testApp::fDrawTutorialInstructions() {
     helvetica.drawString( sAltRight, 3800, y );
     
     // Sly note
-    helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", 10500, y );
+    helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", 12100, y );
+    
+    // Cue boss battle.
+    helvetica.drawString( "[ENTER] here for a boss battle!", 10500, y + 125 );
 }
 
 void testApp::fSetupTutorial() {
@@ -692,7 +695,13 @@ void testApp::keyPressed(int key){
             
             // Proceed on menu.
         case OF_KEY_RETURN:
-            if ( gameState == 0 ) gameState = 1;
+            if ( gameState == 0 ) {
+                gameState = 1;
+            }
+            // Go to boss battle if player has reached end of tutorial.
+            else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + 400 ) {
+                gameState = 2;
+            }
             break;
             
             //----------------------------------------------------
