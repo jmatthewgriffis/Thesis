@@ -146,11 +146,12 @@ void testApp::draw(){
     myCam.begin();
     myCam.setupPerspective();
     
-    if ( gameState == 0 ) fDrawTitleScreen();
+    if ( gameState == 0 ) {
+        fDrawTitleScreen();
+    }
     
     else if ( gameState == -1 ) {
-        
-        helvetica.drawString( "Are you sure you want to restart? Y / N ", 200, ofGetHeight() / 2.0 );
+        fDrawRestartScreen();
     }
     
     // Don't draw anything else if not on the game screen.
@@ -177,21 +178,7 @@ void testApp::draw(){
         
         // LOCATION-DEPENDENT
         
-        // Tutorial Instructions
-        {
-            float y = 100;
-            // Left and right
-            helvetica.drawString( sLeft + " / " + sRight, 100, y );
-            // Up
-            helvetica.drawString( sUp, 1350, y );
-            // Record
-            helvetica.drawString( sAltLeft, 3000, y );
-            // Replay
-            helvetica.drawString( sAltRight, 3800, y );
-            
-            // Sly note
-            helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", 7000, y );
-        }
+        fDrawTutorialInstructions();
         
         // Draw the notes.
         for ( int i = 0; i < objectList.size(); i++ ) {
@@ -532,6 +519,29 @@ void testApp::fDrawTitleScreen() {
     
     helvetica.drawString( "Headphones recommended.", 300, 310 );
     helvetica.drawString( "Press ENTER to continue.", 300, 360 );
+}
+
+//--------------------------------------------------------------
+void testApp::fDrawRestartScreen() {
+    
+    helvetica.drawString( "Are you sure you want to restart? Y / N ", 200, ofGetHeight() / 2.0 );
+}
+
+//--------------------------------------------------------------
+void testApp::fDrawTutorialInstructions() {
+    
+    float y = 100;
+    // Left and right
+    helvetica.drawString( sLeft + " / " + sRight, 100, y );
+    // Up
+    helvetica.drawString( sUp, 1350, y );
+    // Record
+    helvetica.drawString( sAltLeft, 3000, y );
+    // Replay
+    helvetica.drawString( sAltRight, 3800, y );
+    
+    // Sly note
+    helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", 7000, y );
 }
 
 //--------------------------------------------------------------

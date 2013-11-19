@@ -38,6 +38,8 @@ public:
     void exit(); // Technically this is built-in.
     
     void fDrawTitleScreen();
+    void fDrawRestartScreen();
+    void fDrawTutorialInstructions();
     
     // Manage the objects.
     void addObject( int _note, float _xPos, int _age );
