@@ -40,6 +40,7 @@ public:
     void fDrawTitleScreen();
     void fDrawRestartScreen();
     void fDrawTutorialInstructions();
+    void fSetupTutorial();
     
     // Manage the objects.
     void addObject( int _note, float _xPos, int _age );
