@@ -44,7 +44,7 @@ void testApp::setup(){
     //myPlayer.setup();
     myPlayer.setup( ofVec2f( 10200, 100 ) );
     
-    // 0 is title screen, 1 is game screen (-1 is restart screen).
+    // 0 is title screen, -1 is restart screen, 1 is game screen, 2 is boss screen.
     gameState = 0;
     
     fSetupTutorial();
@@ -67,7 +67,7 @@ void testApp::update(){
     if ( gameState == 0 ) fWriteControls();
     
     // Don't update anything else if not on the game screen.
-    if ( gameState != 1 ) return;
+    if ( gameState < 1 ) return;
     
     // Update the alpha for the staff lines.
     iStaffAlpha += iStaffAlphaVel;
@@ -107,9 +107,6 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    myCam.begin();
-    myCam.setupPerspective();
-    
     if ( gameState == 0 ) {
         fDrawTitleScreen();
     }
@@ -119,13 +116,20 @@ void testApp::draw(){
     }
     
     // Don't draw anything else if not on the game screen.
-    else if ( gameState == 1 ) {
+    else if ( gameState > 0 ) {
+        
+        if ( gameState == 1 ) {
+            myCam.begin();
+            myCam.setupPerspective();
+        }
         
         // LOCATION-INDEPENDENT
         
         // Move the camera with the player, as long as it dosn't move out of bounds.
-        if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
-            myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
+        if ( gameState == 1 ) {
+            if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
+                myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
+            }
         }
         
         // Draw the staff with transparency.
@@ -142,7 +146,11 @@ void testApp::draw(){
         
         // LOCATION-DEPENDENT
         
-        fDrawTutorialInstructions();
+        if ( gameState == 1 ) {
+            fDrawTutorialInstructions();
+        } else if ( gameState == 2 ) {
+            testPattern();
+        }
         
         // Draw the notes.
         for ( int i = 0; i < objectList.size(); i++ ) {
@@ -160,9 +168,11 @@ void testApp::draw(){
         if ( myPlayer.bIsReplaying && bIsEmpty ) {
             helvetica.drawString("?", myPlayer.pos.x + 30, myPlayer.pos.y - 30 );
         }
+        
+        if ( gameState == 1 ) {
+            myCam.end();
+        }
     }
-    
-    myCam.end();
 }
 
 //--------------------------------------------------------------
@@ -457,12 +467,20 @@ void testApp::objectCollidesWithObstacle() {
 //--------------------------------------------------------------
 void testApp::testPattern() {
     
+    if ( objectList.size() > 0 ) {
+        return;
+    }
+    
     addObject( 2, 200, -1 );
     addObject( 4, 400, -1 );
     addObject( 6, 600, -1 );
     addObject( 2, 800, -1 );
     addObject( 2, 1000, -1 );
     addObject( 5, 1000, -1 );
+    
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        objectList[ i ].vel.set( -5.0, 0.0 );
+    }
 }
 
 //--------------------------------------------------------------
@@ -485,7 +503,6 @@ void testApp::cleanup() {
     }
     
     // Clear the vector.
-    staffPosList.clear();
     obstacleList.clear();
     objectList.clear();
     recordedList.clear();
@@ -700,7 +717,11 @@ void testApp::keyPressed(int key){
             }
             // Go to boss battle if player has reached end of tutorial.
             else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + 400 ) {
+                cleanup();
                 gameState = 2;
+                myPlayer.setup();
+                bHighlightNote = true;
+                getThisOne = 0;
             }
             break;
             
