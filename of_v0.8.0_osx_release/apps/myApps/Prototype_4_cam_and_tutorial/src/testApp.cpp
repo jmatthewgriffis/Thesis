@@ -42,7 +42,7 @@ void testApp::setup(){
     bIsLefty = bIsRecording = false;
     
     myPlayer.setup();
-    //    myPlayer.setup( ofVec2f( 6200, 100 ) );
+//    myPlayer.setup( ofVec2f( 3000, 100 ) );
     
     // 0 is title screen, 1 is game screen (-1 is restart screen).
     gameState = 0;
@@ -525,6 +525,7 @@ void testApp::fSetupTutorial() {
     // Record and replay a note to overcome an obstacle.
     float x3 = 2300;
     addObject( 2, x3, -1 );
+    addObject( 6, x3 + 745, -1 );
     Obstacle tmp3;
     tmp3.setup( ofVec2f( x3 + 2000, ofGetHeight() ), 100, 150, true );
     obstacleList.push_back( tmp3 );
