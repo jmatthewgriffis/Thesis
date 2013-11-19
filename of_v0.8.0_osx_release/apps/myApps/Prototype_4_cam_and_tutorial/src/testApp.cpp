@@ -185,7 +185,7 @@ void testApp::draw(){
             helvetica.drawString( sAltRight, 3800, y );
             
             // Sly note
-            helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press <r> to restart.)", 7000, y );
+            helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", 7000, y );
         }
         
         // Draw the notes.
@@ -538,33 +538,33 @@ void testApp::fWriteControls() {
         
         // Movement
         
-        sUp = "<w>";
-        sLeft = "<a>";
-        sDown = "<s>";
-        sRight = "<d>";
+        sUp = "[W]";
+        sLeft = "[A]";
+        sDown = "[S]";
+        sRight = "[D]";
         
         // Action
         
-        sAltUp = "<UP>";
-        sAltLeft = "<LEFT>";
-        sAltDown = "<DOWN>";
-        sAltRight = "<RIGHT>";
+        sAltUp = "[UP]";
+        sAltLeft = "[LEFT]";
+        sAltDown = "[DOWN]";
+        sAltRight = "[RIGHT]";
     }
     else {
         
         // Action
         
-        sAltUp = "<w>";
-        sAltLeft = "<a>";
-        sAltDown = "<s>";
-        sAltRight = "<d>";
+        sAltUp = "[W]";
+        sAltLeft = "[A]";
+        sAltDown = "[S]";
+        sAltRight = "[D]";
         
         // Movement
         
-        sUp = "<UP>";
-        sLeft = "<LEFT>";
-        sDown = "<DOWN>";
-        sRight = "<RIGHT>";
+        sUp = "[UP]";
+        sLeft = "[LEFT]";
+        sDown = "[DOWN]";
+        sRight = "[RIGHT]";
     }
 }
 
