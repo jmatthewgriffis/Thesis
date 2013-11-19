@@ -41,8 +41,8 @@ void testApp::setup(){
     
     bIsLefty = bIsRecording = false;
     
-    myPlayer.setup();
-//    myPlayer.setup( ofVec2f( 3000, 100 ) );
+    //    myPlayer.setup();
+    myPlayer.setup( ofVec2f( 9250, 100 ) );
     
     // 0 is title screen, 1 is game screen (-1 is restart screen).
     gameState = 0;
@@ -91,6 +91,7 @@ void testApp::update(){
     playerCollidesWithGround();
     playerCollidesWithObstacle();
     playerCollidesWithObject();
+    objectCollidesWithObstacle();
     
     // Update the player (duh).
     myPlayer.update();
@@ -404,6 +405,56 @@ void testApp::playerCollidesWithObstacle() {
 }
 
 //--------------------------------------------------------------
+void testApp::objectCollidesWithObstacle() {
+    
+    // Collision with Obstacle vector.
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        for ( int j = 0; j < obstacleList.size(); j++ ) {
+            
+            // Make some floats for shorthand...
+            // Object is drawn from the center.
+            // Obstacles are drawn from the corner.
+            float margin = 0.0;
+            float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
+            float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
+            float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
+            float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
+            float obstacleTop = obstacleList[ j ].pos.y;
+            float obstacleLeft = obstacleList[ j ].pos.x;
+            float obstacleBottom = obstacleList[ j ].pos.y + obstacleList[ j ].tall;
+            float obstacleRight = obstacleList[ j ].pos.x + obstacleList[ j ].wide;
+            
+            // First, check if the object is in the same horizontal region as the obstacle.
+            if ( objectBottom >= obstacleTop + margin && objectTop <= obstacleBottom - margin ) {
+                // Is there something directly to the right?
+                if ( objectRight >= obstacleLeft && objectRight < obstacleList[ j ].pos.x + obstacleList[ j ].wide / 2.0 ) {
+                    // Reverse velocity.
+                    objectList[ i ].vel.x *= -1;
+                }
+                // OK, is there something directly to the left?
+                else if ( objectLeft <= obstacleRight && objectLeft > obstacleList[ j ].pos.x + obstacleList[ j ].wide / 2.0 ) {
+                    // Reverse velocity.
+                    objectList[ i ].vel.x *= -1;
+                }
+            }
+            // Next, check if the object is in the same vertical region as the obstacle.
+            if ( objectRight >= obstacleLeft + margin && objectLeft <= obstacleRight - margin ) {
+                // Is there something directly below?
+                if ( objectBottom >= obstacleTop && objectBottom < obstacleList[ j ].pos.y + obstacleList[ j ].tall / 2.0 ) {
+                    // Reverse velocity.
+                    objectList[ i ].vel.y *= -1;
+                }
+                // OK, is there something directly above?
+                else if ( objectTop <= obstacleBottom && objectTop > obstacleList[ j ].pos.y + obstacleList[ j ].tall / 2.0 ) {
+                    // Reverse velocity.
+                    objectList[ i ].vel.y *= -1;
+                }
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------
 void testApp::testPattern() {
     
     addObject( 2, 200, -1 );
@@ -434,6 +485,8 @@ void testApp::cleanup() {
     }
     
     // Clear the vector.
+    staffPosList.clear();
+    obstacleList.clear();
     objectList.clear();
     recordedList.clear();
 }
@@ -504,7 +557,7 @@ void testApp::fDrawTutorialInstructions() {
     helvetica.drawString( sAltRight, 3800, y );
     
     // Sly note
-    helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", 7000, y );
+    helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", 10500, y );
 }
 
 void testApp::fSetupTutorial() {
@@ -536,6 +589,7 @@ void testApp::fSetupTutorial() {
     //    addObject( 5, x4 + 200, -1 );
     addObject( 8, x4 + 400, -1 );
     addObject( 5, x4 + 700, -1 );
+    
     float x5 = x4 + 1100;
     addObject( 5, x5, -1 );
     addObject( 2, x5 + 100, -1 );
@@ -543,6 +597,32 @@ void testApp::fSetupTutorial() {
     Obstacle tmp4;
     tmp4.setup( ofVec2f( x5 + 400, ofGetHeight() ), 100, 300, true );
     obstacleList.push_back( tmp4 );
+    
+    // Record multiple notes before replaying to overcome a tall obstacle before the notes expire.
+    addObject( 7, x5 + 600, -1 );
+    addObject( 3, x5 + 700, -1 );
+    
+    float x6 = 7500;
+    addObject( 7, x6, -1 );
+    addObject( 3, x6 + 200, -1 );
+    Obstacle tmp5;
+    tmp5.setup( ofVec2f( x6 + 1450, ofGetHeight() ), 100, 300, true );
+    obstacleList.push_back( tmp5 );
+    
+    // Ride a moving note to overcome a tall obstacle.
+    Obstacle tmp6;
+    tmp6.setup( ofVec2f( x6 + 1550, ofGetHeight() ), 100, 200, true );
+    obstacleList.push_back( tmp6 );
+    Obstacle tmp7;
+    tmp7.setup( ofVec2f( x6 + 1650, ofGetHeight() ), 100, 100, true );
+    obstacleList.push_back( tmp7 );
+    
+    float x7 = 9250;
+    addObject( 7, x7, -1 );
+    objectList[ objectList.size() - 1 ].vel.set( -3.0, 0.0 );
+    Obstacle tmp8;
+    tmp8.setup( ofVec2f( x7 + 750, ofGetHeight() ), 100, 300, true );
+    obstacleList.push_back( tmp8 );
 }
 
 //--------------------------------------------------------------

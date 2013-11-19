@@ -51,10 +51,11 @@ public:
     void fReplay();
     void testPattern();
     
-    // Handle player collision.
+    // Handle collision.
     void playerCollidesWithGround();
     void playerCollidesWithObject();
     void playerCollidesWithObstacle();
+    void objectCollidesWithObstacle();
     
     // Define all the staff positions.
     void staffPosSet();
