@@ -41,11 +41,19 @@ void testApp::setup(){
     
     bIsLefty = bIsRecording = false;
     
-    //myPlayer.setup();
-    myPlayer.setup( ofVec2f( 10200, 100 ) );
+    myPlayer.setup();
+    //myPlayer.setup( ofVec2f( 10200, 100 ) );
     
     // 0 is title screen, -1 is restart screen, 1 is game screen, 2 is boss screen.
     gameState = 0;
+    currentState = 0;
+    // To jump straight to the boss battle, must set gameState to 2, then uncomment the following...
+    
+    /*testPattern();
+    bHighlightNote = true;
+    getThisOne = 0;*/
+    
+    // ...and comment out the following:
     
     fSetupTutorial();
 }
@@ -150,6 +158,7 @@ void testApp::draw(){
             fDrawTutorialInstructions();
         } else if ( gameState == 2 ) {
             testPattern();
+            helvetica.drawString( "This is not yet fully implemented. :(\nCheck back later.", 100, 100 );
         }
         
         // Draw the notes.
@@ -691,7 +700,8 @@ void testApp::keyPressed(int key){
             // Reset
         case 'r':
         case 'R':
-            if ( gameState == 1 ) {
+            if ( gameState > 0 ) {
+                currentState = gameState;
                 gameState = -1;
             }
             break;
@@ -706,7 +716,7 @@ void testApp::keyPressed(int key){
         case 'n':
         case 'N':
             if ( gameState == -1 ) {
-                gameState = 1;
+                gameState = currentState;
             }
             break;
             

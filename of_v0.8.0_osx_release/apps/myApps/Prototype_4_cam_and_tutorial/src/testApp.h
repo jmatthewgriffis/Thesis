@@ -82,7 +82,7 @@ public:
     bool bIsEmpty;
     
     // Switch between game modes.
-    int gameState;
+    int gameState, currentState;
     bool bIsDebugging;
     
     int frameRate, objectLife;
