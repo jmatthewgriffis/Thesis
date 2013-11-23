@@ -19,6 +19,7 @@ void testApp::setup(){
     ofSetFrameRate( frameRate );
     ofSetCircleResolution( 100 );
     myCam.disableMouseInput();
+    CGDisplayHideCursor(NULL); // ofHideCursor() does not work, but this does.
     
     helvetica.loadFont( "fonts/helvetica.otf", 24 );
     
@@ -727,6 +728,7 @@ void testApp::keyPressed(int key){
             }
             // Go to boss battle if player has reached end of tutorial.
             else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + 400 ) {
+            //else if ( gameState == 1 ) {
                 cleanup();
                 gameState = 2;
                 myPlayer.setup();
