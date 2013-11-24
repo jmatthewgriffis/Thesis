@@ -104,6 +104,14 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         ofFill();
     }
     
+    // Display a visual indicator of recorded capacity.
+    for ( int i = 0; i < _recordedList.size(); i++ ) {
+        float tmpPosX = pos.x + radius * 1.1 * sin( ofDegToRad( -90 + 180 / ( CAPACITY - 1 ) * i ) );
+        float tmpPosY = pos.y + radius * 1.1 * -cos( ofDegToRad( -90 + 180 / ( CAPACITY - 1 ) * i ) );
+        ofSetColor( 0, 255, 0, 125 );
+        ofCircle( tmpPosX, tmpPosY, 5 );
+    }
+    
     // Draw the player.
     ofSetRectMode( OF_RECTMODE_CENTER );
     

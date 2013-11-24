@@ -11,11 +11,13 @@
 #include "ofMain.h"
 #include "Object.h"
 
+#define CAPACITY 8
+
 class Player {
 public:
     Player();
     
-    void setup( ofVec2f _pos = ofVec2f( 100, 100 ) );
+    void setup( ofVec2f _pos = ofVec2f( 100, ofGetHeight() - 50 ) );
     void update();
     void draw( ofTrueTypeFont _font, vector< Object > _recordedList );
     
