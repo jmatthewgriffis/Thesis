@@ -22,7 +22,7 @@ Player::Player() {
 
 void Player::setup( ofVec2f _pos ) {
     
-    up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = false;
+    up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = false;
     allowMove = allowJump = bAllowRecord = bAllowReplay = true;
     angle = 0;
     
@@ -86,7 +86,14 @@ void Player::update() {
     fActing();
 }
 
-void Player::draw() {
+void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
+    
+    // We want to do something when the vector is empty, but not during the action that empties it, so we use a boolean that activates only after that last action is complete.
+    if ( _recordedList.size() > 0 ) {
+        bIsEmpty = false;
+    } else if ( !bIsActing ) {
+        bIsEmpty = true;
+    }
     
     ofSetRectMode( OF_RECTMODE_CENTER );
     
@@ -99,7 +106,14 @@ void Player::draw() {
     // Draw the action if called, orbiting around the player's pos.
     if ( bIsActing ) {
         if ( bIsRecording ) ofSetColor( 0, 255, 0 );
-        else if ( bIsReplaying ) ofSetColor( 0, 0, 255 );
+        else if ( bIsReplaying ) {
+            // Feedback for nothing to replay.
+            if ( bIsEmpty ) {
+                ofSetColor( 0 );
+                _font.drawString("?", pos.x + 30, pos.y - 30 );
+            }
+            ofSetColor( 0, 0, 255 );
+        }
         ofCircle( actPos, 10 );
     }
 }

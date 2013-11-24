@@ -172,12 +172,7 @@ void testApp::draw(){
             obstacleList[ i ].draw();
         }
         
-        myPlayer.draw();
-        
-        ofSetColor( 0 );
-        if ( myPlayer.bIsReplaying && bIsEmpty ) {
-            helvetica.drawString("?", myPlayer.pos.x + 30, myPlayer.pos.y - 30 );
-        }
+        myPlayer.draw( helvetica, recordedList );
         
         if ( gameState == 1 ) {
             myCam.end();
@@ -265,7 +260,6 @@ void testApp::fRecord( int _i ) {
     
     // This prevents additional recording calls before the action completes.
     bIsRecording = true;
-    if ( bIsEmpty ) bIsEmpty = false;
     
     if ( bHighlightNote && _i != getThisOne ) {
         //        cout<<"yes!"<<endl;
@@ -280,7 +274,6 @@ void testApp::fReplay() {
     
     // Don't proceed if there are zero recorded notes.
     if ( recordedList.size() == 0 ) {
-        bIsEmpty = true;
         return;
     }
     

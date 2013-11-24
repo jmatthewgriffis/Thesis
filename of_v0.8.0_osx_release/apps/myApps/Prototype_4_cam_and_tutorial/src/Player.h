@@ -9,6 +9,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Object.h"
 
 class Player {
 public:
@@ -16,7 +17,7 @@ public:
     
     void setup( ofVec2f _pos = ofVec2f( 100, 100 ) );
     void update();
-    void draw();
+    void draw( ofTrueTypeFont _font, vector< Object > _recordedList );
     
     void applyForce( ofVec2f _force );
     void fPressingRecord();
@@ -28,7 +29,7 @@ public:
     float xVel, jumpVel;
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;
-    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing;
+    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty;
     float radius, angle, angleVel;
     
     ofImage headphones; // For some baffling reason the image is not moving when it should.
