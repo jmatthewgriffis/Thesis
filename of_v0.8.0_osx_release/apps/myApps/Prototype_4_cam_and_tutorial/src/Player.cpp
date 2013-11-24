@@ -95,6 +95,16 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         bIsEmpty = true;
     }
     
+    // Display an outline of the next replayable note (drawn from the center).
+    if ( _recordedList.size() > 0 ) {
+        
+        ofSetRectMode( OF_RECTMODE_CENTER );
+        ofNoFill();
+        ofRect( pos.x, _recordedList[ 0 ].pos.y, _recordedList[ 0 ].wide, _recordedList[ 0 ].tall );
+        ofFill();
+    }
+    
+    // Draw the player.
     ofSetRectMode( OF_RECTMODE_CENTER );
     
     ofSetColor( 0 );
