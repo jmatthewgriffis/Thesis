@@ -11,7 +11,7 @@
 #include "ofMain.h"
 #include "Object.h"
 
-#define CAPACITY 8
+#define CAPACITY 9
 
 class Player {
 public:

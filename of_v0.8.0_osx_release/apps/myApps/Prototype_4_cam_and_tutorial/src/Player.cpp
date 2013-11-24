@@ -104,22 +104,36 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         ofFill();
     }
     
-    // Display a visual indicator of recorded capacity.
-    for ( int i = 0; i < _recordedList.size(); i++ ) {
-        float tmpPosX = pos.x + radius * 1.1 * sin( ofDegToRad( -90 + 180 / ( CAPACITY - 1 ) * i ) );
-        float tmpPosY = pos.y + radius * 1.1 * -cos( ofDegToRad( -90 + 180 / ( CAPACITY - 1 ) * i ) );
-        ofSetColor( 0, 255, 0, 125 );
-        ofCircle( tmpPosX, tmpPosY, 5 );
-    }
-    
     // Draw the player.
     ofSetRectMode( OF_RECTMODE_CENTER );
-    
     ofSetColor( 0 );
     ofRect( pos, wide, tall );
     
     ofSetColor( 255 );
 //    headphones.draw( pos, 50, 50 );
+    
+    // Display a visual indicator of recorded capacity.
+    for ( int i = 0; i < _recordedList.size(); i++ ) {
+        float rad, tmpPosX, tmpPosY, hOffset, vOffset;
+        rad = 3;
+        //hOffset = ( wide - ( rad * 3 ) ) / 4;
+        hOffset = wide / 4;
+        vOffset = tall / 4;
+        if ( i < 3 ) {
+            tmpPosX = pos.x - wide / 2 + hOffset + hOffset * i;
+            tmpPosY = pos.y - tall / 2 + vOffset;
+        } else if ( i >= 3 && i < 6 ) {
+            tmpPosX = pos.x - wide / 2 + hOffset + hOffset * ( i - 3 );
+            tmpPosY = pos.y - tall / 2 + vOffset * 2;
+        } else if ( i >= 6 && i < 9 ) {
+            tmpPosX = pos.x - wide / 2 + hOffset + hOffset * ( i - 6 );
+            tmpPosY = pos.y - tall / 2 + vOffset * 3;
+        }
+        ofNoFill();
+        ofSetColor( 255 );
+        ofCircle( tmpPosX, tmpPosY, rad );
+        ofFill();
+    }
     
     // Draw the action if called, orbiting around the player's pos.
     if ( bIsActing ) {
