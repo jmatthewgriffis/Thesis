@@ -31,7 +31,8 @@ public:
     float xVel, jumpVel;
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;
-    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty;
+    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull;
+    int capacity;
     float radius, angle, angleVel;
     
     ofImage headphones; // For some baffling reason the image is not moving when it should.

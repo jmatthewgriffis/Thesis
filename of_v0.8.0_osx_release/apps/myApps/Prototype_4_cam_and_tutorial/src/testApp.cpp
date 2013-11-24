@@ -244,7 +244,7 @@ void testApp::updateObjectList() {
 //--------------------------------------------------------------
 void testApp::fRecord( int _i ) {
     
-    if ( bIsRecording ) return;
+    if ( bIsRecording || recordedList.size() == myPlayer.capacity ) return;
     
     // Set the color to be different to indicate recording.
     objectList[ _i ].bIsRecorded = true;

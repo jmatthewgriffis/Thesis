@@ -15,14 +15,15 @@ Player::Player() {
     xVel = 5;
     jumpVel = 10;
     radius = 40;
-    angleVel = 10;
+    angleVel = 15;
+    capacity = CAPACITY;
     
     headphones.loadImage( "images/headphones.png" );
 }
 
 void Player::setup( ofVec2f _pos ) {
     
-    up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = false;
+    up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = false;
     allowMove = allowJump = bAllowRecord = bAllowReplay = true;
     angle = 0;
     
@@ -94,6 +95,12 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     } else if ( !bIsActing ) {
         bIsEmpty = true;
     }
+    // We want to do something when the vector is full, but not during the action that fills it, so we use a boolean that activates only after that last action is complete.
+    if ( _recordedList.size() < capacity ) {
+        bIsFull = false;
+    } else if ( !bIsActing ) {
+        bIsFull = true;
+    }
     
     // Display an outline of the next replayable note (drawn from the center).
     if ( _recordedList.size() > 0 ) {
@@ -137,7 +144,14 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     
     // Draw the action if called, orbiting around the player's pos.
     if ( bIsActing ) {
-        if ( bIsRecording ) ofSetColor( 0, 255, 0 );
+        if ( bIsRecording ) {
+            // Feedback for no capacity.
+            if ( bIsFull ) {
+                ofSetColor( 0 );
+                _font.drawString("X", pos.x + 30, pos.y - 30 );
+            }
+            ofSetColor( 0, 255, 0 );
+        }
         else if ( bIsReplaying ) {
             // Feedback for nothing to replay.
             if ( bIsEmpty ) {
