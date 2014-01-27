@@ -502,10 +502,16 @@ void testApp::cleanup() {
     
     // Stop any music playing.
     for ( int i = 0; i < objectList.size(); i++ ) {
-        objectList[ i ].myNote.sound.stop();
+//        objectList[ i ].myNote.sound.stop();
+        for ( int j = 0; j < objectList[ i ].noteList.size(); j++ ) {
+            objectList[ i ].noteList[ j ].sound.stop();
+        }
     }
     for ( int i = 0; i < recordedList.size(); i++ ) {
-        recordedList[ i ].myNote.sound.stop();
+//        recordedList[ i ].myNote.sound.stop();
+        for ( int j = 0; j < recordedList[ i ].noteList.size(); j++ ) {
+            recordedList[ i ].noteList[ j ].sound.stop();
+        }
     }
     
     // Clear the vector.
@@ -588,6 +594,14 @@ void testApp::fDrawTutorialInstructions() {
 }
 
 void testApp::fSetupTutorial() {
+    
+    addObject(4, 200, -1);
+    addObject(3, 300, -1);
+    addObject(2, 500, -1);
+    addObject(3, 650, -1);
+    addObject(4, 800, -1);
+    
+    return;
     
     // Jump!
     float x = 1000;
