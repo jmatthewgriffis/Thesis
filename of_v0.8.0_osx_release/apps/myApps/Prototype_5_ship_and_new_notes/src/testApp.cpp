@@ -474,12 +474,12 @@ void testApp::testPattern() {
         return;
     }
     
-    addObject( "a4", 200, -1 );
-    addObject( "c5", 400, -1 );
-    addObject( "e5", 600, -1 );
-    addObject( "a4", 800, -1 );
-    addObject( "a4", 1000, -1 );
-    addObject( "d5", 1000, -1 );
+    addObject( "a3", 200, -1 );
+    addObject( "c4", 400, -1 );
+    addObject( "e4", 600, -1 );
+    addObject( "a3", 800, -1 );
+    addObject( "a3", 1000, -1 );
+    addObject( "d4", 1000, -1 );
     
     for ( int i = 0; i < objectList.size(); i++ ) {
         objectList[ i ].vel.set( -5.0, 0.0 );
@@ -582,11 +582,28 @@ void testApp::fDrawTutorialInstructions() {
 
 void testApp::fSetupTutorial() {
     
-    addObject("d5#", 200, -1);
-    addObject("c5", 300, -1);
-    addObject("a4#", 500, -1);
-    addObject("c5", 650, -1);
-    addObject("d5#", 800, -1);
+    //riff bass
+    float startPos = 100;
+    float spacer = 150;
+    
+    addObject("d3#", startPos, -1);
+    addObject("a3#", startPos, -1);
+    addObject("d3#", startPos + spacer, -1);
+    addObject("a3#", startPos + spacer, -1);
+    addObject("d3#", startPos + spacer * 2, -1);
+    addObject("a3#", startPos + spacer * 2, -1);
+    addObject("d3#", startPos + spacer * 3, -1);
+    addObject("a3#", startPos + spacer * 3, -1);
+    addObject("d3#", startPos + spacer * 4, -1);
+    addObject("a3#", startPos + spacer * 4, -1);
+    
+    
+    //riff treble
+    addObject("f3#", 200, -1);
+    addObject("d3#", 300, -1);
+    addObject("c3#", 500, -1);
+    addObject("d3#", 650, -1);
+    addObject("f3#", 800, -1);
     
     return;
     
@@ -598,41 +615,41 @@ void testApp::fSetupTutorial() {
     
     // Jump off a note to overcome an obstacle.
     float x2 = 1800;
-    addObject( "d4", x2, -1 );
+    addObject( "d3", x2, -1 );
     Obstacle tmp2;
     tmp2.setup( ofVec2f( x2 + 200, ofGetHeight() ), 100, 150, true );
     obstacleList.push_back( tmp2 );
     
     // Record and replay a note to overcome an obstacle.
     float x3 = 2300;
-    addObject( "d4", x3, -1 );
-    addObject( "a4", x3 + 745, -1 );
+    addObject( "d3", x3, -1 );
+    addObject( "a3", x3 + 745, -1 );
     Obstacle tmp3;
     tmp3.setup( ofVec2f( x3 + 2000, ofGetHeight() ), 100, 150, true );
     obstacleList.push_back( tmp3 );
     
     // Spring off notes to get to higher notes and overcome a tall obstacle.
     float x4 = 4600;
-    addObject( "d4", x4, -1 );
+    addObject( "d3", x4, -1 );
     //    addObject( "g4", x4 + 200, -1 );
-    addObject( "c5", x4 + 400, -1 );
-    addObject( "g4", x4 + 700, -1 );
+    addObject( "c4", x4 + 400, -1 );
+    addObject( "g3", x4 + 700, -1 );
     
     float x5 = x4 + 1100;
-    addObject( "g4", x5, -1 );
-    addObject( "d4", x5 + 100, -1 );
+    addObject( "g3", x5, -1 );
+    addObject( "d3", x5 + 100, -1 );
     //    addObject( "c5", x5 + 200, -1 );
     Obstacle tmp4;
     tmp4.setup( ofVec2f( x5 + 400, ofGetHeight() ), 100, 300, true );
     obstacleList.push_back( tmp4 );
     
     // Record multiple notes before replaying to overcome a tall obstacle before the notes expire.
-    addObject( "b4", x5 + 600, -1 );
-    addObject( "e4", x5 + 700, -1 );
+    addObject( "b3", x5 + 600, -1 );
+    addObject( "e3", x5 + 700, -1 );
     
     float x6 = 7500;
-    addObject( "b4", x6, -1 );
-    addObject( "e4", x6 + 200, -1 );
+    addObject( "b3", x6, -1 );
+    addObject( "e3", x6 + 200, -1 );
     Obstacle tmp5;
     tmp5.setup( ofVec2f( x6 + 1450, ofGetHeight() ), 100, 300, true );
     obstacleList.push_back( tmp5 );
@@ -646,7 +663,7 @@ void testApp::fSetupTutorial() {
     obstacleList.push_back( tmp7 );
     
     float x7 = 9250;
-    addObject( "b4", x7, -1 );
+    addObject( "b3", x7, -1 );
     objectList[ objectList.size() - 1 ].vel.set( -3.0, 0.0 );
     Obstacle tmp8;
     tmp8.setup( ofVec2f( x7 + 750, ofGetHeight() ), 100, 300, true );

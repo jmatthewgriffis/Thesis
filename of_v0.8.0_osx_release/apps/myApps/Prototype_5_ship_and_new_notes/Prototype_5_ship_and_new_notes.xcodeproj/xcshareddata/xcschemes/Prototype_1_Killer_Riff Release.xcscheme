@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "Prototype_4_cam_and_tutorial.app"
+               BuildableName = "Prototype_5_ship_and_new_notes.app"
                BlueprintName = "Prototype_5_ship_and_new_notes"
                ReferencedContainer = "container:Prototype_5_ship_and_new_notes.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Prototype_4_cam_and_tutorial.app"
+            BuildableName = "Prototype_5_ship_and_new_notes.app"
             BlueprintName = "Prototype_5_ship_and_new_notes"
             ReferencedContainer = "container:Prototype_5_ship_and_new_notes.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Prototype_4_cam_and_tutorial.app"
+            BuildableName = "Prototype_5_ship_and_new_notes.app"
             BlueprintName = "Prototype_5_ship_and_new_notes"
             ReferencedContainer = "container:Prototype_5_ship_and_new_notes.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Prototype_4_cam_and_tutorial.app"
+            BuildableName = "Prototype_5_ship_and_new_notes.app"
             BlueprintName = "Prototype_5_ship_and_new_notes"
             ReferencedContainer = "container:Prototype_5_ship_and_new_notes.xcodeproj">
          </BuildableReference>
