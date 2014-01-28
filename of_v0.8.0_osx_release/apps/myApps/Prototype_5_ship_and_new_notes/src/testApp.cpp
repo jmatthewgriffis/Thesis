@@ -29,9 +29,6 @@ void testApp::setup(){
     // Background
     ofBackground( 255 );
     
-    // Make the vector of y-pos.
-    staffPosSet();
-    
     // Run a test pattern and highlight the first element.
     //    testPattern();
     bHighlightNote = false;
@@ -184,31 +181,31 @@ void testApp::draw(){
 }
 
 //--------------------------------------------------------------
-void testApp::addObject( int _note, float _xPos, int _age ) {
+void testApp::addObject( string _note, float _xPos, int _age ) {
     
     // This function adds an NPC Object.
     Object tmp;
-    tmp.setup( _note, staffPosList[ _note ], _age );
+    tmp.setup( _note, _age );
     tmp.pos.x = _xPos;
     objectList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
-void testApp::addRecordedObject( int _note, ofVec2f _vel, int _age ) {
+void testApp::addRecordedObject( string _note, ofVec2f _vel, int _age ) {
     
     // This function copies a recorded Object into a static vector that gets neither updated nor drawn.
     Object tmp;
-    tmp.setup( _note, staffPosList[ _note ], _age );
+    tmp.setup( _note, _age );
     tmp.vel.set( _vel );
     recordedList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
-void testApp::addReplayedObject( int _note, ofVec2f _vel, int _age ) {
+void testApp::addReplayedObject( string _note, ofVec2f _vel, int _age ) {
     
     // This function copies an Object from the "recorded" vector to the main Object vector. It also reverses horizontal velocity if needed so the Object can travel the other direction.
     Object tmp;
-    tmp.setup( _note, staffPosList[ _note ], _age );
+    tmp.setup( _note, _age );
     tmp.pos.x = myPlayer.pos.x;
     tmp.vel.set( _vel );
     if ( tmp.vel.x < 0 ) tmp.vel.x *= -1;
@@ -477,12 +474,12 @@ void testApp::testPattern() {
         return;
     }
     
-    addObject( 2, 200, -1 );
-    addObject( 4, 400, -1 );
-    addObject( 6, 600, -1 );
-    addObject( 2, 800, -1 );
-    addObject( 2, 1000, -1 );
-    addObject( 5, 1000, -1 );
+    addObject( "a4", 200, -1 );
+    addObject( "c5", 400, -1 );
+    addObject( "e5", 600, -1 );
+    addObject( "a4", 800, -1 );
+    addObject( "a4", 1000, -1 );
+    addObject( "d5", 1000, -1 );
     
     for ( int i = 0; i < objectList.size(); i++ ) {
         objectList[ i ].vel.set( -5.0, 0.0 );
@@ -518,16 +515,6 @@ void testApp::cleanup() {
     obstacleList.clear();
     objectList.clear();
     recordedList.clear();
-}
-
-//--------------------------------------------------------------
-void testApp::staffPosSet() {
-    
-    // Define the y-pos of each musical note and store it in the vector, starting from the bottom.
-    for ( int i = 0; i < numNotes; i++ ) {
-        float tmp = ofGetHeight() - ( ( ofGetHeight() / ( numNotes + 1 ) ) * ( i + 1 ) );
-        staffPosList.push_back( tmp );
-    }
 }
 
 //--------------------------------------------------------------
@@ -595,11 +582,11 @@ void testApp::fDrawTutorialInstructions() {
 
 void testApp::fSetupTutorial() {
     
-    addObject(4, 200, -1);
-    addObject(3, 300, -1);
-    addObject(2, 500, -1);
-    addObject(3, 650, -1);
-    addObject(4, 800, -1);
+    addObject("d5#", 200, -1);
+    addObject("c5", 300, -1);
+    addObject("a4#", 500, -1);
+    addObject("c5", 650, -1);
+    addObject("d5#", 800, -1);
     
     return;
     
@@ -611,41 +598,41 @@ void testApp::fSetupTutorial() {
     
     // Jump off a note to overcome an obstacle.
     float x2 = 1800;
-    addObject( 2, x2, -1 );
+    addObject( "d4", x2, -1 );
     Obstacle tmp2;
     tmp2.setup( ofVec2f( x2 + 200, ofGetHeight() ), 100, 150, true );
     obstacleList.push_back( tmp2 );
     
     // Record and replay a note to overcome an obstacle.
     float x3 = 2300;
-    addObject( 2, x3, -1 );
-    addObject( 6, x3 + 745, -1 );
+    addObject( "d4", x3, -1 );
+    addObject( "a4", x3 + 745, -1 );
     Obstacle tmp3;
     tmp3.setup( ofVec2f( x3 + 2000, ofGetHeight() ), 100, 150, true );
     obstacleList.push_back( tmp3 );
     
     // Spring off notes to get to higher notes and overcome a tall obstacle.
     float x4 = 4600;
-    addObject( 2, x4, -1 );
-    //    addObject( 5, x4 + 200, -1 );
-    addObject( 8, x4 + 400, -1 );
-    addObject( 5, x4 + 700, -1 );
+    addObject( "d4", x4, -1 );
+    //    addObject( "g4", x4 + 200, -1 );
+    addObject( "c5", x4 + 400, -1 );
+    addObject( "g4", x4 + 700, -1 );
     
     float x5 = x4 + 1100;
-    addObject( 5, x5, -1 );
-    addObject( 2, x5 + 100, -1 );
-    //    addObject( 8, x5 + 200, -1 );
+    addObject( "g4", x5, -1 );
+    addObject( "d4", x5 + 100, -1 );
+    //    addObject( "c5", x5 + 200, -1 );
     Obstacle tmp4;
     tmp4.setup( ofVec2f( x5 + 400, ofGetHeight() ), 100, 300, true );
     obstacleList.push_back( tmp4 );
     
     // Record multiple notes before replaying to overcome a tall obstacle before the notes expire.
-    addObject( 7, x5 + 600, -1 );
-    addObject( 3, x5 + 700, -1 );
+    addObject( "b4", x5 + 600, -1 );
+    addObject( "e4", x5 + 700, -1 );
     
     float x6 = 7500;
-    addObject( 7, x6, -1 );
-    addObject( 3, x6 + 200, -1 );
+    addObject( "b4", x6, -1 );
+    addObject( "e4", x6 + 200, -1 );
     Obstacle tmp5;
     tmp5.setup( ofVec2f( x6 + 1450, ofGetHeight() ), 100, 300, true );
     obstacleList.push_back( tmp5 );
@@ -659,7 +646,7 @@ void testApp::fSetupTutorial() {
     obstacleList.push_back( tmp7 );
     
     float x7 = 9250;
-    addObject( 7, x7, -1 );
+    addObject( "b4", x7, -1 );
     objectList[ objectList.size() - 1 ].vel.set( -3.0, 0.0 );
     Obstacle tmp8;
     tmp8.setup( ofVec2f( x7 + 750, ofGetHeight() ), 100, 300, true );

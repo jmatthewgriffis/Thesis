@@ -11,16 +11,19 @@
 #include "ofMain.h"
 #include "Note.h"
 
+#define numPos 15
+
 class Object {
 public:
     Object();
     
-    void setup( int _whichNote, float y, int _age );
+    void setup( string _whichNote, int _age );
     void update( ofVec2f _pos );
     void draw();
     
-    int whichNote;
+    string whichNote;
     void fLimitLife();
+    float fReturnYPos( string _whichNote );
     void fAddNote();
     
     int age;
@@ -36,6 +39,7 @@ public:
     bool drawAttention, bIsRecorded;
     
     vector< Note > noteList;
+    vector< float > staffPosList;
     
 //    Note myNote;
     

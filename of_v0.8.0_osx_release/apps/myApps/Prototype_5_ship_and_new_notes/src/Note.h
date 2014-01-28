@@ -10,7 +10,7 @@
 
 #include "ofMain.h"
 
-#define NUMNOTES 15
+#define NUMNOTES 25
 
 class Note {
 public:
@@ -18,11 +18,11 @@ public:
     
     Note();
     
-    void setup( int _whichNote );
+    void setup( string _whichNote );
     
-    void update( int _whichNote, float _vol );
+    void update( string _whichNote, float _vol );
     
-    void storePaths();
+    void generatePath( string _whichNote );
     
     ofSoundPlayer sound;
     

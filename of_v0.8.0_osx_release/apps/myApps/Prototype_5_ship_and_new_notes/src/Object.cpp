@@ -14,12 +14,18 @@ Object::Object() {
     wide = tall * 1.5;
     guideLineLength = wide * 0.75;
     c = ofColor( 0 );
+    
+    // Calculate the y-pos for all the notes.
+    for ( int i = 0; i < numPos; i++ ) {
+        float tmp = ofGetHeight() - ( ( ofGetHeight() / ( numPos + 1 ) ) * ( i + 1 ) );
+        staffPosList.push_back( tmp );
+    }
 }
 
-void Object::setup( int _whichNote, float y, int _age ) {
+void Object::setup( string _whichNote, int _age ) {
     
     whichNote = _whichNote;
-    pos.y = y;
+    pos.y = fReturnYPos( _whichNote );
     age = _age;
     
     pos.x = ofGetWidth();
@@ -33,7 +39,7 @@ void Object::setup( int _whichNote, float y, int _age ) {
     bIsRecorded = false;
     
     // Note stuff.
-//    myNote.setup( whichNote );
+    //    myNote.setup( whichNote );
     vol = 1.0f;
 }
 
@@ -71,19 +77,19 @@ void Object::update( ofVec2f _pos ) {
      */
     
     // Update the note.
-//    myNote.update( whichNote, vol );
+    //    myNote.update( whichNote, vol );
     
     // What happens when the Object goes offscreen?
     {
         // Goes off on the right, warp to the other side.
         //float margin = 100;
         //if ( pos.x > ofGetWidth() + margin && vel.x > 0 ) {
-            //pos.x = -margin;
-            /*
-            // Stop playing the Note just in case.
-            myNote.sound.stop();
-            destroyMe = true;
-             */
+        //pos.x = -margin;
+        /*
+         // Stop playing the Note just in case.
+         myNote.sound.stop();
+         destroyMe = true;
+         */
         //}
         // Goes off on the left, warp to the other side.
         float farEnoughForRhythm = 600;
@@ -117,15 +123,15 @@ void Object::draw() {
     
     // Draw guidelines as needed to indicate A above the staff and C below.
     ofSetColor( 0 );
-    if ( whichNote < 2 ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ), pos.x + guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ) );
-    } else if ( whichNote > 12 ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() / 8.0, pos.x + guideLineLength, ofGetHeight() / 8.0 );
-    }
+    /*if ( whichNote < 2 ) {
+     ofLine( pos.x - guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ), pos.x + guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ) );
+     } else if ( whichNote > 12 ) {
+     ofLine( pos.x - guideLineLength, ofGetHeight() / 8.0, pos.x + guideLineLength, ofGetHeight() / 8.0 );
+     }*/
     
     // Draw!
     ofSetColor( c );
-//    ofEllipse( pos, wide, tall);
+    //    ofEllipse( pos, wide, tall);
     ofRect( pos, wide, tall);
     /*
      // Make it a whole note.
@@ -157,7 +163,60 @@ void Object::fLimitLife() {
         
         age--;
     } else {
-//        myNote.sound.stop();
+        //        myNote.sound.stop();
         destroyMe = true;
     }
+}
+
+float Object::fReturnYPos( string _whichNote ) {
+    
+    float tmp;
+    
+    if ( _whichNote == "b3") {
+        tmp = staffPosList[ 0 ];
+    }
+    else if ( _whichNote == "c4_middle" || _whichNote == "c4#") {
+        tmp = staffPosList[ 1 ];
+    }
+    else if ( _whichNote == "d4" || _whichNote == "d4#") {
+        tmp = staffPosList[ 2 ];
+    }
+    else if ( _whichNote == "e4") {
+        tmp = staffPosList[ 3 ];
+    }
+    else if ( _whichNote == "f4" || _whichNote == "f4#") {
+        tmp = staffPosList[ 4 ];
+    }
+    else if ( _whichNote == "g4" || _whichNote == "g4#") {
+        tmp = staffPosList[ 5 ];
+    }
+    else if ( _whichNote == "a4" || _whichNote == "a4#") {
+        tmp = staffPosList[ 6 ];
+    }
+    else if ( _whichNote == "b4") {
+        tmp = staffPosList[ 7 ];
+    }
+    else if ( _whichNote == "c5" || _whichNote == "c5#") {
+        tmp = staffPosList[ 8 ];
+    }
+    else if ( _whichNote == "d5" || _whichNote == "d5#") {
+        tmp = staffPosList[ 9 ];
+    }
+    else if ( _whichNote == "e5") {
+        tmp = staffPosList[ 10 ];
+    }
+    else if ( _whichNote == "f5" || _whichNote == "f5#") {
+        tmp = staffPosList[ 11 ];
+    }
+    else if ( _whichNote == "g5" || _whichNote == "g5#") {
+        tmp = staffPosList[ 12 ];
+    }
+    else if ( _whichNote == "a5" || _whichNote == "a5#") {
+        tmp = staffPosList[ 13 ];
+    }
+    else if ( _whichNote == "b5") {
+        tmp = staffPosList[ 14 ];
+    }
+    
+    return tmp;
 }

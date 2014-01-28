@@ -6,7 +6,7 @@
 #include "Player.h"
 #include "Obstacle.h"
 
-#define numNotes 15
+#define numNotes 25
 
 /*
  So many thanks to:
@@ -43,9 +43,9 @@ public:
     void fSetupTutorial();
     
     // Manage the objects.
-    void addObject( int _note, float _xPos, int _age );
-    void addRecordedObject( int _note, ofVec2f _vel, int _age );
-    void addReplayedObject( int _note, ofVec2f _vel, int _age );
+    void addObject( string _note, float _xPos, int _age );
+    void addRecordedObject( string _note, ofVec2f _vel, int _age );
+    void addReplayedObject( string _note, ofVec2f _vel, int _age );
     void updateObjectList();
     void fRecord( int _i );
     void fReplay();
@@ -57,8 +57,6 @@ public:
     void playerCollidesWithObstacle();
     void objectCollidesWithObstacle();
     
-    // Define all the staff positions.
-    void staffPosSet();
     // Also record the controls (left- or right-handed).
     void fWriteControls();
     
