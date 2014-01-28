@@ -582,28 +582,630 @@ void testApp::fDrawTutorialInstructions() {
 
 void testApp::fSetupTutorial() {
     
-    //riff bass
-    float startPos = 100;
-    float spacer = 150;
+    //m1
     
-    addObject("d3#", startPos, -1);
-    addObject("a3#", startPos, -1);
-    addObject("d3#", startPos + spacer, -1);
-    addObject("a3#", startPos + spacer, -1);
-    addObject("d3#", startPos + spacer * 2, -1);
-    addObject("a3#", startPos + spacer * 2, -1);
-    addObject("d3#", startPos + spacer * 3, -1);
-    addObject("a3#", startPos + spacer * 3, -1);
-    addObject("d3#", startPos + spacer * 4, -1);
-    addObject("a3#", startPos + spacer * 4, -1);
+    //riff bass
+    float m1Bass = 500;
+    float spacer = 150;
+    float mLength = spacer * 5.333333;
+    cout<<mLength<<endl;
+    
+    addObject("d3#", m1Bass-300, -1); // test note
+    
+    addObject("d3#", m1Bass, -1);
+    addObject("a3#", m1Bass, -1);
+    addObject("d3#", m1Bass + spacer, -1);
+    addObject("a3#", m1Bass + spacer, -1);
+    addObject("d3#", m1Bass + spacer * 2, -1);
+    addObject("a3#", m1Bass + spacer * 2, -1);
+    addObject("d3#", m1Bass + spacer * 3, -1);
+    addObject("a3#", m1Bass + spacer * 3, -1);
+    addObject("d3#", m1Bass + spacer * 4, -1);
+    addObject("a3#", m1Bass + spacer * 4, -1);
     
     
     //riff treble
-    addObject("f3#", 200, -1);
-    addObject("d3#", 300, -1);
-    addObject("c3#", 500, -1);
-    addObject("d3#", 650, -1);
-    addObject("f3#", 800, -1);
+    float m1Treble = m1Bass + 100;
+    addObject("f4#", m1Treble, -1);
+    addObject("d4#", m1Treble + 100, -1);
+    addObject("c4#", m1Treble + 300, -1);
+    addObject("d4#", m1Treble + 400, -1);
+    addObject("f4#", m1Treble + 610, -1);
+    
+    //m2
+    
+    //riff bass
+    float m2Bass = m1Bass + mLength;
+    
+    addObject("d3#", m2Bass, -1);
+    addObject("a3#", m2Bass, -1);
+    addObject("d3#", m2Bass + spacer, -1);
+    addObject("a3#", m2Bass + spacer, -1);
+    addObject("d3#", m2Bass + spacer * 2, -1);
+    addObject("a3#", m2Bass + spacer * 2, -1);
+    addObject("d3#", m2Bass + spacer * 3, -1);
+    addObject("a3#", m2Bass + spacer * 3, -1);
+    addObject("d3#", m2Bass + spacer * 4, -1);
+    addObject("a3#", m2Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m2Treble = m2Bass + 100;
+    addObject("f4#", m2Treble, -1);
+    addObject("d4#", m2Treble + 100, -1);
+    addObject("c4#", m2Treble + 300, -1);
+    addObject("d4#", m2Treble + 400, -1);
+    addObject("f4#", m2Treble + 600, -1);
+    
+    //m3
+    
+    //riff bass
+    float m3Bass = m2Bass + mLength;
+    
+    addObject("d3#", m3Bass, -1);
+    addObject("a3#", m3Bass, -1);
+    addObject("d3#", m3Bass + spacer, -1);
+    addObject("a3#", m3Bass + spacer, -1);
+    addObject("d3#", m3Bass + spacer * 2, -1);
+    addObject("a3#", m3Bass + spacer * 2, -1);
+    addObject("d3#", m3Bass + spacer * 3, -1);
+    addObject("a3#", m3Bass + spacer * 3, -1);
+    addObject("d3#", m3Bass + spacer * 4, -1);
+    addObject("a3#", m3Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m3Treble = m3Bass + 100;
+    addObject("f4#", m3Treble, -1);
+    addObject("d4#", m3Treble + 100, -1);
+    addObject("c4#", m3Treble + 300, -1);
+    addObject("d4#", m3Treble + 400, -1);
+    addObject("f4#", m3Treble + 600, -1);
+    
+    //m4
+    
+    //riff bass
+    float m4Bass = m3Bass + mLength;
+    
+    addObject("d3#", m4Bass, -1);
+    addObject("a3#", m4Bass, -1);
+    addObject("d3#", m4Bass + spacer, -1);
+    addObject("a3#", m4Bass + spacer, -1);
+    addObject("d3#", m4Bass + spacer * 2, -1);
+    addObject("a3#", m4Bass + spacer * 2, -1);
+    addObject("d3#", m4Bass + spacer * 3, -1);
+    addObject("a3#", m4Bass + spacer * 3, -1);
+    addObject("d3#", m4Bass + spacer * 4, -1);
+    addObject("a3#", m4Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m4Treble = m4Bass + 100;
+    addObject("f4#", m4Treble, -1);
+    addObject("d4#", m4Treble + 100, -1);
+    addObject("c4#", m4Treble + 300, -1);
+    addObject("d4#", m4Treble + 400, -1);
+    addObject("f4#", m4Treble + 600, -1);
+    
+    //change
+    
+    //m5
+    
+    //riff bass
+    float m5Bass = m4Bass + mLength;
+    
+    addObject("c3#", m5Bass, -1);
+    addObject("g3#", m5Bass, -1);
+    addObject("c3#", m5Bass + spacer, -1);
+    addObject("g3#", m5Bass + spacer, -1);
+    addObject("c3#", m5Bass + spacer * 2, -1);
+    addObject("g3#", m5Bass + spacer * 2, -1);
+    addObject("c3#", m5Bass + spacer * 3, -1);
+    addObject("g3#", m5Bass + spacer * 3, -1);
+    addObject("c3#", m5Bass + spacer * 4, -1);
+    addObject("g3#", m5Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m5Treble = m5Bass + 100;
+    addObject("f4#", m5Treble, -1);
+    addObject("d4#", m5Treble + 100, -1);
+    addObject("c4#", m5Treble + 300, -1);
+    addObject("d4#", m5Treble + 400, -1);
+    addObject("f4#", m5Treble + 600, -1);
+    
+    //m6
+    
+    //riff bass
+    float m6Bass = m5Bass + mLength;
+    
+    addObject("c3#", m6Bass, -1);
+    addObject("g3#", m6Bass, -1);
+    addObject("c3#", m6Bass + spacer, -1);
+    addObject("g3#", m6Bass + spacer, -1);
+    addObject("c3#", m6Bass + spacer * 2, -1);
+    addObject("g3#", m6Bass + spacer * 2, -1);
+    addObject("c3#", m6Bass + spacer * 3, -1);
+    addObject("g3#", m6Bass + spacer * 3, -1);
+    addObject("c3#", m6Bass + spacer * 4, -1);
+    addObject("g3#", m6Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m6Treble = m6Bass + 100;
+    addObject("f4#", m6Treble, -1);
+    addObject("d4#", m6Treble + 100, -1);
+    addObject("c4#", m6Treble + 300, -1);
+    addObject("d4#", m6Treble + 400, -1);
+    addObject("f4#", m6Treble + 600, -1);
+    
+    //m7
+    
+    //riff bass
+    float m7Bass = m6Bass + mLength;
+    
+    addObject("c3#", m7Bass, -1);
+    addObject("g3#", m7Bass, -1);
+    addObject("c3#", m7Bass + spacer, -1);
+    addObject("g3#", m7Bass + spacer, -1);
+    addObject("c3#", m7Bass + spacer * 2, -1);
+    addObject("g3#", m7Bass + spacer * 2, -1);
+    addObject("c3#", m7Bass + spacer * 3, -1);
+    addObject("g3#", m7Bass + spacer * 3, -1);
+    addObject("c3#", m7Bass + spacer * 4, -1);
+    addObject("g3#", m7Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m7Treble = m7Bass + 100;
+    addObject("f4#", m7Treble, -1);
+    addObject("d4#", m7Treble + 100, -1);
+    addObject("c4#", m7Treble + 300, -1);
+    addObject("d4#", m7Treble + 400, -1);
+    addObject("f4#", m7Treble + 600, -1);
+    
+    //m8
+    
+    //riff bass
+    float m8Bass = m7Bass + mLength;
+    
+    addObject("c3#", m8Bass, -1);
+    addObject("g3#", m8Bass, -1);
+    addObject("c3#", m8Bass + spacer, -1);
+    addObject("g3#", m8Bass + spacer, -1);
+    addObject("c3#", m8Bass + spacer * 2, -1);
+    addObject("g3#", m8Bass + spacer * 2, -1);
+    addObject("c3#", m8Bass + spacer * 3, -1);
+    addObject("g3#", m8Bass + spacer * 3, -1);
+    addObject("c3#", m8Bass + spacer * 4, -1);
+    addObject("g3#", m8Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m8Treble = m8Bass + 100;
+    addObject("f4#", m8Treble, -1);
+    addObject("d4#", m8Treble + 100, -1);
+    addObject("c4#", m8Treble + 300, -1);
+    addObject("d4#", m8Treble + 400, -1);
+    addObject("f4#", m8Treble + 600, -1);
+    
+    // change
+    
+    //m9
+    
+    //riff bass
+    float m9Bass = m8Bass + mLength;
+    
+    addObject("d3#", m9Bass, -1);
+    addObject("a3#", m9Bass, -1);
+    addObject("d3#", m9Bass + spacer, -1);
+    addObject("a3#", m9Bass + spacer, -1);
+    addObject("d3#", m9Bass + spacer * 2, -1);
+    addObject("a3#", m9Bass + spacer * 2, -1);
+    addObject("d3#", m9Bass + spacer * 3, -1);
+    addObject("a3#", m9Bass + spacer * 3, -1);
+    addObject("d3#", m9Bass + spacer * 4, -1);
+    addObject("a3#", m9Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m9Treble = m9Bass + 100;
+    addObject("f4#", m9Treble, -1);
+    addObject("d4#", m9Treble + 100, -1);
+    addObject("c4#", m9Treble + 300, -1);
+    addObject("d4#", m9Treble + 400, -1);
+    addObject("f4#", m9Treble + 600, -1);
+    
+    //m10
+    
+    //riff bass
+    float m10Bass = m9Bass + mLength;
+    
+    addObject("d3#", m10Bass, -1);
+    addObject("a3#", m10Bass, -1);
+    addObject("d3#", m10Bass + spacer, -1);
+    addObject("a3#", m10Bass + spacer, -1);
+    addObject("d3#", m10Bass + spacer * 2, -1);
+    addObject("a3#", m10Bass + spacer * 2, -1);
+    addObject("d3#", m10Bass + spacer * 3, -1);
+    addObject("a3#", m10Bass + spacer * 3, -1);
+    addObject("d3#", m10Bass + spacer * 4, -1);
+    addObject("a3#", m10Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m10Treble = m10Bass + 100;
+    addObject("f4#", m10Treble, -1);
+    addObject("d4#", m10Treble + 100, -1);
+    addObject("c4#", m10Treble + 300, -1);
+    addObject("d4#", m10Treble + 400, -1);
+    addObject("f4#", m10Treble + 600, -1);
+    
+    //m11
+    
+    //riff bass
+    float m11Bass = m10Bass + mLength;
+    
+    addObject("d3#", m11Bass, -1);
+    addObject("a3#", m11Bass, -1);
+    addObject("d3#", m11Bass + spacer, -1);
+    addObject("a3#", m11Bass + spacer, -1);
+    addObject("d3#", m11Bass + spacer * 2, -1);
+    addObject("a3#", m11Bass + spacer * 2, -1);
+    addObject("d3#", m11Bass + spacer * 3, -1);
+    addObject("a3#", m11Bass + spacer * 3, -1);
+    addObject("d3#", m11Bass + spacer * 4, -1);
+    addObject("a3#", m11Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m11Treble = m11Bass + 100;
+    addObject("f4#", m11Treble, -1);
+    addObject("d4#", m11Treble + 100, -1);
+    addObject("c4#", m11Treble + 300, -1);
+    addObject("d4#", m11Treble + 400, -1);
+    addObject("f4#", m11Treble + 600, -1);
+    
+    //m12
+    
+    //riff bass
+    float m12Bass = m11Bass + mLength;
+    
+    addObject("d3#", m12Bass, -1);
+    addObject("a3#", m12Bass, -1);
+    addObject("d3#", m12Bass + spacer, -1);
+    addObject("a3#", m12Bass + spacer, -1);
+    addObject("d3#", m12Bass + spacer * 2, -1);
+    addObject("a3#", m12Bass + spacer * 2, -1);
+    addObject("d3#", m12Bass + spacer * 3, -1);
+    addObject("a3#", m12Bass + spacer * 3, -1);
+    addObject("d3#", m12Bass + spacer * 4, -1);
+    addObject("a3#", m12Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m12Treble = m12Bass + 100;
+    addObject("f4#", m12Treble, -1);
+    addObject("d4#", m12Treble + 100, -1);
+    addObject("c4#", m12Treble + 300, -1);
+    addObject("d4#", m12Treble + 400, -1);
+    addObject("f4#", m12Treble + 600, -1);
+    
+    //change
+    
+    //m13
+    
+    //riff bass
+    float m13Bass = m12Bass + mLength;
+    
+    addObject("c3#", m13Bass, -1);
+    addObject("g3#", m13Bass, -1);
+    addObject("c3#", m13Bass + spacer, -1);
+    addObject("g3#", m13Bass + spacer, -1);
+    addObject("c3#", m13Bass + spacer * 2, -1);
+    addObject("g3#", m13Bass + spacer * 2, -1);
+    addObject("c3#", m13Bass + spacer * 3, -1);
+    addObject("g3#", m13Bass + spacer * 3, -1);
+    addObject("c3#", m13Bass + spacer * 4, -1);
+    addObject("g3#", m13Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m13Treble = m13Bass + 100;
+    addObject("f4#", m13Treble, -1);
+    addObject("d4#", m13Treble + 100, -1);
+    addObject("c4#", m13Treble + 300, -1);
+    addObject("d4#", m13Treble + 400, -1);
+    addObject("f4#", m13Treble + 600, -1);
+    
+    //m14
+    
+    //riff bass
+    float m14Bass = m13Bass + mLength;
+    
+    addObject("c3#", m14Bass, -1);
+    addObject("g3#", m14Bass, -1);
+    addObject("c3#", m14Bass + spacer, -1);
+    addObject("g3#", m14Bass + spacer, -1);
+    addObject("c3#", m14Bass + spacer * 2, -1);
+    addObject("g3#", m14Bass + spacer * 2, -1);
+    addObject("c3#", m14Bass + spacer * 3, -1);
+    addObject("g3#", m14Bass + spacer * 3, -1);
+    addObject("c3#", m14Bass + spacer * 4, -1);
+    addObject("g3#", m14Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m14Treble = m14Bass + 100;
+    addObject("f4#", m14Treble, -1);
+    addObject("d4#", m14Treble + 100, -1);
+    addObject("c4#", m14Treble + 300, -1);
+    addObject("d4#", m14Treble + 400, -1);
+    addObject("f4#", m14Treble + 600, -1);
+    
+    //m15
+    
+    //riff bass
+    float m15Bass = m14Bass + mLength;
+    
+    addObject("c3#", m15Bass, -1);
+    addObject("g3#", m15Bass, -1);
+    addObject("c3#", m15Bass + spacer, -1);
+    addObject("g3#", m15Bass + spacer, -1);
+    addObject("c3#", m15Bass + spacer * 2, -1);
+    addObject("g3#", m15Bass + spacer * 2, -1);
+    addObject("c3#", m15Bass + spacer * 3, -1);
+    addObject("g3#", m15Bass + spacer * 3, -1);
+    addObject("c3#", m15Bass + spacer * 4, -1);
+    addObject("g3#", m15Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m15Treble = m15Bass + 100;
+    addObject("f4#", m15Treble, -1);
+    addObject("d4#", m15Treble + 100, -1);
+    addObject("c4#", m15Treble + 300, -1);
+    addObject("d4#", m15Treble + 400, -1);
+    addObject("f4#", m15Treble + 600, -1);
+    
+    //m16
+    
+    //riff bass
+    float m16Bass = m15Bass + mLength;
+    
+    addObject("c3#", m16Bass, -1);
+    addObject("g3#", m16Bass, -1);
+    addObject("c3#", m16Bass + spacer, -1);
+    addObject("g3#", m16Bass + spacer, -1);
+    addObject("c3#", m16Bass + spacer * 2, -1);
+    addObject("g3#", m16Bass + spacer * 2, -1);
+    addObject("c3#", m16Bass + spacer * 3, -1);
+    addObject("g3#", m16Bass + spacer * 3, -1);
+    addObject("c3#", m16Bass + spacer * 4, -1);
+    addObject("g3#", m16Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m16Treble = m16Bass + 100;
+    addObject("f4#", m16Treble, -1);
+    addObject("d4#", m16Treble + 100, -1);
+    addObject("c4#", m16Treble + 300, -1);
+    addObject("d4#", m16Treble + 400, -1);
+    addObject("f4#", m16Treble + 600, -1);
+    
+    //change
+    
+    //m17
+    
+    //riff bass
+    float m17Bass = m16Bass + mLength;
+    
+    addObject("b2", m17Bass, -1);
+    addObject("f3#", m17Bass, -1);
+    addObject("b2", m17Bass + spacer, -1);
+    addObject("f3#", m17Bass + spacer, -1);
+    addObject("b2", m17Bass + spacer * 2, -1);
+    addObject("f3#", m17Bass + spacer * 2, -1);
+    addObject("b2", m17Bass + spacer * 3, -1);
+    addObject("f3#", m17Bass + spacer * 3, -1);
+    addObject("b2", m17Bass + spacer * 4, -1);
+    addObject("f3#", m17Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m17Treble = m17Bass + 100;
+    addObject("f4#", m17Treble, -1);
+    addObject("d4#", m17Treble + 100, -1);
+    addObject("c4#", m17Treble + 300, -1);
+    addObject("d4#", m17Treble + 400, -1);
+    addObject("f4#", m17Treble + 600, -1);
+    
+    //change
+    
+    //m18
+    
+    //riff bass
+    float m18Bass = m17Bass + mLength;
+    
+    addObject("c3#", m18Bass, -1);
+    addObject("g3#", m18Bass, -1);
+    addObject("c3#", m18Bass + spacer, -1);
+    addObject("g3#", m18Bass + spacer, -1);
+    addObject("c3#", m18Bass + spacer * 2, -1);
+    addObject("g3#", m18Bass + spacer * 2, -1);
+    addObject("c3#", m18Bass + spacer * 3, -1);
+    addObject("g3#", m18Bass + spacer * 3, -1);
+    addObject("c3#", m18Bass + spacer * 4, -1);
+    addObject("g3#", m18Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m18Treble = m18Bass + 100;
+    addObject("f4#", m18Treble, -1);
+    addObject("d4#", m18Treble + 100, -1);
+    addObject("c4#", m18Treble + 300, -1);
+    addObject("d4#", m18Treble + 400, -1);
+    addObject("f4#", m18Treble + 600, -1);
+    
+    //change
+    
+    //m19
+    
+    //riff bass
+    float m19Bass = m18Bass + mLength;
+    
+    addObject("d3#", m19Bass, -1);
+    addObject("a3#", m19Bass, -1);
+    addObject("d3#", m19Bass + spacer, -1);
+    addObject("a3#", m19Bass + spacer, -1);
+    addObject("d3#", m19Bass + spacer * 2, -1);
+    addObject("a3#", m19Bass + spacer * 2, -1);
+    addObject("d3#", m19Bass + spacer * 3, -1);
+    addObject("a3#", m19Bass + spacer * 3, -1);
+    addObject("d3#", m19Bass + spacer * 4, -1);
+    addObject("a3#", m19Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m19Treble = m19Bass + 100;
+    addObject("f4#", m19Treble, -1);
+    addObject("d4#", m19Treble + 100, -1);
+    addObject("c4#", m19Treble + 300, -1);
+    addObject("d4#", m19Treble + 400, -1);
+    addObject("f4#", m19Treble + 600, -1);
+    
+    //m20
+    
+    //riff bass
+    float m20Bass = m19Bass + mLength;
+    
+    addObject("d3#", m20Bass, -1);
+    addObject("a3#", m20Bass, -1);
+    addObject("d3#", m20Bass + spacer, -1);
+    addObject("a3#", m20Bass + spacer, -1);
+    addObject("d3#", m20Bass + spacer * 2, -1);
+    addObject("a3#", m20Bass + spacer * 2, -1);
+    addObject("d3#", m20Bass + spacer * 3, -1);
+    addObject("a3#", m20Bass + spacer * 3, -1);
+    addObject("d3#", m20Bass + spacer * 4, -1);
+    addObject("a3#", m20Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m20Treble = m20Bass + 100;
+    addObject("f4#", m20Treble, -1);
+    addObject("d4#", m20Treble + 100, -1);
+    addObject("c4#", m20Treble + 300, -1);
+    addObject("d4#", m20Treble + 400, -1);
+    addObject("f4#", m20Treble + 600, -1);
+    
+    //change
+    
+    //m21
+    
+    //riff bass
+    float m21Bass = m20Bass + mLength;
+    
+    addObject("b2", m21Bass, -1);
+    addObject("f3#", m21Bass, -1);
+    addObject("b2", m21Bass + spacer, -1);
+    addObject("f3#", m21Bass + spacer, -1);
+    addObject("b2", m21Bass + spacer * 2, -1);
+    addObject("f3#", m21Bass + spacer * 2, -1);
+    addObject("b2", m21Bass + spacer * 3, -1);
+    addObject("f3#", m21Bass + spacer * 3, -1);
+    addObject("b2", m21Bass + spacer * 4, -1);
+    addObject("f3#", m21Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m21Treble = m21Bass + 100;
+    addObject("f4#", m21Treble, -1);
+    addObject("d4#", m21Treble + 100, -1);
+    addObject("c4#", m21Treble + 300, -1);
+    addObject("d4#", m21Treble + 400, -1);
+    addObject("f4#", m21Treble + 600, -1);
+    
+    //change
+    
+    //m22
+    
+    //riff bass
+    float m22Bass = m21Bass + mLength;
+    
+    addObject("c3#", m22Bass, -1);
+    addObject("g3#", m22Bass, -1);
+    addObject("c3#", m22Bass + spacer, -1);
+    addObject("g3#", m22Bass + spacer, -1);
+    addObject("c3#", m22Bass + spacer * 2, -1);
+    addObject("g3#", m22Bass + spacer * 2, -1);
+    addObject("c3#", m22Bass + spacer * 3, -1);
+    addObject("g3#", m22Bass + spacer * 3, -1);
+    addObject("c3#", m22Bass + spacer * 4, -1);
+    addObject("g3#", m22Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m22Treble = m22Bass + 100;
+    addObject("f4#", m22Treble, -1);
+    addObject("d4#", m22Treble + 100, -1);
+    addObject("c4#", m22Treble + 300, -1);
+    addObject("d4#", m22Treble + 400, -1);
+    addObject("f4#", m22Treble + 600, -1);
+    
+    //change
+    
+    //m23
+    
+    //riff bass
+    float m23Bass = m22Bass + mLength;
+    
+    addObject("d3#", m23Bass, -1);
+    addObject("a3#", m23Bass, -1);
+    addObject("d3#", m23Bass + spacer, -1);
+    addObject("a3#", m23Bass + spacer, -1);
+    addObject("d3#", m23Bass + spacer * 2, -1);
+    addObject("a3#", m23Bass + spacer * 2, -1);
+    addObject("d3#", m23Bass + spacer * 3, -1);
+    addObject("a3#", m23Bass + spacer * 3, -1);
+    addObject("d3#", m23Bass + spacer * 4, -1);
+    addObject("a3#", m23Bass + spacer * 4, -1);
+    
+    
+    //riff treble
+    float m23Treble = m23Bass + 100;
+    addObject("f4#", m23Treble, -1);
+    addObject("d4#", m23Treble + 100, -1);
+    addObject("c4#", m23Treble + 300, -1);
+    addObject("d4#", m23Treble + 400, -1);
+    addObject("f4#", m23Treble + 600, -1);
+    
+    //m24
+    
+    //riff bass
+    float m24Bass = m23Bass + mLength;
+    
+    addObject("d3#", m24Bass, -1);
+    addObject("a3#", m24Bass, -1);
+    /*addObject("d3#", m24Bass + spacer, -1);
+    addObject("a3#", m24Bass + spacer, -1);
+    addObject("d3#", m24Bass + spacer * 2, -1);
+    addObject("a3#", m24Bass + spacer * 2, -1);
+    addObject("d3#", m24Bass + spacer * 3, -1);
+    addObject("a3#", m24Bass + spacer * 3, -1);
+    addObject("d3#", m24Bass + spacer * 4, -1);
+    addObject("a3#", m24Bass + spacer * 4, -1);*/
+    
+    
+    //riff treble
+    float m24Treble = m24Bass;
+//    float m24Treble = m24Bass + 100;
+    addObject("d4#", m24Treble, -1);
+    /*addObject("f4#", m24Treble, -1);
+    addObject("d4#", m24Treble + 100, -1);
+    addObject("c4#", m24Treble + 300, -1);
+    addObject("d4#", m24Treble + 400, -1);
+    addObject("f4#", m24Treble + 600, -1);*/
     
     return;
     
