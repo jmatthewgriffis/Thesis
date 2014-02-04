@@ -35,7 +35,7 @@ void Player::setup( ofVec2f _pos ) {
 
 void Player::update() {
     
-    pos.x += xVel;
+//    pos.x += xVel;
     
     // Movement
     if ( allowMove ) {

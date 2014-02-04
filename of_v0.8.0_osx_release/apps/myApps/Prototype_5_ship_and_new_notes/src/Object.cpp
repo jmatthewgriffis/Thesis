@@ -40,7 +40,7 @@ void Object::setup( string _whichNote, int _age ) {
     
     // Note stuff.
     //    myNote.setup( whichNote );
-    vol = 1.0f;
+    vol = 0.5f;
 }
 
 void Object::update( ofVec2f _pos ) {

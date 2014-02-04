@@ -51,8 +51,8 @@ void testApp::setup(){
     // To jump straight to the boss battle, must set gameState to 2, then uncomment the following...
     
     /*testPattern();
-    bHighlightNote = true;
-    getThisOne = 0;*/
+     bHighlightNote = true;
+     getThisOne = 0;*/
     
     // ...and comment out the following:
     
@@ -143,8 +143,11 @@ void testApp::draw(){
         
         // Draw the staff with transparency.
         ofSetColor( 0, int( iStaffAlpha ) );
-        for ( int i = 2; i < 7; i++ ) {
-            ofLine( myPlayer.pos.x - ofGetWidth(), ( ofGetHeight() / 8.0 ) * i, myPlayer.pos.x + ofGetWidth(), ( ofGetHeight() / 8.0 ) * i );
+        float numSections = float(numLines + 1);
+        for ( int i = 2; i < ( numSections - 1 ); i++ ) {
+            if ( i != 7 ) {
+                ofLine( myPlayer.pos.x - ofGetWidth(), ( ofGetHeight() / numSections ) * i, myPlayer.pos.x + ofGetWidth(), ( ofGetHeight() / numSections ) * i );
+            }
         }
         
         // Draw some lines on the ground to give something to move against.
@@ -499,13 +502,13 @@ void testApp::cleanup() {
     
     // Stop any music playing.
     for ( int i = 0; i < objectList.size(); i++ ) {
-//        objectList[ i ].myNote.sound.stop();
+        //        objectList[ i ].myNote.sound.stop();
         for ( int j = 0; j < objectList[ i ].noteList.size(); j++ ) {
             objectList[ i ].noteList[ j ].sound.stop();
         }
     }
     for ( int i = 0; i < recordedList.size(); i++ ) {
-//        recordedList[ i ].myNote.sound.stop();
+        //        recordedList[ i ].myNote.sound.stop();
         for ( int j = 0; j < recordedList[ i ].noteList.size(); j++ ) {
             recordedList[ i ].noteList[ j ].sound.stop();
         }
@@ -588,7 +591,8 @@ void testApp::fSetupTutorial() {
     float m1Bass = 500;
     float spacer = 150;
     float mLength = spacer * 5.333333;
-    cout<<mLength<<endl;
+    //float mLength = 800;
+    //cout<<mLength<<endl;
     
     addObject("d3#", m1Bass-300, -1); // test note
     
@@ -1188,24 +1192,24 @@ void testApp::fSetupTutorial() {
     addObject("d3#", m24Bass, -1);
     addObject("a3#", m24Bass, -1);
     /*addObject("d3#", m24Bass + spacer, -1);
-    addObject("a3#", m24Bass + spacer, -1);
-    addObject("d3#", m24Bass + spacer * 2, -1);
-    addObject("a3#", m24Bass + spacer * 2, -1);
-    addObject("d3#", m24Bass + spacer * 3, -1);
-    addObject("a3#", m24Bass + spacer * 3, -1);
-    addObject("d3#", m24Bass + spacer * 4, -1);
-    addObject("a3#", m24Bass + spacer * 4, -1);*/
+     addObject("a3#", m24Bass + spacer, -1);
+     addObject("d3#", m24Bass + spacer * 2, -1);
+     addObject("a3#", m24Bass + spacer * 2, -1);
+     addObject("d3#", m24Bass + spacer * 3, -1);
+     addObject("a3#", m24Bass + spacer * 3, -1);
+     addObject("d3#", m24Bass + spacer * 4, -1);
+     addObject("a3#", m24Bass + spacer * 4, -1);*/
     
     
     //riff treble
     float m24Treble = m24Bass;
-//    float m24Treble = m24Bass + 100;
+    //    float m24Treble = m24Bass + 100;
     addObject("d4#", m24Treble, -1);
     /*addObject("f4#", m24Treble, -1);
-    addObject("d4#", m24Treble + 100, -1);
-    addObject("c4#", m24Treble + 300, -1);
-    addObject("d4#", m24Treble + 400, -1);
-    addObject("f4#", m24Treble + 600, -1);*/
+     addObject("d4#", m24Treble + 100, -1);
+     addObject("c4#", m24Treble + 300, -1);
+     addObject("d4#", m24Treble + 400, -1);
+     addObject("f4#", m24Treble + 600, -1);*/
     
     return;
     
@@ -1318,9 +1322,15 @@ void testApp::keyPressed(int key){
             // Reset
         case 'r':
         case 'R':
-            if ( gameState > 0 ) {
-                currentState = gameState;
-                gameState = -1;
+            if ( bShiftIsPressed ) {
+                setup();
+                gameState = 1;
+            }
+            else {
+                if ( gameState > 0 ) {
+                    currentState = gameState;
+                    gameState = -1;
+                }
             }
             break;
             
@@ -1345,13 +1355,17 @@ void testApp::keyPressed(int key){
             }
             // Go to boss battle if player has reached end of tutorial.
             else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + 400 ) {
-            //else if ( gameState == 1 ) {
+                //else if ( gameState == 1 ) {
                 cleanup();
                 gameState = 2;
                 myPlayer.setup();
                 bHighlightNote = true;
                 getThisOne = 0;
             }
+            break;
+            
+        case OF_KEY_SHIFT:
+            bShiftIsPressed = true;
             break;
             
             //----------------------------------------------------
@@ -1460,6 +1474,10 @@ void testApp::keyPressed(int key){
 void testApp::keyReleased(int key){
     
     switch ( key ) {
+            
+        case OF_KEY_SHIFT:
+            bShiftIsPressed = false;
+            break;
             
             //----------------------------------------------------
             // Movement and action (depends on the control scheme).

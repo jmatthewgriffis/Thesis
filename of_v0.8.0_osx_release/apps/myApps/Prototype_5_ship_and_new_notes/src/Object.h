@@ -11,7 +11,7 @@
 #include "ofMain.h"
 #include "Note.h"
 
-#define numPos 15
+#define numPos 27
 
 class Object {
 public:

@@ -7,6 +7,7 @@
 #include "Obstacle.h"
 
 #define numNotes 25
+#define numLines 13
 
 /*
  So many thanks to:
@@ -101,4 +102,6 @@ public:
     string sUp, sLeft, sDown, sRight, sAltUp, sAltLeft, sAltDown, sAltRight;
     
     ofEasyCam myCam;
+    
+    bool bShiftIsPressed;
 };
