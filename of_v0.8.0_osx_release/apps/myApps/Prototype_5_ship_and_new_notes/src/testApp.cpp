@@ -341,7 +341,7 @@ void testApp::playerCollidesWithObject() {
         float player2Bottom = myPlayer2.pos.y + myPlayer2.tall / 2.0;
         float player2Right = myPlayer2.pos.x + myPlayer2.wide / 2.0;
         
-        float fHealthMultiplier = 1.3;
+        float fHealthMultiplier = 1.5;
         if ( playerRight > objectLeft
             && playerLeft < objectRight
             && playerBottom > objectTop
