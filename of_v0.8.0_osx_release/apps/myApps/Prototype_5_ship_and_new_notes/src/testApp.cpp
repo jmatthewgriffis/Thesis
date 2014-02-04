@@ -1358,14 +1358,14 @@ void testApp::keyPressed(int key){
                 gameState = 1;
             }
             // Go to boss battle if player has reached end of tutorial.
-            else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + 400 ) {
+            /*else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + 400 ) {
                 //else if ( gameState == 1 ) {
                 cleanup();
                 gameState = 2;
                 myPlayer.setup();
                 bHighlightNote = true;
                 getThisOne = 0;
-            }
+            }*/
             break;
             
         case OF_KEY_SHIFT:
