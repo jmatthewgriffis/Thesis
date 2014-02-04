@@ -17,7 +17,7 @@ Player::Player() {
     radius = 40;
     angleVel = 15;
     capacity = CAPACITY;
-    fHealth = 100;
+    fHealth = fHealthMax = 100;
     
     headphones.loadImage( "images/headphones.png" );
 }
@@ -124,6 +124,31 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     ofSetRectMode( OF_RECTMODE_CENTER );
     ofSetColor( 0 );
     ofRect( pos, wide, tall );
+    
+    // Draw the health. Taken from my Space Odyssey 2 code.
+    ofPushMatrix();{
+        
+        ofTranslate( pos.x, pos.y);
+        
+        { // Matt
+            // Draw the health bar
+            ofSetRectMode( OF_RECTMODE_CORNER );
+            float offset = 1;
+            float offsetBar = 10;
+            float barHeight = 10;
+            float barLength = wide * 2;
+            float currentHealth = ofMap( fHealth, 0, fHealthMax, 0, barLength - offset * 2 );
+            // The border.
+            ofSetColor( 255 );
+            ofNoFill();
+            ofRect( -wide, wide / 2 + offsetBar, barLength, barHeight );
+            ofFill();
+            // The current health.
+            ofSetColor( 0, 255, 0 );
+            ofRect( -wide + offset, wide / 2 + offsetBar + offset, currentHealth, barHeight - offset * 2 );
+        } // End Matt
+        
+    }ofPopMatrix();
     
     ofSetColor( 255 );
 //    headphones.draw( pos, 50, 50 );
