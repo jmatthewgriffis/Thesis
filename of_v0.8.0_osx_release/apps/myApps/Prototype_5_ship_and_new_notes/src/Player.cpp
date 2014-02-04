@@ -17,7 +17,8 @@ Player::Player() {
     radius = 40;
     angleVel = 15;
     capacity = CAPACITY;
-    fHealth = fHealthMax = 100;
+    fHealthMax = 100;
+    fHealthLossSpeed = 0.25;
     
     headphones.loadImage( "images/headphones.png" );
 }
@@ -27,6 +28,7 @@ void Player::setup( ofVec2f _pos ) {
     up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = false;
     allowMove = allowJump = bAllowRecord = bAllowReplay = true;
     angle = 0;
+    fHealth = fHealthMax;
     
     pos.set( _pos );
     vel.set( 0 );
@@ -35,6 +37,17 @@ void Player::setup( ofVec2f _pos ) {
 }
 
 void Player::update() {
+    
+    // Health depletes constantly.
+    if ( fHealth > fHealthMax ) {
+        fHealth = fHealthMax;
+    }
+    else if ( fHealth > 0 ) {
+        fHealth -= fHealthLossSpeed;
+    }
+    else if ( fHealth < 0 ) {
+        fHealth = 0;
+    }
     
     pos.x += xVel;
     
@@ -82,6 +95,12 @@ void Player::update() {
     // Prevent going offscreen.
     if ( pos.x <= wide / 2.0 ) {
         pos.x = wide / 2.0;
+    }
+    if ( pos.y <= tall / 2.0 ) {
+        pos.y = tall / 2.0;
+    }
+    else if ( pos.y >= ofGetHeight() - ( tall / 2.0 ) ) {
+        pos.y = ofGetHeight() - ( tall / 2.0 );
     }
     
     // Manage forces.

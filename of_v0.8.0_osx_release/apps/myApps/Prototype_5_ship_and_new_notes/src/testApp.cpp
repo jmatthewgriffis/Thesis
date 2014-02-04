@@ -99,9 +99,9 @@ void testApp::update(){
     //myPlayer.applyForce( ofVec2f( 0.0, 0.3 ) );
     
     // Run collision detection.
-    playerCollidesWithGround();
+    //playerCollidesWithGround();
     playerCollidesWithObstacle();
-    //playerCollidesWithObject();
+    playerCollidesWithObject();
     objectCollidesWithObstacle();
     
     // Update the player (duh).
@@ -244,6 +244,13 @@ void testApp::updateObjectList() {
         if ( i == getThisOne ) objectList[ i ].drawAttention = true;
         else objectList[ i ].drawAttention = false;
         
+        // Make volume dependent on player performance.
+        if ( objectList[ i ].pos.y <= objectList[ i ].staffPosList[ 13 ] ) {
+            objectList[ i ].vol = ofMap( myPlayer.fHealth, 0, myPlayer.fHealthMax, 0.0, 1.0 );
+        } else {
+            objectList[ i ].vol = ofMap( myPlayer2.fHealth, 0, myPlayer2.fHealthMax, 0.0, 1.0 );
+        }
+        
         objectList[ i ].update( myPlayer.pos );
     }
 }
@@ -329,6 +336,26 @@ void testApp::playerCollidesWithObject() {
         float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
         float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
         
+        float player2Top = myPlayer2.pos.y - myPlayer2.tall / 2.0;
+        float player2Left = myPlayer2.pos.x - myPlayer2.wide / 2.0;
+        float player2Bottom = myPlayer2.pos.y + myPlayer2.tall / 2.0;
+        float player2Right = myPlayer2.pos.x + myPlayer2.wide / 2.0;
+        
+        float fHealthMultiplier = 1.3;
+        if ( playerRight > objectLeft
+            && playerLeft < objectRight
+            && playerBottom > objectTop
+            && playerTop < objectBottom ) {
+            myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
+        }
+        if ( player2Right > objectLeft
+            && player2Left < objectRight
+            && player2Bottom > objectTop
+            && player2Top < objectBottom ) {
+            myPlayer2.fHealth += myPlayer2.fHealthLossSpeed * fHealthMultiplier;
+        }
+        
+        /*
         // First, check if the player is in the same horizontal region as the object.
         if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
             // Is there something directly to the right?
@@ -362,6 +389,7 @@ void testApp::playerCollidesWithObject() {
                 }
             }
         }
+         */
         
         /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
          myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
