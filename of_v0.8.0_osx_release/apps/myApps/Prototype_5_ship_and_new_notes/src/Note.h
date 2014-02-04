@@ -10,7 +10,7 @@
 
 #include "ofMain.h"
 
-#define NUMNOTES 25
+#define NUMNOTES 46
 
 class Note {
 public:

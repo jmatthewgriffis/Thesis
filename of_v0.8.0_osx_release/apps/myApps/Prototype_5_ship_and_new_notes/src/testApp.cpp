@@ -151,15 +151,15 @@ void testApp::draw(){
         }
         
         // Draw some lines on the ground to give something to move against.
-        ofSetColor( 0 );
+        /*ofSetColor( 0 );
         for ( int i = 0; i < 3000; i += 50 ) {
             ofLine( 50 + ( i * 2 ), ofGetHeight(), 50 + i, ofGetHeight() - 25 );
-        }
+        }*/
         
         // LOCATION-DEPENDENT
         
         if ( gameState == 1 ) {
-            fDrawTutorialInstructions();
+            //fDrawTutorialInstructions();
         } else if ( gameState == 2 ) {
             testPattern();
             helvetica.drawString( "This is not yet fully implemented. :(\nCheck back later.", 100, 100 );
@@ -594,7 +594,7 @@ void testApp::fSetupTutorial() {
     //float mLength = 800;
     //cout<<mLength<<endl;
     
-    addObject("d3#", m1Bass-300, -1); // test note
+    addObject("c3_middle", m1Bass-300, -1); // test note
     
     addObject("d3#", m1Bass, -1);
     addObject("a3#", m1Bass, -1);

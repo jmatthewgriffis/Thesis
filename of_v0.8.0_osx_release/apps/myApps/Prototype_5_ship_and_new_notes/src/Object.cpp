@@ -10,7 +10,7 @@
 
 Object::Object() {
     
-    tall = ( ofGetHeight() / 8.0 ) - 20;
+    tall = ( ofGetHeight() / 14.0 )/* - 20*/;
     wide = tall * 1.5;
     guideLineLength = wide * 0.75;
     c = ofColor( 0 );
@@ -130,7 +130,13 @@ void Object::draw() {
      }*/
     
     // Draw!
-    ofSetColor( c );
+    /*if ( pos.y + ( tall / 2 ) > ofGetHeight()) {
+        ofSetColor(100);
+    }
+    else if ( pos.y + ( tall / 2 ) == ofGetHeight()) {
+        ofSetColor(255,0,0);
+    }
+    else*/ ofSetColor( c );
     //    ofEllipse( pos, wide, tall);
     ofRect( pos, wide, tall);
     /*
@@ -172,50 +178,88 @@ float Object::fReturnYPos( string _whichNote ) {
     
     float tmp;
     
-    if ( _whichNote == "b2") {
+    if ( _whichNote == "d1" || _whichNote == "d1#") {
         tmp = staffPosList[ 0 ];
     }
-    else if ( _whichNote == "c3_middle" || _whichNote == "c3#") {
+    else if ( _whichNote == "e1") {
         tmp = staffPosList[ 1 ];
     }
-    else if ( _whichNote == "d3" || _whichNote == "d3#") {
+    else if ( _whichNote == "f1" || _whichNote == "f1#") {
         tmp = staffPosList[ 2 ];
     }
-    else if ( _whichNote == "e3") {
+    else if ( _whichNote == "g1" || _whichNote == "g1#") {
         tmp = staffPosList[ 3 ];
     }
-    else if ( _whichNote == "f3" || _whichNote == "f3#") {
+    else if ( _whichNote == "a1" || _whichNote == "a1#") {
         tmp = staffPosList[ 4 ];
     }
-    else if ( _whichNote == "g3" || _whichNote == "g3#") {
+    else if ( _whichNote == "b1") {
         tmp = staffPosList[ 5 ];
     }
-    else if ( _whichNote == "a3" || _whichNote == "a3#") {
+    else if ( _whichNote == "c2" || _whichNote == "c2#") {
         tmp = staffPosList[ 6 ];
     }
-    else if ( _whichNote == "b3") {
+    else if ( _whichNote == "d2" || _whichNote == "d2#") {
         tmp = staffPosList[ 7 ];
     }
-    else if ( _whichNote == "c4" || _whichNote == "c4#") {
+    else if ( _whichNote == "e2") {
         tmp = staffPosList[ 8 ];
     }
-    else if ( _whichNote == "d4" || _whichNote == "d4#") {
+    else if ( _whichNote == "f2" || _whichNote == "f2#") {
         tmp = staffPosList[ 9 ];
     }
-    else if ( _whichNote == "e4") {
+    else if ( _whichNote == "g2" || _whichNote == "g2#") {
         tmp = staffPosList[ 10 ];
     }
-    else if ( _whichNote == "f4" || _whichNote == "f4#") {
+    else if ( _whichNote == "a2" || _whichNote == "a2#") {
         tmp = staffPosList[ 11 ];
     }
-    else if ( _whichNote == "g4" || _whichNote == "g4#") {
+    else if ( _whichNote == "b2") {
         tmp = staffPosList[ 12 ];
     }
-    else if ( _whichNote == "a4" || _whichNote == "a4#") {
+    else if ( _whichNote == "c3_middle" || _whichNote == "c3#") {
+        //tmp = staffPosList[ 0 ];
         tmp = staffPosList[ 13 ];
+        //cout<<float(ofGetHeight())<<" "<<float(tall / 2)<<" "<<float(ofGetHeight() - (tall / 2))<<" "<<staffPosList[0]<<endl;
+    }
+    else if ( _whichNote == "d3" || _whichNote == "d3#") {
+        tmp = staffPosList[ 14 ];
+    }
+    else if ( _whichNote == "e3") {
+        tmp = staffPosList[ 15 ];
+    }
+    else if ( _whichNote == "f3" || _whichNote == "f3#") {
+        tmp = staffPosList[ 16 ];
+    }
+    else if ( _whichNote == "g3" || _whichNote == "g3#") {
+        tmp = staffPosList[ 17 ];
+    }
+    else if ( _whichNote == "a3" || _whichNote == "a3#") {
+        tmp = staffPosList[ 18 ];
+    }
+    else if ( _whichNote == "b3") {
+        tmp = staffPosList[ 19 ];
+    }
+    else if ( _whichNote == "c4" || _whichNote == "c4#") {
+        tmp = staffPosList[ 20 ];
+    }
+    else if ( _whichNote == "d4" || _whichNote == "d4#") {
+        tmp = staffPosList[ 21 ];
+    }
+    else if ( _whichNote == "e4") {
+        tmp = staffPosList[ 22 ];
+    }
+    else if ( _whichNote == "f4" || _whichNote == "f4#") {
+        tmp = staffPosList[ 23 ];
+    }
+    else if ( _whichNote == "g4" || _whichNote == "g4#") {
+        tmp = staffPosList[ 24 ];
+    }
+    else if ( _whichNote == "a4" || _whichNote == "a4#") {
+        tmp = staffPosList[ 25 ];
     }
     else if ( _whichNote == "b4") {
-        tmp = staffPosList[ 14 ];
+        tmp = staffPosList[ 26 ];
     }
     
     return tmp;
