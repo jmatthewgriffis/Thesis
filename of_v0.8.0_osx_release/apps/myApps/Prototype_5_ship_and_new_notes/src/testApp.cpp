@@ -1394,12 +1394,12 @@ void testApp::keyPressed(int key){
             // LEFT
         case 'a':
         case 'A':
-            if ( bIsLefty ) myPlayer.record = true;
+            //if ( bIsLefty ) myPlayer.record = true;
             //else myPlayer.left = true;
             break;
         case OF_KEY_LEFT:
             //if ( bIsLefty ) myPlayer.left = true;
-            /*else*/ myPlayer.record = true;
+            //else myPlayer.record = true;
             break;
             
             // DOWN
@@ -1422,16 +1422,16 @@ void testApp::keyPressed(int key){
         case 'd':
         case 'D':
             if ( bIsLefty ) {
-                myPlayer.replay = true;
-                if ( myPlayer.bAllowReplay ) fReplay();
+                //myPlayer.replay = true;
+                //if ( myPlayer.bAllowReplay ) fReplay();
             }
             //else myPlayer.right = true;
             break;
         case OF_KEY_RIGHT:
             //if ( bIsLefty ) myPlayer.right = true;
             /*else*/ {
-                myPlayer.replay = true;
-                if ( myPlayer.bAllowReplay ) fReplay();
+                //myPlayer.replay = true;
+                //if ( myPlayer.bAllowReplay ) fReplay();
             }
             break;
             
@@ -1509,12 +1509,12 @@ void testApp::keyReleased(int key){
             // LEFT
         case 'a':
         case 'A':
-            if ( bIsLefty ) myPlayer.record = false;
+            //if ( bIsLefty ) myPlayer.record = false;
             //else myPlayer.left = false;
             break;
         case OF_KEY_LEFT:
             //if ( bIsLefty ) myPlayer.left = false;
-            /*else*/ myPlayer.record = false;
+            //else myPlayer.record = false;
             break;
             
             // DOWN
@@ -1532,12 +1532,12 @@ void testApp::keyReleased(int key){
             // RIGHT
         case 'd':
         case 'D':
-            if ( bIsLefty ) myPlayer.replay = false;
+            //if ( bIsLefty ) myPlayer.replay = false;
             //else myPlayer.right = false;
             break;
         case OF_KEY_RIGHT:
             //if ( bIsLefty ) myPlayer.right = false;
-            /*else*/ myPlayer.replay = false;
+            //else myPlayer.replay = false;
             break;
             
             // End movement and action.

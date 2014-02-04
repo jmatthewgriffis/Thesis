@@ -34,6 +34,7 @@ public:
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull;
     int capacity;
     float radius, angle, angleVel;
+    float fHealth;
     
     ofImage headphones; // For some baffling reason the image is not moving when it should.
 };

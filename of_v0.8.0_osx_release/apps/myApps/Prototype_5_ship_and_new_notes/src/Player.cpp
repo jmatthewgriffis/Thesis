@@ -11,12 +11,13 @@
 Player::Player() {
     
     wide = 50;
-    tall = wide/5;
+    tall = wide/2;
     xVel = 7.25; // was 5, need to make sure doesn't screw up. Yields 120bpm.
     jumpVel = 10;
     radius = 40;
     angleVel = 15;
     capacity = CAPACITY;
+    fHealth = 100;
     
     headphones.loadImage( "images/headphones.png" );
 }
