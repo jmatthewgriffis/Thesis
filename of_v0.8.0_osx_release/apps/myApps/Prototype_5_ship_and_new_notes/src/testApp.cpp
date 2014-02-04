@@ -42,12 +42,14 @@ void testApp::setup(){
     
     bIsLefty = bIsRecording = false;
     
-    myPlayer.setup();
+    //myPlayer.setup();
     //myPlayer.setup( ofVec2f( 10200, 100 ) );
+    myPlayer.setup( ofVec2f( 100, 50 ) );
+    myPlayer2.setup( ofVec2f( 100, ofGetHeight() - 50 ) );
     
     // 0 is title screen, -1 is restart screen, 1 is game screen, 2 is boss screen.
-    gameState = 0;
-    currentState = 0;
+    gameState = 1;
+    currentState = 1;
     // To jump straight to the boss battle, must set gameState to 2, then uncomment the following...
     
     /*testPattern();
@@ -94,16 +96,17 @@ void testApp::update(){
     
     // Apply gravity to the player.
     // Come back to this. Use it to fake analog sensitivity with jump height proportional to how long the button is held. Gravity only applies sometimes.
-    myPlayer.applyForce( ofVec2f( 0.0, 0.3 ) );
+    //myPlayer.applyForce( ofVec2f( 0.0, 0.3 ) );
     
     // Run collision detection.
     playerCollidesWithGround();
     playerCollidesWithObstacle();
-    playerCollidesWithObject();
+    //playerCollidesWithObject();
     objectCollidesWithObstacle();
     
     // Update the player (duh).
     myPlayer.update();
+    myPlayer2.update();
     
     // Update the notes.
     updateObjectList();
@@ -176,6 +179,7 @@ void testApp::draw(){
         }
         
         myPlayer.draw( helvetica, recordedList );
+        myPlayer2.draw( helvetica, recordedList );
         
         if ( gameState == 1 ) {
             myCam.end();
@@ -1375,14 +1379,15 @@ void testApp::keyPressed(int key){
         case 'w':
         case 'W':
             if ( bIsLefty ) {}
-            else myPlayer.up = true;
+            //else myPlayer.up = true;
+            else myPlayer2.up = true;
             break;
         case OF_KEY_UP:
             if ( gameState == 0 ) {
                 bIsLefty = !bIsLefty;
             } else {
                 if ( bIsLefty ) myPlayer.up = true;
-                else {}
+                else { myPlayer.up = true; }
             }
             break;
             
@@ -1390,25 +1395,26 @@ void testApp::keyPressed(int key){
         case 'a':
         case 'A':
             if ( bIsLefty ) myPlayer.record = true;
-            else myPlayer.left = true;
+            //else myPlayer.left = true;
             break;
         case OF_KEY_LEFT:
-            if ( bIsLefty ) myPlayer.left = true;
-            else myPlayer.record = true;
+            //if ( bIsLefty ) myPlayer.left = true;
+            /*else*/ myPlayer.record = true;
             break;
             
             // DOWN
         case 's':
         case 'S':
             if ( bIsLefty ) {}
-            else myPlayer.down = true;
+            //else myPlayer.down = true;
+            else myPlayer2.down = true;
             break;
         case OF_KEY_DOWN:
             if ( gameState == 0 ) {
                 bIsLefty = !bIsLefty;
             } else {
                 if ( bIsLefty ) myPlayer.down = true;
-                else {}
+                else { myPlayer.down = true; }
             }
             break;
             
@@ -1419,11 +1425,11 @@ void testApp::keyPressed(int key){
                 myPlayer.replay = true;
                 if ( myPlayer.bAllowReplay ) fReplay();
             }
-            else myPlayer.right = true;
+            //else myPlayer.right = true;
             break;
         case OF_KEY_RIGHT:
-            if ( bIsLefty ) myPlayer.right = true;
-            else {
+            //if ( bIsLefty ) myPlayer.right = true;
+            /*else*/ {
                 myPlayer.replay = true;
                 if ( myPlayer.bAllowReplay ) fReplay();
             }
@@ -1487,7 +1493,8 @@ void testApp::keyReleased(int key){
         case 'W':
             if ( bIsLefty ) {}
             else {
-                myPlayer.up = false;
+                //myPlayer.up = false;
+                myPlayer2.up = false;
                 myPlayer.allowJump = true;
             }
             break;
@@ -1496,40 +1503,41 @@ void testApp::keyReleased(int key){
                 myPlayer.up = false;
                 myPlayer.allowJump = true;
             }
-            else {}
+            else { myPlayer.up = false; }
             break;
             
             // LEFT
         case 'a':
         case 'A':
             if ( bIsLefty ) myPlayer.record = false;
-            else myPlayer.left = false;
+            //else myPlayer.left = false;
             break;
         case OF_KEY_LEFT:
-            if ( bIsLefty ) myPlayer.left = false;
-            else myPlayer.record = false;
+            //if ( bIsLefty ) myPlayer.left = false;
+            /*else*/ myPlayer.record = false;
             break;
             
             // DOWN
         case 's':
         case 'S':
             if ( bIsLefty ) {}
-            else myPlayer.down = false;
+            //else myPlayer.down = false;
+            else myPlayer2.down = false;
             break;
         case OF_KEY_DOWN:
             if ( bIsLefty ) myPlayer.down = false;
-            else {}
+            else { myPlayer.down = false; }
             break;
             
             // RIGHT
         case 'd':
         case 'D':
             if ( bIsLefty ) myPlayer.replay = false;
-            else myPlayer.right = false;
+            //else myPlayer.right = false;
             break;
         case OF_KEY_RIGHT:
-            if ( bIsLefty ) myPlayer.right = false;
-            else myPlayer.replay = false;
+            //if ( bIsLefty ) myPlayer.right = false;
+            /*else*/ myPlayer.replay = false;
             break;
             
             // End movement and action.

@@ -35,22 +35,26 @@ void Player::setup( ofVec2f _pos ) {
 
 void Player::update() {
     
-//    pos.x += xVel;
+    pos.x += xVel;
     
     // Movement
     if ( allowMove ) {
-        if ( up && onSurface && allowJump ) {
+        /*if ( up && onSurface && allowJump ) {
             //            pos.y -= vel.y;
             onSurface = false;
             allowJump = false;
             // Jump! And prevent additional jumps.
             applyForce( ofVec2f( 0.0, -jumpVel ) );
+        }*/
+        if ( up ) {
+            applyForce( ofVec2f( 0.0, -xVel ) );
         }
         if ( left ) {
             applyForce( ofVec2f( -xVel, 0.0 ) );
         }
         if ( down ) {
             //            pos.y += vel.y;
+            applyForce( ofVec2f( 0.0, xVel ) );
         }
         if ( right ) {
             applyForce( ofVec2f( xVel, 0.0 ) );
@@ -69,6 +73,7 @@ void Player::update() {
         
         //        if ( onSurface ) {
         vel.x = 0;
+        vel.y = 0;
         //        }
         
     } // End "if allowMove"
@@ -80,7 +85,8 @@ void Player::update() {
     
     // Manage forces.
     float damping = 0.97;
-    vel.y *= damping;
+    //vel.y *= damping;
+    vel.y *= damping / 2.0;
     vel.x *= damping / 2.0;
     acc.set( 0 );
     

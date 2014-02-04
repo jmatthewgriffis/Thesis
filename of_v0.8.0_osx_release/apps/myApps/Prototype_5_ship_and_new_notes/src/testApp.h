@@ -71,7 +71,7 @@ public:
     vector< Object > objectList; // Enemies, objects, etc.
     vector< Object > recordedList; // Store recorded Objects for later use.
     
-    Player myPlayer;
+    Player myPlayer, myPlayer2;
     
     // Accomodate right-handed and left-handed.
     bool bIsLefty;
