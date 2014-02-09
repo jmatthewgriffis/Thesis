@@ -123,11 +123,18 @@ void Object::draw() {
     
     // Draw guidelines as needed to indicate A above the staff and C below.
     ofSetColor( 0 );
-    /*if ( whichNote < 2 ) {
-     ofLine( pos.x - guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ), pos.x + guideLineLength, ofGetHeight() - ( ofGetHeight() / 8.0 ) );
-     } else if ( whichNote > 12 ) {
-     ofLine( pos.x - guideLineLength, ofGetHeight() / 8.0, pos.x + guideLineLength, ofGetHeight() / 8.0 );
-     }*/
+//    0 1 13 25 26
+    if ( pos.y == staffPosList[ 0 ]
+        || pos.y == staffPosList[ 1 ] ) {
+     ofLine( pos.x - guideLineLength, ofGetHeight() - ( ofGetHeight() / 14.0 ), pos.x + guideLineLength, ofGetHeight() - ( ofGetHeight() / 14.0 ) );
+     }
+    else if ( pos.y == staffPosList[ 13 ] ) {
+        ofLine( pos.x - guideLineLength, ofGetHeight() - ( 7 * ( ofGetHeight() / 14.0 ) ), pos.x + guideLineLength, ofGetHeight() - ( 7 * ( ofGetHeight() / 14.0 ) ) );
+     }
+    else if ( pos.y == staffPosList[ 25 ]
+             || pos.y == staffPosList[ 26 ] ) {
+     ofLine( pos.x - guideLineLength, ofGetHeight() / 14.0, pos.x + guideLineLength, ofGetHeight() / 14.0 );
+     }
     
     // Draw!
     /*if ( pos.y + ( tall / 2 ) > ofGetHeight()) {
@@ -137,8 +144,8 @@ void Object::draw() {
         ofSetColor(255,0,0);
     }
     else*/ ofSetColor( c );
-    //    ofEllipse( pos, wide, tall);
-    ofRect( pos, wide, tall);
+    ofEllipse( pos, wide, tall);
+    //ofRect( pos, wide, tall);
     /*
      // Make it a whole note.
      ofSetColor( 255 );
