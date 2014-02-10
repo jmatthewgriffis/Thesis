@@ -16,18 +16,19 @@ Object::Object() {
     c = ofColor( 0 );
     
     // Calculate the y-pos for all the notes.
-    for ( int i = 0; i < numPos; i++ ) {
+    /*for ( int i = 0; i < numPos; i++ ) {
         float noteSpacer = ofGetHeight() * 0.0357; // Must divide 1 by numPos and approximate it manually. The computer won't do it if it's a long decimal.
         //cout<<noteSpacer<<endl;
         float tmp = ofGetHeight() - ( noteSpacer * ( i + 1 ) );
         staffPosList.push_back( tmp );
-    }
+    }*/
     
     //staffPosList[ 0 ] = 867.8571;
 }
 
-void Object::setup( string _whichNote, int _age ) {
+void Object::setup( vector< float > _staffPosList, string _whichNote, int _age ) {
     
+    staffPosList = _staffPosList;
     whichNote = _whichNote;
     age = _age;
     
@@ -231,47 +232,47 @@ float Object::fReturnYPos( string _whichNote ) {
     }
     else if ( _whichNote == "c3_middle" || _whichNote == "c3#") {
         //tmp = staffPosList[ 0 ];
-        tmp = staffPosList[ 13 ];
+        tmp = staffPosList[ 16 ];
         //cout<<float(ofGetHeight())<<" "<<float(tall / 2)<<" "<<float(ofGetHeight() - (tall / 2))<<" "<<staffPosList[0]<<endl;
     }
     else if ( _whichNote == "d3" || _whichNote == "d3#") {
-        tmp = staffPosList[ 14 ];
-    }
-    else if ( _whichNote == "e3") {
-        tmp = staffPosList[ 15 ];
-    }
-    else if ( _whichNote == "f3" || _whichNote == "f3#") {
-        tmp = staffPosList[ 16 ];
-    }
-    else if ( _whichNote == "g3" || _whichNote == "g3#") {
         tmp = staffPosList[ 17 ];
     }
-    else if ( _whichNote == "a3" || _whichNote == "a3#") {
+    else if ( _whichNote == "e3") {
         tmp = staffPosList[ 18 ];
     }
-    else if ( _whichNote == "b3") {
+    else if ( _whichNote == "f3" || _whichNote == "f3#") {
         tmp = staffPosList[ 19 ];
     }
-    else if ( _whichNote == "c4" || _whichNote == "c4#") {
+    else if ( _whichNote == "g3" || _whichNote == "g3#") {
         tmp = staffPosList[ 20 ];
     }
-    else if ( _whichNote == "d4" || _whichNote == "d4#") {
+    else if ( _whichNote == "a3" || _whichNote == "a3#") {
         tmp = staffPosList[ 21 ];
     }
-    else if ( _whichNote == "e4") {
+    else if ( _whichNote == "b3") {
         tmp = staffPosList[ 22 ];
     }
-    else if ( _whichNote == "f4" || _whichNote == "f4#") {
+    else if ( _whichNote == "c4" || _whichNote == "c4#") {
         tmp = staffPosList[ 23 ];
     }
-    else if ( _whichNote == "g4" || _whichNote == "g4#") {
+    else if ( _whichNote == "d4" || _whichNote == "d4#") {
         tmp = staffPosList[ 24 ];
     }
-    else if ( _whichNote == "a4" || _whichNote == "a4#") {
+    else if ( _whichNote == "e4") {
         tmp = staffPosList[ 25 ];
     }
-    else if ( _whichNote == "b4") {
+    else if ( _whichNote == "f4" || _whichNote == "f4#") {
         tmp = staffPosList[ 26 ];
+    }
+    else if ( _whichNote == "g4" || _whichNote == "g4#") {
+        tmp = staffPosList[ 27 ];
+    }
+    else if ( _whichNote == "a4" || _whichNote == "a4#") {
+        tmp = staffPosList[ 28 ];
+    }
+    else if ( _whichNote == "b4") {
+        tmp = staffPosList[ 29 ];
     }
     
     return tmp;

@@ -6,7 +6,7 @@
 #include "Player.h"
 #include "Obstacle.h"
 
-#define numNotes 25
+#define numYpos 30
 #define numLines 13
 
 /*
@@ -42,6 +42,8 @@ public:
     void fDrawRestartScreen();
     void fDrawTutorialInstructions();
     void fSetupTutorial();
+    void fDrawStaff();
+    void fCalcAllNotePos();
     
     // Manage the objects.
     void addObject( string _note, float _xPos, int _age );
@@ -51,7 +53,6 @@ public:
     void fRecord( int _i );
     void fReplay();
     void testPattern();
-    void fDrawStaff();
     
     // Handle collision.
     void playerCollidesWithGround();

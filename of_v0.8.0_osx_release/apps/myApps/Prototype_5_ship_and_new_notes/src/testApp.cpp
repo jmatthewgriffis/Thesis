@@ -34,7 +34,7 @@ void testApp::setup(){
     while ( iThirdOfScreen % 16 != 0 ) {
         iThirdOfScreen--;
     }
-    //cout<<iThirdOfScreen<<endl;
+    fCalcAllNotePos();
     
     // Run a test pattern and highlight the first element.
     //    testPattern();
@@ -192,7 +192,7 @@ void testApp::addObject( string _note, float _xPos, int _age ) {
     
     // This function adds an NPC Object.
     Object tmp;
-    tmp.setup( _note, _age );
+    tmp.setup( staffPosList, _note, _age );
     tmp.pos.x = _xPos;
     objectList.push_back( tmp );
 }
@@ -202,7 +202,7 @@ void testApp::addRecordedObject( string _note, ofVec2f _vel, int _age ) {
     
     // This function copies a recorded Object into a static vector that gets neither updated nor drawn.
     Object tmp;
-    tmp.setup( _note, _age );
+    tmp.setup( staffPosList, _note, _age );
     tmp.vel.set( _vel );
     recordedList.push_back( tmp );
 }
@@ -212,7 +212,7 @@ void testApp::addReplayedObject( string _note, ofVec2f _vel, int _age ) {
     
     // This function copies an Object from the "recorded" vector to the main Object vector. It also reverses horizontal velocity if needed so the Object can travel the other direction.
     Object tmp;
-    tmp.setup( _note, _age );
+    tmp.setup( staffPosList, _note, _age );
     tmp.pos.x = myPlayer.pos.x;
     tmp.vel.set( _vel );
     if ( tmp.vel.x < 0 ) tmp.vel.x *= -1;
@@ -1364,6 +1364,21 @@ void testApp::fDrawStaff() {
     }
     //ofLine( myPlayer.pos.x - ofGetWidth(), 300, myPlayer.pos.x + ofGetWidth(), 300 );
     //ofLine( myPlayer.pos.x - ofGetWidth(), 600, myPlayer.pos.x + ofGetWidth(), 600 );
+}
+
+//--------------------------------------------------------------
+void testApp::fCalcAllNotePos() {
+    
+    for ( int i = 0; i < numYpos; i++ ) {
+        float noteSpacer = iThirdOfScreen / 16;
+        float tmp;
+        if ( i <= 15 ) { // Bottom clef.
+            tmp = ofGetHeight() - ( noteSpacer * ( i + 1 ) );
+        } else { // Top clef.
+            tmp = ofGetHeight() - ( ofGetHeight() - iThirdOfScreen * 2 ) - ( noteSpacer * ( i + 1 ) );
+        }
+        staffPosList.push_back( tmp ); // FIND ME
+    }
 }
 
 //--------------------------------------------------------------

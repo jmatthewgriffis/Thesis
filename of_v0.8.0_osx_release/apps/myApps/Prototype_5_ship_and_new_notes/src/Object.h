@@ -17,7 +17,7 @@ class Object {
 public:
     Object();
     
-    void setup( string _whichNote, int _age );
+    void setup( vector< float > _staffPosList, string _whichNote, int _age );
     void update( ofVec2f _pos );
     void draw();
     
