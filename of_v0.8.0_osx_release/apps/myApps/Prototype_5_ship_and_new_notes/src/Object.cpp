@@ -52,13 +52,18 @@ void Object::update( ofVec2f _pos ) {
     float tooFar = ofGetWidth() * 0.25 * 0.25;
     //    float dist = ofDist( _pos.x, _pos.y, pos.x, pos.y );
     float dist = ofDist( _pos.x, 0, pos.x, 0 );
-    if ( dist > tooFar ) {
+    /*if ( dist > tooFar ) {
         if ( noteList.size() != 0 ) {
             noteList.erase( noteList.begin() );
         }
     } else {
         //        vol = ofMap( dist, tooFar, 0, 0.0f, 1.0f );
         fAddNote();
+    }*/
+    if ( bIsTouched ) {
+        fAddNote();
+    } else if ( noteList.size() != 0 ) {
+            noteList.erase( noteList.begin() );
     }
     
     for ( int i = 0; i < noteList.size(); i++ ) {
