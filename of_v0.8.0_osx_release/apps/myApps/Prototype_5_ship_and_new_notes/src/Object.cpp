@@ -29,10 +29,9 @@ Object::Object() {
 void Object::setup( string _whichNote, int _age ) {
     
     whichNote = _whichNote;
-    pos.y = fReturnYPos( _whichNote );
     age = _age;
     
-    pos.x = ofGetWidth();
+    pos.set( ofGetWidth(), -2000 );
     
     vel.set( 0.0, 0.0 );
     
@@ -48,6 +47,8 @@ void Object::setup( string _whichNote, int _age ) {
 }
 
 void Object::update( ofVec2f _pos ) {
+    
+    pos.y = fReturnYPos( whichNote );
     
     fLimitLife();
     
@@ -229,8 +230,8 @@ float Object::fReturnYPos( string _whichNote ) {
         tmp = staffPosList[ 12 ];
     }
     else if ( _whichNote == "c3_middle" || _whichNote == "c3#") {
-        tmp = staffPosList[ 0 ];
-        //tmp = staffPosList[ 13 ];
+        //tmp = staffPosList[ 0 ];
+        tmp = staffPosList[ 13 ];
         //cout<<float(ofGetHeight())<<" "<<float(tall / 2)<<" "<<float(ofGetHeight() - (tall / 2))<<" "<<staffPosList[0]<<endl;
     }
     else if ( _whichNote == "d3" || _whichNote == "d3#") {

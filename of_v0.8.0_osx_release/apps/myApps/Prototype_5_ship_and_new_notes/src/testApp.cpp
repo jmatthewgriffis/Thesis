@@ -29,6 +29,13 @@ void testApp::setup(){
     // Background
     ofBackground( 255 );
     
+    // Divide the screen into sections and make sure notes can be spaced perfectly.
+    iThirdOfScreen = int( ofGetHeight() / 2.25 );
+    while ( iThirdOfScreen % 16 != 0 ) {
+        iThirdOfScreen--;
+    }
+    //cout<<iThirdOfScreen<<endl;
+    
     // Run a test pattern and highlight the first element.
     //    testPattern();
     bHighlightNote = false;
@@ -41,8 +48,6 @@ void testApp::setup(){
     iStaffAlphaVel = 0.5;
     
     bIsLefty = bIsRecording = false;
-    
-    iThirdOfScreen = int( ofGetHeight() / 2.25 );
     
     //myPlayer.setup();
     //myPlayer.setup( ofVec2f( 10200, 100 ) );
@@ -1345,19 +1350,11 @@ void testApp::fWriteControls() {
 //--------------------------------------------------------------
 void testApp::fDrawStaff() {
     
-    // Divide the screen into three sections.
-    //cout<<ofGetHeight()%8<<endl;
-    if ( iThirdOfScreen % 16 != 0 ) {
-        iThirdOfScreen--;
-        return;
-    }
-    cout<<iThirdOfScreen<<endl;
     // Draw the staff with transparency.
     //ofSetColor( 0, int( iStaffAlpha ) );
     ofSetColor(0);
     //float numSections = float(numLines + 1);
     float spacer = iThirdOfScreen / 8;
-    cout<<spacer<<endl;
     //for ( int i = 2; i < ( numSections - 1 ); i++ ) {
     for ( int i = 2; i < 7; i++ ) {
         //if ( i != 7 ) {
