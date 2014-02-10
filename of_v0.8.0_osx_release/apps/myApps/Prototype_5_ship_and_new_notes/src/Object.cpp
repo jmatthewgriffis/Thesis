@@ -147,12 +147,45 @@ void Object::draw() {
         ofSetColor(255,0,0);
     }
     else*/ ofSetColor( c );
+    // Draw the note.
     ofEllipse( pos, wide, tall);
+    // Draw the tail.
     ofSetLineWidth( 2 );
     if ( pos.y > staffPosList[ 14 ] ) {
         ofLine( pos.x - wide / 2, pos.y, pos.x - wide / 2, pos.y + lineSpacer * 4 - lineSpacer / 2 );
     } else {
         ofLine( pos.x + wide / 2, pos.y, pos.x + wide / 2, pos.y - ( lineSpacer * 4 - lineSpacer / 2 ) );
+    }
+    // Draw a sharp sign where appropriate.
+    if ( ofStringTimesInString( whichNote, "#") != 0 ) {
+        ofSetLineWidth( 3 );
+        float scaler = 0.25;
+        float dist = wide / 1.5;
+        ofLine( // right vertical
+               pos.x - dist,
+               pos.y - lineSpacer * 1.5 * scaler,
+               pos.x - dist,
+               pos.y + lineSpacer * 1.5 * scaler
+               );
+        ofLine( // left vertical
+               pos.x - dist - ( wide - dist ) * scaler,
+               pos.y - lineSpacer * 1.5 * scaler,
+               pos.x - dist - ( wide - dist ) * scaler,
+               pos.y + lineSpacer * 1.5 * scaler
+               );
+        ofSetLineWidth( 8 );
+        ofLine( // top horizontal
+               pos.x - dist - ( wide - dist ) * scaler - ( wide * 0.2 ) * scaler,
+               pos.y - ( lineSpacer / 2 ) * scaler + ( 0.1 * lineSpacer ) * scaler,
+               pos.x - dist + ( wide * 0.2 ) * scaler,
+               pos.y - ( lineSpacer / 2 ) * scaler - ( 0.1 * lineSpacer ) * scaler
+               );
+        ofLine( // bottom horizontal
+               pos.x - dist - ( wide - dist ) * scaler - ( wide * 0.2 ) * scaler,
+               pos.y + ( lineSpacer / 2 ) * scaler + ( 0.1 * lineSpacer ) * scaler,
+               pos.x - dist + ( wide * 0.2 ) * scaler,
+               pos.y + ( lineSpacer / 2 ) * scaler - ( 0.1 * lineSpacer ) * scaler
+               );
     }
     ofSetLineWidth( 1 );
     //ofRect( pos, wide, tall);
