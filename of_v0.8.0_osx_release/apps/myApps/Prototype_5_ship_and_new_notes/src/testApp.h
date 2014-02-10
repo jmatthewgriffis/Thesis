@@ -108,4 +108,6 @@ public:
     bool bShiftIsPressed;
     
     int iThirdOfScreen;
+    
+    float fMeasureLength;
 };

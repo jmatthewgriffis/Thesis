@@ -36,6 +36,8 @@ void testApp::setup(){
     }
     fCalcAllNotePos();
     
+    fMeasureLength = 0;
+    
     // Run a test pattern and highlight the first element.
     //    testPattern();
     bHighlightNote = false;
@@ -114,6 +116,13 @@ void testApp::update(){
     // Update the player (duh).
     myPlayer.update();
     myPlayer2.update();
+    // Prevent ships from moving into the wrong section of screen.
+    if ( myPlayer.pos.y > iThirdOfScreen ) {
+        myPlayer.pos.y = iThirdOfScreen;
+    }
+    if ( myPlayer2.pos.y < ofGetHeight() - iThirdOfScreen ) {
+        myPlayer2.pos.y = ofGetHeight() - iThirdOfScreen;
+    }
     
     // Update the notes.
     updateObjectList();
@@ -267,7 +276,7 @@ void testApp::fRecord( int _i ) {
     /*float xDist;
      if ( recordedList.size() == 0 ) {
      xDist = 0;
-     } else { // FIND ME--I may need to adjust the below in case notes aren't captured linearly.
+     } else { // I may need to adjust the below in case notes aren't captured linearly.
      xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
      }*/
     addRecordedObject( objectList[ _i ].whichNote, objectList[ _i ].vel, objectLife );
@@ -623,6 +632,7 @@ void testApp::fSetupTutorial() {
     float m1Bass = 500;
     float spacer = 150;
     float mLength = spacer * 5.333333;
+    fMeasureLength = mLength;
     //float mLength = 800;
     //cout<<mLength<<endl;
     
@@ -1362,8 +1372,12 @@ void testApp::fDrawStaff() {
         ofLine( myPlayer.pos.x - ofGetWidth(), ofGetHeight() - ( spacer * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( spacer * i ) );
         //}
     }
-    //ofLine( myPlayer.pos.x - ofGetWidth(), 300, myPlayer.pos.x + ofGetWidth(), 300 );
-    //ofLine( myPlayer.pos.x - ofGetWidth(), 600, myPlayer.pos.x + ofGetWidth(), 600 );
+    for ( int i = 0; i < 30; i++ ) {
+        // Draw the measure lines.
+        ofLine( 450 + fMeasureLength * i, spacer * 2,  450 + fMeasureLength * i, ofGetHeight() - spacer * 2 );
+        // Draw the measure number.
+        helvetica.drawString( ofToString( i + 1 ), 475 + fMeasureLength * i, spacer * 2);
+    }
 }
 
 //--------------------------------------------------------------
@@ -1377,7 +1391,7 @@ void testApp::fCalcAllNotePos() {
         } else { // Top clef.
             tmp = ofGetHeight() - ( ofGetHeight() - iThirdOfScreen * 2 ) - ( noteSpacer * ( i + 2 ) );
         }
-        staffPosList.push_back( tmp ); // FIND ME
+        staffPosList.push_back( tmp );
     }
 }
 
