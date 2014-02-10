@@ -10,20 +10,6 @@
 
 Object::Object() {
     
-    tall = ( ofGetHeight() / 14.0 )/* - 20*/;
-    wide = tall * 1.5;
-    guideLineLength = wide * 0.75;
-    c = ofColor( 0 );
-    
-    // Calculate the y-pos for all the notes.
-    /*for ( int i = 0; i < numPos; i++ ) {
-        float noteSpacer = ofGetHeight() * 0.0357; // Must divide 1 by numPos and approximate it manually. The computer won't do it if it's a long decimal.
-        //cout<<noteSpacer<<endl;
-        float tmp = ofGetHeight() - ( noteSpacer * ( i + 1 ) );
-        staffPosList.push_back( tmp );
-    }*/
-    
-    //staffPosList[ 0 ] = 867.8571;
 }
 
 void Object::setup( vector< float > _staffPosList, string _whichNote, int _age ) {
@@ -31,6 +17,11 @@ void Object::setup( vector< float > _staffPosList, string _whichNote, int _age )
     staffPosList = _staffPosList;
     whichNote = _whichNote;
     age = _age;
+    
+    tall = ( staffPosList[0] - staffPosList[2] ) * 0.8;
+    wide = tall * 1.5;
+    guideLineLength = wide * 0.75;
+    c = ofColor( 0 );
     
     pos.set( ofGetWidth(), -2000 );
     
@@ -130,16 +121,22 @@ void Object::draw() {
     // Draw guidelines as needed to indicate A above the staff and C below.
     ofSetColor( 0 );
 //    0 1 13 25 26
+    float lineSpacer = staffPosList[0] - staffPosList[2];
     if ( pos.y == staffPosList[ 0 ]
         || pos.y == staffPosList[ 1 ] ) {
-     ofLine( pos.x - guideLineLength, ofGetHeight() - ( ofGetHeight() / 14.0 ), pos.x + guideLineLength, ofGetHeight() - ( ofGetHeight() / 14.0 ) );
+     ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer, pos.x + guideLineLength, ofGetHeight() - lineSpacer );
      }
-    else if ( pos.y == staffPosList[ 13 ] ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() - ( 7 * ( ofGetHeight() / 14.0 ) ), pos.x + guideLineLength, ofGetHeight() - ( 7 * ( ofGetHeight() / 14.0 ) ) );
+    else if ( pos.y == staffPosList[ 13 ]
+             || pos.y == staffPosList[ 14 ] ) {
+        ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer * 7, pos.x + guideLineLength, ofGetHeight() - lineSpacer * 7 );
+    }
+    else if ( pos.y == staffPosList[ 15 ]
+             || pos.y == staffPosList[ 16 ] ) {
+        ofLine( pos.x - guideLineLength, lineSpacer * 7, pos.x + guideLineLength, lineSpacer * 7 );
      }
-    else if ( pos.y == staffPosList[ 25 ]
-             || pos.y == staffPosList[ 26 ] ) {
-     ofLine( pos.x - guideLineLength, ofGetHeight() / 14.0, pos.x + guideLineLength, ofGetHeight() / 14.0 );
+    else if ( pos.y == staffPosList[ 28 ]
+             || pos.y == staffPosList[ 29 ] ) {
+     ofLine( pos.x - guideLineLength, lineSpacer, pos.x + guideLineLength, lineSpacer );
      }
     
     // Draw!
@@ -151,6 +148,13 @@ void Object::draw() {
     }
     else*/ ofSetColor( c );
     ofEllipse( pos, wide, tall);
+    ofSetLineWidth( 2 );
+    if ( pos.y > staffPosList[ 14 ] ) {
+        ofLine( pos.x - wide / 2, pos.y, pos.x - wide / 2, pos.y + lineSpacer * 4 - lineSpacer / 2 );
+    } else {
+        ofLine( pos.x + wide / 2, pos.y, pos.x + wide / 2, pos.y - ( lineSpacer * 4 - lineSpacer / 2 ) );
+    }
+    ofSetLineWidth( 1 );
     //ofRect( pos, wide, tall);
     /*
      // Make it a whole note.
@@ -230,10 +234,9 @@ float Object::fReturnYPos( string _whichNote ) {
     else if ( _whichNote == "b2") {
         tmp = staffPosList[ 12 ];
     }
+    // 13 = bass c; 14 = bass d; 15 = treble b
     else if ( _whichNote == "c3_middle" || _whichNote == "c3#") {
-        //tmp = staffPosList[ 0 ];
         tmp = staffPosList[ 16 ];
-        //cout<<float(ofGetHeight())<<" "<<float(tall / 2)<<" "<<float(ofGetHeight() - (tall / 2))<<" "<<staffPosList[0]<<endl;
     }
     else if ( _whichNote == "d3" || _whichNote == "d3#") {
         tmp = staffPosList[ 17 ];

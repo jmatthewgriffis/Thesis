@@ -1372,10 +1372,10 @@ void testApp::fCalcAllNotePos() {
     for ( int i = 0; i < numYpos; i++ ) {
         float noteSpacer = iThirdOfScreen / 16;
         float tmp;
-        if ( i <= 15 ) { // Bottom clef.
+        if ( i < 15 ) { // Bottom clef.
             tmp = ofGetHeight() - ( noteSpacer * ( i + 1 ) );
         } else { // Top clef.
-            tmp = ofGetHeight() - ( ofGetHeight() - iThirdOfScreen * 2 ) - ( noteSpacer * ( i + 1 ) );
+            tmp = ofGetHeight() - ( ofGetHeight() - iThirdOfScreen * 2 ) - ( noteSpacer * ( i + 2 ) );
         }
         staffPosList.push_back( tmp ); // FIND ME
     }
