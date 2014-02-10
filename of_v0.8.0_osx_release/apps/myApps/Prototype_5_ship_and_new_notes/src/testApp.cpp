@@ -42,6 +42,8 @@ void testApp::setup(){
     
     bIsLefty = bIsRecording = false;
     
+    iThirdOfScreen = int( ofGetHeight() / 2.25 );
+    
     //myPlayer.setup();
     //myPlayer.setup( ofVec2f( 10200, 100 ) );
     myPlayer.setup( ofVec2f( 100, 50 ) );
@@ -144,14 +146,7 @@ void testApp::draw(){
             }
         }
         
-        // Draw the staff with transparency.
-        ofSetColor( 0, int( iStaffAlpha ) );
-        float numSections = float(numLines + 1);
-        for ( int i = 2; i < ( numSections - 1 ); i++ ) {
-            if ( i != 7 ) {
-                ofLine( myPlayer.pos.x - ofGetWidth(), ( ofGetHeight() / numSections ) * i, myPlayer.pos.x + ofGetWidth(), ( ofGetHeight() / numSections ) * i );
-            }
-        }
+        fDrawStaff();
         
         // Draw some lines on the ground to give something to move against.
         /*ofSetColor( 0 );
@@ -356,39 +351,39 @@ void testApp::playerCollidesWithObject() {
         }
         
         /*
-        // First, check if the player is in the same horizontal region as the object.
-        if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
-            // Is there something directly to the right?
-            if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
-                // Prevent the player from moving to the right.
-                myPlayer.pos.x = objectLeft - myPlayer.wide / 2.0;
-            }
-            // OK, is there something directly to the left?
-            else if ( playerLeft <= objectRight && playerLeft > objectList[ i ].pos.x ) {
-                // Prevent the player from moving to the left.
-                myPlayer.pos.x = objectRight + myPlayer.wide / 2.0;
-            }
-        }
-        // Next, check if the player is in the same vertical region as the object.
-        if ( playerRight >= objectLeft + margin && playerLeft <= objectRight - margin ) {
-            // Is there something directly below?
-            if ( playerBottom >= objectTop && playerBottom < objectList[ i ].pos.y ) {
-                // Prevent the player from moving downward.
-                myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
-                myPlayer.onSurface = true;
-                //                myPlayer.vel.set( objectList[ i ].vel );
-                myPlayer.applyForce( objectList[ i ].vel );
-            }
-            // OK, is there something directly above?
-            else if ( playerTop <= objectBottom && playerTop > objectList[ i ].pos.y ) {
-                // Prevent the player from moving upward.
-                myPlayer.pos.y = objectBottom + myPlayer.tall / 2.0;
-                // Cancel any upward velocity.
-                if ( myPlayer.vel.y < 0 ) {
-                    myPlayer.vel.y = 0;
-                }
-            }
-        }
+         // First, check if the player is in the same horizontal region as the object.
+         if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
+         // Is there something directly to the right?
+         if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
+         // Prevent the player from moving to the right.
+         myPlayer.pos.x = objectLeft - myPlayer.wide / 2.0;
+         }
+         // OK, is there something directly to the left?
+         else if ( playerLeft <= objectRight && playerLeft > objectList[ i ].pos.x ) {
+         // Prevent the player from moving to the left.
+         myPlayer.pos.x = objectRight + myPlayer.wide / 2.0;
+         }
+         }
+         // Next, check if the player is in the same vertical region as the object.
+         if ( playerRight >= objectLeft + margin && playerLeft <= objectRight - margin ) {
+         // Is there something directly below?
+         if ( playerBottom >= objectTop && playerBottom < objectList[ i ].pos.y ) {
+         // Prevent the player from moving downward.
+         myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
+         myPlayer.onSurface = true;
+         //                myPlayer.vel.set( objectList[ i ].vel );
+         myPlayer.applyForce( objectList[ i ].vel );
+         }
+         // OK, is there something directly above?
+         else if ( playerTop <= objectBottom && playerTop > objectList[ i ].pos.y ) {
+         // Prevent the player from moving upward.
+         myPlayer.pos.y = objectBottom + myPlayer.tall / 2.0;
+         // Cancel any upward velocity.
+         if ( myPlayer.vel.y < 0 ) {
+         myPlayer.vel.y = 0;
+         }
+         }
+         }
          */
         
         /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
@@ -1348,6 +1343,33 @@ void testApp::fWriteControls() {
 }
 
 //--------------------------------------------------------------
+void testApp::fDrawStaff() {
+    
+    // Divide the screen into three sections.
+    //cout<<ofGetHeight()%8<<endl;
+    if ( iThirdOfScreen % 16 != 0 ) {
+        iThirdOfScreen--;
+        return;
+    }
+    cout<<iThirdOfScreen<<endl;
+    // Draw the staff with transparency.
+    //ofSetColor( 0, int( iStaffAlpha ) );
+    ofSetColor(0);
+    //float numSections = float(numLines + 1);
+    float spacer = iThirdOfScreen / 8;
+    cout<<spacer<<endl;
+    //for ( int i = 2; i < ( numSections - 1 ); i++ ) {
+    for ( int i = 2; i < 7; i++ ) {
+        //if ( i != 7 ) {
+        ofLine( myPlayer.pos.x - ofGetWidth(), spacer * i, myPlayer.pos.x + ofGetWidth(), spacer * i );
+        ofLine( myPlayer.pos.x - ofGetWidth(), ofGetHeight() - ( spacer * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( spacer * i ) );
+        //}
+    }
+    //ofLine( myPlayer.pos.x - ofGetWidth(), 300, myPlayer.pos.x + ofGetWidth(), 300 );
+    //ofLine( myPlayer.pos.x - ofGetWidth(), 600, myPlayer.pos.x + ofGetWidth(), 600 );
+}
+
+//--------------------------------------------------------------
 void testApp::keyPressed(int key){
     
     switch ( key ) {
@@ -1387,13 +1409,13 @@ void testApp::keyPressed(int key){
             }
             // Go to boss battle if player has reached end of tutorial.
             /*else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + 400 ) {
-                //else if ( gameState == 1 ) {
-                cleanup();
-                gameState = 2;
-                myPlayer.setup();
-                bHighlightNote = true;
-                getThisOne = 0;
-            }*/
+             //else if ( gameState == 1 ) {
+             cleanup();
+             gameState = 2;
+             myPlayer.setup();
+             bHighlightNote = true;
+             getThisOne = 0;
+             }*/
             break;
             
         case OF_KEY_SHIFT:

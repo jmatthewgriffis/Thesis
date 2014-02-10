@@ -51,6 +51,7 @@ public:
     void fRecord( int _i );
     void fReplay();
     void testPattern();
+    void fDrawStaff();
     
     // Handle collision.
     void playerCollidesWithGround();
@@ -104,4 +105,6 @@ public:
     ofEasyCam myCam;
     
     bool bShiftIsPressed;
+    
+    int iThirdOfScreen;
 };

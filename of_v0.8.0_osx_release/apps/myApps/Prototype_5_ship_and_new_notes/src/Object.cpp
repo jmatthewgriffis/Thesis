@@ -17,9 +17,13 @@ Object::Object() {
     
     // Calculate the y-pos for all the notes.
     for ( int i = 0; i < numPos; i++ ) {
-        float tmp = ofGetHeight() - ( ( ofGetHeight() / ( numPos + 1 ) ) * ( i + 1 ) );
+        float noteSpacer = ofGetHeight() * 0.0357; // Must divide 1 by numPos and approximate it manually. The computer won't do it if it's a long decimal.
+        //cout<<noteSpacer<<endl;
+        float tmp = ofGetHeight() - ( noteSpacer * ( i + 1 ) );
         staffPosList.push_back( tmp );
     }
+    
+    //staffPosList[ 0 ] = 867.8571;
 }
 
 void Object::setup( string _whichNote, int _age ) {
@@ -225,8 +229,8 @@ float Object::fReturnYPos( string _whichNote ) {
         tmp = staffPosList[ 12 ];
     }
     else if ( _whichNote == "c3_middle" || _whichNote == "c3#") {
-        //tmp = staffPosList[ 0 ];
-        tmp = staffPosList[ 13 ];
+        tmp = staffPosList[ 0 ];
+        //tmp = staffPosList[ 13 ];
         //cout<<float(ofGetHeight())<<" "<<float(tall / 2)<<" "<<float(ofGetHeight() - (tall / 2))<<" "<<staffPosList[0]<<endl;
     }
     else if ( _whichNote == "d3" || _whichNote == "d3#") {
