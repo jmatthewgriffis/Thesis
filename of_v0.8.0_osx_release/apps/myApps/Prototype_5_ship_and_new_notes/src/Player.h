@@ -36,5 +36,5 @@ public:
     float radius, angle, angleVel;
     float fHealth, fHealthMax, fHealthLossSpeed;
     
-    ofImage headphones; // For some baffling reason the image is not moving when it should.
+    ofImage headphones, hand; // For some baffling reason the image is not moving when it should.
 };

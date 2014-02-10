@@ -187,8 +187,16 @@ void testApp::draw(){
             obstacleList[ i ].draw();
         }
         
+        //helvetica.drawString( "Treble rockitude: " + ofToString( int( myPlayer.fHealth ) ) + "%", myPlayer.pos.x - 400, ofGetHeight() / 2 - 50 );
+        //helvetica.drawString( "Bass groovosity: " + ofToString( int( myPlayer2.fHealth ) ) + "%", myPlayer.pos.x + 100, ofGetHeight() / 2 + 50 );
+        
         myPlayer.draw( helvetica, recordedList );
         myPlayer2.draw( helvetica, recordedList );
+        //ofSetColor(0);
+        //helvetica.drawString("[UP]", myPlayer.pos.x, myPlayer.pos.y - myPlayer.tall / 2 );
+        //helvetica.drawString("[DOWN]", myPlayer.pos.x, myPlayer.pos.y + myPlayer.tall / 2 );
+        
+        cout<<objectList[ 1 ].c<<endl;
         
         if ( gameState == 1 ) {
             myCam.end();
@@ -356,12 +364,14 @@ void testApp::playerCollidesWithObject() {
             && playerBottom > objectTop
             && playerTop < objectBottom ) {
             myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
+            objectList[ i ].bIsTouched = true;
         }
         if ( player2Right > objectLeft
             && player2Left < objectRight
             && player2Bottom > objectTop
             && player2Top < objectBottom ) {
             myPlayer2.fHealth += myPlayer2.fHealthLossSpeed * fHealthMultiplier;
+            objectList[ i ].bIsTouched = true;
         }
         
         /*

@@ -32,6 +32,7 @@ void Object::setup( vector< float > _staffPosList, string _whichNote, int _age )
     destroyMe = false;
     drawAttention = false;
     bIsRecorded = false;
+    bIsTouched = false;
     
     // Note stuff.
     //    myNote.setup( whichNote );
@@ -106,6 +107,8 @@ void Object::update( ofVec2f _pos ) {
     if ( bIsRecorded ) {
         c = ofColor( 0, 255, 0, alpha );
         colorTimer = 10;
+    } else if ( bIsTouched ) {
+        c = ofColor( 255, 0 , 0, alpha );
     } else if ( drawAttention && colorTimer == 0 ) {
         c = ofColor( 255, 0, 0, alpha );
     } else if ( colorTimer == 0 ) {
@@ -113,7 +116,7 @@ void Object::update( ofVec2f _pos ) {
     }
     
     // Reset this so the color goes back to normal.
-    bIsRecorded = false;
+    bIsRecorded = bIsTouched = false;
 }
 
 void Object::draw() {

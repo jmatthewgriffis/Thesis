@@ -10,8 +10,8 @@
 
 Player::Player() {
     
-    wide = 50;
-    tall = wide/2;
+    wide = 100;
+    tall = wide;
     xVel = 7.25; // was 5, need to make sure doesn't screw up. Yields 120bpm.
     jumpVel = 10;
     radius = 40;
@@ -21,6 +21,7 @@ Player::Player() {
     fHealthLossSpeed = 0.25;
     
     headphones.loadImage( "images/headphones.png" );
+    hand.loadImage( "images/hand.png" ); // http://upload.wikimedia.org/wikipedia/commons/f/fa/Hand.svg
 }
 
 void Player::setup( ofVec2f _pos ) {
@@ -142,12 +143,13 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     // Draw the player.
     ofSetRectMode( OF_RECTMODE_CENTER );
     ofSetColor( 0 );
-    ofRect( pos, wide, tall );
+    //ofRect( pos, wide, tall );
     
     // Draw the health. Taken from my Space Odyssey 2 code.
     ofPushMatrix();{
         
         ofTranslate( pos.x, pos.y);
+        
         
         { // Matt
             // Draw the health bar
@@ -166,11 +168,14 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
             ofSetColor( 0, 255, 0 );
             ofRect( -wide + offset, wide / 2 + offsetBar + offset, currentHealth, barHeight - offset * 2 );
         } // End Matt
+         
         
     }ofPopMatrix();
     
     ofSetColor( 255 );
-//    headphones.draw( pos, 50, 50 );
+    ofSetRectMode( OF_RECTMODE_CORNER );
+    //headphones.draw( pos, 50, 50 );
+    hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall );
     
     // Display a visual indicator of recorded capacity.
     if ( _recordedList.size() > 1 ) {
