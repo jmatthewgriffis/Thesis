@@ -648,7 +648,7 @@ void testApp::fSetupTutorial() {
     //float mLength = 800;
     //cout<<mLength<<endl;
     
-    addObject("a2#", m1Bass-100, -1); // test note
+    //addObject("a2#", m1Bass-100, -1); // test note
     
     addObject("d2#", m1Bass, -1);
     addObject("a2#", m1Bass, -1);
