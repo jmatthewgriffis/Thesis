@@ -33,7 +33,7 @@ public:
     float wide;
     float guideLineLength;
     ofColor c;
-    int colorTimer;
+    int colorTimer, noteTimer;
     
     bool destroyMe;
     bool drawAttention, bIsRecorded, bIsTouched;
@@ -44,4 +44,5 @@ public:
 //    Note myNote;
     
     float vol; // Volume
+    int noteDuration;
 };

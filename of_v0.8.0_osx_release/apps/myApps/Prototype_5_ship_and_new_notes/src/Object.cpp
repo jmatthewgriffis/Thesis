@@ -27,7 +27,7 @@ void Object::setup( vector< float > _staffPosList, string _whichNote, int _age )
     
     vel.set( 0.0, 0.0 );
     
-    colorTimer = 0;
+    colorTimer = noteTimer = 0;
     
     destroyMe = false;
     drawAttention = false;
@@ -37,6 +37,7 @@ void Object::setup( vector< float > _staffPosList, string _whichNote, int _age )
     // Note stuff.
     //    myNote.setup( whichNote );
     vol = 0.5f;
+    noteDuration = 30;
 }
 
 void Object::update( ofVec2f _pos ) {
@@ -47,6 +48,10 @@ void Object::update( ofVec2f _pos ) {
     
     // Move!
     pos += vel;
+    
+    if ( noteTimer > 0 ) {
+        noteTimer--;
+    }
     
     // Map the volume onto the distance between the player and the Object. Closer = louder.
     float tooFar = ofGetWidth() * 0.25 * 0.25;
@@ -63,7 +68,9 @@ void Object::update( ofVec2f _pos ) {
     if ( bIsTouched ) {
         fAddNote();
     } else if ( noteList.size() != 0 ) {
+        if ( noteTimer <= 0 ) {
             noteList.erase( noteList.begin() );
+        }
     }
     
     for ( int i = 0; i < noteList.size(); i++ ) {
@@ -213,7 +220,7 @@ void Object::fAddNote() {
     Note tmp;
     tmp.setup( whichNote );
     noteList.push_back( tmp );
-    
+    noteTimer = noteDuration;
 }
 
 void Object::fLimitLife() {

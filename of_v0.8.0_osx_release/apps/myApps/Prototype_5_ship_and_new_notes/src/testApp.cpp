@@ -57,8 +57,8 @@ void testApp::setup(){
     
     //myPlayer.setup();
     //myPlayer.setup( ofVec2f( 10200, 100 ) );
-    myPlayer.setup( ofVec2f( 100, 50 ) );
-    myPlayer2.setup( ofVec2f( 100, ofGetHeight() - 50 ) );
+    myPlayer.setup( ofVec2f( 100, iThirdOfScreen ) );
+    myPlayer2.setup( ofVec2f( 100, ofGetHeight() - iThirdOfScreen ) );
     
     // 0 is title screen, -1 is restart screen, 1 is game screen, 2 is boss screen.
     gameState = 1;
@@ -161,6 +161,14 @@ void testApp::draw(){
         if ( gameState == 1 ) {
             if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
                 myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
+            }
+            ofSetColor( 0 );
+            if ( bIsDebugging ) {
+                helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, 50 );
+                helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - 300, 50 );
+            }
+            if ( myPlayer.pos.x > ofGetWidth() / 2 ) {
+                helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - 210, 50 );
             }
         }
         
@@ -648,7 +656,7 @@ void testApp::fSetupTutorial() {
     //float mLength = 800;
     //cout<<mLength<<endl;
     
-    //addObject("a2#", m1Bass-100, -1); // test note
+    addObject("c3#", m1Bass-100, -1); // test note
     
     addObject("d2#", m1Bass, -1);
     addObject("a2#", m1Bass, -1);
@@ -1411,7 +1419,7 @@ void testApp::fDrawStaff() {
     helveticaJumbo.drawString("4", 275, ofGetHeight() - spacer * 4 );
     helveticaJumbo.drawString("4", 275, ofGetHeight() - spacer * 2 );
     
-    helvetica.drawString( "Finished! Press SHIFT + R to restart.", 20000, ofGetHeight() / 2 );
+    helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", 20000, ofGetHeight() / 2 );
 }
 
 //--------------------------------------------------------------
@@ -1550,6 +1558,10 @@ void testApp::keyPressed(int key){
             
             // Debug mode-----------------------------------------
         {
+        case '0':
+            bIsDebugging = !bIsDebugging;
+            break;
+            
         case '[':
             if ( bIsDebugging ) {
                 getThisOne--;
