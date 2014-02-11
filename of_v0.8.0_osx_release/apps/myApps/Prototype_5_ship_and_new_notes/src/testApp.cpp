@@ -25,8 +25,9 @@ void testApp::setup(){
     CGDisplayHideCursor(NULL); // ofHideCursor() does not work, but this does.
     
     helvetica.loadFont( "fonts/helvetica.otf", 24 );
-    trebleClef.loadImage( "images/clef_treble.png" );
-    bassClef.loadImage( "images/clef_bass.png" );
+    trebleClef.loadImage( "images/clef_treble.png" ); // http://clipartist.info/SVG/CLIPARTIST.ORG/TREBLE/treble_clef_treble_clef-555px.png
+    bassClef.loadImage( "images/clef_bass.png" ); // http://clipartist.info/RSS/openclipart.org/2011/April/15-Friday/bass_clef_bassclef-1979px.png
+    staffBracket.loadImage( "images/staff_bracket.png" ); // http://musescore.org/sites/musescore.org/files/issues/Curly%20brace%20extends%20to%20all%20staves.png
     
     // Background
     ofBackground( 255 );
@@ -264,9 +265,9 @@ void testApp::updateObjectList() {
         
         // Make volume dependent on player performance.
         if ( objectList[ i ].pos.y <= objectList[ i ].staffPosList[ 13 ] ) {
-            objectList[ i ].vol = ofMap( myPlayer.fHealth, 0, myPlayer.fHealthMax, 0.0, 1.0 );
+            //objectList[ i ].vol = ofMap( myPlayer.fHealth, 0, myPlayer.fHealthMax, 0.0, 1.0 );
         } else {
-            objectList[ i ].vol = ofMap( myPlayer2.fHealth, 0, myPlayer2.fHealthMax, 0.0, 1.0 );
+            //objectList[ i ].vol = ofMap( myPlayer2.fHealth, 0, myPlayer2.fHealthMax, 0.0, 1.0 );
         }
         
         objectList[ i ].update( myPlayer.pos );
@@ -1379,8 +1380,18 @@ void testApp::fDrawStaff() {
     //for ( int i = 2; i < ( numSections - 1 ); i++ ) {
     for ( int i = 2; i < 7; i++ ) {
         //if ( i != 7 ) {
-        ofLine( myPlayer.pos.x - ofGetWidth(), spacer * i, myPlayer.pos.x + ofGetWidth(), spacer * i );
-        ofLine( myPlayer.pos.x - ofGetWidth(), ofGetHeight() - ( spacer * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( spacer * i ) );
+        float xStart;
+        if ( myPlayer.pos.x < ofGetWidth() / 1.5 ) {
+            xStart = ( ofGetHeight() - spacer * 4 ) * staffBracket.getWidth() / staffBracket.getHeight();
+            // Draw initial vertical line.
+            ofSetLineWidth( 3 );
+            ofLine( xStart, spacer * 2, xStart, ofGetHeight() - spacer * 2 );
+            ofSetLineWidth( 1 );
+        } else {
+            xStart = myPlayer.pos.x - ofGetWidth();
+        }
+        ofLine( xStart, spacer * i, myPlayer.pos.x + ofGetWidth(), spacer * i );
+        ofLine( xStart, ofGetHeight() - ( spacer * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( spacer * i ) );
         //}
     }
     for ( int i = 0; i < 30; i++ ) {
@@ -1389,6 +1400,8 @@ void testApp::fDrawStaff() {
         // Draw the measure number.
         helvetica.drawString( ofToString( i + 1 ), 475 + fMeasureLength * i, spacer * 2);
     }
+    // Draw the initial bracket.
+    staffBracket.draw( 0, spacer * 2, ( ofGetHeight() - spacer * 4 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - spacer * 4 );
     // Draw the clefs.
     trebleClef.draw( 100, spacer * 4 - spacer * 7 / 2.15, ( spacer * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), spacer * 7 );
     bassClef.draw( 100, ofGetHeight() - spacer * 6, ( spacer * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), spacer * 3.1 );
@@ -1397,6 +1410,8 @@ void testApp::fDrawStaff() {
     helveticaJumbo.drawString("4", 275, spacer * 6 );
     helveticaJumbo.drawString("4", 275, ofGetHeight() - spacer * 4 );
     helveticaJumbo.drawString("4", 275, ofGetHeight() - spacer * 2 );
+    
+    helvetica.drawString( "Finished! Press SHIFT + R to restart.", 20000, ofGetHeight() / 2 );
 }
 
 //--------------------------------------------------------------

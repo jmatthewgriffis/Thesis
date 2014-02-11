@@ -50,7 +50,7 @@ void Player::update() {
         fHealth = 0;
     }
     
-    //pos.x += xVel;
+    pos.x += xVel;
     
     // Movement
     if ( allowMove ) {

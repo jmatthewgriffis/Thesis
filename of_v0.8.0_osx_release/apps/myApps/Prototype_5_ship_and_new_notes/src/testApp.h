@@ -111,5 +111,5 @@ public:
     
     float fMeasureLength;
     
-    ofImage trebleClef, bassClef;
+    ofImage trebleClef, bassClef, staffBracket;
 };
