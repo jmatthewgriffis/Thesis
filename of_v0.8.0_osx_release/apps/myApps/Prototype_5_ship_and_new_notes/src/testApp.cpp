@@ -25,6 +25,8 @@ void testApp::setup(){
     CGDisplayHideCursor(NULL); // ofHideCursor() does not work, but this does.
     
     helvetica.loadFont( "fonts/helvetica.otf", 24 );
+    trebleClef.loadImage( "images/clef_treble.png" );
+    bassClef.loadImage( "images/clef_bass.png" );
     
     // Background
     ofBackground( 255 );
@@ -35,6 +37,7 @@ void testApp::setup(){
         iThirdOfScreen--;
     }
     fCalcAllNotePos();
+    helveticaJumbo.loadFont("fonts/helvetica.otf", ( iThirdOfScreen / 8 ) * 2 );
     
     fMeasureLength = 0;
     
@@ -195,8 +198,6 @@ void testApp::draw(){
         //ofSetColor(0);
         //helvetica.drawString("[UP]", myPlayer.pos.x, myPlayer.pos.y - myPlayer.tall / 2 );
         //helvetica.drawString("[DOWN]", myPlayer.pos.x, myPlayer.pos.y + myPlayer.tall / 2 );
-        
-        cout<<objectList[ 1 ].c<<endl;
         
         if ( gameState == 1 ) {
             myCam.end();
@@ -646,7 +647,7 @@ void testApp::fSetupTutorial() {
     //float mLength = 800;
     //cout<<mLength<<endl;
     
-    addObject("c3_middle", m1Bass-300, -1); // test note
+    addObject("a2#", m1Bass-100, -1); // test note
     
     addObject("d2#", m1Bass, -1);
     addObject("a2#", m1Bass, -1);
@@ -1388,6 +1389,14 @@ void testApp::fDrawStaff() {
         // Draw the measure number.
         helvetica.drawString( ofToString( i + 1 ), 475 + fMeasureLength * i, spacer * 2);
     }
+    // Draw the clefs.
+    trebleClef.draw( 100, spacer * 4 - spacer * 7 / 2.15, ( spacer * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), spacer * 7 );
+    bassClef.draw( 100, ofGetHeight() - spacer * 6, ( spacer * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), spacer * 3.1 );
+    // Draw the time signature.
+    helveticaJumbo.drawString("4", 275, spacer * 4 );
+    helveticaJumbo.drawString("4", 275, spacer * 6 );
+    helveticaJumbo.drawString("4", 275, ofGetHeight() - spacer * 4 );
+    helveticaJumbo.drawString("4", 275, ofGetHeight() - spacer * 2 );
 }
 
 //--------------------------------------------------------------

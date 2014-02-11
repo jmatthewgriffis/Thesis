@@ -98,7 +98,7 @@ public:
     // This will be used to time certain events.
     double lastTime;
     
-    ofTrueTypeFont helvetica;
+    ofTrueTypeFont helvetica, helveticaJumbo;
     
     // Store a bunch of strings to accomodate different controls.
     string sUp, sLeft, sDown, sRight, sAltUp, sAltLeft, sAltDown, sAltRight;
@@ -110,4 +110,6 @@ public:
     int iThirdOfScreen;
     
     float fMeasureLength;
+    
+    ofImage trebleClef, bassClef;
 };
