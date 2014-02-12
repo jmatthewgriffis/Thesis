@@ -5,6 +5,7 @@
 #include "Note.h"
 #include "Player.h"
 #include "Obstacle.h"
+#include "ofxGamepad.h"
 
 #define numYpos 30
 #define numLines 13

@@ -12,6 +12,12 @@
 		CDC60D7C181C77B900A26838 /* Note.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D7A181C77B800A26838 /* Note.cpp */; };
 		CDC60D80181C929B00A26838 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D7E181C929B00A26838 /* Player.cpp */; };
 		CDC8500D183A6F9B00959567 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC8500B183A6F9B00959567 /* Obstacle.cpp */; };
+		CDF6C5DF18AB2D36000B8877 /* ofxGamepad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF6C5A018AB2D36000B8877 /* ofxGamepad.cpp */; };
+		CDF6C5E018AB2D36000B8877 /* ofxGamepadCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF6C5A218AB2D36000B8877 /* ofxGamepadCamera.cpp */; };
+		CDF6C5E118AB2D36000B8877 /* ofxGamepadHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF6C5A518AB2D36000B8877 /* ofxGamepadHandler.cpp */; };
+		CDF6C5E218AB2D36000B8877 /* ofxGamepadLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF6C5A718AB2D36000B8877 /* ofxGamepadLinux.cpp */; };
+		CDF6C5E318AB2D36000B8877 /* ofxGamepadOIS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDF6C5A918AB2D36000B8877 /* ofxGamepadOIS.cpp */; };
+		CDF6C5E418AB2D36000B8877 /* libOIS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CDF6C5D818AB2D36000B8877 /* libOIS.a */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -73,6 +79,53 @@
 		CDC60D7F181C929B00A26838 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		CDC8500B183A6F9B00959567 /* Obstacle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Obstacle.cpp; sourceTree = "<group>"; };
 		CDC8500C183A6F9B00959567 /* Obstacle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obstacle.h; sourceTree = "<group>"; };
+		CDF6C5A018AB2D36000B8877 /* ofxGamepad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGamepad.cpp; sourceTree = "<group>"; };
+		CDF6C5A118AB2D36000B8877 /* ofxGamepad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxGamepad.h; sourceTree = "<group>"; };
+		CDF6C5A218AB2D36000B8877 /* ofxGamepadCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGamepadCamera.cpp; sourceTree = "<group>"; };
+		CDF6C5A318AB2D36000B8877 /* ofxGamepadCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxGamepadCamera.h; sourceTree = "<group>"; };
+		CDF6C5A418AB2D36000B8877 /* ofxGamepadConfigs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxGamepadConfigs.h; sourceTree = "<group>"; };
+		CDF6C5A518AB2D36000B8877 /* ofxGamepadHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGamepadHandler.cpp; sourceTree = "<group>"; };
+		CDF6C5A618AB2D36000B8877 /* ofxGamepadHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxGamepadHandler.h; sourceTree = "<group>"; };
+		CDF6C5A718AB2D36000B8877 /* ofxGamepadLinux.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGamepadLinux.cpp; sourceTree = "<group>"; };
+		CDF6C5A818AB2D36000B8877 /* ofxGamepadLinux.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxGamepadLinux.h; sourceTree = "<group>"; };
+		CDF6C5A918AB2D36000B8877 /* ofxGamepadOIS.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGamepadOIS.cpp; sourceTree = "<group>"; };
+		CDF6C5AA18AB2D36000B8877 /* ofxGamepadOIS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxGamepadOIS.h; sourceTree = "<group>"; };
+		CDF6C5AF18AB2D36000B8877 /* EventHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventHelpers.h; sourceTree = "<group>"; };
+		CDF6C5B018AB2D36000B8877 /* LinuxForceFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinuxForceFeedback.h; sourceTree = "<group>"; };
+		CDF6C5B118AB2D36000B8877 /* LinuxInputManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinuxInputManager.h; sourceTree = "<group>"; };
+		CDF6C5B218AB2D36000B8877 /* LinuxJoyStickEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinuxJoyStickEvents.h; sourceTree = "<group>"; };
+		CDF6C5B318AB2D36000B8877 /* LinuxKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinuxKeyboard.h; sourceTree = "<group>"; };
+		CDF6C5B418AB2D36000B8877 /* LinuxMouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinuxMouse.h; sourceTree = "<group>"; };
+		CDF6C5B518AB2D36000B8877 /* LinuxPrereqs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinuxPrereqs.h; sourceTree = "<group>"; };
+		CDF6C5B718AB2D36000B8877 /* MacHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacHelpers.h; sourceTree = "<group>"; };
+		CDF6C5B818AB2D36000B8877 /* MacHIDManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacHIDManager.h; sourceTree = "<group>"; };
+		CDF6C5B918AB2D36000B8877 /* MacInputManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacInputManager.h; sourceTree = "<group>"; };
+		CDF6C5BA18AB2D36000B8877 /* MacJoyStick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacJoyStick.h; sourceTree = "<group>"; };
+		CDF6C5BB18AB2D36000B8877 /* MacKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacKeyboard.h; sourceTree = "<group>"; };
+		CDF6C5BC18AB2D36000B8877 /* MacMouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacMouse.h; sourceTree = "<group>"; };
+		CDF6C5BD18AB2D36000B8877 /* MacPrereqs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacPrereqs.h; sourceTree = "<group>"; };
+		CDF6C5BE18AB2D36000B8877 /* OIS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OIS.h; sourceTree = "<group>"; };
+		CDF6C5BF18AB2D36000B8877 /* OISConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISConfig.h; sourceTree = "<group>"; };
+		CDF6C5C018AB2D36000B8877 /* OISEffect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISEffect.h; sourceTree = "<group>"; };
+		CDF6C5C118AB2D36000B8877 /* OISEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISEvents.h; sourceTree = "<group>"; };
+		CDF6C5C218AB2D36000B8877 /* OISException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISException.h; sourceTree = "<group>"; };
+		CDF6C5C318AB2D36000B8877 /* OISFactoryCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISFactoryCreator.h; sourceTree = "<group>"; };
+		CDF6C5C418AB2D36000B8877 /* OISForceFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISForceFeedback.h; sourceTree = "<group>"; };
+		CDF6C5C518AB2D36000B8877 /* OISInputManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISInputManager.h; sourceTree = "<group>"; };
+		CDF6C5C618AB2D36000B8877 /* OISInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISInterface.h; sourceTree = "<group>"; };
+		CDF6C5C718AB2D36000B8877 /* OISJoyStick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISJoyStick.h; sourceTree = "<group>"; };
+		CDF6C5C818AB2D36000B8877 /* OISKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISKeyboard.h; sourceTree = "<group>"; };
+		CDF6C5C918AB2D36000B8877 /* OISMouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISMouse.h; sourceTree = "<group>"; };
+		CDF6C5CA18AB2D36000B8877 /* OISMultiTouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISMultiTouch.h; sourceTree = "<group>"; };
+		CDF6C5CB18AB2D36000B8877 /* OISObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISObject.h; sourceTree = "<group>"; };
+		CDF6C5CC18AB2D36000B8877 /* OISPrereqs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OISPrereqs.h; sourceTree = "<group>"; };
+		CDF6C5CE18AB2D36000B8877 /* Win32ForceFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Win32ForceFeedback.h; sourceTree = "<group>"; };
+		CDF6C5CF18AB2D36000B8877 /* Win32InputManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Win32InputManager.h; sourceTree = "<group>"; };
+		CDF6C5D018AB2D36000B8877 /* Win32JoyStick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Win32JoyStick.h; sourceTree = "<group>"; };
+		CDF6C5D118AB2D36000B8877 /* Win32KeyBoard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Win32KeyBoard.h; sourceTree = "<group>"; };
+		CDF6C5D218AB2D36000B8877 /* Win32Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Win32Mouse.h; sourceTree = "<group>"; };
+		CDF6C5D318AB2D36000B8877 /* Win32Prereqs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Win32Prereqs.h; sourceTree = "<group>"; };
+		CDF6C5D818AB2D36000B8877 /* libOIS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOIS.a; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -106,6 +159,7 @@
 				E7F985F815E0DEA3003869B5 /* Accelerate.framework in Frameworks */,
 				E7E077E815D3B6510020DFD4 /* QTKit.framework in Frameworks */,
 				E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */,
+				CDF6C5E418AB2D36000B8877 /* libOIS.a in Frameworks */,
 				E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */,
 				E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */,
 				E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */,
@@ -129,6 +183,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				CDF6C59E18AB2D36000B8877 /* ofxGamepad */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -161,6 +216,134 @@
 				BBAB23BE13894E4700AA2426 /* GLUT.framework */,
 			);
 			name = "3rd party frameworks";
+			sourceTree = "<group>";
+		};
+		CDF6C59E18AB2D36000B8877 /* ofxGamepad */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C59F18AB2D36000B8877 /* src */,
+				CDF6C5AB18AB2D36000B8877 /* libs */,
+			);
+			name = ofxGamepad;
+			sourceTree = "<group>";
+		};
+		CDF6C59F18AB2D36000B8877 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C5A018AB2D36000B8877 /* ofxGamepad.cpp */,
+				CDF6C5A118AB2D36000B8877 /* ofxGamepad.h */,
+				CDF6C5A218AB2D36000B8877 /* ofxGamepadCamera.cpp */,
+				CDF6C5A318AB2D36000B8877 /* ofxGamepadCamera.h */,
+				CDF6C5A418AB2D36000B8877 /* ofxGamepadConfigs.h */,
+				CDF6C5A518AB2D36000B8877 /* ofxGamepadHandler.cpp */,
+				CDF6C5A618AB2D36000B8877 /* ofxGamepadHandler.h */,
+				CDF6C5A718AB2D36000B8877 /* ofxGamepadLinux.cpp */,
+				CDF6C5A818AB2D36000B8877 /* ofxGamepadLinux.h */,
+				CDF6C5A918AB2D36000B8877 /* ofxGamepadOIS.cpp */,
+				CDF6C5AA18AB2D36000B8877 /* ofxGamepadOIS.h */,
+			);
+			name = src;
+			path = addons/ofxGamepad/src;
+			sourceTree = "<group>";
+		};
+		CDF6C5AB18AB2D36000B8877 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C5AC18AB2D36000B8877 /* wgois */,
+			);
+			name = libs;
+			path = addons/ofxGamepad/libs;
+			sourceTree = "<group>";
+		};
+		CDF6C5AC18AB2D36000B8877 /* wgois */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C5AD18AB2D36000B8877 /* include */,
+				CDF6C5D418AB2D36000B8877 /* lib */,
+			);
+			path = wgois;
+			sourceTree = "<group>";
+		};
+		CDF6C5AD18AB2D36000B8877 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C5AE18AB2D36000B8877 /* linux */,
+				CDF6C5B618AB2D36000B8877 /* mac */,
+				CDF6C5BE18AB2D36000B8877 /* OIS.h */,
+				CDF6C5BF18AB2D36000B8877 /* OISConfig.h */,
+				CDF6C5C018AB2D36000B8877 /* OISEffect.h */,
+				CDF6C5C118AB2D36000B8877 /* OISEvents.h */,
+				CDF6C5C218AB2D36000B8877 /* OISException.h */,
+				CDF6C5C318AB2D36000B8877 /* OISFactoryCreator.h */,
+				CDF6C5C418AB2D36000B8877 /* OISForceFeedback.h */,
+				CDF6C5C518AB2D36000B8877 /* OISInputManager.h */,
+				CDF6C5C618AB2D36000B8877 /* OISInterface.h */,
+				CDF6C5C718AB2D36000B8877 /* OISJoyStick.h */,
+				CDF6C5C818AB2D36000B8877 /* OISKeyboard.h */,
+				CDF6C5C918AB2D36000B8877 /* OISMouse.h */,
+				CDF6C5CA18AB2D36000B8877 /* OISMultiTouch.h */,
+				CDF6C5CB18AB2D36000B8877 /* OISObject.h */,
+				CDF6C5CC18AB2D36000B8877 /* OISPrereqs.h */,
+				CDF6C5CD18AB2D36000B8877 /* win32 */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		CDF6C5AE18AB2D36000B8877 /* linux */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C5AF18AB2D36000B8877 /* EventHelpers.h */,
+				CDF6C5B018AB2D36000B8877 /* LinuxForceFeedback.h */,
+				CDF6C5B118AB2D36000B8877 /* LinuxInputManager.h */,
+				CDF6C5B218AB2D36000B8877 /* LinuxJoyStickEvents.h */,
+				CDF6C5B318AB2D36000B8877 /* LinuxKeyboard.h */,
+				CDF6C5B418AB2D36000B8877 /* LinuxMouse.h */,
+				CDF6C5B518AB2D36000B8877 /* LinuxPrereqs.h */,
+			);
+			path = linux;
+			sourceTree = "<group>";
+		};
+		CDF6C5B618AB2D36000B8877 /* mac */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C5B718AB2D36000B8877 /* MacHelpers.h */,
+				CDF6C5B818AB2D36000B8877 /* MacHIDManager.h */,
+				CDF6C5B918AB2D36000B8877 /* MacInputManager.h */,
+				CDF6C5BA18AB2D36000B8877 /* MacJoyStick.h */,
+				CDF6C5BB18AB2D36000B8877 /* MacKeyboard.h */,
+				CDF6C5BC18AB2D36000B8877 /* MacMouse.h */,
+				CDF6C5BD18AB2D36000B8877 /* MacPrereqs.h */,
+			);
+			path = mac;
+			sourceTree = "<group>";
+		};
+		CDF6C5CD18AB2D36000B8877 /* win32 */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C5CE18AB2D36000B8877 /* Win32ForceFeedback.h */,
+				CDF6C5CF18AB2D36000B8877 /* Win32InputManager.h */,
+				CDF6C5D018AB2D36000B8877 /* Win32JoyStick.h */,
+				CDF6C5D118AB2D36000B8877 /* Win32KeyBoard.h */,
+				CDF6C5D218AB2D36000B8877 /* Win32Mouse.h */,
+				CDF6C5D318AB2D36000B8877 /* Win32Prereqs.h */,
+			);
+			path = win32;
+			sourceTree = "<group>";
+		};
+		CDF6C5D418AB2D36000B8877 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C5D718AB2D36000B8877 /* osx */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		CDF6C5D718AB2D36000B8877 /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				CDF6C5D818AB2D36000B8877 /* libOIS.a */,
+			);
+			path = osx;
 			sourceTree = "<group>";
 		};
 		E4328144138ABC890047C5CB /* Products */ = {
@@ -309,9 +492,14 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				CDC60D79181C76B500A26838 /* Object.cpp in Sources */,
+				CDF6C5E018AB2D36000B8877 /* ofxGamepadCamera.cpp in Sources */,
 				CDC8500D183A6F9B00959567 /* Obstacle.cpp in Sources */,
+				CDF6C5E318AB2D36000B8877 /* ofxGamepadOIS.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
+				CDF6C5DF18AB2D36000B8877 /* ofxGamepad.cpp in Sources */,
 				CDC60D7C181C77B900A26838 /* Note.cpp in Sources */,
+				CDF6C5E118AB2D36000B8877 /* ofxGamepadHandler.cpp in Sources */,
+				CDF6C5E218AB2D36000B8877 /* ofxGamepadLinux.cpp in Sources */,
 				CDC60D80181C929B00A26838 /* Player.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -468,8 +656,10 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
+					"/Users/jmatthewgriffis/Documents/GitHub\\ repos/Thesis/of_v0.8.0_osx_release/apps/myApps/Prototype_6_controller_and_new_mechanic/addons/ofxGamepad/libs/wgois/lib/osx",
 				);
 				PRODUCT_NAME = Prototype_6_controller_and_new_mechanicDebug;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -553,8 +743,10 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_49)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
+					"/Users/jmatthewgriffis/Documents/GitHub\\ repos/Thesis/of_v0.8.0_osx_release/apps/myApps/Prototype_6_controller_and_new_mechanic/addons/ofxGamepad/libs/wgois/lib/osx",
 				);
 				PRODUCT_NAME = Prototype_6_controller_and_new_mechanic;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
