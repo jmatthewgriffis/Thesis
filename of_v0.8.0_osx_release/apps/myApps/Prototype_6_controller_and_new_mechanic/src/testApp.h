@@ -5,7 +5,8 @@
 #include "Note.h"
 #include "Player.h"
 #include "Obstacle.h"
-#include "ofxGamepad.h"
+//#include "ofxGamepad.h"
+#include "ofxGamepadHandler.h"
 
 #define numYpos 30
 #define numLines 13
@@ -35,6 +36,14 @@ public:
     void gotMessage(ofMessage msg);
     
     //--------MY STUFF STARTS HERE--------
+    
+    // Start gamepad stuff
+    
+    void axisChanged(ofxGamepadAxisEvent &e);
+    void buttonPressed(ofxGamepadButtonEvent &e);
+    void buttonReleased(ofxGamepadButtonEvent &e);
+    
+    // End gamepad stuff.
     
     void cleanup();
     void exit(); // Technically this is built-in.

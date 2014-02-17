@@ -6,6 +6,18 @@ void testApp::setup(){
     // Necessary for a standalone app.
     //ofSetDataPathRoot("data/");
     
+    { // Straight from the ofxGamepad example:
+        ofxGamepadHandler::get()->enableHotplug();
+        
+        //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
+        /*if(ofxGamepadHandler::get()->getNumPads()>0){
+			ofxGamepad* pad = ofxGamepadHandler::get()->getGamepad(0);
+			ofAddListener(pad->onAxisChanged, this, &testApp::axisChanged);
+			ofAddListener(pad->onButtonPressed, this, &testApp::buttonPressed);
+			ofAddListener(pad->onButtonReleased, this, &testApp::buttonReleased);
+        }*/
+    }
+    
     // Switch debug mode on and off.
     bIsDebugging = false;
     
@@ -138,6 +150,8 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
+    ofxGamepadHandler::get()->draw(10,10);
     
     if ( gameState == 0 ) {
         fDrawTitleScreen();
