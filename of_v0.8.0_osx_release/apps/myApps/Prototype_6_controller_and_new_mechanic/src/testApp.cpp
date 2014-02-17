@@ -10,12 +10,12 @@ void testApp::setup(){
         ofxGamepadHandler::get()->enableHotplug();
         
         //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
-        /*if(ofxGamepadHandler::get()->getNumPads()>0){
+        if(ofxGamepadHandler::get()->getNumPads()>0){
 			ofxGamepad* pad = ofxGamepadHandler::get()->getGamepad(0);
 			ofAddListener(pad->onAxisChanged, this, &testApp::axisChanged);
 			ofAddListener(pad->onButtonPressed, this, &testApp::buttonPressed);
 			ofAddListener(pad->onButtonReleased, this, &testApp::buttonReleased);
-        }*/
+        }
     }
     
     // Switch debug mode on and off.
@@ -1449,6 +1449,37 @@ void testApp::fCalcAllNotePos() {
         }
         staffPosList.push_back( tmp );
     }
+}
+
+//--------------------------------------------------------------
+
+// Again, from the ofxGamepad example:
+void testApp::axisChanged(ofxGamepadAxisEvent& e)
+{
+    //if ( e.axis == 2 ) myPlayer.pos.x += ofMap( e.value, -1, 1, -5, 5 );
+    if ( e.axis == 3 ) {
+        if ( e.value < 0 ) {
+            myPlayer.up = true;
+            myPlayer.down = false;
+        } else if ( e.value > 0 ) {
+            myPlayer.up = false;
+            myPlayer.down = true;
+        } else {
+            myPlayer.up = false;
+            myPlayer.down = false;
+        }
+        cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
+    }
+}
+
+void testApp::buttonPressed(ofxGamepadButtonEvent& e)
+{
+	cout << "BUTTON " << e.button << " PRESSED" << endl;
+}
+
+void testApp::buttonReleased(ofxGamepadButtonEvent& e)
+{
+	cout << "BUTTON " << e.button << " RELEASED" << endl;
 }
 
 //--------------------------------------------------------------
