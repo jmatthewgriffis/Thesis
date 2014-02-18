@@ -173,9 +173,9 @@ void testApp::draw(){
         
         // Move the camera with the player, as long as it dosn't move out of bounds.
         if ( gameState == 1 ) {
-            if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
+            //if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
                 myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
-            }
+            //}
             ofSetColor( 0 );
             if ( bIsDebugging ) {
                 helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, 50 );
@@ -1402,15 +1402,16 @@ void testApp::fDrawStaff() {
     //for ( int i = 2; i < ( numSections - 1 ); i++ ) {
     for ( int i = 2; i < 7; i++ ) {
         //if ( i != 7 ) {
+        float staffStart = ( ofGetHeight() - spacer * 4 ) * staffBracket.getWidth() / staffBracket.getHeight();
         float xStart;
-        if ( myPlayer.pos.x < ofGetWidth() / 1.5 ) {
-            xStart = ( ofGetHeight() - spacer * 4 ) * staffBracket.getWidth() / staffBracket.getHeight();
+        if ( myPlayer.pos.x < staffStart + ofGetWidth() ) {
+            xStart = staffStart;
             // Draw initial vertical line.
             ofSetLineWidth( 3 );
             ofLine( xStart, spacer * 2, xStart, ofGetHeight() - spacer * 2 );
             ofSetLineWidth( 1 );
         } else {
-            xStart = myPlayer.pos.x - ofGetWidth();
+            xStart = myPlayer.pos.x - ofGetWidth() / 2; // FIND ME
         }
         ofLine( xStart, spacer * i, myPlayer.pos.x + ofGetWidth(), spacer * i );
         ofLine( xStart, ofGetHeight() - ( spacer * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( spacer * i ) );
