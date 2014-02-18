@@ -69,8 +69,8 @@ void testApp::setup(){
     iStaffAlpha = iStaffAlphaMin;
     iStaffAlphaVel = 0.5;
     
-    myPlayer.setup( ofVec2f( iScaler * 4, iThirdOfScreen ) );
-    myPlayer2.setup( ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen ) );
+    myPlayer.setup( iScaler, ofVec2f( iScaler * 4, iThirdOfScreen ) );
+    myPlayer2.setup( iScaler, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen ) );
     
     //testPattern(); //(boss battle)
     fSetupTutorial();
@@ -217,7 +217,7 @@ void testApp::addObject( string _note, float _xPos, int _age ) {
     
     // This function adds an NPC Object.
     Object tmp;
-    tmp.setup( staffPosList, _note, _age );
+    tmp.setup( iScaler, staffPosList, _note, _age );
     tmp.pos.x = _xPos;
     objectList.push_back( tmp );
 }
@@ -227,7 +227,7 @@ void testApp::addRecordedObject( string _note, ofVec2f _vel, int _age ) {
     
     // This function copies a recorded Object into a static vector that gets neither updated nor drawn.
     Object tmp;
-    tmp.setup( staffPosList, _note, _age );
+    tmp.setup( iScaler, staffPosList, _note, _age );
     tmp.vel.set( _vel );
     recordedList.push_back( tmp );
 }
@@ -237,7 +237,7 @@ void testApp::addReplayedObject( string _note, ofVec2f _vel, int _age ) {
     
     // This function copies an Object from the "recorded" vector to the main Object vector. It also reverses horizontal velocity if needed so the Object can travel the other direction.
     Object tmp;
-    tmp.setup( staffPosList, _note, _age );
+    tmp.setup( iScaler, staffPosList, _note, _age );
     tmp.pos.x = myPlayer.pos.x;
     tmp.vel.set( _vel );
     if ( tmp.vel.x < 0 ) tmp.vel.x *= -1;

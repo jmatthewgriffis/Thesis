@@ -17,7 +17,7 @@ class Object {
 public:
     Object();
     
-    void setup( vector< float > _staffPosList, string _whichNote, int _age );
+    void setup( int _iScaler, vector< float > _staffPosList, string _whichNote, int _age );
     void update( ofVec2f _pos );
     void draw();
     
@@ -26,7 +26,7 @@ public:
     float fReturnYPos( string _whichNote );
     void fAddNote();
     
-    int age;
+    int iScaler, age;
     
     ofVec2f pos, vel;
     float tall;

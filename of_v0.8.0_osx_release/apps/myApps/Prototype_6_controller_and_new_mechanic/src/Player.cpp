@@ -10,12 +10,6 @@
 
 Player::Player() {
     
-    wide = 100;
-    tall = wide;
-    xVel = 7.25; // was 5, need to make sure doesn't screw up. Yields 120bpm.
-    jumpVel = 10;
-    radius = 40;
-    angleVel = 15;
     capacity = CAPACITY;
     fHealthMax = 100;
     fHealthLossSpeed = 0.25;
@@ -24,7 +18,17 @@ Player::Player() {
     hand.loadImage( "images/hand.png" ); // http://upload.wikimedia.org/wikipedia/commons/f/fa/Hand.svg
 }
 
-void Player::setup( ofVec2f _pos ) {
+void Player::setup( int _iScaler, ofVec2f _pos ) {
+    
+    iScaler = _iScaler;
+    
+    wide = iScaler * 4;
+    tall = wide;
+    xVel = float( iScaler / 3.4483 ); // Yields 120bpm.
+    jumpVel = iScaler / 2.5;
+    radius = iScaler * 1.6;
+    //angleVel = float( iScaler / 1.6667 );
+    angleVel = 15;
     
     up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = false;
     allowMove = allowJump = bAllowRecord = bAllowReplay = true;
@@ -151,12 +155,12 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         ofTranslate( pos.x, pos.y);
         
         
-        { // Matt
+        {
             // Draw the health bar
             ofSetRectMode( OF_RECTMODE_CORNER );
             float offset = 1;
-            float offsetBar = 10;
-            float barHeight = 10;
+            float offsetBar = iScaler / 2.5;
+            float barHeight = iScaler / 2.5;
             float barLength = wide * 2;
             float currentHealth = ofMap( fHealth, 0, fHealthMax, 0, barLength - offset * 2 );
             // The border.
@@ -167,14 +171,14 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
             // The current health.
             ofSetColor( 0, 255, 0 );
             ofRect( -wide + offset, wide / 2 + offsetBar + offset, currentHealth, barHeight - offset * 2 );
-        } // End Matt
+        }
          
         
     }ofPopMatrix();
     
     ofSetColor( 255 );
     ofSetRectMode( OF_RECTMODE_CORNER );
-    //headphones.draw( pos, 50, 50 );
+    //headphones.draw( pos, iScaler * 2, iScaler * 2 );
     hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall );
     
     // Display a visual indicator of recorded capacity.
@@ -208,7 +212,7 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
             // Feedback for no capacity.
             if ( bIsFull ) {
                 ofSetColor( 0 );
-                _font.drawString("X", pos.x + 30, pos.y - 30 );
+                _font.drawString("X", pos.x + float( iScaler / 0.8333 ), pos.y - float( iScaler / 0.8333 ) );
             }
             ofSetColor( 0, 255, 0 );
         }
@@ -216,11 +220,11 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
             // Feedback for nothing to replay.
             if ( bIsEmpty ) {
                 ofSetColor( 0 );
-                _font.drawString("?", pos.x + 30, pos.y - 30 );
+                _font.drawString("?", pos.x + float( iScaler / 0.8333 ), pos.y - float( iScaler / 0.8333 ) );
             }
             ofSetColor( 0, 0, 255 );
         }
-        ofCircle( actPos, 10 );
+        ofCircle( actPos, iScaler / 2.5 );
     }
 }
 

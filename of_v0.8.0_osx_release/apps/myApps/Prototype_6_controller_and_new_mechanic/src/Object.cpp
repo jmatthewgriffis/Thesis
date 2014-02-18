@@ -12,8 +12,9 @@ Object::Object() {
     
 }
 
-void Object::setup( vector< float > _staffPosList, string _whichNote, int _age ) {
+void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNote, int _age ) {
     
+    iScaler = _iScaler;
     staffPosList = _staffPosList;
     whichNote = _whichNote;
     age = _age;
@@ -92,7 +93,7 @@ void Object::update( ofVec2f _pos ) {
     // What happens when the Object goes offscreen?
     {
         // Goes off on the right, warp to the other side.
-        //float margin = 100;
+        //float margin = iScaler * 4;
         //if ( pos.x > ofGetWidth() + margin && vel.x > 0 ) {
         //pos.x = -margin;
         /*
@@ -102,7 +103,7 @@ void Object::update( ofVec2f _pos ) {
          */
         //}
         // Goes off on the left, warp to the other side.
-        float farEnoughForRhythm = 600;
+        float farEnoughForRhythm = iScaler * 24;
         if ( pos.x < 0 && vel.x < 0 ) pos.x = ofGetWidth() + farEnoughForRhythm;
     }
     
