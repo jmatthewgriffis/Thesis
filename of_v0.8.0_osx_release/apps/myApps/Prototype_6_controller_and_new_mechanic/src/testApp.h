@@ -5,11 +5,10 @@
 #include "Note.h"
 #include "Player.h"
 #include "Obstacle.h"
-//#include "ofxGamepad.h"
 #include "ofxGamepadHandler.h"
 
 #define numYpos 30
-#define numLines 13
+//#define numLines 13
 
 /*
  So many thanks to:
@@ -37,89 +36,65 @@ public:
     
     //--------MY STUFF STARTS HERE--------
     
-    // Start gamepad stuff
-    
+    // Gamepad stuff
     void axisChanged(ofxGamepadAxisEvent &e);
     void buttonPressed(ofxGamepadButtonEvent &e);
     void buttonReleased(ofxGamepadButtonEvent &e);
     
-    // End gamepad stuff.
-    
     void cleanup();
-    void exit(); // Technically this is built-in.
+    void exit();
     
     void fDrawTitleScreen();
     void fDrawRestartScreen();
-    void fDrawTutorialInstructions();
-    void fSetupTutorial();
     void fDrawStaff();
-    void fCalcAllNotePos();
+    void fDrawTutorialInstructions();
     
-    // Manage the objects.
+    void fCalcAllNotePos();
+    void testPattern();
+    void fSetupTutorial();
+    void fWriteControls();
+    
     void addObject( string _note, float _xPos, int _age );
     void addRecordedObject( string _note, ofVec2f _vel, int _age );
     void addReplayedObject( string _note, ofVec2f _vel, int _age );
     void updateObjectList();
     void fRecord( int _i );
     void fReplay();
-    void testPattern();
     
-    // Handle collision.
     void playerCollidesWithGround();
     void playerCollidesWithObject();
     void playerCollidesWithObstacle();
     void objectCollidesWithObstacle();
     
-    // Also record the controls (left- or right-handed).
-    void fWriteControls();
-    
-    // Store all the y-pos of the notes on the musical staff.
     vector< float > staffPosList;
-    
-    // Store all the obstacles.
     vector< Obstacle > obstacleList;
+    vector< Object > objectList;
+    vector< Object > recordedList;
     
-    // Store all the notes.
-    vector< Object > objectList; // Enemies, objects, etc.
-    vector< Object > recordedList; // Store recorded Objects for later use.
-    
-    Player myPlayer, myPlayer2;
-    
-    // Accomodate right-handed and left-handed.
-    bool bIsLefty;
-    
-    // Prevent multiple record calls from the same action.
-    bool bIsRecording;
-    
-    // Switch between game modes.
     int gameState, currentState;
-    bool bIsDebugging;
-    
-    int frameRate, objectLife;
-    
-    // Control the staff lines' transparency.
+    int frameRate;
+    int objectLife;
     int iStaffAlphaMin, iStaffAlphaMax;
+    int getThisOne; // Highlight a specific object.
+    int iThirdOfScreen;
+    
     float iStaffAlpha, iStaffAlphaVel;
+    float fMeasureLength;
     
-    // Highlight a specific object.
-    int getThisOne;
+    bool bIsLefty; // Left-handed control scheme
+    bool bIsRecording; // Prevent multiple record calls from the same action.
+    bool bIsDebugging;
     bool bHighlightNote;
-    
-    // This will be used to time certain events.
-    double lastTime;
-    
-    ofTrueTypeFont helvetica, helveticaJumbo;
+    bool bShiftIsPressed;
     
     // Store a bunch of strings to accomodate different controls.
     string sUp, sLeft, sDown, sRight, sAltUp, sAltLeft, sAltDown, sAltRight;
     
-    ofEasyCam myCam;
-    
-    bool bShiftIsPressed;
-    
-    int iThirdOfScreen;
-    
-    float fMeasureLength;
+    ofTrueTypeFont helvetica, helveticaJumbo;
     
     ofImage trebleClef, bassClef, staffBracket;
+    
+    ofEasyCam myCam;
+    
+    Player myPlayer, myPlayer2;
 };

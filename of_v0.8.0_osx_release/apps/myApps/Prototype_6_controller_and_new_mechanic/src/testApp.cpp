@@ -23,7 +23,6 @@ void testApp::setup(){
     
     // Support r-restart:
     cleanup();
-    lastTime = ofGetElapsedTimef();
     
     frameRate = 60;
     objectLife = 7 * frameRate;
