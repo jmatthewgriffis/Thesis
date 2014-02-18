@@ -77,6 +77,7 @@ public:
     int iStaffAlphaMin, iStaffAlphaMax;
     int getThisOne; // Highlight a specific object.
     int iThirdOfScreen;
+    int iScaler; // Scale everything based on screen size.
     
     float iStaffAlpha, iStaffAlphaVel;
     float fMeasureLength;

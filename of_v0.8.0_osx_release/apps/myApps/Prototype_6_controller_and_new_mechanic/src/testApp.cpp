@@ -3,8 +3,24 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     
-    // Necessary for a standalone app.
-    //ofSetDataPathRoot("data/");
+    //ofSetDataPathRoot("data/"); // Necessary for a standalone app.
+    
+    cleanup(); // Support r-restart.
+    
+    // Maintenance
+    frameRate = 60;
+    ofSetFrameRate( frameRate );
+    ofSetVerticalSync( true );
+    ofEnableAlphaBlending();
+    ofSetCircleResolution( 100 );
+    myCam.disableMouseInput();
+    CGDisplayHideCursor(NULL); // ofHideCursor() does not work, but this does.
+    ofBackground( 255 );
+    
+    // Load images
+    trebleClef.loadImage( "images/clef_treble.png" ); // http://clipartist.info/SVG/CLIPARTIST.ORG/TREBLE/treble_clef_treble_clef-555px.png
+    bassClef.loadImage( "images/clef_bass.png" ); // http://clipartist.info/RSS/openclipart.org/2011/April/15-Friday/bass_clef_bassclef-1979px.png
+    staffBracket.loadImage( "images/staff_bracket.png" ); // http://musescore.org/sites/musescore.org/files/issues/Curly%20brace%20extends%20to%20all%20staves.png
     
     { // Straight from the ofxGamepad example:
         ofxGamepadHandler::get()->enableHotplug();
@@ -18,39 +34,18 @@ void testApp::setup(){
         }
     }
     
-    // Switch debug mode on and off.
-    bIsDebugging = false;
-    
-    // Support r-restart:
-    cleanup();
-    
-    frameRate = 60;
-    objectLife = 7 * frameRate;
-    
-    // Maintenance
-    ofSetVerticalSync( true );
-    ofEnableAlphaBlending();
-    ofSetFrameRate( frameRate );
-    ofSetCircleResolution( 100 );
-    myCam.disableMouseInput();
-    CGDisplayHideCursor(NULL); // ofHideCursor() does not work, but this does.
-    
-    helvetica.loadFont( "fonts/helvetica.otf", 24 );
-    trebleClef.loadImage( "images/clef_treble.png" ); // http://clipartist.info/SVG/CLIPARTIST.ORG/TREBLE/treble_clef_treble_clef-555px.png
-    bassClef.loadImage( "images/clef_bass.png" ); // http://clipartist.info/RSS/openclipart.org/2011/April/15-Friday/bass_clef_bassclef-1979px.png
-    staffBracket.loadImage( "images/staff_bracket.png" ); // http://musescore.org/sites/musescore.org/files/issues/Curly%20brace%20extends%20to%20all%20staves.png
-    
-    // Background
-    ofBackground( 255 );
-    
-    // Divide the screen into sections and make sure notes can be spaced perfectly.
+    // Precision placement is key in this game, so that the music sounds right. However, there's no way to know what size screen will be used. So everything is sized based on the screen, via a scaler factor calculated using this wizardry:
     iThirdOfScreen = int( ofGetHeight() / 2.25 );
     while ( iThirdOfScreen % 16 != 0 ) {
         iThirdOfScreen--;
     }
+    iScaler = iThirdOfScreen / 16;
     fCalcAllNotePos();
-    helveticaJumbo.loadFont("fonts/helvetica.otf", ( iThirdOfScreen / 8 ) * 2 );
     
+    helvetica.loadFont( "fonts/helvetica.otf", iScaler );
+    helveticaJumbo.loadFont("fonts/helvetica.otf", iScaler * 4 );
+    
+    objectLife = 7 * frameRate;
     fMeasureLength = 0;
     
     // Run a test pattern and highlight the first element.
@@ -70,6 +65,8 @@ void testApp::setup(){
     //myPlayer.setup( ofVec2f( 10200, 100 ) );
     myPlayer.setup( ofVec2f( 100, iThirdOfScreen ) );
     myPlayer2.setup( ofVec2f( 100, ofGetHeight() - iThirdOfScreen ) );
+    
+    bIsDebugging = false; // Switch debug mode on and off.
     
     // 0 is title screen, -1 is restart screen, 1 is game screen, 2 is boss screen.
     gameState = 1;
@@ -177,11 +174,11 @@ void testApp::draw(){
             //}
             ofSetColor( 0 );
             if ( bIsDebugging ) {
-                helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, 50 );
-                helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - 300, 50 );
+                helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, iScaler * 2 );
+                helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - iScaler * 12, iScaler * 2 );
             }
             if ( myPlayer.pos.x > ofGetWidth() / 2 ) {
-                helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - 210, 50 );
+                helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - iScaler * 8.4, iScaler * 2 );
             }
         }
         
