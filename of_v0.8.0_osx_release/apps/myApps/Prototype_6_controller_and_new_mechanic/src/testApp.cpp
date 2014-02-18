@@ -647,14 +647,14 @@ void testApp::fSetupTutorial() {
     //m1
     
     //riff bass
-    float m1Bass = 500;
-    float spacer = 150;
+    float m1Bass = iScaler * 20;
+    float spacer = iScaler * 6;
     float mLength = spacer * 5.333333;
     fMeasureLength = mLength;
-    //float mLength = 800;
+    //float mLength = iScaler * 32;
     //cout<<mLength<<endl;
     
-    addObject("c3#", m1Bass-100, -1); // test note
+    addObject("c3#", m1Bass-iScaler * 4, -1); // test note
     
     addObject("d2#", m1Bass, -1);
     addObject("a2#", m1Bass, -1);
@@ -669,12 +669,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m1Treble = m1Bass + 100;
+    float m1Treble = m1Bass + iScaler * 4;
     addObject("f3#", m1Treble, -1);
-    addObject("d3#", m1Treble + 100, -1);
-    addObject("c3#", m1Treble + 300, -1);
-    addObject("d3#", m1Treble + 400, -1);
-    addObject("f3#", m1Treble + 610, -1);
+    addObject("d3#", m1Treble + iScaler * 4, -1);
+    addObject("c3#", m1Treble + iScaler * 12, -1);
+    addObject("d3#", m1Treble + iScaler * 16, -1);
+    addObject("f3#", m1Treble + iScaler * 24.4, -1);
     
     //m2
     
@@ -694,12 +694,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m2Treble = m2Bass + 100;
+    float m2Treble = m2Bass + iScaler * 4;
     addObject("f3#", m2Treble, -1);
-    addObject("d3#", m2Treble + 100, -1);
-    addObject("c3#", m2Treble + 300, -1);
-    addObject("d3#", m2Treble + 400, -1);
-    addObject("f3#", m2Treble + 600, -1);
+    addObject("d3#", m2Treble + iScaler * 4, -1);
+    addObject("c3#", m2Treble + iScaler * 12, -1);
+    addObject("d3#", m2Treble + iScaler * 16, -1);
+    addObject("f3#", m2Treble + iScaler * 24, -1);
     
     //m3
     
@@ -719,12 +719,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m3Treble = m3Bass + 100;
+    float m3Treble = m3Bass + iScaler * 4;
     addObject("f3#", m3Treble, -1);
-    addObject("d3#", m3Treble + 100, -1);
-    addObject("c3#", m3Treble + 300, -1);
-    addObject("d3#", m3Treble + 400, -1);
-    addObject("f3#", m3Treble + 600, -1);
+    addObject("d3#", m3Treble + iScaler * 4, -1);
+    addObject("c3#", m3Treble + iScaler * 12, -1);
+    addObject("d3#", m3Treble + iScaler * 16, -1);
+    addObject("f3#", m3Treble + iScaler * 24, -1);
     
     //m4
     
@@ -744,12 +744,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m4Treble = m4Bass + 100;
+    float m4Treble = m4Bass + iScaler * 4;
     addObject("f3#", m4Treble, -1);
-    addObject("d3#", m4Treble + 100, -1);
-    addObject("c3#", m4Treble + 300, -1);
-    addObject("d3#", m4Treble + 400, -1);
-    addObject("f3#", m4Treble + 600, -1);
+    addObject("d3#", m4Treble + iScaler * 4, -1);
+    addObject("c3#", m4Treble + iScaler * 12, -1);
+    addObject("d3#", m4Treble + iScaler * 16, -1);
+    addObject("f3#", m4Treble + iScaler * 24, -1);
     
     //change
     
@@ -771,12 +771,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m5Treble = m5Bass + 100;
+    float m5Treble = m5Bass + iScaler * 4;
     addObject("f3#", m5Treble, -1);
-    addObject("d3#", m5Treble + 100, -1);
-    addObject("c3#", m5Treble + 300, -1);
-    addObject("d3#", m5Treble + 400, -1);
-    addObject("f3#", m5Treble + 600, -1);
+    addObject("d3#", m5Treble + iScaler * 4, -1);
+    addObject("c3#", m5Treble + iScaler * 12, -1);
+    addObject("d3#", m5Treble + iScaler * 16, -1);
+    addObject("f3#", m5Treble + iScaler * 24, -1);
     
     //m6
     
@@ -796,12 +796,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m6Treble = m6Bass + 100;
+    float m6Treble = m6Bass + iScaler * 4;
     addObject("f3#", m6Treble, -1);
-    addObject("d3#", m6Treble + 100, -1);
-    addObject("c3#", m6Treble + 300, -1);
-    addObject("d3#", m6Treble + 400, -1);
-    addObject("f3#", m6Treble + 600, -1);
+    addObject("d3#", m6Treble + iScaler * 4, -1);
+    addObject("c3#", m6Treble + iScaler * 12, -1);
+    addObject("d3#", m6Treble + iScaler * 16, -1);
+    addObject("f3#", m6Treble + iScaler * 24, -1);
     
     //m7
     
@@ -821,12 +821,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m7Treble = m7Bass + 100;
+    float m7Treble = m7Bass + iScaler * 4;
     addObject("f3#", m7Treble, -1);
-    addObject("d3#", m7Treble + 100, -1);
-    addObject("c3#", m7Treble + 300, -1);
-    addObject("d3#", m7Treble + 400, -1);
-    addObject("f3#", m7Treble + 600, -1);
+    addObject("d3#", m7Treble + iScaler * 4, -1);
+    addObject("c3#", m7Treble + iScaler * 12, -1);
+    addObject("d3#", m7Treble + iScaler * 16, -1);
+    addObject("f3#", m7Treble + iScaler * 24, -1);
     
     //m8
     
@@ -846,12 +846,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m8Treble = m8Bass + 100;
+    float m8Treble = m8Bass + iScaler * 4;
     addObject("f3#", m8Treble, -1);
-    addObject("d3#", m8Treble + 100, -1);
-    addObject("c3#", m8Treble + 300, -1);
-    addObject("d3#", m8Treble + 400, -1);
-    addObject("f3#", m8Treble + 600, -1);
+    addObject("d3#", m8Treble + iScaler * 4, -1);
+    addObject("c3#", m8Treble + iScaler * 12, -1);
+    addObject("d3#", m8Treble + iScaler * 16, -1);
+    addObject("f3#", m8Treble + iScaler * 24, -1);
     
     // change
     
@@ -873,12 +873,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m9Treble = m9Bass + 100;
+    float m9Treble = m9Bass + iScaler * 4;
     addObject("f3#", m9Treble, -1);
-    addObject("d3#", m9Treble + 100, -1);
-    addObject("c3#", m9Treble + 300, -1);
-    addObject("d3#", m9Treble + 400, -1);
-    addObject("f3#", m9Treble + 600, -1);
+    addObject("d3#", m9Treble + iScaler * 4, -1);
+    addObject("c3#", m9Treble + iScaler * 12, -1);
+    addObject("d3#", m9Treble + iScaler * 16, -1);
+    addObject("f3#", m9Treble + iScaler * 24, -1);
     
     //m10
     
@@ -898,12 +898,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m10Treble = m10Bass + 100;
+    float m10Treble = m10Bass + iScaler * 4;
     addObject("f3#", m10Treble, -1);
-    addObject("d3#", m10Treble + 100, -1);
-    addObject("c3#", m10Treble + 300, -1);
-    addObject("d3#", m10Treble + 400, -1);
-    addObject("f3#", m10Treble + 600, -1);
+    addObject("d3#", m10Treble + iScaler * 4, -1);
+    addObject("c3#", m10Treble + iScaler * 12, -1);
+    addObject("d3#", m10Treble + iScaler * 16, -1);
+    addObject("f3#", m10Treble + iScaler * 24, -1);
     
     //m11
     
@@ -923,12 +923,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m11Treble = m11Bass + 100;
+    float m11Treble = m11Bass + iScaler * 4;
     addObject("f3#", m11Treble, -1);
-    addObject("d3#", m11Treble + 100, -1);
-    addObject("c3#", m11Treble + 300, -1);
-    addObject("d3#", m11Treble + 400, -1);
-    addObject("f3#", m11Treble + 600, -1);
+    addObject("d3#", m11Treble + iScaler * 4, -1);
+    addObject("c3#", m11Treble + iScaler * 12, -1);
+    addObject("d3#", m11Treble + iScaler * 16, -1);
+    addObject("f3#", m11Treble + iScaler * 24, -1);
     
     //m12
     
@@ -948,12 +948,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m12Treble = m12Bass + 100;
+    float m12Treble = m12Bass + iScaler * 4;
     addObject("f3#", m12Treble, -1);
-    addObject("d3#", m12Treble + 100, -1);
-    addObject("c3#", m12Treble + 300, -1);
-    addObject("d3#", m12Treble + 400, -1);
-    addObject("f3#", m12Treble + 600, -1);
+    addObject("d3#", m12Treble + iScaler * 4, -1);
+    addObject("c3#", m12Treble + iScaler * 12, -1);
+    addObject("d3#", m12Treble + iScaler * 16, -1);
+    addObject("f3#", m12Treble + iScaler * 24, -1);
     
     //change
     
@@ -975,12 +975,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m13Treble = m13Bass + 100;
+    float m13Treble = m13Bass + iScaler * 4;
     addObject("f3#", m13Treble, -1);
-    addObject("d3#", m13Treble + 100, -1);
-    addObject("c3#", m13Treble + 300, -1);
-    addObject("d3#", m13Treble + 400, -1);
-    addObject("f3#", m13Treble + 600, -1);
+    addObject("d3#", m13Treble + iScaler * 4, -1);
+    addObject("c3#", m13Treble + iScaler * 12, -1);
+    addObject("d3#", m13Treble + iScaler * 16, -1);
+    addObject("f3#", m13Treble + iScaler * 24, -1);
     
     //m14
     
@@ -1000,12 +1000,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m14Treble = m14Bass + 100;
+    float m14Treble = m14Bass + iScaler * 4;
     addObject("f3#", m14Treble, -1);
-    addObject("d3#", m14Treble + 100, -1);
-    addObject("c3#", m14Treble + 300, -1);
-    addObject("d3#", m14Treble + 400, -1);
-    addObject("f3#", m14Treble + 600, -1);
+    addObject("d3#", m14Treble + iScaler * 4, -1);
+    addObject("c3#", m14Treble + iScaler * 12, -1);
+    addObject("d3#", m14Treble + iScaler * 16, -1);
+    addObject("f3#", m14Treble + iScaler * 24, -1);
     
     //m15
     
@@ -1025,12 +1025,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m15Treble = m15Bass + 100;
+    float m15Treble = m15Bass + iScaler * 4;
     addObject("f3#", m15Treble, -1);
-    addObject("d3#", m15Treble + 100, -1);
-    addObject("c3#", m15Treble + 300, -1);
-    addObject("d3#", m15Treble + 400, -1);
-    addObject("f3#", m15Treble + 600, -1);
+    addObject("d3#", m15Treble + iScaler * 4, -1);
+    addObject("c3#", m15Treble + iScaler * 12, -1);
+    addObject("d3#", m15Treble + iScaler * 16, -1);
+    addObject("f3#", m15Treble + iScaler * 24, -1);
     
     //m16
     
@@ -1050,12 +1050,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m16Treble = m16Bass + 100;
+    float m16Treble = m16Bass + iScaler * 4;
     addObject("f3#", m16Treble, -1);
-    addObject("d3#", m16Treble + 100, -1);
-    addObject("c3#", m16Treble + 300, -1);
-    addObject("d3#", m16Treble + 400, -1);
-    addObject("f3#", m16Treble + 600, -1);
+    addObject("d3#", m16Treble + iScaler * 4, -1);
+    addObject("c3#", m16Treble + iScaler * 12, -1);
+    addObject("d3#", m16Treble + iScaler * 16, -1);
+    addObject("f3#", m16Treble + iScaler * 24, -1);
     
     //change
     
@@ -1077,12 +1077,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m17Treble = m17Bass + 100;
+    float m17Treble = m17Bass + iScaler * 4;
     addObject("f3#", m17Treble, -1);
-    addObject("d3#", m17Treble + 100, -1);
-    addObject("c3#", m17Treble + 300, -1);
-    addObject("d3#", m17Treble + 400, -1);
-    addObject("f3#", m17Treble + 600, -1);
+    addObject("d3#", m17Treble + iScaler * 4, -1);
+    addObject("c3#", m17Treble + iScaler * 12, -1);
+    addObject("d3#", m17Treble + iScaler * 16, -1);
+    addObject("f3#", m17Treble + iScaler * 24, -1);
     
     //change
     
@@ -1104,12 +1104,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m18Treble = m18Bass + 100;
+    float m18Treble = m18Bass + iScaler * 4;
     addObject("f3#", m18Treble, -1);
-    addObject("d3#", m18Treble + 100, -1);
-    addObject("c3#", m18Treble + 300, -1);
-    addObject("d3#", m18Treble + 400, -1);
-    addObject("f3#", m18Treble + 600, -1);
+    addObject("d3#", m18Treble + iScaler * 4, -1);
+    addObject("c3#", m18Treble + iScaler * 12, -1);
+    addObject("d3#", m18Treble + iScaler * 16, -1);
+    addObject("f3#", m18Treble + iScaler * 24, -1);
     
     //change
     
@@ -1131,12 +1131,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m19Treble = m19Bass + 100;
+    float m19Treble = m19Bass + iScaler * 4;
     addObject("f3#", m19Treble, -1);
-    addObject("d3#", m19Treble + 100, -1);
-    addObject("c3#", m19Treble + 300, -1);
-    addObject("d3#", m19Treble + 400, -1);
-    addObject("f3#", m19Treble + 600, -1);
+    addObject("d3#", m19Treble + iScaler * 4, -1);
+    addObject("c3#", m19Treble + iScaler * 12, -1);
+    addObject("d3#", m19Treble + iScaler * 16, -1);
+    addObject("f3#", m19Treble + iScaler * 24, -1);
     
     //m20
     
@@ -1156,12 +1156,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m20Treble = m20Bass + 100;
+    float m20Treble = m20Bass + iScaler * 4;
     addObject("f3#", m20Treble, -1);
-    addObject("d3#", m20Treble + 100, -1);
-    addObject("c3#", m20Treble + 300, -1);
-    addObject("d3#", m20Treble + 400, -1);
-    addObject("f3#", m20Treble + 600, -1);
+    addObject("d3#", m20Treble + iScaler * 4, -1);
+    addObject("c3#", m20Treble + iScaler * 12, -1);
+    addObject("d3#", m20Treble + iScaler * 16, -1);
+    addObject("f3#", m20Treble + iScaler * 24, -1);
     
     //change
     
@@ -1183,12 +1183,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m21Treble = m21Bass + 100;
+    float m21Treble = m21Bass + iScaler * 4;
     addObject("f3#", m21Treble, -1);
-    addObject("d3#", m21Treble + 100, -1);
-    addObject("c3#", m21Treble + 300, -1);
-    addObject("d3#", m21Treble + 400, -1);
-    addObject("f3#", m21Treble + 600, -1);
+    addObject("d3#", m21Treble + iScaler * 4, -1);
+    addObject("c3#", m21Treble + iScaler * 12, -1);
+    addObject("d3#", m21Treble + iScaler * 16, -1);
+    addObject("f3#", m21Treble + iScaler * 24, -1);
     
     //change
     
@@ -1210,12 +1210,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m22Treble = m22Bass + 100;
+    float m22Treble = m22Bass + iScaler * 4;
     addObject("f3#", m22Treble, -1);
-    addObject("d3#", m22Treble + 100, -1);
-    addObject("c3#", m22Treble + 300, -1);
-    addObject("d3#", m22Treble + 400, -1);
-    addObject("f3#", m22Treble + 600, -1);
+    addObject("d3#", m22Treble + iScaler * 4, -1);
+    addObject("c3#", m22Treble + iScaler * 12, -1);
+    addObject("d3#", m22Treble + iScaler * 16, -1);
+    addObject("f3#", m22Treble + iScaler * 24, -1);
     
     //change
     
@@ -1237,12 +1237,12 @@ void testApp::fSetupTutorial() {
     
     
     //riff treble
-    float m23Treble = m23Bass + 100;
+    float m23Treble = m23Bass + iScaler * 4;
     addObject("f3#", m23Treble, -1);
-    addObject("d3#", m23Treble + 100, -1);
-    addObject("c3#", m23Treble + 300, -1);
-    addObject("d3#", m23Treble + 400, -1);
-    addObject("f3#", m23Treble + 600, -1);
+    addObject("d3#", m23Treble + iScaler * 4, -1);
+    addObject("c3#", m23Treble + iScaler * 12, -1);
+    addObject("d3#", m23Treble + iScaler * 16, -1);
+    addObject("f3#", m23Treble + iScaler * 24, -1);
     
     //m24
     
@@ -1263,13 +1263,13 @@ void testApp::fSetupTutorial() {
     
     //riff treble
     float m24Treble = m24Bass;
-    //    float m24Treble = m24Bass + 100;
+    //    float m24Treble = m24Bass + iScaler * 4;
     addObject("d3#", m24Treble, -1);
     /*addObject("f3#", m24Treble, -1);
-     addObject("d3#", m24Treble + 100, -1);
-     addObject("c3#", m24Treble + 300, -1);
-     addObject("d3#", m24Treble + 400, -1);
-     addObject("f3#", m24Treble + 600, -1);*/
+     addObject("d3#", m24Treble + iScaler * 4, -1);
+     addObject("c3#", m24Treble + iScaler * 12, -1);
+     addObject("d3#", m24Treble + iScaler * 16, -1);
+     addObject("f3#", m24Treble + iScaler * 24, -1);*/
     
     return;
     
