@@ -5,6 +5,9 @@
 #include "Note.h"
 #include "Player.h"
 #include "Obstacle.h"
+#include "BossBattle.h"
+#include "Tutorial.h"
+#include "Track.h"
 #include "ofxGamepadHandler.h"
 
 #define numYpos 30

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		CD05236E18B3FC02008FCB84 /* BossBattle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD05236C18B3FC02008FCB84 /* BossBattle.cpp */; };
+		CD05237118B3FC1B008FCB84 /* Tutorial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD05236F18B3FC1B008FCB84 /* Tutorial.cpp */; };
+		CD05237418B3FC35008FCB84 /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD05237218B3FC35008FCB84 /* Track.cpp */; };
 		CDC60D79181C76B500A26838 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D77181C76B500A26838 /* Object.cpp */; };
 		CDC60D7C181C77B900A26838 /* Note.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D7A181C77B800A26838 /* Note.cpp */; };
 		CDC60D80181C929B00A26838 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D7E181C929B00A26838 /* Player.cpp */; };
@@ -71,6 +74,12 @@
 
 /* Begin PBXFileReference section */
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
+		CD05236C18B3FC02008FCB84 /* BossBattle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BossBattle.cpp; sourceTree = "<group>"; };
+		CD05236D18B3FC02008FCB84 /* BossBattle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BossBattle.h; sourceTree = "<group>"; };
+		CD05236F18B3FC1B008FCB84 /* Tutorial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tutorial.cpp; sourceTree = "<group>"; };
+		CD05237018B3FC1B008FCB84 /* Tutorial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tutorial.h; sourceTree = "<group>"; };
+		CD05237218B3FC35008FCB84 /* Track.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Track.cpp; sourceTree = "<group>"; };
+		CD05237318B3FC35008FCB84 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		CDC60D77181C76B500A26838 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
 		CDC60D78181C76B500A26838 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		CDC60D7A181C77B800A26838 /* Note.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Note.cpp; sourceTree = "<group>"; };
@@ -390,6 +399,12 @@
 				CDC60D7F181C929B00A26838 /* Player.h */,
 				CDC8500B183A6F9B00959567 /* Obstacle.cpp */,
 				CDC8500C183A6F9B00959567 /* Obstacle.h */,
+				CD05236C18B3FC02008FCB84 /* BossBattle.cpp */,
+				CD05236D18B3FC02008FCB84 /* BossBattle.h */,
+				CD05236F18B3FC1B008FCB84 /* Tutorial.cpp */,
+				CD05237018B3FC1B008FCB84 /* Tutorial.h */,
+				CD05237218B3FC35008FCB84 /* Track.cpp */,
+				CD05237318B3FC35008FCB84 /* Track.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -496,8 +511,11 @@
 				CDC8500D183A6F9B00959567 /* Obstacle.cpp in Sources */,
 				CDF6C5E318AB2D36000B8877 /* ofxGamepadOIS.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
+				CD05236E18B3FC02008FCB84 /* BossBattle.cpp in Sources */,
+				CD05237418B3FC35008FCB84 /* Track.cpp in Sources */,
 				CDF6C5DF18AB2D36000B8877 /* ofxGamepad.cpp in Sources */,
 				CDC60D7C181C77B900A26838 /* Note.cpp in Sources */,
+				CD05237118B3FC1B008FCB84 /* Tutorial.cpp in Sources */,
 				CDF6C5E118AB2D36000B8877 /* ofxGamepadHandler.cpp in Sources */,
 				CDF6C5E218AB2D36000B8877 /* ofxGamepadLinux.cpp in Sources */,
 				CDC60D80181C929B00A26838 /* Player.cpp in Sources */,
