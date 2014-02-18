@@ -1424,12 +1424,11 @@ void testApp::fDrawStaff() {
 void testApp::fCalcAllNotePos() {
     
     for ( int i = 0; i < numYpos; i++ ) {
-        float noteSpacer = iThirdOfScreen / 16;
         float tmp;
         if ( i < 15 ) { // Bottom clef.
-            tmp = ofGetHeight() - ( noteSpacer * ( i + 1 ) );
+            tmp = ofGetHeight() - ( iScaler * ( i + 1 ) );
         } else { // Top clef.
-            tmp = ofGetHeight() - ( ofGetHeight() - iThirdOfScreen * 2 ) - ( noteSpacer * ( i + 2 ) );
+            tmp = ofGetHeight() - ( ofGetHeight() - iThirdOfScreen * 2 ) - ( iScaler * ( i + 2 ) );
         }
         staffPosList.push_back( tmp );
     }
@@ -1505,7 +1504,7 @@ void testApp::keyPressed(int key){
                 gameState = 1;
             }
             // Go to boss battle if player has reached end of tutorial.
-            /*else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + 400 ) {
+            /*else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + iScaler * 16 ) {
              //else if ( gameState == 1 ) {
              cleanup();
              gameState = 2;
@@ -1615,7 +1614,7 @@ void testApp::keyPressed(int key){
                 // Turn Object movement on and off.
                 for ( int i = 0; i < objectList.size(); i++ ) {
                     if ( objectList[ i ].vel == ofVec2f ( 0 ) ) {
-                        objectList[ i ].vel.set( -5, 0 );
+                        objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0 );
                     } else {
                         objectList[ i ].vel.set( 0 );
                     }
