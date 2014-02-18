@@ -180,8 +180,8 @@ void testApp::draw(){
         
         // Draw some lines on the ground to give something to move against.
         /*ofSetColor( 0 );
-         for ( int i = 0; i < 3000; i += 50 ) {
-         ofLine( 50 + ( i * 2 ), ofGetHeight(), 50 + i, ofGetHeight() - 25 );
+         for ( int i = 0; i < iScaler * 120; i += iScaler * 2 ) {
+         ofLine( iScaler * 2 + ( i * 2 ), ofGetHeight(), iScaler * 2 + i, ofGetHeight() - iScaler );
          }*/
         
         // LOCATION-DEPENDENT
@@ -190,7 +190,7 @@ void testApp::draw(){
             //fDrawTutorialInstructions();
         } else if ( gameState == 2 ) {
             testPattern();
-            helvetica.drawString( "This is not yet fully implemented. :(\nCheck back later.", 100, 100 );
+            helvetica.drawString( "This is not yet fully implemented. :(\nCheck back later.", iScaler * 4, iScaler * 4 );
         }
         
         // Draw the notes.
@@ -203,14 +203,8 @@ void testApp::draw(){
             obstacleList[ i ].draw();
         }
         
-        //helvetica.drawString( "Treble rockitude: " + ofToString( int( myPlayer.fHealth ) ) + "%", myPlayer.pos.x - 400, ofGetHeight() / 2 - 50 );
-        //helvetica.drawString( "Bass groovosity: " + ofToString( int( myPlayer2.fHealth ) ) + "%", myPlayer.pos.x + 100, ofGetHeight() / 2 + 50 );
-        
         myPlayer.draw( helvetica, recordedList );
         myPlayer2.draw( helvetica, recordedList );
-        //ofSetColor(0);
-        //helvetica.drawString("[UP]", myPlayer.pos.x, myPlayer.pos.y - myPlayer.tall / 2 );
-        //helvetica.drawString("[DOWN]", myPlayer.pos.x, myPlayer.pos.y + myPlayer.tall / 2 );
         
         if ( gameState == 1 ) {
             myCam.end();
@@ -260,7 +254,7 @@ void testApp::updateObjectList() {
         if ( myPlayer.bIsRecording ) {
             
             ofVec2f dist = myPlayer.actPos - objectList[ i ].pos;
-            if ( dist.lengthSquared() < ( 50 * 50 ) ) {
+            if ( dist.lengthSquared() < ( ( iScaler * 2 ) * ( iScaler * 2 ) ) ) {
                 
                 fRecord( i );
                 
@@ -357,7 +351,7 @@ void testApp::playerCollidesWithObject() {
         // Make some floats for shorthand...
         // Player is drawn from the center.
         // Obstacles are drawn from the corner.
-        float margin = 10.0;
+        //float margin = iScaler / 2.5;
         float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
         float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
         float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
@@ -439,7 +433,7 @@ void testApp::playerCollidesWithObstacle() {
         // Make some floats for shorthand...
         // Player is drawn from the center.
         // Obstacles are drawn from the corner.
-        float margin = 10.0;
+        float margin = iScaler / 2.5;
         float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
         float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
         float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
@@ -542,15 +536,15 @@ void testApp::testPattern() {
         return;
     }
     
-    addObject( "a3", 200, -1 );
-    addObject( "c4", 400, -1 );
-    addObject( "e4", 600, -1 );
-    addObject( "a3", 800, -1 );
-    addObject( "a3", 1000, -1 );
-    addObject( "d4", 1000, -1 );
+    addObject( "a3", iScaler * 8, -1 );
+    addObject( "c4", iScaler * 16, -1 );
+    addObject( "e4", iScaler * 24, -1 );
+    addObject( "a3", iScaler * 32, -1 );
+    addObject( "a3", iScaler * 40, -1 );
+    addObject( "d4", iScaler * 40, -1 );
     
     for ( int i = 0; i < objectList.size(); i++ ) {
-        objectList[ i ].vel.set( -5.0, 0.0 );
+        objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
     }
 }
 
@@ -591,61 +585,61 @@ void testApp::fDrawTitleScreen() {
     ofSetRectMode( OF_RECTMODE_CORNER );
     
     ofSetColor( 0 );
-    helvetica.drawString( "Hello! Welcome to Protoville, home of the prototype.", 125, 75 );
-    helvetica.drawString( "Please choose your control affiliation.", 225, 125 );
+    helvetica.drawString( "Hello! Welcome to Protoville, home of the prototype.", iScaler * 5, iScaler * 3 );
+    helvetica.drawString( "Please choose your control affiliation.", iScaler * 9, iScaler * 5 );
     
     if ( bIsLefty) ofSetColor( 0 );
     else {
         ofSetColor( 0 );
-        ofRect( 190, 170, 670, 50 );
+        ofRect( iScaler * 7.6, iScaler * 6.8, iScaler * 26.8, iScaler * 2 );
         ofSetColor( 255 );
     }
-    helvetica.drawString( "I am so dextrous (right-handed).", 275, 200 );
+    helvetica.drawString( "I am so dextrous (right-handed).", iScaler * 11, iScaler * 8 );
     if ( bIsLefty) {
         ofSetColor( 0 );
-        ofRect( 190, 220, 670, 50 );
+        ofRect( iScaler * 7.6, iScaler * 8.8, iScaler * 26.8, iScaler * 2 );
         ofSetColor( 255 );
     } else ofSetColor( 0 );
-    helvetica.drawString( "I feel quite sinister (left-handed).", 275, 250 );
+    helvetica.drawString( "I feel quite sinister (left-handed).", iScaler * 11, iScaler * 10 );
     
     ofSetColor( 0 );
     
     ofPushMatrix();{
-        ofTranslate( ofGetWidth() - 75, 225 );
+        ofTranslate( ofGetWidth() - iScaler * 3, iScaler * 9 );
         helvetica.drawString( "[^]", 0, 0 );
         ofRotate( 180 );
-        helvetica.drawString( "[^]", 15, 17 );
+        helvetica.drawString( "[^]", float( iScaler * 0.6 ), float( iScaler * 0.68 ) );
     }ofPopMatrix();
     
-    helvetica.drawString( "Headphones recommended.", 300, 310 );
-    helvetica.drawString( "Press ENTER to continue.", 300, 360 );
+    helvetica.drawString( "Headphones recommended.", iScaler * 12, iScaler * 12.4 );
+    helvetica.drawString( "Press ENTER to continue.", iScaler * 12, iScaler * 14.4 );
 }
 
 //--------------------------------------------------------------
 void testApp::fDrawRestartScreen() {
     
     ofSetColor( 0 );
-    helvetica.drawString( "Are you sure you want to restart? Y / N ", 200, ofGetHeight() / 2.0 );
+    helvetica.drawString( "Are you sure you want to restart? Y / N ", iScaler * 8, ofGetHeight() / 2.0 );
 }
 
 //--------------------------------------------------------------
 void testApp::fDrawTutorialInstructions() {
     
-    float y = 100;
+    float y = iScaler * 4;
     // Left and right
-    helvetica.drawString( sLeft + " / " + sRight, 100, y );
+    helvetica.drawString( sLeft + " / " + sRight, iScaler * 4, y );
     // Up
-    helvetica.drawString( sUp, 1350, y );
+    helvetica.drawString( sUp, iScaler * 54, y );
     // Record
-    helvetica.drawString( sAltLeft, 3000, y );
+    helvetica.drawString( sAltLeft, iScaler * 120, y );
     // Replay
-    helvetica.drawString( sAltRight, 3800, y );
+    helvetica.drawString( sAltRight, iScaler * 152, y );
     
     // Sly note
-    helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", 12100, y );
+    helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", iScaler * 484, y );
     
     // Cue boss battle.
-    helvetica.drawString( "[ENTER] here for a boss battle!", 10500, y + 125 );
+    helvetica.drawString( "[ENTER] here for a boss battle!", iScaler * 420, y + iScaler * 5 );
 }
 
 void testApp::fSetupTutorial() {
