@@ -1382,43 +1382,42 @@ void testApp::fDrawStaff() {
     //ofSetColor( 0, int( iStaffAlpha ) );
     ofSetColor(0);
     //float numSections = float(numLines + 1);
-    float spacer = iThirdOfScreen / 8;
     //for ( int i = 2; i < ( numSections - 1 ); i++ ) {
     for ( int i = 2; i < 7; i++ ) {
         //if ( i != 7 ) {
-        float staffStart = ( ofGetHeight() - spacer * 4 ) * staffBracket.getWidth() / staffBracket.getHeight();
+        float staffStart = ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight();
         float xStart;
         if ( myPlayer.pos.x < staffStart + ofGetWidth() ) {
             xStart = staffStart;
             // Draw initial vertical line.
             ofSetLineWidth( 3 );
-            ofLine( xStart, spacer * 2, xStart, ofGetHeight() - spacer * 2 );
+            ofLine( xStart, iScaler * 4, xStart, ofGetHeight() - iScaler * 4 );
             ofSetLineWidth( 1 );
         } else {
             xStart = myPlayer.pos.x - ofGetWidth() / 2; // FIND ME
         }
-        ofLine( xStart, spacer * i, myPlayer.pos.x + ofGetWidth(), spacer * i );
-        ofLine( xStart, ofGetHeight() - ( spacer * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( spacer * i ) );
+        ofLine( xStart, iScaler * 2 * i, myPlayer.pos.x + ofGetWidth(), iScaler * 2 * i );
+        ofLine( xStart, ofGetHeight() - ( iScaler * 2 * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( iScaler * 2 * i ) );
         //}
     }
     for ( int i = 0; i < 30; i++ ) {
         // Draw the measure lines.
-        ofLine( 450 + fMeasureLength * i, spacer * 2,  450 + fMeasureLength * i, ofGetHeight() - spacer * 2 );
+        ofLine( iScaler * 18 + fMeasureLength * i, iScaler * 4,  iScaler * 18 + fMeasureLength * i, ofGetHeight() - iScaler * 4 );
         // Draw the measure number.
-        helvetica.drawString( ofToString( i + 1 ), 475 + fMeasureLength * i, spacer * 2);
+        helvetica.drawString( ofToString( i + 1 ), iScaler * 19 + fMeasureLength * i, iScaler * 4);
     }
     // Draw the initial bracket.
-    staffBracket.draw( 0, spacer * 2, ( ofGetHeight() - spacer * 4 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - spacer * 4 );
+    staffBracket.draw( 0, iScaler * 4, ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - iScaler * 8 );
     // Draw the clefs.
-    trebleClef.draw( 100, spacer * 4 - spacer * 7 / 2.15, ( spacer * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), spacer * 7 );
-    bassClef.draw( 100, ofGetHeight() - spacer * 6, ( spacer * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), spacer * 3.1 );
+    trebleClef.draw( iScaler * 4, iScaler * 8 - iScaler * 2 * 7 / 2.15, ( iScaler * 2 * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), iScaler * 14 );
+    bassClef.draw( iScaler * 4, ofGetHeight() - iScaler * 12, ( iScaler * 2 * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), iScaler * 6.2 );
     // Draw the time signature.
-    helveticaJumbo.drawString("4", 275, spacer * 4 );
-    helveticaJumbo.drawString("4", 275, spacer * 6 );
-    helveticaJumbo.drawString("4", 275, ofGetHeight() - spacer * 4 );
-    helveticaJumbo.drawString("4", 275, ofGetHeight() - spacer * 2 );
+    helveticaJumbo.drawString("4", iScaler * 11, iScaler * 8 );
+    helveticaJumbo.drawString("4", iScaler * 11, iScaler * 12 );
+    helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 8 );
+    helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
     
-    helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", 20000, ofGetHeight() / 2 );
+    helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", iScaler * 800, ofGetHeight() / 2 );
 }
 
 //--------------------------------------------------------------
