@@ -14,15 +14,14 @@ void testApp::setup(){
     ofEnableAlphaBlending();
     ofSetCircleResolution( 100 );
     myCam.disableMouseInput();
-    CGDisplayHideCursor(NULL); // ofHideCursor() does not work, but this does.
+    CGDisplayHideCursor(NULL);
     ofBackground( 255 );
     
-    // Load images
     trebleClef.loadImage( "images/clef_treble.png" ); // http://clipartist.info/SVG/CLIPARTIST.ORG/TREBLE/treble_clef_treble_clef-555px.png
     bassClef.loadImage( "images/clef_bass.png" ); // http://clipartist.info/RSS/openclipart.org/2011/April/15-Friday/bass_clef_bassclef-1979px.png
     staffBracket.loadImage( "images/staff_bracket.png" ); // http://musescore.org/sites/musescore.org/files/issues/Curly%20brace%20extends%20to%20all%20staves.png
     
-    { // Straight from the ofxGamepad example:
+    { // Straight from the ofxGamepad example.
         ofxGamepadHandler::get()->enableHotplug();
         
         //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
@@ -32,46 +31,45 @@ void testApp::setup(){
 			ofAddListener(pad->onButtonPressed, this, &testApp::buttonPressed);
 			ofAddListener(pad->onButtonReleased, this, &testApp::buttonReleased);
         }
-    }
+    } // End ofxGamepad stuff
     
-    // Precision placement is key in this game, so that the music sounds right. However, there's no way to know what size screen will be used. So everything is sized based on the screen, via a scaler factor calculated using this wizardry:
-    iThirdOfScreen = int( ofGetHeight() / 2.25 );
-    while ( iThirdOfScreen % 16 != 0 ) {
-        iThirdOfScreen--;
-    }
-    iScaler = iThirdOfScreen / 16;
+    { /*
+       Precision placement is key in this game, so that the music sounds right. However, there's no way to know what size screen will be used. So everything is sized based on the screen, via a scaler factor calculated using this wizardry:
+       */
+        iThirdOfScreen = int( ofGetHeight() / 2.25 );
+        while ( iThirdOfScreen % 16 != 0 ) {
+            iThirdOfScreen--;
+        }
+        iScaler = iThirdOfScreen / 16;
+    } // End wizardry
     fCalcAllNotePos();
     
     helvetica.loadFont( "fonts/helvetica.otf", iScaler );
     helveticaJumbo.loadFont("fonts/helvetica.otf", iScaler * 4 );
     
-    objectLife = 7 * frameRate;
-    fMeasureLength = 0;
+    /*
+     -1:    restart screen
+     0:     title screen
+     1:     game screen
+     2:     boss screen.
+     */
+    gameState = 1;
+    currentState = gameState;
     
-    // Run a test pattern and highlight the first element.
-    //    testPattern();
+    bIsLefty = bIsRecording = bIsDebugging = false;
     bHighlightNote = false;
+    
     if ( bHighlightNote ) getThisOne = 0;
     else getThisOne = -1;
-    
+    objectLife = 7 * frameRate;
+    fMeasureLength = 0;
     iStaffAlphaMin = 10;
     iStaffAlphaMax = 200;
     iStaffAlpha = iStaffAlphaMin;
     iStaffAlphaVel = 0.5;
     
-    bIsLefty = bIsRecording = false;
-    
-    //myPlayer.setup();
-    //myPlayer.setup( ofVec2f( 10200, 100 ) );
     myPlayer.setup( ofVec2f( 100, iThirdOfScreen ) );
     myPlayer2.setup( ofVec2f( 100, ofGetHeight() - iThirdOfScreen ) );
-    
-    bIsDebugging = false; // Switch debug mode on and off.
-    
-    // 0 is title screen, -1 is restart screen, 1 is game screen, 2 is boss screen.
-    gameState = 1;
-    currentState = 1;
-    // To jump straight to the boss battle, must set gameState to 2, then uncomment the following...
     
     /*testPattern();
      bHighlightNote = true;
@@ -79,6 +77,7 @@ void testApp::setup(){
     
     // ...and comment out the following:
     
+    //testPattern(); //(boss battle)
     fSetupTutorial();
 }
 
@@ -170,7 +169,7 @@ void testApp::draw(){
         // Move the camera with the player, as long as it dosn't move out of bounds.
         if ( gameState == 1 ) {
             //if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
-                myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
+            myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
             //}
             ofSetColor( 0 );
             if ( bIsDebugging ) {
