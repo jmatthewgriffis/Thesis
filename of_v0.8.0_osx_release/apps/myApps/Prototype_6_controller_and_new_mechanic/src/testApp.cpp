@@ -40,14 +40,15 @@ void testApp::setup(){
         while ( iThirdOfScreen % 16 != 0 ) {
             iThirdOfScreen--;
         }
-        iScaler = iThirdOfScreen / 16;
+        iScaler = iThirdOfScreen / 16; // 25 on my fullscreen.
+        //cout<<iScaler<<endl;
     } // End wizardry
     fCalcAllNotePos();
     
     helvetica.loadFont( "fonts/helvetica.otf", iScaler );
     helveticaJumbo.loadFont("fonts/helvetica.otf", iScaler * 4 );
     
-    /*
+    /* Gamestates:
      -1:    restart screen
      0:     title screen
      1:     game screen
@@ -56,7 +57,7 @@ void testApp::setup(){
     gameState = 1;
     currentState = gameState;
     
-    bIsLefty = bIsRecording = bIsDebugging = false;
+    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = false;
     bHighlightNote = false;
     
     if ( bHighlightNote ) getThisOne = 0;
@@ -68,14 +69,8 @@ void testApp::setup(){
     iStaffAlpha = iStaffAlphaMin;
     iStaffAlphaVel = 0.5;
     
-    myPlayer.setup( ofVec2f( 100, iThirdOfScreen ) );
-    myPlayer2.setup( ofVec2f( 100, ofGetHeight() - iThirdOfScreen ) );
-    
-    /*testPattern();
-     bHighlightNote = true;
-     getThisOne = 0;*/
-    
-    // ...and comment out the following:
+    myPlayer.setup( ofVec2f( iScaler * 4, iThirdOfScreen ) );
+    myPlayer2.setup( ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen ) );
     
     //testPattern(); //(boss battle)
     fSetupTutorial();
