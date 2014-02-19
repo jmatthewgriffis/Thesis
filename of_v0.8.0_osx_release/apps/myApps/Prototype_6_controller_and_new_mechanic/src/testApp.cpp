@@ -1447,6 +1447,7 @@ void testApp::fCalcAllNotePos() {
 //--------------------------------------------------------------
 
 // Again, from the ofxGamepad example:
+
 void testApp::axisChanged(ofxGamepadAxisEvent& e)
 {
     float fStickBuffer = 0.125;
