@@ -24,14 +24,15 @@ void Player::setup( int _iScaler, ofVec2f _pos ) {
     
     wide = iScaler * 4;
     tall = wide;
-    xVel = float( iScaler / 3.4483 ); // Yields 120bpm.
+    maxVel = float( iScaler / 3.4483 ); // Yields 120bpm.
     jumpVel = iScaler / 2.5;
     radius = iScaler * 1.6;
     //angleVel = float( iScaler / 1.6667 );
     angleVel = 15;
     
     up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = false;
-    allowMove = allowJump = bAllowRecord = bAllowReplay = true;
+    allowMove = false;
+    allowJump = bAllowRecord = bAllowReplay = true;
     angle = 0;
     fHealth = fHealthMax;
     
@@ -42,6 +43,8 @@ void Player::setup( int _iScaler, ofVec2f _pos ) {
 }
 
 void Player::update() {
+    
+    pos += vel;
     
     // Health depletes constantly.
     if ( fHealth > fHealthMax ) {
@@ -54,8 +57,6 @@ void Player::update() {
         fHealth = 0;
     }
     
-    pos.x += xVel;
-    
     // Movement
     if ( allowMove ) {
         /*if ( up && onSurface && allowJump ) {
@@ -66,17 +67,17 @@ void Player::update() {
             applyForce( ofVec2f( 0.0, -jumpVel ) );
         }*/
         if ( up ) {
-            applyForce( ofVec2f( 0.0, -xVel ) );
+            applyForce( ofVec2f( 0.0, -maxVel ) );
         }
         if ( left ) {
-            applyForce( ofVec2f( -xVel, 0.0 ) );
+            applyForce( ofVec2f( -maxVel, 0.0 ) );
         }
         if ( down ) {
             //            pos.y += vel.y;
-            applyForce( ofVec2f( 0.0, xVel ) );
+            applyForce( ofVec2f( 0.0, maxVel ) );
         }
         if ( right ) {
-            applyForce( ofVec2f( xVel, 0.0 ) );
+            applyForce( ofVec2f( maxVel, 0.0 ) );
         }
         
         vel += acc;
@@ -111,8 +112,8 @@ void Player::update() {
     // Manage forces.
     float damping = 0.97;
     //vel.y *= damping;
-    vel.y *= damping / 2.0;
-    vel.x *= damping / 2.0;
+    //vel.y *= damping / 2.0;
+    //vel.x *= damping / 2.0;
     acc.set( 0 );
     
     fPressingRecord();

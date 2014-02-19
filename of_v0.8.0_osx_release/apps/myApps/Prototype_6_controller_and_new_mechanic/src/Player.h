@@ -28,7 +28,7 @@ public:
     
     ofVec2f pos, vel, acc, actPos;
     float wide, tall;
-    float xVel, jumpVel;
+    float maxVel, jumpVel;
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull;

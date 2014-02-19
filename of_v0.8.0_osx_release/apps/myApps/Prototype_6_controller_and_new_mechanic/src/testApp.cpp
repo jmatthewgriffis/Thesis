@@ -89,6 +89,16 @@ bool bShouldIErase( Object &a ){
 //--------------------------------------------------------------
 void testApp::update(){
     
+    { // Straight from the ofxGamepad example.
+        //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
+        /*if(ofxGamepadHandler::get()->getNumPads()>0){
+			ofxGamepad* pad = ofxGamepadHandler::get()->getGamepad(0);
+			ofAddListener(pad->onAxisChanged, this, &testApp::axisChanged);
+			ofAddListener(pad->onButtonPressed, this, &testApp::buttonPressed);
+			ofAddListener(pad->onButtonReleased, this, &testApp::buttonReleased);
+        }*/
+    } // End ofxGamepad stuff
+    
     // Update the control text based on the player's choice on the title screen.
     if ( gameState == 0 ) fWriteControls();
     
@@ -141,7 +151,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    ofxGamepadHandler::get()->draw(10,10);
+    //ofxGamepadHandler::get()->draw(10,10);
     
     if ( gameState == 0 ) {
         fDrawTitleScreen();
@@ -1439,30 +1449,34 @@ void testApp::fCalcAllNotePos() {
 // Again, from the ofxGamepad example:
 void testApp::axisChanged(ofxGamepadAxisEvent& e)
 {
-    //if ( e.axis == 2 ) myPlayer.pos.x += ofMap( e.value, -1, 1, -5, 5 );
-    if ( e.axis == 3 ) {
-        if ( e.value < 0 ) {
-            myPlayer.up = true;
-            myPlayer.down = false;
-        } else if ( e.value > 0 ) {
-            myPlayer.up = false;
-            myPlayer.down = true;
+    float fStickBuffer = 0.125;
+    
+    if ( e.axis == 5 ) {
+        if ( abs( e.value ) > fStickBuffer ) {
+            myPlayer.vel.y = ofMap( e.value, -1, 1, -myPlayer.maxVel, myPlayer.maxVel );
+            //cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
         } else {
-            myPlayer.up = false;
-            myPlayer.down = false;
+            myPlayer.vel.y = 0;
         }
-        cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
+    }
+    if ( e.axis == 3 ) {
+        if ( abs( e.value ) > fStickBuffer ) {
+            myPlayer2.vel.y = ofMap( e.value, -1, 1, -myPlayer2.maxVel, myPlayer2.maxVel );
+            //cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
+        } else {
+            myPlayer2.vel.y = 0;
+        }
     }
 }
 
 void testApp::buttonPressed(ofxGamepadButtonEvent& e)
 {
-	cout << "BUTTON " << e.button << " PRESSED" << endl;
+	cout << "BUTTON " << e.button << " RELEASED" << endl;
 }
 
 void testApp::buttonReleased(ofxGamepadButtonEvent& e)
 {
-	cout << "BUTTON " << e.button << " RELEASED" << endl;
+    cout << "BUTTON " << e.button << " PRESSED" << endl;
 }
 
 //--------------------------------------------------------------
