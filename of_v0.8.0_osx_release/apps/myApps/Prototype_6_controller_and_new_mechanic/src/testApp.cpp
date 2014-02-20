@@ -59,7 +59,7 @@ void testApp::setup(){
      3:     piano prototype
      4:     boost prototype
      */
-    gameState = 4;
+    gameState = 3;
     currentState = gameState;
     
     bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = false;
@@ -127,7 +127,9 @@ void testApp::update(){
     
     // Apply gravity to the player.
     // Come back to this. Use it to fake analog sensitivity with jump height proportional to how long the button is held. Gravity only applies sometimes.
-    //myPlayer.applyForce( ofVec2f( 0.0, 0.3 ) );
+    if ( gameState == 4 ) {
+        myPlayer.applyForce( ofVec2f( 0.0, 0.3 ) );
+    }
     
     // Run collision detection.
     //playerCollidesWithGround();
@@ -225,6 +227,7 @@ void testApp::draw(){
         
         myPlayer.draw( helvetica, recordedList );
         myPlayer2.draw( helvetica, recordedList );
+        
         
         if ( gameState == 1 ) {
             myCam.end();
@@ -1461,29 +1464,39 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e)
 {
     float fStickBuffer = 0.125;
     
-    // P1 vertical movement
-    if ( e.axis == 5 ) {
-        if ( abs( e.value ) > fStickBuffer ) {
-            myPlayer.vel.y = ofMap( e.value, -1, 1, -myPlayer.maxVel, myPlayer.maxVel );
-            //cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
-        } else {
-            myPlayer.vel.y = 0;
+    if ( gameState == 3 ) {
+        // P1 vertical movement
+        if ( e.axis == 5 ) {
+            if ( abs( e.value ) > fStickBuffer ) {
+                myPlayer.vel.y = ofMap( e.value, -1, 1, -myPlayer.maxVel, myPlayer.maxVel );
+                //cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
+            } else {
+                myPlayer.vel.y = 0;
+            }
         }
-    }
-    // P2 vertical movement
-    if ( e.axis == 3 ) {
-        if ( abs( e.value ) > fStickBuffer ) {
-            myPlayer2.vel.y = ofMap( e.value, -1, 1, -myPlayer2.maxVel, myPlayer2.maxVel );
-            //cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
-        } else {
-            myPlayer2.vel.y = 0;
+        // P2 vertical movement
+        if ( e.axis == 3 ) {
+            if ( abs( e.value ) > fStickBuffer ) {
+                myPlayer2.vel.y = ofMap( e.value, -1, 1, -myPlayer2.maxVel, myPlayer2.maxVel );
+                //cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
+            } else {
+                myPlayer2.vel.y = 0;
+            }
+        }
+    } else if ( gameState == 4 ) {
+        if ( e.axis == 3 ) {
+            if ( abs( e.value ) > fStickBuffer ) {
+                if ( e.value < 0 ) {
+                    myPlayer.applyForce( ofVec2f( 0.0, -2.0 ) );
+                }
+            }
         }
     }
 }
 
 void testApp::buttonPressed(ofxGamepadButtonEvent& e)
 {
-	cout << "BUTTON " << e.button << " RELEASED" << endl;
+    cout << "BUTTON " << e.button << " RELEASED" << endl;
 }
 
 void testApp::buttonReleased(ofxGamepadButtonEvent& e)
