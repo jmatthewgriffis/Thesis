@@ -90,6 +90,7 @@ public:
     bool bIsDebugging;
     bool bHighlightNote;
     bool bShiftIsPressed;
+    bool bUsingController;
     
     // Store a bunch of strings to accomodate different controls.
     string sUp, sLeft, sDown, sRight, sAltUp, sAltLeft, sAltDown, sAltRight;

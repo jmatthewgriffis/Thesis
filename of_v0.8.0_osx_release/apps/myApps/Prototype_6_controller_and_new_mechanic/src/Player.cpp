@@ -18,9 +18,10 @@ Player::Player() {
     hand.loadImage( "images/hand.png" ); // http://upload.wikimedia.org/wikipedia/commons/f/fa/Hand.svg
 }
 
-void Player::setup( int _iScaler, ofVec2f _pos ) {
+void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     
     iScaler = _iScaler;
+    bUsingController = _bUsingController;
     
     wide = iScaler * 4;
     tall = wide;
@@ -31,7 +32,7 @@ void Player::setup( int _iScaler, ofVec2f _pos ) {
     angleVel = 15;
     
     up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = false;
-    allowMove = false;
+    allowMove = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     angle = 0;
     fHealth = fHealthMax;
@@ -43,9 +44,6 @@ void Player::setup( int _iScaler, ofVec2f _pos ) {
 }
 
 void Player::update() {
-    
-    pos += vel;
-    pos.x += maxVel;
     
     // Health depletes constantly.
     if ( fHealth > fHealthMax ) {
@@ -89,14 +87,16 @@ void Player::update() {
         }
         
         pos += vel;
+        pos.x += maxVel;
         
         //        cout<<vel.x<<endl;
         
-        //        if ( onSurface ) {
-        vel.x = 0;
-        vel.y = 0;
-        //        }
-        
+        if ( !bUsingController ) {
+            //        if ( onSurface ) {
+            vel.x = 0;
+            vel.y = 0;
+            //        }
+        }
     } // End "if allowMove"
     
     // Prevent going offscreen.

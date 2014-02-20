@@ -26,10 +26,13 @@ void testApp::setup(){
         
         //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
         if(ofxGamepadHandler::get()->getNumPads()>0){
+            bUsingController = true; // Matt: I added this.
 			ofxGamepad* pad = ofxGamepadHandler::get()->getGamepad(0);
 			ofAddListener(pad->onAxisChanged, this, &testApp::axisChanged);
 			ofAddListener(pad->onButtonPressed, this, &testApp::buttonPressed);
 			ofAddListener(pad->onButtonReleased, this, &testApp::buttonReleased);
+        } else {
+            bUsingController = false; // Matt: I added this too.
         }
     } // End ofxGamepad stuff
     
@@ -51,8 +54,10 @@ void testApp::setup(){
     /* Gamestates:
      -1:    restart screen
      0:     title screen
-     1:     game screen
-     2:     boss screen.
+     1:     platforming prototype
+     2:     boss prototype
+     3:     piano prototype
+     4:     boost prototype
      */
     gameState = 1;
     currentState = gameState;
@@ -69,8 +74,8 @@ void testApp::setup(){
     iStaffAlpha = iStaffAlphaMin;
     iStaffAlphaVel = 0.5;
     
-    myPlayer.setup( iScaler, ofVec2f( iScaler * 4, iThirdOfScreen ) );
-    myPlayer2.setup( iScaler, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen ) );
+    myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
+    myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen ) );
     myTrack.setup( iScaler, fMeasureLength/*, &testApp::addObject*/ );
     
     //testPattern(); //(boss battle)

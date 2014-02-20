@@ -22,6 +22,7 @@ void Track::setup( int _iScaler, float _fMeasureLength/*, void *_addObject( stri
     //riff bass
     float m1Bass = iScaler * 20;
     float spacer = fMeasureLength / 5.333333;
+    
     /*
     _addObject("c3#", m1Bass-iScaler * 4, -1); // test note
     
@@ -618,10 +619,9 @@ void Track::setup( int _iScaler, float _fMeasureLength/*, void *_addObject( stri
     //riff bass
     float m24Bass = m23Bass + fMeasureLength;
     
+    addObject("d2#", m24Bass, -1);
+    addObject("a2#", m24Bass, -1);
      */
-     
-    //addObject("d2#", m24Bass, -1);
-    //addObject("a2#", m24Bass, -1);
     /*addObject("d2#", m24Bass + spacer, -1);
      addObject("a2#", m24Bass + spacer, -1);
      addObject("d2#", m24Bass + spacer * 2, -1);

@@ -17,7 +17,7 @@ class Player {
 public:
     Player();
     
-    void setup( int _iScaler, ofVec2f _pos = ofVec2f( 100, ofGetHeight() - 50 ) );
+    void setup( int _iScaler, bool _bUsingController, ofVec2f _pos = ofVec2f( 100, ofGetHeight() - 50 ) );
     void update();
     void draw( ofTrueTypeFont _font, vector< Object > _recordedList );
     
@@ -31,7 +31,7 @@ public:
     float maxVel, jumpVel;
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;
-    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull;
+    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;
     int iScaler, capacity;
     float radius, angle, angleVel;
     float fHealth, fHealthMax, fHealthLossSpeed;
