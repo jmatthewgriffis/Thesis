@@ -23,7 +23,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     iScaler = _iScaler;
     bUsingController = _bUsingController;
     
-    wide = iScaler * 4;
+    wide = iScaler * 2;
     tall = wide;
     maxVel = float( iScaler / 3.4483 ); // Yields 120bpm.
     jumpVel = iScaler / 2.5;
@@ -149,14 +149,14 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     // Draw the player.
     ofSetRectMode( OF_RECTMODE_CENTER );
     ofSetColor( 0 );
-    //ofRect( pos, wide, tall );
+    ofRect( pos, wide, tall );
     
     // Draw the health. Taken from my Space Odyssey 2 code.
     ofPushMatrix();{
         
         ofTranslate( pos.x, pos.y);
         
-        
+       /*
         {
             // Draw the health bar
             ofSetRectMode( OF_RECTMODE_CORNER );
@@ -174,14 +174,14 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
             ofSetColor( 0, 255, 0 );
             ofRect( -wide + offset, wide / 2 + offsetBar + offset, currentHealth, barHeight - offset * 2 );
         }
-         
+       */  
         
     }ofPopMatrix();
     
     ofSetColor( 255 );
     ofSetRectMode( OF_RECTMODE_CORNER );
-    //headphones.draw( pos, iScaler * 2, iScaler * 2 );
-    hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall );
+    headphones.draw( pos.x-35, pos.y-60, iScaler * 3, iScaler * 3 );
+    //hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall );
     
     // Display a visual indicator of recorded capacity.
     if ( _recordedList.size() > 1 ) {
