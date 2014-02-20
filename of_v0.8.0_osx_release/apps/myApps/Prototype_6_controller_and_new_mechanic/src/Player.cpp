@@ -31,7 +31,7 @@ void Player::setup( int _iScaler, ofVec2f _pos ) {
     angleVel = 15;
     
     up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = false;
-    allowMove = true;
+    allowMove = false;
     allowJump = bAllowRecord = bAllowReplay = true;
     angle = 0;
     fHealth = fHealthMax;
@@ -45,6 +45,7 @@ void Player::setup( int _iScaler, ofVec2f _pos ) {
 void Player::update() {
     
     pos += vel;
+    pos.x += maxVel;
     
     // Health depletes constantly.
     if ( fHealth > fHealthMax ) {

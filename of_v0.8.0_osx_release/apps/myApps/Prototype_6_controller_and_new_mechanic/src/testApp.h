@@ -101,4 +101,6 @@ public:
     ofEasyCam myCam;
     
     Player myPlayer, myPlayer2;
+    
+    Track myTrack;
 };

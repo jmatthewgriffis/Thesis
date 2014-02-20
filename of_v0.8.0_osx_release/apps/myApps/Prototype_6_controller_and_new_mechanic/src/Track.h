@@ -14,7 +14,11 @@ class Track {
 public:
     Track();
     
-    void setup();
+    void setup( int _iScaler, float _fMeasureLength/*, void *_addObject( string _note, float _xPos, int _age )*/ );
     void update();
     void draw();
+    
+    int iScaler;
+    
+    float fMeasureLength;
 };

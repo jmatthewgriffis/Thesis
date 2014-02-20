@@ -63,7 +63,7 @@ void testApp::setup(){
     if ( bHighlightNote ) getThisOne = 0;
     else getThisOne = -1;
     objectLife = 7 * frameRate;
-    fMeasureLength = 0;
+    fMeasureLength = iScaler * 6 * 5.333333;;
     iStaffAlphaMin = 10;
     iStaffAlphaMax = 200;
     iStaffAlpha = iStaffAlphaMin;
@@ -71,6 +71,7 @@ void testApp::setup(){
     
     myPlayer.setup( iScaler, ofVec2f( iScaler * 4, iThirdOfScreen ) );
     myPlayer2.setup( iScaler, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen ) );
+    myTrack.setup( iScaler, fMeasureLength/*, &testApp::addObject*/ );
     
     //testPattern(); //(boss battle)
     fSetupTutorial();
@@ -658,11 +659,7 @@ void testApp::fSetupTutorial() {
     
     //riff bass
     float m1Bass = iScaler * 20;
-    float spacer = iScaler * 6;
-    float mLength = spacer * 5.333333;
-    fMeasureLength = mLength;
-    //float mLength = iScaler * 32;
-    //cout<<mLength<<endl;
+    float spacer = fMeasureLength / 5.333333;
     
     addObject("c3#", m1Bass-iScaler * 4, -1); // test note
     
@@ -689,7 +686,7 @@ void testApp::fSetupTutorial() {
     //m2
     
     //riff bass
-    float m2Bass = m1Bass + mLength;
+    float m2Bass = m1Bass + fMeasureLength;
     
     addObject("d2#", m2Bass, -1);
     addObject("a2#", m2Bass, -1);
@@ -714,7 +711,7 @@ void testApp::fSetupTutorial() {
     //m3
     
     //riff bass
-    float m3Bass = m2Bass + mLength;
+    float m3Bass = m2Bass + fMeasureLength;
     
     addObject("d2#", m3Bass, -1);
     addObject("a2#", m3Bass, -1);
@@ -739,7 +736,7 @@ void testApp::fSetupTutorial() {
     //m4
     
     //riff bass
-    float m4Bass = m3Bass + mLength;
+    float m4Bass = m3Bass + fMeasureLength;
     
     addObject("d2#", m4Bass, -1);
     addObject("a2#", m4Bass, -1);
@@ -766,7 +763,7 @@ void testApp::fSetupTutorial() {
     //m5
     
     //riff bass
-    float m5Bass = m4Bass + mLength;
+    float m5Bass = m4Bass + fMeasureLength;
     
     addObject("c2#", m5Bass, -1);
     addObject("g2#", m5Bass, -1);
@@ -791,7 +788,7 @@ void testApp::fSetupTutorial() {
     //m6
     
     //riff bass
-    float m6Bass = m5Bass + mLength;
+    float m6Bass = m5Bass + fMeasureLength;
     
     addObject("c2#", m6Bass, -1);
     addObject("g2#", m6Bass, -1);
@@ -816,7 +813,7 @@ void testApp::fSetupTutorial() {
     //m7
     
     //riff bass
-    float m7Bass = m6Bass + mLength;
+    float m7Bass = m6Bass + fMeasureLength;
     
     addObject("c2#", m7Bass, -1);
     addObject("g2#", m7Bass, -1);
@@ -841,7 +838,7 @@ void testApp::fSetupTutorial() {
     //m8
     
     //riff bass
-    float m8Bass = m7Bass + mLength;
+    float m8Bass = m7Bass + fMeasureLength;
     
     addObject("c2#", m8Bass, -1);
     addObject("g2#", m8Bass, -1);
@@ -868,7 +865,7 @@ void testApp::fSetupTutorial() {
     //m9
     
     //riff bass
-    float m9Bass = m8Bass + mLength;
+    float m9Bass = m8Bass + fMeasureLength;
     
     addObject("d2#", m9Bass, -1);
     addObject("a2#", m9Bass, -1);
@@ -893,7 +890,7 @@ void testApp::fSetupTutorial() {
     //m10
     
     //riff bass
-    float m10Bass = m9Bass + mLength;
+    float m10Bass = m9Bass + fMeasureLength;
     
     addObject("d2#", m10Bass, -1);
     addObject("a2#", m10Bass, -1);
@@ -918,7 +915,7 @@ void testApp::fSetupTutorial() {
     //m11
     
     //riff bass
-    float m11Bass = m10Bass + mLength;
+    float m11Bass = m10Bass + fMeasureLength;
     
     addObject("d2#", m11Bass, -1);
     addObject("a2#", m11Bass, -1);
@@ -943,7 +940,7 @@ void testApp::fSetupTutorial() {
     //m12
     
     //riff bass
-    float m12Bass = m11Bass + mLength;
+    float m12Bass = m11Bass + fMeasureLength;
     
     addObject("d2#", m12Bass, -1);
     addObject("a2#", m12Bass, -1);
@@ -970,7 +967,7 @@ void testApp::fSetupTutorial() {
     //m13
     
     //riff bass
-    float m13Bass = m12Bass + mLength;
+    float m13Bass = m12Bass + fMeasureLength;
     
     addObject("c2#", m13Bass, -1);
     addObject("g2#", m13Bass, -1);
@@ -995,7 +992,7 @@ void testApp::fSetupTutorial() {
     //m14
     
     //riff bass
-    float m14Bass = m13Bass + mLength;
+    float m14Bass = m13Bass + fMeasureLength;
     
     addObject("c2#", m14Bass, -1);
     addObject("g2#", m14Bass, -1);
@@ -1020,7 +1017,7 @@ void testApp::fSetupTutorial() {
     //m15
     
     //riff bass
-    float m15Bass = m14Bass + mLength;
+    float m15Bass = m14Bass + fMeasureLength;
     
     addObject("c2#", m15Bass, -1);
     addObject("g2#", m15Bass, -1);
@@ -1045,7 +1042,7 @@ void testApp::fSetupTutorial() {
     //m16
     
     //riff bass
-    float m16Bass = m15Bass + mLength;
+    float m16Bass = m15Bass + fMeasureLength;
     
     addObject("c2#", m16Bass, -1);
     addObject("g2#", m16Bass, -1);
@@ -1072,7 +1069,7 @@ void testApp::fSetupTutorial() {
     //m17
     
     //riff bass
-    float m17Bass = m16Bass + mLength;
+    float m17Bass = m16Bass + fMeasureLength;
     
     addObject("b1", m17Bass, -1);
     addObject("f2#", m17Bass, -1);
@@ -1099,7 +1096,7 @@ void testApp::fSetupTutorial() {
     //m18
     
     //riff bass
-    float m18Bass = m17Bass + mLength;
+    float m18Bass = m17Bass + fMeasureLength;
     
     addObject("c2#", m18Bass, -1);
     addObject("g2#", m18Bass, -1);
@@ -1126,7 +1123,7 @@ void testApp::fSetupTutorial() {
     //m19
     
     //riff bass
-    float m19Bass = m18Bass + mLength;
+    float m19Bass = m18Bass + fMeasureLength;
     
     addObject("d2#", m19Bass, -1);
     addObject("a2#", m19Bass, -1);
@@ -1151,7 +1148,7 @@ void testApp::fSetupTutorial() {
     //m20
     
     //riff bass
-    float m20Bass = m19Bass + mLength;
+    float m20Bass = m19Bass + fMeasureLength;
     
     addObject("d2#", m20Bass, -1);
     addObject("a2#", m20Bass, -1);
@@ -1178,7 +1175,7 @@ void testApp::fSetupTutorial() {
     //m21
     
     //riff bass
-    float m21Bass = m20Bass + mLength;
+    float m21Bass = m20Bass + fMeasureLength;
     
     addObject("b1", m21Bass, -1);
     addObject("f2#", m21Bass, -1);
@@ -1205,7 +1202,7 @@ void testApp::fSetupTutorial() {
     //m22
     
     //riff bass
-    float m22Bass = m21Bass + mLength;
+    float m22Bass = m21Bass + fMeasureLength;
     
     addObject("c2#", m22Bass, -1);
     addObject("g2#", m22Bass, -1);
@@ -1232,7 +1229,7 @@ void testApp::fSetupTutorial() {
     //m23
     
     //riff bass
-    float m23Bass = m22Bass + mLength;
+    float m23Bass = m22Bass + fMeasureLength;
     
     addObject("d2#", m23Bass, -1);
     addObject("a2#", m23Bass, -1);
@@ -1257,7 +1254,7 @@ void testApp::fSetupTutorial() {
     //m24
     
     //riff bass
-    float m24Bass = m23Bass + mLength;
+    float m24Bass = m23Bass + fMeasureLength;
     
     addObject("d2#", m24Bass, -1);
     addObject("a2#", m24Bass, -1);
