@@ -78,9 +78,7 @@ void testApp::setup(){
     myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
     
     myTrack.setup( iScaler, fMeasureLength );
-    for ( int i = 0; i < myTrack.stringList.size(); i += 3 ) {
-        addObject( myTrack.stringList[ i ], ofToFloat( myTrack.stringList[ i + 1  ] ), ofToInt( myTrack.stringList[ i + 2 ] ) );
-    }
+    addObject( myTrack.stringList );
     
     //testPattern(); //(boss battle)
     //if ( gameState > 0 ) fSetupTutorial();
@@ -247,6 +245,17 @@ void testApp::addObject( string _note, float _xPos, int _age ) {
     tmp.setup( iScaler, staffPosList, _note, _age );
     tmp.pos.x = _xPos;
     objectList.push_back( tmp );
+}
+
+void testApp::addObject( vector < string > _stringList ) {
+    
+    for ( int i = 0; i < myTrack.stringList.size(); i += 3 ) {
+        // This function adds an NPC Object.
+        Object tmp;
+        tmp.setup( iScaler, staffPosList, _stringList[ i ], ofToInt( _stringList[ i + 2 ] ) );
+        tmp.pos.x = ofToFloat( _stringList[ i + 1  ] );
+        objectList.push_back( tmp );
+    }
 }
 
 //--------------------------------------------------------------
