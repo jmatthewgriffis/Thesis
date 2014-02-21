@@ -12,7 +12,16 @@ Track::Track() {
     
 }
 
-void Track::setup( int _iScaler, float _fMeasureLength/*, void *_addObject( string _note, float _xPos, int _age )*/ ) {
+void Track::addObject( string _note, float _xPos, int _age ) {
+    
+    stringList.push_back( _note );
+    stringList.push_back( ofToString( _xPos ) );
+    stringList.push_back( ofToString( _age ) );
+}
+
+void Track::setup( int _iScaler, float _fMeasureLength ) {
+    
+    stringList.clear();
     
     iScaler = _iScaler;
     fMeasureLength = _fMeasureLength;
@@ -23,10 +32,9 @@ void Track::setup( int _iScaler, float _fMeasureLength/*, void *_addObject( stri
     float m1Bass = iScaler * 20;
     float spacer = fMeasureLength / 5.333333;
     
-    /*
-    _addObject("c3#", m1Bass-iScaler * 4, -1); // test note
+    addObject("c3#", m1Bass-iScaler * 4, -1); // test note
     
-    _addObject("d2#", m1Bass, -1);
+    addObject("d2#", m1Bass, -1);
     addObject("a2#", m1Bass, -1);
     addObject("d2#", m1Bass + spacer, -1);
     addObject("a2#", m1Bass + spacer, -1);
@@ -621,7 +629,7 @@ void Track::setup( int _iScaler, float _fMeasureLength/*, void *_addObject( stri
     
     addObject("d2#", m24Bass, -1);
     addObject("a2#", m24Bass, -1);
-     */
+    
     /*addObject("d2#", m24Bass + spacer, -1);
      addObject("a2#", m24Bass + spacer, -1);
      addObject("d2#", m24Bass + spacer * 2, -1);
@@ -633,14 +641,16 @@ void Track::setup( int _iScaler, float _fMeasureLength/*, void *_addObject( stri
     
     
     //riff treble
-    //float m24Treble = m24Bass;
+    float m24Treble = m24Bass;
     //    float m24Treble = m24Bass + iScaler * 4;
-    //addObject("d3#", m24Treble, -1);
+    addObject("d3#", m24Treble, -1);
     /*addObject("f3#", m24Treble, -1);
      addObject("d3#", m24Treble + iScaler * 4, -1);
      addObject("c3#", m24Treble + iScaler * 12, -1);
      addObject("d3#", m24Treble + iScaler * 16, -1);
      addObject("f3#", m24Treble + iScaler * 24, -1);*/
+    
+    return stringList;
 }
 
 void Track::update() {

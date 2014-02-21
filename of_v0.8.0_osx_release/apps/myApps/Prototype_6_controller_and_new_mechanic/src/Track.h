@@ -14,9 +14,13 @@ class Track {
 public:
     Track();
     
-    void setup( int _iScaler, float _fMeasureLength/*, void *_addObject( string _note, float _xPos, int _age )*/ );
+    void setup( int _iScaler, float _fMeasureLength );
     void update();
     void draw();
+    
+    void addObject( string _note, float _xPos, int _age );
+    
+    vector< string > stringList;
     
     int iScaler;
     
