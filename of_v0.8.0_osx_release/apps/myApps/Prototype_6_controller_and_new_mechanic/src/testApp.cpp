@@ -75,10 +75,12 @@ void testApp::setup(){
     iStaffAlphaVel = 0.5;
     
     myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
-    myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
     
-    myTrack.setup( iScaler, fMeasureLength );
-    addObject( myTrack.stringList );
+    if ( gameState >= 3 ) {
+        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
+        myTrack.setup( iScaler, fMeasureLength );
+        addObject( myTrack.stringList );
+    }
     
     //testPattern(); //(boss battle)
     //if ( gameState > 0 ) fSetupTutorial();
