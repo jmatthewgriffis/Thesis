@@ -43,7 +43,9 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     actPos.set( 0 );
 }
 
-void Player::update() {
+void Player::update( int _gameState ) {
+    
+    gameState = _gameState;
     
     // Health depletes constantly.
     if ( fHealth > fHealthMax ) {
@@ -58,25 +60,34 @@ void Player::update() {
     
     // Movement
     if ( allowMove ) {
-        /*if ( up && onSurface && allowJump ) {
-            //            pos.y -= vel.y;
-            onSurface = false;
-            allowJump = false;
-            // Jump! And prevent additional jumps.
-            applyForce( ofVec2f( 0.0, -jumpVel ) );
-        }*/
+        
         if ( up ) {
-            applyForce( ofVec2f( 0.0, -maxVel ) );
-        }
-        if ( left ) {
-            applyForce( ofVec2f( -maxVel, 0.0 ) );
+            if ( gameState >= 3 ) {
+                applyForce( ofVec2f( 0.0, -maxVel ) );
+            } else if ( onSurface && allowJump ) {
+                    //            pos.y -= vel.y;
+                    onSurface = false;
+                    allowJump = false;
+                    // Jump! And prevent additional jumps.
+                    applyForce( ofVec2f( 0.0, -jumpVel ) );
+                    }
         }
         if ( down ) {
-            //            pos.y += vel.y;
-            applyForce( ofVec2f( 0.0, maxVel ) );
+            if ( gameState >= 3 ) {
+                //            pos.y += vel.y;
+                applyForce( ofVec2f( 0.0, maxVel ) );
+            }
+        }
+        
+        if ( left ) {
+            //if ( gameState < 3 ) {
+                applyForce( ofVec2f( -maxVel, 0.0 ) );
+            //}
         }
         if ( right ) {
-            applyForce( ofVec2f( maxVel, 0.0 ) );
+            //if ( gameState < 3 ) {
+                applyForce( ofVec2f( maxVel, 0.0 ) );
+            //}
         }
         
         vel += acc;
@@ -87,9 +98,10 @@ void Player::update() {
         }
         
         pos += vel;
-        //pos.x += maxVel;
         
-        //        cout<<vel.x<<endl;
+        if ( gameState >= 3 ) {
+            pos.x += maxVel;
+        }
         
         if ( !bUsingController ) {
             //        if ( onSurface ) {
@@ -111,10 +123,12 @@ void Player::update() {
     }
     
     // Manage forces.
-    float damping = 0.97;
-    //vel.y *= damping;
-    //vel.y *= damping / 2.0;
-    //vel.x *= damping / 2.0;
+    if ( gameState < 3 ) {
+        float damping = 0.97;
+        vel.y *= damping;
+        //vel.y *= damping / 2.0;
+        vel.x *= damping / 2.0;
+    }
     acc.set( 0 );
     
     fPressingRecord();
@@ -156,25 +170,25 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         
         ofTranslate( pos.x, pos.y);
         
-       /*
-        {
-            // Draw the health bar
-            ofSetRectMode( OF_RECTMODE_CORNER );
-            float offset = 1;
-            float offsetBar = iScaler / 2.5;
-            float barHeight = iScaler / 2.5;
-            float barLength = wide * 2;
-            float currentHealth = ofMap( fHealth, 0, fHealthMax, 0, barLength - offset * 2 );
-            // The border.
-            ofSetColor( 255 );
-            ofNoFill();
-            ofRect( -wide, wide / 2 + offsetBar, barLength, barHeight );
-            ofFill();
-            // The current health.
-            ofSetColor( 0, 255, 0 );
-            ofRect( -wide + offset, wide / 2 + offsetBar + offset, currentHealth, barHeight - offset * 2 );
-        }
-       */  
+        /*
+         {
+         // Draw the health bar
+         ofSetRectMode( OF_RECTMODE_CORNER );
+         float offset = 1;
+         float offsetBar = iScaler / 2.5;
+         float barHeight = iScaler / 2.5;
+         float barLength = wide * 2;
+         float currentHealth = ofMap( fHealth, 0, fHealthMax, 0, barLength - offset * 2 );
+         // The border.
+         ofSetColor( 255 );
+         ofNoFill();
+         ofRect( -wide, wide / 2 + offsetBar, barLength, barHeight );
+         ofFill();
+         // The current health.
+         ofSetColor( 0, 255, 0 );
+         ofRect( -wide + offset, wide / 2 + offsetBar + offset, currentHealth, barHeight - offset * 2 );
+         }
+         */
         
     }ofPopMatrix();
     

@@ -64,7 +64,7 @@ void testApp::setup(){
     
     bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = false;
     bHighlightNote = false;
-    bCamZoomedIn = true;
+    bCamZoomedIn = false;
     
     if ( bHighlightNote ) getThisOne = 0;
     else getThisOne = -1;
@@ -121,7 +121,7 @@ void testApp::update(){
     
     // Apply gravity to the player.
     // Come back to this. Use it to fake analog sensitivity with jump height proportional to how long the button is held. Gravity only applies sometimes.
-    if ( gameState == 4 ) {
+    if ( gameState != 3 ) {
         myPlayer.applyForce( ofVec2f( 0.0, 0.3 ) );
     }
     
@@ -132,8 +132,8 @@ void testApp::update(){
     objectCollidesWithObstacle();
     
     // Update the player (duh).
-    myPlayer.update();
-    myPlayer2.update();
+    myPlayer.update( gameState );
+    myPlayer2.update( gameState );
     // Prevent ships from moving into the wrong section of screen.
     if ( myPlayer.pos.y > iThirdOfScreen ) {
         myPlayer.pos.y = iThirdOfScreen;
@@ -859,20 +859,37 @@ void testApp::keyPressed(int key){
         case OF_KEY_RETURN:
             if ( gameState == 0 ) {
                 if ( !myTitle.bChoseControls ) {
+                    
                     myTitle.bChoseControls = true;
+                    
                 } else {
+                    
                     gameState = myTitle.iWhichPrototype;
                     currentState = gameState;
+                    
                     if ( gameState == 1 ) {
+                        
+                        bCamZoomedIn = true;
                         //fSetupTutorial();
+                        
                     } else if ( gameState == 2 ) {
+                        
+                        bCamZoomedIn = true;
                         addObject( myBoss.setup( iScaler, fMeasureLength ) );
+                        
                         for ( int i = 0; i < objectList.size(); i++ ) {
                             objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
                         }
+                        
                     } else if ( gameState >= 3 ) {
+                        
                         myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
+                        
                         addObject( myTrack.setup( iScaler, fMeasureLength ) );
+                        
+                        if ( gameState == 4 ) {
+                            bCamZoomedIn = true;
+                        }
                     }
                 }
             }
@@ -897,9 +914,15 @@ void testApp::keyPressed(int key){
             // UP
         case 'w':
         case 'W':
-            if ( bIsLefty ) {}
-            //else myPlayer.up = true;
-            else myPlayer2.up = true;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    //
+                } else {
+                    myPlayer.up = true;
+                }
+            } else {
+                myPlayer2.up = true;
+            }
             break;
         case OF_KEY_UP:
             if ( gameState == 0 ) {
@@ -908,29 +931,50 @@ void testApp::keyPressed(int key){
                 } else {
                     myTitle.iWhichPrototype--;
                 }
+            } else if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.up = true;
+                } else {
+                    //
+                }
             } else {
-                if ( bIsLefty ) myPlayer.up = true;
-                else { myPlayer.up = true; }
+                myPlayer.up = true;
             }
             break;
             
             // LEFT
         case 'a':
         case 'A':
-            //if ( bIsLefty ) myPlayer.record = true;
-            //else myPlayer.left = true;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.record = true;
+                } else {
+                    myPlayer.left = true;
+                }
+            }
             break;
         case OF_KEY_LEFT:
-            //if ( bIsLefty ) myPlayer.left = true;
-            //else myPlayer.record = true;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.left = true;
+                } else {
+                    myPlayer.record = true;
+                }
+            }
             break;
             
             // DOWN
         case 's':
         case 'S':
-            if ( bIsLefty ) {}
-            //else myPlayer.down = true;
-            else myPlayer2.down = true;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    //
+                } else {
+                    myPlayer.down = true;
+                }
+            } else {
+                myPlayer2.down = true;
+            }
             break;
         case OF_KEY_DOWN:
             if ( gameState == 0 ) {
@@ -939,26 +983,42 @@ void testApp::keyPressed(int key){
                 } else {
                     myTitle.iWhichPrototype++;
                 }
+            } else if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.down = true;
+                } else {
+                    //
+                }
             } else {
-                if ( bIsLefty ) myPlayer.down = true;
-                else { myPlayer.down = true; }
+                myPlayer.down = true;
             }
             break;
             
             // RIGHT
         case 'd':
         case 'D':
-            if ( bIsLefty ) {
-                //myPlayer.replay = true;
-                //if ( myPlayer.bAllowReplay ) fReplay();
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.replay = true;
+                    if ( myPlayer.bAllowReplay ) {
+                        fReplay();
+                    }
+                }
+                else {
+                    myPlayer.right = true;
+                }
             }
-            //else myPlayer.right = true;
             break;
         case OF_KEY_RIGHT:
-            //if ( bIsLefty ) myPlayer.right = true;
-            /*else*/ {
-                //myPlayer.replay = true;
-                //if ( myPlayer.bAllowReplay ) fReplay();
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.right = true;
+                } else {
+                    myPlayer.replay = true;
+                    if ( myPlayer.bAllowReplay ) {
+                        fReplay();
+                    }
+                }
             }
             break;
             
@@ -1022,53 +1082,94 @@ void testApp::keyReleased(int key){
             // UP
         case 'w':
         case 'W':
-            if ( bIsLefty ) {}
-            else {
-                //myPlayer.up = false;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    //
+                } else {
+                    myPlayer.up = false;
+                    myPlayer.allowJump = true;
+                }
+            } else {
                 myPlayer2.up = false;
-                myPlayer.allowJump = true;
             }
             break;
         case OF_KEY_UP:
-            if ( bIsLefty ) {
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.up = false;
+                    myPlayer.allowJump = true;
+                }
+            } else {
                 myPlayer.up = false;
-                myPlayer.allowJump = true;
             }
-            else { myPlayer.up = false; }
             break;
             
             // LEFT
         case 'a':
         case 'A':
-            //if ( bIsLefty ) myPlayer.record = false;
-            //else myPlayer.left = false;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.record = false;
+                }
+                else {
+                    myPlayer.left = false;
+                }
+            }
             break;
         case OF_KEY_LEFT:
-            //if ( bIsLefty ) myPlayer.left = false;
-            //else myPlayer.record = false;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.left = false;
+                } else {
+                    myPlayer.record = false;
+                }
+            }
             break;
             
             // DOWN
         case 's':
         case 'S':
-            if ( bIsLefty ) {}
-            //else myPlayer.down = false;
-            else myPlayer2.down = false;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    //
+                } else {
+                    myPlayer.down = false;
+                }
+            } else {
+                myPlayer2.down = false;
+            }
             break;
         case OF_KEY_DOWN:
-            if ( bIsLefty ) myPlayer.down = false;
-            else { myPlayer.down = false; }
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.down = false;
+                } else {
+                    //
+                }
+            } else {
+                myPlayer.down = false;
+            }
             break;
             
             // RIGHT
         case 'd':
         case 'D':
-            //if ( bIsLefty ) myPlayer.replay = false;
-            //else myPlayer.right = false;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.replay = false;
+                } else {
+                    myPlayer.right = false;
+                }
+            }
             break;
         case OF_KEY_RIGHT:
-            //if ( bIsLefty ) myPlayer.right = false;
-            //else myPlayer.replay = false;
+            if ( gameState < 3 ) {
+                if ( bIsLefty ) {
+                    myPlayer.right = false;
+                } else {
+                    myPlayer.replay = false;
+                }
+            }
             break;
             
             // End movement and action.
@@ -1076,38 +1177,38 @@ void testApp::keyReleased(int key){
     }
 }
 /*
-//--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
-    
-}
-
-//--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
-    
-}
-
-//--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
-    
-}
-
-//--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
-    
-}
-
-//--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
-    
-}
-
-//--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
-    
-}
-
-//--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){
-    
-}
-*/
+ //--------------------------------------------------------------
+ void testApp::mouseMoved(int x, int y ){
+ 
+ }
+ 
+ //--------------------------------------------------------------
+ void testApp::mouseDragged(int x, int y, int button){
+ 
+ }
+ 
+ //--------------------------------------------------------------
+ void testApp::mousePressed(int x, int y, int button){
+ 
+ }
+ 
+ //--------------------------------------------------------------
+ void testApp::mouseReleased(int x, int y, int button){
+ 
+ }
+ 
+ //--------------------------------------------------------------
+ void testApp::windowResized(int w, int h){
+ 
+ }
+ 
+ //--------------------------------------------------------------
+ void testApp::gotMessage(ofMessage msg){
+ 
+ }
+ 
+ //--------------------------------------------------------------
+ void testApp::dragEvent(ofDragInfo dragInfo){
+ 
+ }
+ */
