@@ -59,10 +59,10 @@ void testApp::setup(){
      3:     piano prototype
      4:     boost prototype
      */
-    gameState = 2;
+    gameState = 0;
     currentState = gameState;
     
-    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = false;
+    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = false;
     bHighlightNote = false;
     bCamZoomedIn = true;
     
@@ -74,6 +74,7 @@ void testApp::setup(){
     iStaffAlphaMax = 200;
     iStaffAlpha = iStaffAlphaMin;
     iStaffAlphaVel = 0.5;
+    myTitle.iWhichPrototype = 1;
     
     myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
     
@@ -167,7 +168,7 @@ void testApp::draw(){
     //ofxGamepadHandler::get()->draw(10,10);
     
     if ( gameState == 0 ) {
-        fDrawTitleScreen();
+        myTitle.draw( iScaler, helvetica, bIsLefty );
     }
     
     else if ( gameState == -1 ) {
@@ -594,42 +595,6 @@ void testApp::cleanup() {
 }
 
 //--------------------------------------------------------------
-void testApp::fDrawTitleScreen() {
-    
-    ofSetRectMode( OF_RECTMODE_CORNER );
-    
-    ofSetColor( 0 );
-    helvetica.drawString( "Hello! Welcome to Protoville, home of the prototype.", iScaler * 5, iScaler * 3 );
-    helvetica.drawString( "Please choose your control affiliation.", iScaler * 9, iScaler * 5 );
-    
-    if ( bIsLefty) ofSetColor( 0 );
-    else {
-        ofSetColor( 0 );
-        ofRect( iScaler * 7.6, iScaler * 6.8, iScaler * 26.8, iScaler * 2 );
-        ofSetColor( 255 );
-    }
-    helvetica.drawString( "I am so dextrous (right-handed).", iScaler * 11, iScaler * 8 );
-    if ( bIsLefty) {
-        ofSetColor( 0 );
-        ofRect( iScaler * 7.6, iScaler * 8.8, iScaler * 26.8, iScaler * 2 );
-        ofSetColor( 255 );
-    } else ofSetColor( 0 );
-    helvetica.drawString( "I feel quite sinister (left-handed).", iScaler * 11, iScaler * 10 );
-    
-    ofSetColor( 0 );
-    
-    ofPushMatrix();{
-        ofTranslate( ofGetWidth() - iScaler * 3, iScaler * 9 );
-        helvetica.drawString( "[^]", 0, 0 );
-        ofRotate( 180 );
-        helvetica.drawString( "[^]", float( iScaler * 0.6 ), float( iScaler * 0.68 ) );
-    }ofPopMatrix();
-    
-    helvetica.drawString( "Headphones recommended.", iScaler * 12, iScaler * 12.4 );
-    helvetica.drawString( "Press ENTER to continue.", iScaler * 12, iScaler * 14.4 );
-}
-
-//--------------------------------------------------------------
 void testApp::fDrawRestartScreen() {
     
     ofSetColor( 0 );
@@ -906,7 +871,11 @@ void testApp::keyPressed(int key){
             // Proceed on menu.
         case OF_KEY_RETURN:
             if ( gameState == 0 ) {
-                gameState = 1;
+                if ( !myTitle.bChoseControls ) {
+                    myTitle.bChoseControls = true;
+                } else {
+                    
+                }
             }
             // Go to boss battle if player has reached end of tutorial.
             /*else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + iScaler * 16 ) {
@@ -1099,7 +1068,7 @@ void testApp::keyReleased(int key){
             //----------------------------------------------------
     }
 }
-
+/*
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
     
@@ -1134,3 +1103,4 @@ void testApp::gotMessage(ofMessage msg){
 void testApp::dragEvent(ofDragInfo dragInfo){
     
 }
+*/
