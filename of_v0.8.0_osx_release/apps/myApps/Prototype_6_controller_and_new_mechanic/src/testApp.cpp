@@ -64,6 +64,7 @@ void testApp::setup(){
     
     bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = false;
     bHighlightNote = false;
+    bCamZoomedIn = false;
     
     if ( bHighlightNote ) getThisOne = 0;
     else getThisOne = -1;
@@ -186,10 +187,10 @@ void testApp::draw(){
         // Move the camera with the player, as long as it dosn't move out of bounds.
         if ( gameState > 0 ) {
             //if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
-            if ( gameState == 3 ) {
-                myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
-            } else if ( gameState == 4 ) {
+            if ( bCamZoomedIn ) {
                 myCam.move( myPlayer.pos.x - ofGetWidth() / 3.0, -iScaler * 10, -iScaler * 6 );
+            } else {
+                myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
             }
             //}
             ofSetColor( 0 );
@@ -806,7 +807,7 @@ void testApp::fDrawStaff() {
             ofLine( xStart, iScaler * 4, xStart, ofGetHeight() - iScaler * 4 );
             ofSetLineWidth( 1 );
         } else {
-            xStart = myPlayer.pos.x - ofGetWidth() / 2; // FIND ME
+            xStart = myPlayer.pos.x - ofGetWidth();
         }
         ofLine( xStart, iScaler * 2 * i, myPlayer.pos.x + ofGetWidth(), iScaler * 2 * i );
         ofLine( xStart, ofGetHeight() - ( iScaler * 2 * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( iScaler * 2 * i ) );
