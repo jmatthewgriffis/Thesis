@@ -59,12 +59,12 @@ void testApp::setup(){
      3:     piano prototype
      4:     boost prototype
      */
-    gameState = 3;
+    gameState = 2;
     currentState = gameState;
     
     bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = false;
     bHighlightNote = false;
-    bCamZoomedIn = false;
+    bCamZoomedIn = true;
     
     if ( bHighlightNote ) getThisOne = 0;
     else getThisOne = -1;
@@ -77,24 +77,25 @@ void testApp::setup(){
     
     myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
     
-    if ( gameState >= 3 ) {
+    if ( gameState == 2 ) {
+        addObject( myBoss.setup( iScaler, fMeasureLength ) );
+        for ( int i = 0; i < objectList.size(); i++ ) {
+         objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
+         }
+    }
+    else if ( gameState >= 3 ) {
         myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
-        myTrack.setup( iScaler, fMeasureLength );
-        addObject( myTrack.stringList );
+        addObject( myTrack.setup( iScaler, fMeasureLength ) );
     }
     
-    //testPattern(); //(boss battle)
     //if ( gameState > 0 ) fSetupTutorial();
 }
 
 //--------------------------------------------------------------
 bool bShouldIErase( Object &a ){
     
-    // Zach Lieberman showed me this method to remove an element from a vector. We create a boolean function, feed it a class, and pass a reference label that we make up (in this case 'a') so we can refer to the applicable object. Then we check for a certain condition which if met returns a boolean value of 'true.' Otherwise it returns 'false.'
-    
     if ( a.destroyMe ) return true;
     else return false;
-    
 }
 
 //--------------------------------------------------------------
@@ -156,7 +157,6 @@ void testApp::update(){
     // Update the notes.
     updateObjectList();
     
-    // Following up the boolean function we created above, this oF function sorts the vector according to the values of the booleans and then removes any with a 'true' value:
     ofRemove( objectList, bShouldIErase );
     ofRemove( recordedList, bShouldIErase );
 }
@@ -176,31 +176,27 @@ void testApp::draw(){
     
     // Don't draw anything else if not on the game screen.
     else if ( gameState > 0 ) {
-        
-        if ( gameState > 0 ) {
-            myCam.begin();
-            myCam.setupPerspective();
-        }
+        myCam.begin();
+        myCam.setupPerspective();
         
         // LOCATION-INDEPENDENT
         
         // Move the camera with the player, as long as it dosn't move out of bounds.
-        if ( gameState > 0 ) {
-            //if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
-            if ( bCamZoomedIn ) {
-                myCam.move( myPlayer.pos.x - ofGetWidth() / 3.0, -iScaler * 10, -iScaler * 6 );
-            } else {
-                myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
-            }
-            //}
-            ofSetColor( 0 );
-            if ( bIsDebugging ) {
-                helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, iScaler * 2 );
-                helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - iScaler * 12, iScaler * 2 );
-            }
-            if ( myPlayer.pos.x > ofGetWidth() / 2 ) {
-                helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - iScaler * 8.4, iScaler * 2 );
-            }
+        //if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
+        if ( bCamZoomedIn ) {
+            myCam.move( myPlayer.pos.x - ofGetWidth() / 3.0, -iScaler * 10, -iScaler * 6 );
+        } else {
+            myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
+        }
+        //}
+        
+        ofSetColor( 0 );
+        if ( bIsDebugging ) {
+            helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, iScaler * 2 );
+            helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - iScaler * 12, iScaler * 2 );
+        }
+        if ( myPlayer.pos.x > ofGetWidth() / 2 ) {
+            helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - iScaler * 8.4, iScaler * 2 );
         }
         
         fDrawStaff();
@@ -216,7 +212,7 @@ void testApp::draw(){
         if ( gameState == 1 ) {
             fDrawTutorialInstructions();
         } else if ( gameState == 2 ) {
-            testPattern();
+            //Boss battle goes here.
             helvetica.drawString( "This is not yet fully implemented. :(\nCheck back later.", iScaler * 4, iScaler * 4 );
         }
         
@@ -234,9 +230,7 @@ void testApp::draw(){
         myPlayer2.draw( helvetica, recordedList );
         
         
-        if ( gameState == 1 ) {
-            myCam.end();
-        }
+        myCam.end();
     }
 }
 
@@ -252,7 +246,7 @@ void testApp::addObject( string _note, float _xPos, int _age ) {
 
 void testApp::addObject( vector < string > _stringList ) {
     
-    for ( int i = 0; i < myTrack.stringList.size(); i += 3 ) {
+    for ( int i = 0; i < _stringList.size(); i += 3 ) {
         // This function adds an NPC Object.
         Object tmp;
         tmp.setup( iScaler, staffPosList, _stringList[ i ], ofToInt( _stringList[ i + 2 ] ) );
@@ -565,25 +559,6 @@ void testApp::objectCollidesWithObstacle() {
                 }
             }
         }
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::testPattern() {
-    
-    if ( objectList.size() > 0 ) {
-        return;
-    }
-    
-    addObject( "a3", iScaler * 8, -1 );
-    addObject( "c4", iScaler * 16, -1 );
-    addObject( "e4", iScaler * 24, -1 );
-    addObject( "a3", iScaler * 32, -1 );
-    addObject( "a3", iScaler * 40, -1 );
-    addObject( "d4", iScaler * 40, -1 );
-    
-    for ( int i = 0; i < objectList.size(); i++ ) {
-        objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
     }
 }
 

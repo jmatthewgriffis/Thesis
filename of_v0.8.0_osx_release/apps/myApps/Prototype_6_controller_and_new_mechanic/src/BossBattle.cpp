@@ -12,14 +12,26 @@ BossBattle::BossBattle() {
     
 }
 
-void BossBattle::setup() {
+void BossBattle::addObject( string _note, float _xPos, int _age ) {
     
+    stringList.push_back( _note );
+    stringList.push_back( ofToString( _xPos ) );
+    stringList.push_back( ofToString( _age ) );
 }
 
-void BossBattle::update() {
+vector< string > BossBattle::setup( int _iScaler, float _fMeasureLength ) {
     
-}
-
-void BossBattle::draw() {
+    stringList.clear();
     
+    iScaler = _iScaler;
+    fMeasureLength = _fMeasureLength;
+    
+    addObject( "a3", iScaler * 8, -1 );
+    addObject( "c4", iScaler * 16, -1 );
+    addObject( "e4", iScaler * 24, -1 );
+    addObject( "a3", iScaler * 32, -1 );
+    addObject( "a3", iScaler * 40, -1 );
+    addObject( "d4", iScaler * 40, -1 );
+    
+    return stringList;
 }

@@ -19,7 +19,7 @@ void Track::addObject( string _note, float _xPos, int _age ) {
     stringList.push_back( ofToString( _age ) );
 }
 
-void Track::setup( int _iScaler, float _fMeasureLength ) {
+vector< string > Track::setup( int _iScaler, float _fMeasureLength ) {
     
     stringList.clear();
     
@@ -651,12 +651,4 @@ void Track::setup( int _iScaler, float _fMeasureLength ) {
      addObject("f3#", m24Treble + iScaler * 24, -1);*/
     
     return stringList;
-}
-
-void Track::update() {
-    
-}
-
-void Track::draw() {
-    
 }

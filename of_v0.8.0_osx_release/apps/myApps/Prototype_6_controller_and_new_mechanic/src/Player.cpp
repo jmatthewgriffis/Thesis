@@ -87,7 +87,7 @@ void Player::update() {
         }
         
         pos += vel;
-        pos.x += maxVel;
+        //pos.x += maxVel;
         
         //        cout<<vel.x<<endl;
         

@@ -53,7 +53,6 @@ public:
     void fDrawTutorialInstructions();
     
     void fCalcAllNotePos();
-    void testPattern();
     void fSetupTutorial();
     void fWriteControls();
     
@@ -104,6 +103,8 @@ public:
     ofEasyCam myCam;
     
     Player myPlayer, myPlayer2;
+    
+    BossBattle myBoss;
     
     Track myTrack;
 };

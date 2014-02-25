@@ -14,7 +14,12 @@ class BossBattle {
 public:
     BossBattle();
     
-    void setup();
-    void update();
-    void draw();
+    vector< string > setup( int _iScaler, float _fMeasureLength );
+    void addObject( string _note, float _xPos, int _age );
+    
+    vector< string > stringList;
+    
+    int iScaler;
+    
+    float fMeasureLength;
 };
