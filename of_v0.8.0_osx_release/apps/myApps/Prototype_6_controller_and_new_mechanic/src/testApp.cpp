@@ -357,10 +357,16 @@ void testApp::fReplay() {
 //--------------------------------------------------------------
 void testApp::playerCollidesWithGround() {
     
-    if ( myPlayer.pos.y >= ofGetHeight() - myPlayer.tall / 2.0 ) {
+    /*if ( myPlayer.pos.y >= ofGetHeight() - myPlayer.tall / 2.0 ) {
         myPlayer.pos.y = ofGetHeight() - myPlayer.tall / 2.0;
         myPlayer.onSurface = true;
+    }*/
+    
+    if ( myPlayer.pos.y >= iThirdOfScreen - myPlayer.tall / 2.0 ) {
+        myPlayer.pos.y = iThirdOfScreen - myPlayer.tall / 2.0;
+        myPlayer.onSurface = true;
     }
+
 }
 
 //--------------------------------------------------------------

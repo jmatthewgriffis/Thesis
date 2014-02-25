@@ -47,6 +47,8 @@ void Player::update( int _gameState ) {
     
     gameState = _gameState;
     
+    cout<<onSurface<<endl;
+    
     // Health depletes constantly.
     if ( fHealth > fHealthMax ) {
         fHealth = fHealthMax;
@@ -194,7 +196,7 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     
     ofSetColor( 255 );
     ofSetRectMode( OF_RECTMODE_CORNER );
-    headphones.draw( pos.x-35, pos.y-60, iScaler * 3, iScaler * 3 );
+    headphones.draw( pos.x-iScaler*1.4, pos.y-iScaler*2.4, iScaler * 3, iScaler * 3 );
     //hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall );
     
     // Display a visual indicator of recorded capacity.
