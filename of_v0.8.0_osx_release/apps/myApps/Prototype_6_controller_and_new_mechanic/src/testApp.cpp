@@ -77,19 +77,6 @@ void testApp::setup(){
     myTitle.iWhichPrototype = 1;
     
     myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
-    
-    if ( gameState == 2 ) {
-        addObject( myBoss.setup( iScaler, fMeasureLength ) );
-        for ( int i = 0; i < objectList.size(); i++ ) {
-         objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
-         }
-    }
-    else if ( gameState >= 3 ) {
-        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
-        addObject( myTrack.setup( iScaler, fMeasureLength ) );
-    }
-    
-    //if ( gameState > 0 ) fSetupTutorial();
 }
 
 //--------------------------------------------------------------
@@ -874,7 +861,19 @@ void testApp::keyPressed(int key){
                 if ( !myTitle.bChoseControls ) {
                     myTitle.bChoseControls = true;
                 } else {
-                    
+                    gameState = myTitle.iWhichPrototype;
+                    currentState = gameState;
+                    if ( gameState == 1 ) {
+                        //fSetupTutorial();
+                    } else if ( gameState == 2 ) {
+                        addObject( myBoss.setup( iScaler, fMeasureLength ) );
+                        for ( int i = 0; i < objectList.size(); i++ ) {
+                            objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
+                        }
+                    } else if ( gameState >= 3 ) {
+                        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
+                        addObject( myTrack.setup( iScaler, fMeasureLength ) );
+                    }
                 }
             }
             // Go to boss battle if player has reached end of tutorial.
@@ -904,7 +903,11 @@ void testApp::keyPressed(int key){
             break;
         case OF_KEY_UP:
             if ( gameState == 0 ) {
-                bIsLefty = !bIsLefty;
+                if ( !myTitle.bChoseControls ) {
+                    bIsLefty = !bIsLefty;
+                } else {
+                    myTitle.iWhichPrototype--;
+                }
             } else {
                 if ( bIsLefty ) myPlayer.up = true;
                 else { myPlayer.up = true; }
@@ -931,7 +934,11 @@ void testApp::keyPressed(int key){
             break;
         case OF_KEY_DOWN:
             if ( gameState == 0 ) {
-                bIsLefty = !bIsLefty;
+                if ( !myTitle.bChoseControls ) {
+                    bIsLefty = !bIsLefty;
+                } else {
+                    myTitle.iWhichPrototype++;
+                }
             } else {
                 if ( bIsLefty ) myPlayer.down = true;
                 else { myPlayer.down = true; }
