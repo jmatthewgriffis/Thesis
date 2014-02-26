@@ -41,7 +41,7 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     noteDuration = 30;
 }
 
-void Object::update( ofVec2f _pos ) {
+void Object::update( int _gameState, ofVec2f _pos ) {
     
     pos.y = fReturnYPos( whichNote );
     
@@ -120,7 +120,7 @@ void Object::update( ofVec2f _pos ) {
     if ( bIsRecorded ) {
         c = ofColor( 0, 255, 0, alpha );
         colorTimer = 10;
-    } else if ( bIsTouched ) {
+    } else if ( bIsTouched && _gameState >= 3 ) {
         c = ofColor( 255, 0 , 0, alpha );
     } else if ( drawAttention && colorTimer == 0 ) {
         c = ofColor( 255, 0, 0, alpha );

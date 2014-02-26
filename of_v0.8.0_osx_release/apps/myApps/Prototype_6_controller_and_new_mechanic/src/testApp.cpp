@@ -168,14 +168,24 @@ void testApp::draw(){
         
         // LOCATION-INDEPENDENT
         
+        //( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight() (staffStart)
+        
         // Move the camera with the player, as long as it dosn't move out of bounds.
-        //if ( myPlayer.pos.x - ofGetWidth() / 2.0 >= 0 ) {
-        if ( bCamZoomedIn ) {
-            myCam.move( myPlayer.pos.x - ofGetWidth() / 3.0, -iScaler * 10, -iScaler * 6 );
+        float fZoomFactor, fMoveX, fMoveY;
+        if ( bCamZoomedIn == true ) {
+            fZoomFactor = -iScaler * 6;
+            fMoveX = myPlayer.pos.x - ofGetWidth() / 3.0;
+            fMoveY = -iScaler * 10;
         } else {
-            myCam.move( myPlayer.pos.x - ofGetWidth() / 2.0, 0, 0 );
+            fZoomFactor = 0;
+            fMoveX = myPlayer.pos.x - ofGetWidth() / 2.0;
+            fMoveY = 0;
         }
-        //}
+        if ( fMoveX < 0 || gameState == 2 ) {
+            myCam.move( 0, fMoveY, fZoomFactor );
+        } else if ( fMoveX >= 0 ) {
+            myCam.move( fMoveX, fMoveY, fZoomFactor );
+        }
         
         ofSetColor( 0 );
         if ( bIsDebugging ) {
@@ -300,7 +310,7 @@ void testApp::updateObjectList() {
             //objectList[ i ].vol = ofMap( myPlayer2.fHealth, 0, myPlayer2.fHealthMax, 0.0, 1.0 );
         }
         
-        objectList[ i ].update( myPlayer.pos );
+        objectList[ i ].update( gameState, myPlayer.pos );
     }
 }
 
@@ -827,14 +837,14 @@ void testApp::keyPressed(int key){
         case 'r':
         case 'R':
             /*if ( bShiftIsPressed ) {
-                setup();
-                gameState = 1;
-            }*/
+             setup();
+             gameState = 1;
+             }*/
             //else {
-                if ( gameState > 0 ) {
-                    currentState = gameState;
-                    gameState = -1;
-                }
+            if ( gameState > 0 ) {
+                currentState = gameState;
+                gameState = -1;
+            }
             //}
             break;
             

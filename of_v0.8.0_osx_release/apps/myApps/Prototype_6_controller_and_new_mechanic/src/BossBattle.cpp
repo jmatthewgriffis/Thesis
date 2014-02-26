@@ -26,12 +26,12 @@ vector< string > BossBattle::setup( int _iScaler, float _fMeasureLength ) {
     iScaler = _iScaler;
     fMeasureLength = _fMeasureLength;
     
-    addObject( "a3", iScaler * 8, -1 );
-    addObject( "c4", iScaler * 16, -1 );
-    addObject( "e4", iScaler * 24, -1 );
-    addObject( "a3", iScaler * 32, -1 );
+    addObject( "e3", iScaler * 8, -1 );
+    addObject( "g3", iScaler * 16, -1 );
+    addObject( "b3", iScaler * 24, -1 );
+    addObject( "e3", iScaler * 32, -1 );
+    addObject( "e3", iScaler * 40, -1 );
     addObject( "a3", iScaler * 40, -1 );
-    addObject( "d4", iScaler * 40, -1 );
     
     return stringList;
 }

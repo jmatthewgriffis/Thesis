@@ -18,7 +18,7 @@ public:
     Object();
     
     void setup( int _iScaler, vector< float > _staffPosList, string _whichNote, int _age );
-    void update( ofVec2f _pos );
+    void update( int _gameState, ofVec2f _pos );
     void draw();
     
     string whichNote;
