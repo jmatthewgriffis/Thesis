@@ -224,6 +224,14 @@ void Object::fAddNote() {
     noteTimer = noteDuration;
 }
 
+void Object::fCleanup() {
+    
+    for ( int i = 0; i < noteList.size(); i++ ) {
+        noteList[ i ].sound.stop();
+    }
+    noteList.clear();
+}
+
 void Object::fLimitLife() {
     
     // Age the Object and destroy if it gets too old. Try not to feel too morbid.

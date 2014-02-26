@@ -25,6 +25,7 @@ public:
     void fLimitLife();
     float fReturnYPos( string _whichNote );
     void fAddNote();
+    void fCleanup();
     
     int iScaler, age;
     

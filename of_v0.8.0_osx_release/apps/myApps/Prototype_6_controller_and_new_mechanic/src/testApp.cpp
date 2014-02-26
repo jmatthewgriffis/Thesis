@@ -566,19 +566,18 @@ void testApp::cleanup() {
     
     // Stop any music playing.
     for ( int i = 0; i < objectList.size(); i++ ) {
-        //        objectList[ i ].myNote.sound.stop();
         for ( int j = 0; j < objectList[ i ].noteList.size(); j++ ) {
-            objectList[ i ].noteList[ j ].sound.stop();
+            objectList[ i ].fCleanup();
         }
     }
     for ( int i = 0; i < recordedList.size(); i++ ) {
-        //        recordedList[ i ].myNote.sound.stop();
         for ( int j = 0; j < recordedList[ i ].noteList.size(); j++ ) {
-            recordedList[ i ].noteList[ j ].sound.stop();
+            recordedList[ i ].fCleanup();
         }
     }
     
     // Clear the vector.
+    staffPosList.clear();
     obstacleList.clear();
     objectList.clear();
     recordedList.clear();
