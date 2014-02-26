@@ -122,7 +122,7 @@ void testApp::update(){
     // Apply gravity to the player.
     // Come back to this. Use it to fake analog sensitivity with jump height proportional to how long the button is held. Gravity only applies sometimes.
     if ( gameState != 3 ) {
-        myPlayer.applyForce( ofVec2f( 0.0, 0.3 ) );
+        myPlayer.applyForce( ofVec2f( 0.0, iScaler * 0.012 ) );
     }
     
     // Run collision detection.
@@ -185,10 +185,12 @@ void testApp::draw(){
         fDrawStaff();
         
         // Draw some lines on the ground to give something to move against.
-        /*ofSetColor( 0 );
-         for ( int i = 0; i < iScaler * 120; i += iScaler * 2 ) {
-         ofLine( iScaler * 2 + ( i * 2 ), ofGetHeight(), iScaler * 2 + i, ofGetHeight() - iScaler );
-         }*/
+        if ( gameState < 3 ) {
+            ofSetColor( 0 );
+            for ( int i = 0; i < iScaler * 12000; i += iScaler * 2 ) {
+                ofLine( iScaler * 2 + ( i * 2 ), iThirdOfScreen + iScaler, iScaler * 2 + i, iThirdOfScreen );
+            }
+        }
         
         // LOCATION-DEPENDENT
         
@@ -659,8 +661,12 @@ void testApp::fWriteControls() {
 void testApp::fDrawStaff() {
     
     // Draw the staff with transparency.
-    //ofSetColor( 0, int( iStaffAlpha ) );
-    ofSetColor(0);
+    if ( gameState < 3 ) {
+        ofSetColor( 0, int( iStaffAlpha ) );
+    } else {
+        ofSetColor(0);
+    }
+    
     //float numSections = float(numLines + 1);
     //for ( int i = 2; i < ( numSections - 1 ); i++ ) {
     for ( int i = 2; i < 7; i++ ) {
@@ -705,7 +711,7 @@ void testApp::fLoadPrototype() {
     
     if ( gameState == 1 ) {
         
-        bCamZoomedIn = false;
+        bCamZoomedIn = true;
         addObject( myTutorial.setup( iScaler, iThirdOfScreen ) );
         obstacleList = myTutorial.obstacleList;
         

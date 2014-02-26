@@ -26,7 +26,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     wide = iScaler * 2;
     tall = wide;
     maxVel = float( iScaler / 3.4483 ); // Yields 120bpm.
-    jumpVel = iScaler / 2.5;
+    jumpVel = iScaler * 0.45;
     radius = iScaler * 1.6;
     //angleVel = float( iScaler / 1.6667 );
     angleVel = 15;
