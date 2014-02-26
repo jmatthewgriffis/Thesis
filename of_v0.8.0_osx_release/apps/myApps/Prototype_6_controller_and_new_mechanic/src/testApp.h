@@ -53,7 +53,7 @@ public:
     void fDrawTutorialInstructions();
     
     void fCalcAllNotePos();
-    void fSetupTutorial();
+    void fLoadPrototype();
     void fWriteControls();
     
     void addObject( string _note, float _xPos, int _age );
@@ -109,6 +109,8 @@ public:
     Player myPlayer, myPlayer2;
     
     BossBattle myBoss;
+    
+    Tutorial myTutorial;
     
     Track myTrack;
 };

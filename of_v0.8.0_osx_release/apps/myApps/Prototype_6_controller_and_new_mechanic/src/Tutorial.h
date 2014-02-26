@@ -9,12 +9,19 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Obstacle.h"
 
 class Tutorial {
 public:
     Tutorial();
     
-    void setup();
+    vector< string >  setup( int _iScaler );
     void update();
     void draw();
+    void addObject( string _note, float _xPos, int _age );
+    
+    vector< string > stringList;
+    vector< Obstacle > obstacleList;
+    
+    int iScaler;
 };

@@ -610,74 +610,6 @@ void testApp::fDrawTutorialInstructions() {
     helvetica.drawString( "[ENTER] here for a boss battle!", iScaler * 420, y + iScaler * 5 );
 }
 
-void testApp::fSetupTutorial() {
-    
-    if ( gameState == 1 ) {
-        // Jump!
-        float x = iScaler * 40;
-        Obstacle tmp;
-        tmp.setup( ofVec2f( x, ofGetHeight() ), iScaler * 4, iScaler * 3, true );
-        obstacleList.push_back( tmp );
-        
-        // Jump off a note to overcome an obstacle.
-        float x2 = iScaler * 72;
-        addObject( "d3", x2, -1 );
-        Obstacle tmp2;
-        tmp2.setup( ofVec2f( x2 + iScaler * 8, ofGetHeight() ), iScaler * 4, iScaler * 6, true );
-        obstacleList.push_back( tmp2 );
-        
-        // Record and replay a note to overcome an obstacle.
-        float x3 = iScaler * 92;
-        addObject( "d3", x3, -1 );
-        addObject( "a3", x3 + iScaler * 29.8, -1 );
-        Obstacle tmp3;
-        tmp3.setup( ofVec2f( x3 + iScaler * 80, ofGetHeight() ), iScaler * 4, iScaler * 6, true );
-        obstacleList.push_back( tmp3 );
-        
-        // Spring off notes to get to higher notes and overcome a tall obstacle.
-        float x4 = iScaler * 184;
-        addObject( "d3", x4, -1 );
-        //    addObject( "g4", x4 + iScaler * 8, -1 );
-        addObject( "c4", x4 + iScaler * 16, -1 );
-        addObject( "g3", x4 + iScaler * 28, -1 );
-        
-        float x5 = x4 + iScaler * 44;
-        addObject( "g3", x5, -1 );
-        addObject( "d3", x5 + iScaler * 4, -1 );
-        //    addObject( "c5", x5 + iScaler * 8, -1 );
-        Obstacle tmp4;
-        tmp4.setup( ofVec2f( x5 + iScaler * 16, ofGetHeight() ), iScaler * 4, iScaler * 12, true );
-        obstacleList.push_back( tmp4 );
-        
-        // Record multiple notes before replaying to overcome a tall obstacle before the notes expire.
-        addObject( "b3", x5 + iScaler * 24, -1 );
-        addObject( "e3", x5 + iScaler * 28, -1 );
-        
-        float x6 = iScaler * 300;
-        addObject( "b3", x6, -1 );
-        addObject( "e3", x6 + iScaler * 8, -1 );
-        Obstacle tmp5;
-        tmp5.setup( ofVec2f( x6 + iScaler * 58, ofGetHeight() ), iScaler * 4, iScaler * 12, true );
-        obstacleList.push_back( tmp5 );
-        
-        // Ride a moving note to overcome a tall obstacle.
-        Obstacle tmp6;
-        tmp6.setup( ofVec2f( x6 + iScaler * 62, ofGetHeight() ), iScaler * 4, iScaler * 8, true );
-        obstacleList.push_back( tmp6 );
-        Obstacle tmp7;
-        tmp7.setup( ofVec2f( x6 + iScaler * 66, ofGetHeight() ), iScaler * 4, iScaler * 4, true );
-        obstacleList.push_back( tmp7 );
-        
-        float x7 = iScaler * 370;
-        addObject( "b3", x7, -1 );
-        objectList[ objectList.size() - 1 ].vel.set( float( -( iScaler / 8.3333 ) ), 0.0 );
-        Obstacle tmp8;
-        tmp8.setup( ofVec2f( x7 + iScaler * 30, ofGetHeight() ), iScaler * 4, iScaler * 12, true );
-        obstacleList.push_back( tmp8 );
-        
-    }
-}
-
 //--------------------------------------------------------------
 void testApp::fWriteControls() {
     
@@ -760,6 +692,38 @@ void testApp::fDrawStaff() {
     helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
     
     helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", iScaler * 800, ofGetHeight() / 2 );
+}
+
+//--------------------------------------------------------------
+void testApp::fLoadPrototype() {
+    
+    if ( gameState == 1 ) {
+        
+        bCamZoomedIn = false;
+        addObject( myTutorial.setup( iScaler ) );
+        obstacleList = myTutorial.obstacleList;
+        
+        objectList[ objectList.size() - 1 ].vel.set( float( -( iScaler / 8.3333 ) ), 0.0 );
+        
+    } else if ( gameState == 2 ) {
+        
+        bCamZoomedIn = true;
+        addObject( myBoss.setup( iScaler, fMeasureLength ) );
+        
+        for ( int i = 0; i < objectList.size(); i++ ) {
+            objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
+        }
+        
+    } else if ( gameState >= 3 ) {
+        
+        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
+        
+        addObject( myTrack.setup( iScaler, fMeasureLength ) );
+        
+        if ( gameState == 4 ) {
+            bCamZoomedIn = true;
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -868,31 +832,7 @@ void testApp::keyPressed(int key){
                     
                     gameState = myTitle.iWhichPrototype;
                     currentState = gameState;
-                    
-                    if ( gameState == 1 ) {
-                        
-                        bCamZoomedIn = true;
-                        //fSetupTutorial();
-                        
-                    } else if ( gameState == 2 ) {
-                        
-                        bCamZoomedIn = true;
-                        addObject( myBoss.setup( iScaler, fMeasureLength ) );
-                        
-                        for ( int i = 0; i < objectList.size(); i++ ) {
-                            objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
-                        }
-                        
-                    } else if ( gameState >= 3 ) {
-                        
-                        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
-                        
-                        addObject( myTrack.setup( iScaler, fMeasureLength ) );
-                        
-                        if ( gameState == 4 ) {
-                            bCamZoomedIn = true;
-                        }
-                    }
+                    fLoadPrototype();
                 }
             }
             // Go to boss battle if player has reached end of tutorial.
