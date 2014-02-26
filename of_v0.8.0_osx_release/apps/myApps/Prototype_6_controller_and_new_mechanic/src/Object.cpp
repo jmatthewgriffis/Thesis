@@ -24,7 +24,7 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     guideLineLength = wide * 0.75;
     c = ofColor( 0 );
     
-    pos.set( ofGetWidth(), -2000 );
+    pos.set( ofGetWidth(), fReturnYPos( _whichNote ) );
     
     vel.set( 0.0, 0.0 );
     

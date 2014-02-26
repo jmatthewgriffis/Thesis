@@ -158,7 +158,7 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         
         ofSetRectMode( OF_RECTMODE_CENTER );
         ofNoFill();
-        ofRect( pos.x, _recordedList[ 0 ].pos.y, _recordedList[ 0 ].wide, _recordedList[ 0 ].tall );
+        ofEllipse( pos.x, _recordedList[ 0 ].pos.y, _recordedList[ 0 ].wide, _recordedList[ 0 ].tall );
         ofFill();
     }
     

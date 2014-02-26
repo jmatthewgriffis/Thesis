@@ -19,24 +19,25 @@ void Tutorial::addObject( string _note, float _xPos, int _age ) {
     stringList.push_back( ofToString( _age ) );
 }
 
-vector< string >  Tutorial::setup( int _iScaler ) {
+vector< string >  Tutorial::setup( int _iScaler, int _iThirdOfScreen ) {
     
     stringList.clear();
     obstacleList.clear();
     
     iScaler = _iScaler;
+    iThirdOfScreen = _iThirdOfScreen;
     
     // Jump!
     float x = iScaler * 40;
     Obstacle tmp;
-    tmp.setup( ofVec2f( x, ofGetHeight() ), iScaler * 4, iScaler * 3, true );
+    tmp.setup( ofVec2f( x, iThirdOfScreen ), iScaler * 4, iScaler * 3, true );
     obstacleList.push_back( tmp );
     
     // Jump off a note to overcome an obstacle.
     float x2 = iScaler * 72;
     addObject( "d3", x2, -1 );
     Obstacle tmp2;
-    tmp2.setup( ofVec2f( x2 + iScaler * 8, ofGetHeight() ), iScaler * 4, iScaler * 6, true );
+    tmp2.setup( ofVec2f( x2 + iScaler * 8, iThirdOfScreen ), iScaler * 4, iScaler * 6, true );
     obstacleList.push_back( tmp2 );
     
     // Record and replay a note to overcome an obstacle.
@@ -44,7 +45,7 @@ vector< string >  Tutorial::setup( int _iScaler ) {
     addObject( "d3", x3, -1 );
     addObject( "a3", x3 + iScaler * 29.8, -1 );
     Obstacle tmp3;
-    tmp3.setup( ofVec2f( x3 + iScaler * 80, ofGetHeight() ), iScaler * 4, iScaler * 6, true );
+    tmp3.setup( ofVec2f( x3 + iScaler * 80, iThirdOfScreen ), iScaler * 4, iScaler * 6, true );
     obstacleList.push_back( tmp3 );
     
     // Spring off notes to get to higher notes and overcome a tall obstacle.
@@ -59,7 +60,7 @@ vector< string >  Tutorial::setup( int _iScaler ) {
     addObject( "d3", x5 + iScaler * 4, -1 );
     //    addObject( "c5", x5 + iScaler * 8, -1 );
     Obstacle tmp4;
-    tmp4.setup( ofVec2f( x5 + iScaler * 16, ofGetHeight() ), iScaler * 4, iScaler * 12, true );
+    tmp4.setup( ofVec2f( x5 + iScaler * 16, iThirdOfScreen ), iScaler * 4, iScaler * 12, true );
     obstacleList.push_back( tmp4 );
     
     // Record multiple notes before replaying to overcome a tall obstacle before the notes expire.
@@ -70,22 +71,22 @@ vector< string >  Tutorial::setup( int _iScaler ) {
     addObject( "b3", x6, -1 );
     addObject( "e3", x6 + iScaler * 8, -1 );
     Obstacle tmp5;
-    tmp5.setup( ofVec2f( x6 + iScaler * 58, ofGetHeight() ), iScaler * 4, iScaler * 12, true );
+    tmp5.setup( ofVec2f( x6 + iScaler * 58, iThirdOfScreen ), iScaler * 4, iScaler * 12, true );
     obstacleList.push_back( tmp5 );
     
     // Ride a moving note to overcome a tall obstacle.
     Obstacle tmp6;
-    tmp6.setup( ofVec2f( x6 + iScaler * 62, ofGetHeight() ), iScaler * 4, iScaler * 8, true );
+    tmp6.setup( ofVec2f( x6 + iScaler * 62, iThirdOfScreen ), iScaler * 4, iScaler * 8, true );
     obstacleList.push_back( tmp6 );
     Obstacle tmp7;
-    tmp7.setup( ofVec2f( x6 + iScaler * 66, ofGetHeight() ), iScaler * 4, iScaler * 4, true );
+    tmp7.setup( ofVec2f( x6 + iScaler * 66, iThirdOfScreen ), iScaler * 4, iScaler * 4, true );
     obstacleList.push_back( tmp7 );
     
     float x7 = iScaler * 370;
     addObject( "b3", x7, -1 );
     //objectList[ objectList.size() - 1 ].vel.set( float( -( iScaler / 8.3333 ) ), 0.0 ); // Moved to testApp.cpp
     Obstacle tmp8;
-    tmp8.setup( ofVec2f( x7 + iScaler * 30, ofGetHeight() ), iScaler * 4, iScaler * 12, true );
+    tmp8.setup( ofVec2f( x7 + iScaler * 30, iThirdOfScreen ), iScaler * 4, iScaler * 12, true );
     obstacleList.push_back( tmp8 );
     
     return stringList;

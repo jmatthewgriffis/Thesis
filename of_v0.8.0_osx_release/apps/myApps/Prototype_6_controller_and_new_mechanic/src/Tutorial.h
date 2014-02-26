@@ -15,7 +15,7 @@ class Tutorial {
 public:
     Tutorial();
     
-    vector< string >  setup( int _iScaler );
+    vector< string >  setup( int _iScaler, int _iThirdOfScreen );
     void update();
     void draw();
     void addObject( string _note, float _xPos, int _age );
@@ -23,5 +23,5 @@ public:
     vector< string > stringList;
     vector< Obstacle > obstacleList;
     
-    int iScaler;
+    int iScaler, iThirdOfScreen;
 };
