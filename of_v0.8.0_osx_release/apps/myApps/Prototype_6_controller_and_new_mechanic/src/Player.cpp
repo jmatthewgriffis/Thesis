@@ -47,8 +47,6 @@ void Player::update( int _gameState ) {
     
     gameState = _gameState;
     
-    cout<<onSurface<<endl;
-    
     // Health depletes constantly.
     if ( fHealth > fHealthMax ) {
         fHealth = fHealthMax;
@@ -108,7 +106,9 @@ void Player::update( int _gameState ) {
         if ( !bUsingController ) {
             //        if ( onSurface ) {
             vel.x = 0;
-            vel.y = 0;
+            if ( gameState == 3 ) {
+                vel.y = 0;
+            }
             //        }
         }
     } // End "if allowMove"

@@ -34,7 +34,7 @@ void Player::setup( ofVec2f _pos ) {
 }
 
 void Player::update() {
-    
+    cout<<onSurface<<endl;
     // Movement
     if ( allowMove ) {
         if ( up && onSurface && allowJump ) {

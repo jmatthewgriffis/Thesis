@@ -76,7 +76,7 @@ void testApp::setup(){
     iStaffAlphaVel = 0.5;
     myTitle.iWhichPrototype = 1;
     
-    myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
+    myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen - 25 ) );
 }
 
 //--------------------------------------------------------------
@@ -126,7 +126,7 @@ void testApp::update(){
     }
     
     // Run collision detection.
-    //playerCollidesWithGround();
+    playerCollidesWithGround();
     playerCollidesWithObstacle();
     playerCollidesWithObject();
     objectCollidesWithObstacle();
@@ -134,13 +134,6 @@ void testApp::update(){
     // Update the player (duh).
     myPlayer.update( gameState );
     myPlayer2.update( gameState );
-    // Prevent ships from moving into the wrong section of screen.
-    if ( myPlayer.pos.y > iThirdOfScreen ) {
-        myPlayer.pos.y = iThirdOfScreen;
-    }
-    if ( myPlayer2.pos.y < ofGetHeight() - iThirdOfScreen ) {
-        myPlayer2.pos.y = ofGetHeight() - iThirdOfScreen;
-    }
     
     // Update the notes.
     updateObjectList();
@@ -166,6 +159,8 @@ void testApp::draw(){
     else if ( gameState > 0 ) {
         myCam.begin();
         myCam.setupPerspective();
+        
+        ofSetColor( 0 );
         
         // LOCATION-INDEPENDENT
         
@@ -357,16 +352,18 @@ void testApp::fReplay() {
 //--------------------------------------------------------------
 void testApp::playerCollidesWithGround() {
     
-    /*if ( myPlayer.pos.y >= ofGetHeight() - myPlayer.tall / 2.0 ) {
-        myPlayer.pos.y = ofGetHeight() - myPlayer.tall / 2.0;
-        myPlayer.onSurface = true;
-    }*/
-    
-    if ( myPlayer.pos.y >= iThirdOfScreen - myPlayer.tall / 2.0 ) {
-        myPlayer.pos.y = iThirdOfScreen - myPlayer.tall / 2.0;
-        myPlayer.onSurface = true;
+    if ( myPlayer.pos.y >= iThirdOfScreen ) {
+        myPlayer.pos.y = iThirdOfScreen;
+        if ( gameState < 3 ) {
+            myPlayer.onSurface = true;
+        }
     }
-
+    
+    if ( gameState >= 3 ) {
+        if ( myPlayer2.pos.y < ofGetHeight() - iThirdOfScreen ) {
+            myPlayer2.pos.y = ofGetHeight() - iThirdOfScreen;
+        }
+    }
 }
 
 //--------------------------------------------------------------
