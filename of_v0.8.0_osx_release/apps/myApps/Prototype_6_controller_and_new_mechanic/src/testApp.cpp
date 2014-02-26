@@ -5,7 +5,9 @@ void testApp::setup(){
     
     //ofSetDataPathRoot("data/"); // Necessary for a standalone app.
     
-    cleanup(); // Support r-restart.
+    // Support r-restart.
+    cleanup();
+    staffPosList.clear();
     
     // Maintenance
     frameRate = 60;
@@ -133,7 +135,9 @@ void testApp::update(){
     
     // Update the player (duh).
     myPlayer.update( gameState );
-    myPlayer2.update( gameState );
+    if ( gameState >= 3 ) {
+        myPlayer2.update( gameState );
+    }
     
     // Update the notes.
     updateObjectList();
@@ -212,7 +216,9 @@ void testApp::draw(){
         }
         
         myPlayer.draw( helvetica, recordedList );
-        myPlayer2.draw( helvetica, recordedList );
+        if ( gameState >= 3 ) {
+            myPlayer2.draw( helvetica, recordedList );
+        }
         
         
         myCam.end();
@@ -585,7 +591,6 @@ void testApp::cleanup() {
     }
     
     // Clear the vector.
-    staffPosList.clear();
     obstacleList.clear();
     objectList.clear();
     recordedList.clear();
@@ -667,47 +672,58 @@ void testApp::fDrawStaff() {
         ofSetColor(0);
     }
     
-    //float numSections = float(numLines + 1);
-    //for ( int i = 2; i < ( numSections - 1 ); i++ ) {
+    // Establish some reference floats.
+    float staffStart = ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight();
+    float xStart;
+    if ( myPlayer.pos.x < staffStart + ofGetWidth() ) {
+        xStart = staffStart;
+    } else {
+        xStart = myPlayer.pos.x - ofGetWidth();
+    }
+    
+    ofSetLineWidth( 1 );
+    
+    // Draw the horizontal staff lines.
     for ( int i = 2; i < 7; i++ ) {
-        //if ( i != 7 ) {
-        float staffStart = ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight();
-        float xStart;
-        if ( myPlayer.pos.x < staffStart + ofGetWidth() ) {
-            xStart = staffStart;
-            // Draw initial vertical line.
-            ofSetLineWidth( 3 );
-            ofLine( xStart, iScaler * 4, xStart, ofGetHeight() - iScaler * 4 );
-            ofSetLineWidth( 1 );
-        } else {
-            xStart = myPlayer.pos.x - ofGetWidth();
-        }
         ofLine( xStart, iScaler * 2 * i, myPlayer.pos.x + ofGetWidth(), iScaler * 2 * i );
         ofLine( xStart, ofGetHeight() - ( iScaler * 2 * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( iScaler * 2 * i ) );
-        //}
     }
-    for ( int i = 0; i < 30; i++ ) {
-        // Draw the measure lines.
-        ofLine( iScaler * 18 + fMeasureLength * i, iScaler * 4,  iScaler * 18 + fMeasureLength * i, ofGetHeight() - iScaler * 4 );
-        // Draw the measure number.
-        helvetica.drawString( ofToString( i + 1 ), iScaler * 19 + fMeasureLength * i, iScaler * 4);
-    }
-    // Draw the initial bracket.
-    staffBracket.draw( 0, iScaler * 4, ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - iScaler * 8 );
-    // Draw the clefs.
-    trebleClef.draw( iScaler * 4, iScaler * 8 - iScaler * 2 * 7 / 2.15, ( iScaler * 2 * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), iScaler * 14 );
-    bassClef.draw( iScaler * 4, ofGetHeight() - iScaler * 12, ( iScaler * 2 * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), iScaler * 6.2 );
-    // Draw the time signature.
-    helveticaJumbo.drawString("4", iScaler * 11, iScaler * 8 );
-    helveticaJumbo.drawString("4", iScaler * 11, iScaler * 12 );
-    helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 8 );
-    helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
     
-    helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", iScaler * 800, ofGetHeight() / 2 );
+    if ( gameState >= 3 ) {
+        
+        // Draw initial vertical line.
+        ofSetLineWidth( 3 );
+        ofLine( xStart, iScaler * 4, xStart, ofGetHeight() - iScaler * 4 );
+        ofSetLineWidth( 1 );
+        
+        // Draw the initial bracket.
+        staffBracket.draw( 0, iScaler * 4, ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - iScaler * 8 );
+        // Draw the clefs.
+        trebleClef.draw( iScaler * 4, iScaler * 8 - iScaler * 2 * 7 / 2.15, ( iScaler * 2 * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), iScaler * 14 );
+        bassClef.draw( iScaler * 4, ofGetHeight() - iScaler * 12, ( iScaler * 2 * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), iScaler * 6.2 );
+        
+        // Draw the time signature.
+        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 8 );
+        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 12 );
+        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 8 );
+        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
+        
+        helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", iScaler * 800, ofGetHeight() / 2 );
+        
+        for ( int i = 0; i < 30; i++ ) {
+            // Draw the measure lines.
+            ofLine( iScaler * 18 + fMeasureLength * i, iScaler * 4,  iScaler * 18 + fMeasureLength * i, ofGetHeight() - iScaler * 4 );
+            // Draw the measure number.
+            helvetica.drawString( ofToString( i + 1 ), iScaler * 19 + fMeasureLength * i, iScaler * 4);
+        }
+    }
 }
 
 //--------------------------------------------------------------
 void testApp::fLoadPrototype() {
+    
+    cleanup();
+    myPlayer.setup( iScaler, bUsingController );
     
     if ( gameState == 1 ) {
         
@@ -725,6 +741,9 @@ void testApp::fLoadPrototype() {
         for ( int i = 0; i < objectList.size(); i++ ) {
             objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
         }
+        
+        bHighlightNote = true;
+        getThisOne = 0;
         
     } else if ( gameState >= 3 ) {
         
@@ -807,16 +826,16 @@ void testApp::keyPressed(int key){
             // Reset
         case 'r':
         case 'R':
-            if ( bShiftIsPressed ) {
+            /*if ( bShiftIsPressed ) {
                 setup();
                 gameState = 1;
-            }
-            else {
+            }*/
+            //else {
                 if ( gameState > 0 ) {
                     currentState = gameState;
                     gameState = -1;
                 }
-            }
+            //}
             break;
             
         case 'y':
@@ -848,14 +867,11 @@ void testApp::keyPressed(int key){
                 }
             }
             // Go to boss battle if player has reached end of tutorial.
-            /*else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + iScaler * 16 ) {
-             //else if ( gameState == 1 ) {
-             cleanup();
-             gameState = 2;
-             myPlayer.setup();
-             bHighlightNote = true;
-             getThisOne = 0;
-             }*/
+            else if ( gameState == 1 && myPlayer.pos.x > obstacleList[ obstacleList.size() - 1 ].pos.x + obstacleList[ obstacleList.size() - 1 ].wide + iScaler * 16 ) {
+                //else if ( gameState == 1 ) {
+                gameState = 2;
+                fLoadPrototype();
+            }
             break;
             
         case OF_KEY_SHIFT:
