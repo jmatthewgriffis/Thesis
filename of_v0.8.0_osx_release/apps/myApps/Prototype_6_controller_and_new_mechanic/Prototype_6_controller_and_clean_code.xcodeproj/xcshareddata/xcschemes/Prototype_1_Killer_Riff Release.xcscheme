@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
                BuildableName = "Prototype_6_controller_and_new_mechanic.app"
-               BlueprintName = "Prototype_6_controller_and_new_mechanic"
-               ReferencedContainer = "container:Prototype_6_controller_and_new_mechanic.xcodeproj">
+               BlueprintName = "Prototype_6_controller_and_clean_code"
+               ReferencedContainer = "container:Prototype_6_controller_and_clean_code.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,8 +34,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
             BuildableName = "Prototype_6_controller_and_new_mechanic.app"
-            BlueprintName = "Prototype_6_controller_and_new_mechanic"
-            ReferencedContainer = "container:Prototype_6_controller_and_new_mechanic.xcodeproj">
+            BlueprintName = "Prototype_6_controller_and_clean_code"
+            ReferencedContainer = "container:Prototype_6_controller_and_clean_code.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -53,8 +53,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
             BuildableName = "Prototype_6_controller_and_new_mechanic.app"
-            BlueprintName = "Prototype_6_controller_and_new_mechanic"
-            ReferencedContainer = "container:Prototype_6_controller_and_new_mechanic.xcodeproj">
+            BlueprintName = "Prototype_6_controller_and_clean_code"
+            ReferencedContainer = "container:Prototype_6_controller_and_clean_code.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -71,8 +71,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
             BuildableName = "Prototype_6_controller_and_new_mechanic.app"
-            BlueprintName = "Prototype_6_controller_and_new_mechanic"
-            ReferencedContainer = "container:Prototype_6_controller_and_new_mechanic.xcodeproj">
+            BlueprintName = "Prototype_6_controller_and_clean_code"
+            ReferencedContainer = "container:Prototype_6_controller_and_clean_code.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
