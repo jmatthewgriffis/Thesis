@@ -27,7 +27,7 @@ public:
     void fAddNote();
     void fCleanup();
     
-    int iScaler, age;
+    int iScaler, gameState, age;
     
     ofVec2f pos, vel;
     float tall;
@@ -37,7 +37,7 @@ public:
     int colorTimer, noteTimer;
     
     bool destroyMe;
-    bool drawAttention, bIsRecorded, bIsTouched;
+    bool drawAttention, bIsRecorded, bIsTouched, bWasTouched;
     
     vector< Note > noteList;
     vector< float > staffPosList;

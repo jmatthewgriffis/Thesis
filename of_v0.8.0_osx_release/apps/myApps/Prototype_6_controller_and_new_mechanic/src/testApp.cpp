@@ -96,6 +96,8 @@ void testApp::update(){
     
     myStaff.update();
     
+    fCalcTrebleNotes();
+    
     // Reset essential conditionals.
     myPlayer.onSurface = false;
     myPlayer2.onSurface = false;
@@ -112,6 +114,14 @@ void testApp::update(){
     playerCollidesWithObstacle();
     playerCollidesWithObject();
     objectCollidesWithObstacle();
+    
+    // Calculate the player's success:
+    iHitCounter = 0; // Reset this every frame.
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        if ( objectList[ i ].bWasTouched == true ) {
+            iHitCounter++;
+        }
+    }
     
     // Update the player (duh).
     myPlayer.update( gameState );
@@ -188,6 +198,11 @@ void testApp::draw(){
         myPlayer.draw( helvetica, recordedList );
         if ( gameState >= 3 ) {
             myPlayer2.draw( helvetica, recordedList );
+        }
+        
+        if ( gameState == 4 ) {
+            ofSetColor( 0 );
+            helvetica.drawString( "Notes hit: " + ofToString( iHitCounter ) + "/" + ofToString( iTotalTrebleNotes ), myPlayer.pos.x + iScaler, iScaler * 2 );
         }
         
         myCam.end();
@@ -960,6 +975,19 @@ void testApp::fCalcAllNotePos() {
             tmp = ofGetHeight() - ( ofGetHeight() - iThirdOfScreen * 2 ) - ( iScaler * ( i + 2 ) );
         }
         staffPosList.push_back( tmp );
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::fCalcTrebleNotes() {
+    
+    iTotalTrebleNotes = 0; // Reset this every frame.
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        if ( objectList[ i ].pos.y <= iThirdOfScreen ) {
+            iTotalTrebleNotes++;
+        } else {
+            objectList[ i ].bWasTouched = false;
+        }
     }
 }
 

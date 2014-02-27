@@ -54,6 +54,7 @@ public:
     void fDrawDebugUI();
     
     void fCalcAllNotePos();
+    void fCalcTrebleNotes();
     void fLoadPrototype();
     
     void addObject( string _note, float _xPos, int _age );
@@ -81,6 +82,8 @@ public:
     int getThisOne; // Highlight a specific object.
     int iThirdOfScreen;
     int iScaler; // Scale everything based on screen size.
+    int iHitCounter; // How many notes hit?
+    int iTotalTrebleNotes;
     
     float fMeasureLength;
     

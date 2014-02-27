@@ -34,6 +34,7 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     drawAttention = false;
     bIsRecorded = false;
     bIsTouched = false;
+    bWasTouched = false;
     
     // Note stuff.
     //    myNote.setup( whichNote );
@@ -42,6 +43,8 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
 }
 
 void Object::update( int _gameState, ofVec2f _pos ) {
+    
+    gameState = _gameState;
     
     pos.y = fReturnYPos( whichNote );
     
@@ -67,6 +70,7 @@ void Object::update( int _gameState, ofVec2f _pos ) {
         fAddNote();
     }*/
     if ( bIsTouched ) {
+        bWasTouched = true;
         fAddNote();
     } else if ( noteList.size() != 0 ) {
         if ( noteTimer <= 0 ) {
@@ -162,8 +166,15 @@ void Object::draw() {
     else if ( pos.y + ( tall / 2 ) == ofGetHeight()) {
         ofSetColor(255,0,0);
     }
-    else*/ ofSetColor( c );
+    else*/
+    // Draw a halo around the note to indicate it was hit.
+    if ( bWasTouched && gameState == 4 ) {
+        ofSetColor( 0, 0, 255 );
+        float fHaloThickness = 5;
+        ofEllipse( pos, wide + fHaloThickness, tall + fHaloThickness );
+    }
     // Draw the note.
+    ofSetColor( c );
     ofEllipse( pos, wide, tall);
     // Draw the tail.
     ofSetLineWidth( 2 );
