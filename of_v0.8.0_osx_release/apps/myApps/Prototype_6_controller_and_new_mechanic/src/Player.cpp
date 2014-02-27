@@ -26,7 +26,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     wide = iScaler * 2;
     tall = wide;
     maxVel = float( iScaler / 3.4483 ); // Yields 120bpm.
-    jumpVel = iScaler * 0.45;
+    jumpVel = -iScaler * 0.45;
     radius = iScaler * 1.6;
     //angleVel = float( iScaler / 1.6667 );
     angleVel = 15;
@@ -85,7 +85,7 @@ void Player::update( int _gameState ) {
             if ( gameState < 3 ) {
                 
                 if ( onSurface && allowJump ) {
-                    applyForce( ofVec2f( 0.0, -jumpVel ) );
+                    applyForce( ofVec2f( 0.0, jumpVel ) );
                     onSurface = false;
                     allowJump = false;
                 }
@@ -97,7 +97,7 @@ void Player::update( int _gameState ) {
                 
                 if ( allowJump == true ) {
                     vel.y = 0;
-                    applyForce( ofVec2f( 0.0, -jumpVel * 0.75 ) );
+                    applyForce( ofVec2f( 0.0, jumpVel * 0.75 ) );
                     onSurface = false;
                     allowJump = false;
                 }

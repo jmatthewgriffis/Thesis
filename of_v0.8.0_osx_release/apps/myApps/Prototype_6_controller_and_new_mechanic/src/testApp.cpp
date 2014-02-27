@@ -292,6 +292,9 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e)
         if ( e.axis == 3 ) {
             if ( abs( e.value ) > fStickBuffer ) {
                 if ( e.value < 0 ) {
+                    float fJumpMin = -iScaler * 0.25;
+                    float fJumpMax = -iScaler * 0.75;
+                    myPlayer.jumpVel = ofMap( e.value, -0.125, -1, fJumpMin, fJumpMax );
                     myPlayer.up = true;
                 }
             } else {
