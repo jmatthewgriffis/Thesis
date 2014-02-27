@@ -606,7 +606,7 @@ void testApp::cleanup() {
 void testApp::fDrawRestartScreen() {
     
     ofSetColor( 0 );
-    helvetica.drawString( "Are you sure you want to restart? Y / N ", iScaler * 8, ofGetHeight() / 2.0 );
+    helvetica.drawString( "Are you sure you want to restart? Y / N ", ofGetWidth() / 2 - iScaler * 13, ofGetHeight() / 2.0 );
 }
 
 //--------------------------------------------------------------
