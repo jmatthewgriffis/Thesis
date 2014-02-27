@@ -19,10 +19,6 @@ void testApp::setup(){
     CGDisplayHideCursor(NULL);
     ofBackground( 255 );
     
-    trebleClef.loadImage( "images/clef_treble.png" ); // http://clipartist.info/SVG/CLIPARTIST.ORG/TREBLE/treble_clef_treble_clef-555px.png
-    bassClef.loadImage( "images/clef_bass.png" ); // http://clipartist.info/RSS/openclipart.org/2011/April/15-Friday/bass_clef_bassclef-1979px.png
-    staffBracket.loadImage( "images/staff_bracket.png" ); // http://musescore.org/sites/musescore.org/files/issues/Curly%20brace%20extends%20to%20all%20staves.png
-    
     { // Straight from the ofxGamepad example.
         ofxGamepadHandler::get()->enableHotplug();
         
@@ -72,10 +68,6 @@ void testApp::setup(){
     else getThisOne = -1;
     objectLife = 7 * frameRate;
     fMeasureLength = iScaler * 6 * 5.333333;;
-    iStaffAlphaMin = 10;
-    iStaffAlphaMax = 200;
-    iStaffAlpha = iStaffAlphaMin;
-    iStaffAlphaVel = 0.5;
     myTitle.iWhichPrototype = 1;
 }
 
@@ -102,11 +94,7 @@ void testApp::update(){
     // Don't update anything else if not on the game screen.
     if ( gameState < 1 ) return;
     
-    // Update the alpha for the staff lines.
-    iStaffAlpha += iStaffAlphaVel;
-    if ( iStaffAlpha < iStaffAlphaMin || iStaffAlpha > iStaffAlphaMax ) {
-        iStaffAlphaVel *= -1;
-    }
+    myStaff.update();
     
     // Reset essential conditionals.
     myPlayer.onSurface = false;
@@ -177,8 +165,8 @@ void testApp::draw(){
             myCam.move( fMoveX, fMoveY, fZoomFactor );
         }
         
+        myStaff.draw( iScaler, fMeasureLength, gameState, helvetica, helveticaJumbo, myPlayer.pos.x );
         fDrawDebugUI();
-        fDrawStaff();
         fDrawGround();
         
         if ( gameState == 1 ) {
@@ -866,63 +854,6 @@ void testApp::objectCollidesWithObstacle() {
                     objectList[ i ].vel.y *= -1;
                 }
             }
-        }
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::fDrawStaff() {
-    
-    // Draw the staff with transparency.
-    if ( gameState < 3 ) {
-        ofSetColor( 0, int( iStaffAlpha ) );
-    } else {
-        ofSetColor(0);
-    }
-    
-    // Establish some reference floats.
-    float staffStart = ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight();
-    float xStart;
-    if ( myPlayer.pos.x < staffStart + ofGetWidth() ) {
-        xStart = staffStart;
-    } else {
-        xStart = myPlayer.pos.x - ofGetWidth();
-    }
-    
-    ofSetLineWidth( 1 );
-    
-    // Draw the horizontal staff lines.
-    for ( int i = 2; i < 7; i++ ) {
-        ofLine( xStart, iScaler * 2 * i, myPlayer.pos.x + ofGetWidth(), iScaler * 2 * i );
-        ofLine( xStart, ofGetHeight() - ( iScaler * 2 * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( iScaler * 2 * i ) );
-    }
-    
-    if ( gameState >= 3 ) {
-        
-        // Draw initial vertical line.
-        ofSetLineWidth( 3 );
-        ofLine( xStart, iScaler * 4, xStart, ofGetHeight() - iScaler * 4 );
-        ofSetLineWidth( 1 );
-        
-        // Draw the initial bracket.
-        staffBracket.draw( 0, iScaler * 4, ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - iScaler * 8 );
-        // Draw the clefs.
-        trebleClef.draw( iScaler * 4, iScaler * 8 - iScaler * 2 * 7 / 2.15, ( iScaler * 2 * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), iScaler * 14 );
-        bassClef.draw( iScaler * 4, ofGetHeight() - iScaler * 12, ( iScaler * 2 * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), iScaler * 6.2 );
-        
-        // Draw the time signature.
-        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 8 );
-        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 12 );
-        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 8 );
-        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
-        
-        helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", iScaler * 800, ofGetHeight() / 2 );
-        
-        for ( int i = 0; i < 30; i++ ) {
-            // Draw the measure lines.
-            ofLine( iScaler * 18 + fMeasureLength * i, iScaler * 4,  iScaler * 18 + fMeasureLength * i, ofGetHeight() - iScaler * 4 );
-            // Draw the measure number.
-            helvetica.drawString( ofToString( i + 1 ), iScaler * 19 + fMeasureLength * i, iScaler * 4);
         }
     }
 }

@@ -8,6 +8,7 @@
 #include "BossBattle.h"
 #include "Tutorial.h"
 #include "Track.h"
+#include "Staff.h"
 #include "TitleScreen.h"
 #include "ofxGamepadHandler.h"
 
@@ -49,7 +50,6 @@ public:
     void exit();
     
     void fDrawRestartScreen();
-    void fDrawStaff();
     void fDrawGround();
     void fDrawDebugUI();
     
@@ -77,12 +77,10 @@ public:
     int gameState, currentState;
     int frameRate;
     int objectLife;
-    int iStaffAlphaMin, iStaffAlphaMax;
     int getThisOne; // Highlight a specific object.
     int iThirdOfScreen;
     int iScaler; // Scale everything based on screen size.
     
-    float iStaffAlpha, iStaffAlphaVel;
     float fMeasureLength;
     
     bool bIsLefty; // Left-handed control scheme
@@ -94,8 +92,6 @@ public:
     bool bCamZoomedIn;
     
     ofTrueTypeFont helvetica, helveticaJumbo;
-    
-    ofImage trebleClef, bassClef, staffBracket;
     
     ofEasyCam myCam;
     
@@ -110,4 +106,6 @@ public:
     Tutorial myTutorial;
     
     Track myTrack;
+    
+    Staff myStaff;
 };
