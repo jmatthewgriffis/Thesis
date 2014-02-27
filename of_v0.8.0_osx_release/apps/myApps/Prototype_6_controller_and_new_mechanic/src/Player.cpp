@@ -46,18 +46,19 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
 void Player::update( int _gameState ) {
     
     gameState = _gameState;
-    
-    // Health depletes constantly.
-    if ( fHealth > fHealthMax ) {
-        fHealth = fHealthMax;
-    }
-    else if ( fHealth > 0 ) {
-        fHealth -= fHealthLossSpeed;
-    }
-    else if ( fHealth < 0 ) {
-        fHealth = 0;
-    }
-    
+    /*
+     // Health depletes constantly.
+     if ( fHealth > fHealthMax ) {
+     fHealth = fHealthMax;
+     }
+     else if ( fHealth > 0 ) {
+     fHealth -= fHealthLossSpeed;
+     }
+     else if ( fHealth < 0 ) {
+     fHealth = 0;
+     }
+     */
+    // Prevent from going offscreen.
     if ( gameState < 3 ) {
         if ( pos.x < iScaler * 7 ) {
             pos.x = iScaler * 7;
@@ -71,21 +72,42 @@ void Player::update( int _gameState ) {
     }
     
     // Movement
+    
+    if ( gameState >= 3 ) {
+        if ( onSurface == false ) {
+            pos.x += maxVel;
+        }
+    }
+    
     if ( allowMove ) {
         
         if ( up ) {
-            if ( gameState >= 3 ) {
+            if ( gameState < 3 ) {
+                
+                if ( onSurface && allowJump ) {
+                    applyForce( ofVec2f( 0.0, -jumpVel ) );
+                    onSurface = false;
+                    allowJump = false;
+                }
+            
+            } else if ( gameState == 3 ) {
                 applyForce( ofVec2f( 0.0, -maxVel ) );
-            } else if ( onSurface && allowJump ) {
-                //            pos.y -= vel.y;
-                onSurface = false;
-                allowJump = false;
-                // Jump! And prevent additional jumps.
-                applyForce( ofVec2f( 0.0, -jumpVel ) );
+            
+            } else if ( gameState == 4 ) {
+                
+                if ( allowJump == true ) {
+                    vel.y = 0;
+                    applyForce( ofVec2f( 0.0, -jumpVel * 0.75 ) );
+                    onSurface = false;
+                    allowJump = false;
+                }
             }
+        } else if ( gameState == 4 ){
+            allowJump = true;
         }
+        
         if ( down ) {
-            if ( gameState >= 3 ) {
+            if ( gameState == 3 ) {
                 //            pos.y += vel.y;
                 applyForce( ofVec2f( 0.0, maxVel ) );
             }
@@ -96,6 +118,7 @@ void Player::update( int _gameState ) {
             applyForce( ofVec2f( -maxVel, 0.0 ) );
             //}
         }
+        
         if ( right ) {
             //if ( gameState < 3 ) {
             applyForce( ofVec2f( maxVel, 0.0 ) );
@@ -111,10 +134,6 @@ void Player::update( int _gameState ) {
         
         pos += vel;
         
-        if ( gameState >= 3 ) {
-            pos.x += maxVel;
-        }
-        
         if ( !bUsingController ) {
             //        if ( onSurface ) {
             vel.x = 0;
@@ -129,10 +148,7 @@ void Player::update( int _gameState ) {
     if ( pos.x <= wide / 2.0 ) {
         pos.x = wide / 2.0;
     }
-    if ( pos.y <= tall / 2.0 ) {
-        pos.y = tall / 2.0;
-    }
-    else if ( pos.y >= ofGetHeight() - ( tall / 2.0 ) ) {
+    if ( pos.y >= ofGetHeight() - ( tall / 2.0 ) ) {
         pos.y = ofGetHeight() - ( tall / 2.0 );
     }
     

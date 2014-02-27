@@ -652,3 +652,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength ) {
     
     return stringList;
 }
+
+void Track::draw( ofTrueTypeFont _font ) {
+    _font.drawString( "Finished! Press R to restart.", iScaler * 800, ofGetHeight() / 2 );
+}

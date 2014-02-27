@@ -64,7 +64,8 @@ public:
     void fRecord( int _i );
     void fReplay();
     
-    void playerCollidesWithGround();
+    void fApplyGravity();
+    void playerCollidesWithGroundOrSky();
     void playerCollidesWithObject();
     void playerCollidesWithObstacle();
     void objectCollidesWithObstacle();

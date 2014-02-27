@@ -98,19 +98,17 @@ void testApp::update(){
     
     // Reset essential conditionals.
     myPlayer.onSurface = false;
+    myPlayer2.onSurface = false;
     
     if ( bHighlightNote ) {
         if ( getThisOne < 0 ) getThisOne = objectList.size() - 1;
         if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
     }
     
-    // Apply gravity to the player.
-    if ( gameState != 3 ) {
-        myPlayer.applyForce( ofVec2f( 0.0, iScaler * 0.012 ) );
-    }
+    fApplyGravity();
     
     // Run collision detection.
-    playerCollidesWithGround();
+    playerCollidesWithGroundOrSky();
     playerCollidesWithObstacle();
     playerCollidesWithObject();
     objectCollidesWithObstacle();
@@ -173,6 +171,8 @@ void testApp::draw(){
             myTutorial.draw( helvetica );
         } else if ( gameState == 2 ) {
             myBoss.draw( helvetica );
+        } else {
+            myTrack.draw( helvetica );
         }
         
         // Draw the notes.
@@ -226,13 +226,38 @@ void testApp::fLoadPrototype() {
         
     } else if ( gameState >= 3 ) {
         
-        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 5 ) );
+        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 6.5 ) );
         
         addObject( myTrack.setup( iScaler, fMeasureLength ) );
         
         if ( gameState == 4 ) {
             bCamZoomedIn = true;
+            myPlayer2.tall = myPlayer2.wide * 3;
+            myPlayer2.allowMove = false;
         }
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::fApplyGravity() {
+    
+    if ( gameState != 3 ) {
+        
+        float fGravity, fGravFactor;
+        
+        if ( gameState < 3 ) {
+            fGravFactor = iScaler * 0.012;
+        } else if ( gameState == 4 ) {
+            fGravFactor = iScaler * 0.012 * 0.5;
+        }
+        
+        if ( myPlayer.vel.y <= 0 ) {
+            fGravity = fGravFactor;
+        } else {
+            fGravity = fGravFactor * 3;
+        }
+        
+        myPlayer.applyForce( ofVec2f( 0.0, fGravity ) );
     }
 }
 
@@ -649,18 +674,42 @@ void testApp::updateObjectList() {
 }
 
 //--------------------------------------------------------------
-void testApp::playerCollidesWithGround() {
+void testApp::playerCollidesWithGroundOrSky() {
     
-    if ( myPlayer.pos.y >= iThirdOfScreen - myPlayer.tall / 2.0 ) {
-        myPlayer.pos.y = iThirdOfScreen - myPlayer.tall / 2.0;
-        if ( gameState < 3 ) {
+    // P1
+    
+    float fGoNoLower;
+    if ( gameState != 4 ) {
+        fGoNoLower = iThirdOfScreen - myPlayer.tall / 2.0;
+    } else {
+        fGoNoLower = iThirdOfScreen + iScaler * 7;
+    }
+    if ( myPlayer.pos.y >= fGoNoLower ) {
+        myPlayer.pos.y = fGoNoLower;
+        if ( gameState < 3 || gameState == 4 ) {
             myPlayer.onSurface = true;
+            myPlayer2.onSurface = true;
         }
     }
     
+    float fGoNoHigher;
+    if ( gameState != 4 ) {
+        fGoNoHigher = myPlayer.tall / 2.0;
+        
+    } else {
+        fGoNoHigher = -iScaler * 7;
+    }
+    if ( myPlayer.pos.y <= fGoNoHigher ) {
+        myPlayer.pos.y = fGoNoHigher;
+        myPlayer.vel.y = 0;
+    }
+    
+    // P2
+    
     if ( gameState >= 3 ) {
-        if ( myPlayer2.pos.y < ofGetHeight() - iThirdOfScreen + myPlayer.tall / 2.0 ) {
-            myPlayer2.pos.y = ofGetHeight() - iThirdOfScreen + myPlayer.tall / 2.0;
+        float fGoNoLower2 = ofGetHeight() - iThirdOfScreen + myPlayer2.tall / 2.0;
+        if ( myPlayer2.pos.y < fGoNoLower2 ) {
+            myPlayer2.pos.y = fGoNoLower2;
         }
     }
 }

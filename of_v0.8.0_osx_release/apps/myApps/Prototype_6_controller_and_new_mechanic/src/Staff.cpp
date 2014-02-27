@@ -74,8 +74,6 @@ void Staff::draw( int iScaler, float fMeasureLength, int gameState, ofTrueTypeFo
         helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 8 );
         helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
         
-        helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", iScaler * 800, ofGetHeight() / 2 );
-        
         for ( int i = 0; i < 30; i++ ) {
             // Draw the measure lines.
             ofLine( iScaler * 18 + fMeasureLength * i, iScaler * 4,  iScaler * 18 + fMeasureLength * i, ofGetHeight() - iScaler * 4 );
