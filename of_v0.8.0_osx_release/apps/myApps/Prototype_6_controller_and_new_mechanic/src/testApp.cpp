@@ -117,7 +117,6 @@ void testApp::update(){
     }
     
     // Apply gravity to the player.
-    // Come back to this. Use it to fake analog sensitivity with jump height proportional to how long the button is held. Gravity only applies sometimes.
     if ( gameState != 3 ) {
         myPlayer.applyForce( ofVec2f( 0.0, iScaler * 0.012 ) );
     }
@@ -161,10 +160,6 @@ void testApp::draw(){
         
         ofSetColor( 0 );
         
-        // LOCATION-INDEPENDENT
-        
-        //( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight() (staffStart)
-        
         // Move the camera with the player, as long as it dosn't move out of bounds.
         float fZoomFactor, fMoveX, fMoveY;
         if ( bCamZoomedIn == true ) {
@@ -182,26 +177,9 @@ void testApp::draw(){
             myCam.move( fMoveX, fMoveY, fZoomFactor );
         }
         
-        ofSetColor( 0 );
-        if ( bIsDebugging ) {
-            helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, iScaler * 2 );
-            helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - iScaler * 12, iScaler * 2 );
-        }
-        if ( myPlayer.pos.x > ofGetWidth() / 2 && gameState >= 3 ) {
-            helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - iScaler * 8.4, iScaler * 2 );
-        }
-        
+        fDrawDebugUI();
         fDrawStaff();
-        
-        // Draw some lines on the ground to give something to move against.
-        if ( gameState < 3 ) {
-            ofSetColor( 0 );
-            for ( int i = 0; i < iScaler * 800; i += iScaler * 2 ) {
-                ofLine( iScaler * 2 + ( i * 2 ), iThirdOfScreen + iScaler, iScaler * 2 + i, iThirdOfScreen );
-            }
-        }
-        
-        // LOCATION-DEPENDENT
+        fDrawGround();
         
         if ( gameState == 1 ) {
             myTutorial.draw( helvetica );
@@ -224,442 +202,7 @@ void testApp::draw(){
             myPlayer2.draw( helvetica, recordedList );
         }
         
-        
         myCam.end();
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::addObject( string _note, float _xPos, int _age ) {
-    
-    // This function adds an NPC Object.
-    Object tmp;
-    tmp.setup( iScaler, staffPosList, _note, _age );
-    tmp.pos.x = _xPos;
-    objectList.push_back( tmp );
-}
-
-void testApp::addObject( vector < string > _stringList ) {
-    
-    for ( int i = 0; i < _stringList.size(); i += 3 ) {
-        // This function adds an NPC Object.
-        Object tmp;
-        tmp.setup( iScaler, staffPosList, _stringList[ i ], ofToInt( _stringList[ i + 2 ] ) );
-        tmp.pos.x = ofToFloat( _stringList[ i + 1  ] );
-        objectList.push_back( tmp );
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::addRecordedObject( string _note, ofVec2f _vel, int _age ) {
-    
-    // This function copies a recorded Object into a static vector that gets neither updated nor drawn.
-    Object tmp;
-    tmp.setup( iScaler, staffPosList, _note, _age );
-    tmp.vel.set( _vel );
-    recordedList.push_back( tmp );
-}
-
-//--------------------------------------------------------------
-void testApp::addReplayedObject( string _note, ofVec2f _vel, int _age ) {
-    
-    // This function copies an Object from the "recorded" vector to the main Object vector. It also reverses horizontal velocity if needed so the Object can travel the other direction.
-    Object tmp;
-    tmp.setup( iScaler, staffPosList, _note, _age );
-    tmp.pos.x = myPlayer.pos.x;
-    tmp.vel.set( _vel );
-    if ( tmp.vel.x < 0 ) tmp.vel.x *= -1;
-    objectList.push_back( tmp );
-}
-
-//--------------------------------------------------------------
-void testApp::updateObjectList() {
-    
-    for ( int i = 0; i < objectList.size(); i++ ) {
-        
-        // Detect for collision with player's recorder and check if a note has already been recorded in this action.
-        
-        if ( myPlayer.bIsRecording ) {
-            
-            ofVec2f dist = myPlayer.actPos - objectList[ i ].pos;
-            if ( dist.lengthSquared() < ( ( iScaler * 2 ) * ( iScaler * 2 ) ) ) {
-                
-                fRecord( i );
-                
-                // Advance the counter if recorded a selected note.
-                if ( bHighlightNote && i == getThisOne) getThisOne++;
-            }
-        } else {
-            bIsRecording = false;
-        }
-        
-        // Highlight a specific Object.
-        if ( i == getThisOne ) objectList[ i ].drawAttention = true;
-        else objectList[ i ].drawAttention = false;
-        
-        // Make volume dependent on player performance.
-        if ( objectList[ i ].pos.y <= objectList[ i ].staffPosList[ 13 ] ) {
-            //objectList[ i ].vol = ofMap( myPlayer.fHealth, 0, myPlayer.fHealthMax, 0.0, 1.0 );
-        } else {
-            //objectList[ i ].vol = ofMap( myPlayer2.fHealth, 0, myPlayer2.fHealthMax, 0.0, 1.0 );
-        }
-        
-        objectList[ i ].update( gameState, myPlayer.pos );
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::fRecord( int _i ) {
-    
-    if ( bIsRecording || recordedList.size() == myPlayer.capacity ) return;
-    
-    // Set the color to be different to indicate recording.
-    objectList[ _i ].bIsRecorded = true;
-    
-    // Check the spacing between the recorded note and the previous note.
-    /*float xDist;
-     if ( recordedList.size() == 0 ) {
-     xDist = 0;
-     } else { // I may need to adjust the below in case notes aren't captured linearly.
-     xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
-     }*/
-    addRecordedObject( objectList[ _i ].whichNote, objectList[ _i ].vel, objectLife );
-    
-    // This prevents additional recording calls before the action completes.
-    bIsRecording = true;
-    
-    if ( bHighlightNote && _i != getThisOne ) {
-        getThisOne = 0;
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::fReplay() {
-    
-    // Replay mode pauses movement.
-    
-    // Don't proceed if there are zero recorded notes.
-    if ( recordedList.size() == 0 ) {
-        return;
-    }
-    
-    myPlayer.allowMove = false;
-    
-    /*float xDist;
-     if ( replayedList.size() > 0 ) {
-     xDist = replayedList[ replayedList.size() - 1 ].pos.x - myPlayer.pos.x;
-     } else {
-     xDist = 0;
-     }*/
-    
-    //if ( xDist >= recordedList[ 0 ].spacing ) {
-    addReplayedObject( recordedList[ 0 ].whichNote, recordedList[ 0 ].vel, recordedList[ 0 ].age );
-    recordedList[ 0 ].destroyMe = true;
-    //}
-    
-    myPlayer.allowMove = true;
-}
-
-//--------------------------------------------------------------
-void testApp::playerCollidesWithGround() {
-    
-    if ( myPlayer.pos.y >= iThirdOfScreen - myPlayer.tall / 2.0 ) {
-        myPlayer.pos.y = iThirdOfScreen - myPlayer.tall / 2.0;
-        if ( gameState < 3 ) {
-            myPlayer.onSurface = true;
-        }
-    }
-    
-    if ( gameState >= 3 ) {
-        if ( myPlayer2.pos.y < ofGetHeight() - iThirdOfScreen + myPlayer.tall / 2.0 ) {
-            myPlayer2.pos.y = ofGetHeight() - iThirdOfScreen + myPlayer.tall / 2.0;
-        }
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::playerCollidesWithObject() {
-    
-    // Collision with main objects vector.
-    for ( int i = 0; i < objectList.size(); i++ ) {
-        
-        // Make some floats for shorthand...
-        // Player is drawn from the center.
-        // Obstacles are drawn from the corner.
-        float margin = iScaler / 2.5;
-        float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
-        float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
-        float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
-        float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
-        float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
-        float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
-        float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
-        float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
-        
-        float player2Top = myPlayer2.pos.y - myPlayer2.tall / 2.0;
-        float player2Left = myPlayer2.pos.x - myPlayer2.wide / 2.0;
-        float player2Bottom = myPlayer2.pos.y + myPlayer2.tall / 2.0;
-        float player2Right = myPlayer2.pos.x + myPlayer2.wide / 2.0;
-        
-        if ( gameState >= 3 ) {
-            float fHealthMultiplier = 1.5;
-            if ( playerRight > objectLeft
-                && playerLeft < objectRight
-                && playerBottom > objectTop
-                && playerTop < objectBottom ) {
-                myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
-                objectList[ i ].bIsTouched = true;
-            }
-            if ( player2Right > objectLeft
-                && player2Left < objectRight
-                && player2Bottom > objectTop
-                && player2Top < objectBottom ) {
-                myPlayer2.fHealth += myPlayer2.fHealthLossSpeed * fHealthMultiplier;
-                objectList[ i ].bIsTouched = true;
-            }
-        }
-        
-        if ( gameState < 3 ) {
-            // First, check if the player is in the same horizontal region as the object.
-            if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
-                // Is there something directly to the right?
-                if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
-                    // Prevent the player from moving to the right.
-                    myPlayer.pos.x = objectLeft - myPlayer.wide / 2.0;
-                }
-                // OK, is there something directly to the left?
-                else if ( playerLeft <= objectRight && playerLeft > objectList[ i ].pos.x ) {
-                    // Prevent the player from moving to the left.
-                    myPlayer.pos.x = objectRight + myPlayer.wide / 2.0;
-                }
-            }
-            // Next, check if the player is in the same vertical region as the object.
-            if ( playerRight >= objectLeft + margin && playerLeft <= objectRight - margin ) {
-                
-                objectList[ i ].bIsTouched = true;
-                
-                // Is there something directly below?
-                if ( playerBottom >= objectTop && playerBottom < objectList[ i ].pos.y ) {
-                    // Prevent the player from moving downward.
-                    myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
-                    myPlayer.onSurface = true;
-                    //                myPlayer.vel.set( objectList[ i ].vel );
-                    myPlayer.applyForce( objectList[ i ].vel );
-                }
-                // OK, is there something directly above?
-                else if ( playerTop <= objectBottom && playerTop > objectList[ i ].pos.y ) {
-                    // Prevent the player from moving upward.
-                    myPlayer.pos.y = objectBottom + myPlayer.tall / 2.0;
-                    // Cancel any upward velocity.
-                    if ( myPlayer.vel.y < 0 ) {
-                        myPlayer.vel.y = 0;
-                    }
-                }
-            }
-        }
-        
-        
-        /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
-         myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
-         }*/
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::playerCollidesWithObstacle() {
-    
-    // Collision with Obstacle vector.
-    for ( int i = 0; i < obstacleList.size(); i++ ) {
-        
-        // Make some floats for shorthand...
-        // Player is drawn from the center.
-        // Obstacles are drawn from the corner.
-        float margin = iScaler / 2.5;
-        float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
-        float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
-        float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
-        float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
-        float obstacleTop = obstacleList[ i ].pos.y;
-        float obstacleLeft = obstacleList[ i ].pos.x;
-        float obstacleBottom = obstacleList[ i ].pos.y + obstacleList[ i ].tall;
-        float obstacleRight = obstacleList[ i ].pos.x + obstacleList[ i ].wide;
-        
-        // First, check if the player is in the same horizontal region as the obstacle.
-        if ( playerBottom >= obstacleTop + margin && playerTop <= obstacleBottom - margin ) {
-            // Is there something directly to the right?
-            if ( playerRight >= obstacleLeft && playerRight < obstacleList[ i ].pos.x + obstacleList[ i ].wide / 2.0 ) {
-                // Prevent the player from moving to the right.
-                myPlayer.pos.x = obstacleLeft - myPlayer.wide / 2.0;
-            }
-            // OK, is there something directly to the left?
-            else if ( playerLeft <= obstacleRight && playerLeft > obstacleList[ i ].pos.x + obstacleList[ i ].wide / 2.0 ) {
-                // Prevent the player from moving to the left.
-                myPlayer.pos.x = obstacleRight + myPlayer.wide / 2.0;
-            }
-        }
-        // Next, check if the player is in the same vertical region as the obstacle.
-        if ( playerRight >= obstacleLeft + margin && playerLeft <= obstacleRight - margin ) {
-            // Is there something directly below?
-            if ( playerBottom >= obstacleTop && playerBottom < obstacleList[ i ].pos.y + obstacleList[ i ].tall / 2.0 ) {
-                // Prevent the player from moving downward.
-                myPlayer.pos.y = obstacleTop - myPlayer.tall / 2.0;
-                myPlayer.onSurface = true;
-                //                myPlayer.vel.set( objectList[ i ].vel );
-                //myPlayer.applyForce( objectList[ i ].vel );
-            }
-            // OK, is there something directly above?
-            else if ( playerTop <= obstacleBottom && playerTop > obstacleList[ i ].pos.y + obstacleList[ i ].tall / 2.0 ) {
-                // Prevent the player from moving upward.
-                myPlayer.pos.y = obstacleBottom + myPlayer.tall / 2.0;
-                // Cancel any upward velocity.
-                if ( myPlayer.vel.y < 0 ) {
-                    myPlayer.vel.y = 0;
-                }
-            }
-        }
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::objectCollidesWithObstacle() {
-    
-    // Collision with Obstacle vector.
-    for ( int i = 0; i < objectList.size(); i++ ) {
-        for ( int j = 0; j < obstacleList.size(); j++ ) {
-            
-            // Make some floats for shorthand...
-            // Object is drawn from the center.
-            // Obstacles are drawn from the corner.
-            float margin = 0.0;
-            float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
-            float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
-            float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
-            float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
-            float obstacleTop = obstacleList[ j ].pos.y;
-            float obstacleLeft = obstacleList[ j ].pos.x;
-            float obstacleBottom = obstacleList[ j ].pos.y + obstacleList[ j ].tall;
-            float obstacleRight = obstacleList[ j ].pos.x + obstacleList[ j ].wide;
-            
-            // First, check if the object is in the same horizontal region as the obstacle.
-            if ( objectBottom >= obstacleTop + margin && objectTop <= obstacleBottom - margin ) {
-                // Is there something directly to the right?
-                if ( objectRight >= obstacleLeft && objectRight < obstacleList[ j ].pos.x + obstacleList[ j ].wide / 2.0 ) {
-                    // Reverse velocity.
-                    objectList[ i ].vel.x *= -1;
-                }
-                // OK, is there something directly to the left?
-                else if ( objectLeft <= obstacleRight && objectLeft > obstacleList[ j ].pos.x + obstacleList[ j ].wide / 2.0 ) {
-                    // Reverse velocity.
-                    objectList[ i ].vel.x *= -1;
-                }
-            }
-            // Next, check if the object is in the same vertical region as the obstacle.
-            if ( objectRight >= obstacleLeft + margin && objectLeft <= obstacleRight - margin ) {
-                // Is there something directly below?
-                if ( objectBottom >= obstacleTop && objectBottom < obstacleList[ j ].pos.y + obstacleList[ j ].tall / 2.0 ) {
-                    // Reverse velocity.
-                    objectList[ i ].vel.y *= -1;
-                }
-                // OK, is there something directly above?
-                else if ( objectTop <= obstacleBottom && objectTop > obstacleList[ j ].pos.y + obstacleList[ j ].tall / 2.0 ) {
-                    // Reverse velocity.
-                    objectList[ i ].vel.y *= -1;
-                }
-            }
-        }
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::exit() {
-    
-    cleanup();
-}
-
-//--------------------------------------------------------------
-void testApp::cleanup() {
-    
-    // Run this function when exiting or restarting the app, just to be safe.
-    
-    // Stop any music playing.
-    for ( int i = 0; i < objectList.size(); i++ ) {
-        for ( int j = 0; j < objectList[ i ].noteList.size(); j++ ) {
-            objectList[ i ].fCleanup();
-        }
-    }
-    for ( int i = 0; i < recordedList.size(); i++ ) {
-        for ( int j = 0; j < recordedList[ i ].noteList.size(); j++ ) {
-            recordedList[ i ].fCleanup();
-        }
-    }
-    
-    // Clear the vector.
-    obstacleList.clear();
-    objectList.clear();
-    recordedList.clear();
-}
-
-//--------------------------------------------------------------
-void testApp::fDrawRestartScreen() {
-    
-    ofSetColor( 0 );
-    helvetica.drawString( "Are you sure you want to restart? Y / N ", ofGetWidth() / 2 - iScaler * 13, ofGetHeight() / 2.0 );
-}
-
-//--------------------------------------------------------------
-void testApp::fDrawStaff() {
-    
-    // Draw the staff with transparency.
-    if ( gameState < 3 ) {
-        ofSetColor( 0, int( iStaffAlpha ) );
-    } else {
-        ofSetColor(0);
-    }
-    
-    // Establish some reference floats.
-    float staffStart = ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight();
-    float xStart;
-    if ( myPlayer.pos.x < staffStart + ofGetWidth() ) {
-        xStart = staffStart;
-    } else {
-        xStart = myPlayer.pos.x - ofGetWidth();
-    }
-    
-    ofSetLineWidth( 1 );
-    
-    // Draw the horizontal staff lines.
-    for ( int i = 2; i < 7; i++ ) {
-        ofLine( xStart, iScaler * 2 * i, myPlayer.pos.x + ofGetWidth(), iScaler * 2 * i );
-        ofLine( xStart, ofGetHeight() - ( iScaler * 2 * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( iScaler * 2 * i ) );
-    }
-    
-    if ( gameState >= 3 ) {
-        
-        // Draw initial vertical line.
-        ofSetLineWidth( 3 );
-        ofLine( xStart, iScaler * 4, xStart, ofGetHeight() - iScaler * 4 );
-        ofSetLineWidth( 1 );
-        
-        // Draw the initial bracket.
-        staffBracket.draw( 0, iScaler * 4, ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - iScaler * 8 );
-        // Draw the clefs.
-        trebleClef.draw( iScaler * 4, iScaler * 8 - iScaler * 2 * 7 / 2.15, ( iScaler * 2 * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), iScaler * 14 );
-        bassClef.draw( iScaler * 4, ofGetHeight() - iScaler * 12, ( iScaler * 2 * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), iScaler * 6.2 );
-        
-        // Draw the time signature.
-        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 8 );
-        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 12 );
-        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 8 );
-        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
-        
-        helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", iScaler * 800, ofGetHeight() / 2 );
-        
-        for ( int i = 0; i < 30; i++ ) {
-            // Draw the measure lines.
-            ofLine( iScaler * 18 + fMeasureLength * i, iScaler * 4,  iScaler * 18 + fMeasureLength * i, ofGetHeight() - iScaler * 4 );
-            // Draw the measure number.
-            helvetica.drawString( ofToString( i + 1 ), iScaler * 19 + fMeasureLength * i, iScaler * 4);
-        }
     }
 }
 
@@ -702,20 +245,6 @@ void testApp::fLoadPrototype() {
         if ( gameState == 4 ) {
             bCamZoomedIn = true;
         }
-    }
-}
-
-//--------------------------------------------------------------
-void testApp::fCalcAllNotePos() {
-    
-    for ( int i = 0; i < numYpos; i++ ) {
-        float tmp;
-        if ( i < 15 ) { // Bottom clef.
-            tmp = ofGetHeight() - ( iScaler * ( i + 1 ) );
-        } else { // Top clef.
-            tmp = ofGetHeight() - ( ofGetHeight() - iThirdOfScreen * 2 ) - ( iScaler * ( i + 2 ) );
-        }
-        staffPosList.push_back( tmp );
     }
 }
 
@@ -1094,6 +623,480 @@ void testApp::keyReleased(int key){
             //----------------------------------------------------
     }
 }
+
+//--------------------------------------------------------------
+void testApp::updateObjectList() {
+    
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        
+        // Detect for collision with player's recorder and check if a note has already been recorded in this action.
+        
+        if ( myPlayer.bIsRecording ) {
+            
+            ofVec2f dist = myPlayer.actPos - objectList[ i ].pos;
+            if ( dist.lengthSquared() < ( ( iScaler * 2 ) * ( iScaler * 2 ) ) ) {
+                
+                fRecord( i );
+                
+                // Advance the counter if recorded a selected note.
+                if ( bHighlightNote && i == getThisOne) getThisOne++;
+            }
+        } else {
+            bIsRecording = false;
+        }
+        
+        // Highlight a specific Object.
+        if ( i == getThisOne ) objectList[ i ].drawAttention = true;
+        else objectList[ i ].drawAttention = false;
+        
+        // Make volume dependent on player performance.
+        if ( objectList[ i ].pos.y <= objectList[ i ].staffPosList[ 13 ] ) {
+            //objectList[ i ].vol = ofMap( myPlayer.fHealth, 0, myPlayer.fHealthMax, 0.0, 1.0 );
+        } else {
+            //objectList[ i ].vol = ofMap( myPlayer2.fHealth, 0, myPlayer2.fHealthMax, 0.0, 1.0 );
+        }
+        
+        objectList[ i ].update( gameState, myPlayer.pos );
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::playerCollidesWithGround() {
+    
+    if ( myPlayer.pos.y >= iThirdOfScreen - myPlayer.tall / 2.0 ) {
+        myPlayer.pos.y = iThirdOfScreen - myPlayer.tall / 2.0;
+        if ( gameState < 3 ) {
+            myPlayer.onSurface = true;
+        }
+    }
+    
+    if ( gameState >= 3 ) {
+        if ( myPlayer2.pos.y < ofGetHeight() - iThirdOfScreen + myPlayer.tall / 2.0 ) {
+            myPlayer2.pos.y = ofGetHeight() - iThirdOfScreen + myPlayer.tall / 2.0;
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::playerCollidesWithObject() {
+    
+    // Collision with main objects vector.
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        
+        // Make some floats for shorthand...
+        // Player is drawn from the center.
+        // Obstacles are drawn from the corner.
+        float margin = iScaler / 2.5;
+        float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
+        float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
+        float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
+        float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
+        float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
+        float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
+        float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
+        float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
+        
+        float player2Top = myPlayer2.pos.y - myPlayer2.tall / 2.0;
+        float player2Left = myPlayer2.pos.x - myPlayer2.wide / 2.0;
+        float player2Bottom = myPlayer2.pos.y + myPlayer2.tall / 2.0;
+        float player2Right = myPlayer2.pos.x + myPlayer2.wide / 2.0;
+        
+        if ( gameState >= 3 ) {
+            float fHealthMultiplier = 1.5;
+            if ( playerRight > objectLeft
+                && playerLeft < objectRight
+                && playerBottom > objectTop
+                && playerTop < objectBottom ) {
+                myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
+                objectList[ i ].bIsTouched = true;
+            }
+            if ( player2Right > objectLeft
+                && player2Left < objectRight
+                && player2Bottom > objectTop
+                && player2Top < objectBottom ) {
+                myPlayer2.fHealth += myPlayer2.fHealthLossSpeed * fHealthMultiplier;
+                objectList[ i ].bIsTouched = true;
+            }
+        }
+        
+        if ( gameState < 3 ) {
+            // First, check if the player is in the same horizontal region as the object.
+            if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
+                // Is there something directly to the right?
+                if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
+                    // Prevent the player from moving to the right.
+                    myPlayer.pos.x = objectLeft - myPlayer.wide / 2.0;
+                }
+                // OK, is there something directly to the left?
+                else if ( playerLeft <= objectRight && playerLeft > objectList[ i ].pos.x ) {
+                    // Prevent the player from moving to the left.
+                    myPlayer.pos.x = objectRight + myPlayer.wide / 2.0;
+                }
+            }
+            // Next, check if the player is in the same vertical region as the object.
+            if ( playerRight >= objectLeft + margin && playerLeft <= objectRight - margin ) {
+                
+                objectList[ i ].bIsTouched = true;
+                
+                // Is there something directly below?
+                if ( playerBottom >= objectTop && playerBottom < objectList[ i ].pos.y ) {
+                    // Prevent the player from moving downward.
+                    myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
+                    myPlayer.onSurface = true;
+                    //                myPlayer.vel.set( objectList[ i ].vel );
+                    myPlayer.applyForce( objectList[ i ].vel );
+                }
+                // OK, is there something directly above?
+                else if ( playerTop <= objectBottom && playerTop > objectList[ i ].pos.y ) {
+                    // Prevent the player from moving upward.
+                    myPlayer.pos.y = objectBottom + myPlayer.tall / 2.0;
+                    // Cancel any upward velocity.
+                    if ( myPlayer.vel.y < 0 ) {
+                        myPlayer.vel.y = 0;
+                    }
+                }
+            }
+        }
+        
+        
+        /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
+         myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
+         }*/
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::playerCollidesWithObstacle() {
+    
+    // Collision with Obstacle vector.
+    for ( int i = 0; i < obstacleList.size(); i++ ) {
+        
+        // Make some floats for shorthand...
+        // Player is drawn from the center.
+        // Obstacles are drawn from the corner.
+        float margin = iScaler / 2.5;
+        float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
+        float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
+        float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
+        float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
+        float obstacleTop = obstacleList[ i ].pos.y;
+        float obstacleLeft = obstacleList[ i ].pos.x;
+        float obstacleBottom = obstacleList[ i ].pos.y + obstacleList[ i ].tall;
+        float obstacleRight = obstacleList[ i ].pos.x + obstacleList[ i ].wide;
+        
+        // First, check if the player is in the same horizontal region as the obstacle.
+        if ( playerBottom >= obstacleTop + margin && playerTop <= obstacleBottom - margin ) {
+            // Is there something directly to the right?
+            if ( playerRight >= obstacleLeft && playerRight < obstacleList[ i ].pos.x + obstacleList[ i ].wide / 2.0 ) {
+                // Prevent the player from moving to the right.
+                myPlayer.pos.x = obstacleLeft - myPlayer.wide / 2.0;
+            }
+            // OK, is there something directly to the left?
+            else if ( playerLeft <= obstacleRight && playerLeft > obstacleList[ i ].pos.x + obstacleList[ i ].wide / 2.0 ) {
+                // Prevent the player from moving to the left.
+                myPlayer.pos.x = obstacleRight + myPlayer.wide / 2.0;
+            }
+        }
+        // Next, check if the player is in the same vertical region as the obstacle.
+        if ( playerRight >= obstacleLeft + margin && playerLeft <= obstacleRight - margin ) {
+            // Is there something directly below?
+            if ( playerBottom >= obstacleTop && playerBottom < obstacleList[ i ].pos.y + obstacleList[ i ].tall / 2.0 ) {
+                // Prevent the player from moving downward.
+                myPlayer.pos.y = obstacleTop - myPlayer.tall / 2.0;
+                myPlayer.onSurface = true;
+                //                myPlayer.vel.set( objectList[ i ].vel );
+                //myPlayer.applyForce( objectList[ i ].vel );
+            }
+            // OK, is there something directly above?
+            else if ( playerTop <= obstacleBottom && playerTop > obstacleList[ i ].pos.y + obstacleList[ i ].tall / 2.0 ) {
+                // Prevent the player from moving upward.
+                myPlayer.pos.y = obstacleBottom + myPlayer.tall / 2.0;
+                // Cancel any upward velocity.
+                if ( myPlayer.vel.y < 0 ) {
+                    myPlayer.vel.y = 0;
+                }
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::objectCollidesWithObstacle() {
+    
+    // Collision with Obstacle vector.
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        for ( int j = 0; j < obstacleList.size(); j++ ) {
+            
+            // Make some floats for shorthand...
+            // Object is drawn from the center.
+            // Obstacles are drawn from the corner.
+            float margin = 0.0;
+            float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
+            float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
+            float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
+            float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
+            float obstacleTop = obstacleList[ j ].pos.y;
+            float obstacleLeft = obstacleList[ j ].pos.x;
+            float obstacleBottom = obstacleList[ j ].pos.y + obstacleList[ j ].tall;
+            float obstacleRight = obstacleList[ j ].pos.x + obstacleList[ j ].wide;
+            
+            // First, check if the object is in the same horizontal region as the obstacle.
+            if ( objectBottom >= obstacleTop + margin && objectTop <= obstacleBottom - margin ) {
+                // Is there something directly to the right?
+                if ( objectRight >= obstacleLeft && objectRight < obstacleList[ j ].pos.x + obstacleList[ j ].wide / 2.0 ) {
+                    // Reverse velocity.
+                    objectList[ i ].vel.x *= -1;
+                }
+                // OK, is there something directly to the left?
+                else if ( objectLeft <= obstacleRight && objectLeft > obstacleList[ j ].pos.x + obstacleList[ j ].wide / 2.0 ) {
+                    // Reverse velocity.
+                    objectList[ i ].vel.x *= -1;
+                }
+            }
+            // Next, check if the object is in the same vertical region as the obstacle.
+            if ( objectRight >= obstacleLeft + margin && objectLeft <= obstacleRight - margin ) {
+                // Is there something directly below?
+                if ( objectBottom >= obstacleTop && objectBottom < obstacleList[ j ].pos.y + obstacleList[ j ].tall / 2.0 ) {
+                    // Reverse velocity.
+                    objectList[ i ].vel.y *= -1;
+                }
+                // OK, is there something directly above?
+                else if ( objectTop <= obstacleBottom && objectTop > obstacleList[ j ].pos.y + obstacleList[ j ].tall / 2.0 ) {
+                    // Reverse velocity.
+                    objectList[ i ].vel.y *= -1;
+                }
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::fDrawStaff() {
+    
+    // Draw the staff with transparency.
+    if ( gameState < 3 ) {
+        ofSetColor( 0, int( iStaffAlpha ) );
+    } else {
+        ofSetColor(0);
+    }
+    
+    // Establish some reference floats.
+    float staffStart = ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight();
+    float xStart;
+    if ( myPlayer.pos.x < staffStart + ofGetWidth() ) {
+        xStart = staffStart;
+    } else {
+        xStart = myPlayer.pos.x - ofGetWidth();
+    }
+    
+    ofSetLineWidth( 1 );
+    
+    // Draw the horizontal staff lines.
+    for ( int i = 2; i < 7; i++ ) {
+        ofLine( xStart, iScaler * 2 * i, myPlayer.pos.x + ofGetWidth(), iScaler * 2 * i );
+        ofLine( xStart, ofGetHeight() - ( iScaler * 2 * i ), myPlayer.pos.x + ofGetWidth(), ofGetHeight() - ( iScaler * 2 * i ) );
+    }
+    
+    if ( gameState >= 3 ) {
+        
+        // Draw initial vertical line.
+        ofSetLineWidth( 3 );
+        ofLine( xStart, iScaler * 4, xStart, ofGetHeight() - iScaler * 4 );
+        ofSetLineWidth( 1 );
+        
+        // Draw the initial bracket.
+        staffBracket.draw( 0, iScaler * 4, ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - iScaler * 8 );
+        // Draw the clefs.
+        trebleClef.draw( iScaler * 4, iScaler * 8 - iScaler * 2 * 7 / 2.15, ( iScaler * 2 * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), iScaler * 14 );
+        bassClef.draw( iScaler * 4, ofGetHeight() - iScaler * 12, ( iScaler * 2 * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), iScaler * 6.2 );
+        
+        // Draw the time signature.
+        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 8 );
+        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 12 );
+        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 8 );
+        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
+        
+        helvetica.drawString( "Finished! Press SHIFT + R to quick-restart.", iScaler * 800, ofGetHeight() / 2 );
+        
+        for ( int i = 0; i < 30; i++ ) {
+            // Draw the measure lines.
+            ofLine( iScaler * 18 + fMeasureLength * i, iScaler * 4,  iScaler * 18 + fMeasureLength * i, ofGetHeight() - iScaler * 4 );
+            // Draw the measure number.
+            helvetica.drawString( ofToString( i + 1 ), iScaler * 19 + fMeasureLength * i, iScaler * 4);
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::fDrawRestartScreen() {
+    
+    ofSetColor( 0 );
+    helvetica.drawString( "Are you sure you want to restart? Y / N ", ofGetWidth() / 2 - iScaler * 13, ofGetHeight() / 2.0 );
+}
+
+//--------------------------------------------------------------
+void testApp::fDrawDebugUI() {
+    
+    ofSetColor( 0 );
+    if ( bIsDebugging ) {
+        helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, iScaler * 2 );
+        helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - iScaler * 12, iScaler * 2 );
+    }
+    if ( myPlayer.pos.x > ofGetWidth() / 2 && gameState >= 3 ) {
+        helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - iScaler * 8.4, iScaler * 2 );
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::fDrawGround() {
+    
+    // Draw some lines on the ground to give something to move against.
+    if ( gameState < 3 ) {
+        ofSetColor( 0 );
+        for ( int i = 0; i < iScaler * 800; i += iScaler * 2 ) {
+            ofLine( iScaler * 2 + ( i * 2 ), iThirdOfScreen + iScaler, iScaler * 2 + i, iThirdOfScreen );
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::fCalcAllNotePos() {
+    
+    for ( int i = 0; i < numYpos; i++ ) {
+        float tmp;
+        if ( i < 15 ) { // Bottom clef.
+            tmp = ofGetHeight() - ( iScaler * ( i + 1 ) );
+        } else { // Top clef.
+            tmp = ofGetHeight() - ( ofGetHeight() - iThirdOfScreen * 2 ) - ( iScaler * ( i + 2 ) );
+        }
+        staffPosList.push_back( tmp );
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::addObject( string _note, float _xPos, int _age ) {
+    
+    // This function adds an NPC Object.
+    Object tmp;
+    tmp.setup( iScaler, staffPosList, _note, _age );
+    tmp.pos.x = _xPos;
+    objectList.push_back( tmp );
+}
+
+void testApp::addObject( vector < string > _stringList ) {
+    
+    for ( int i = 0; i < _stringList.size(); i += 3 ) {
+        // This function adds an NPC Object.
+        Object tmp;
+        tmp.setup( iScaler, staffPosList, _stringList[ i ], ofToInt( _stringList[ i + 2 ] ) );
+        tmp.pos.x = ofToFloat( _stringList[ i + 1  ] );
+        objectList.push_back( tmp );
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::addRecordedObject( string _note, ofVec2f _vel, int _age ) {
+    
+    // This function copies a recorded Object into a static vector that gets neither updated nor drawn.
+    Object tmp;
+    tmp.setup( iScaler, staffPosList, _note, _age );
+    tmp.vel.set( _vel );
+    recordedList.push_back( tmp );
+}
+
+//--------------------------------------------------------------
+void testApp::addReplayedObject( string _note, ofVec2f _vel, int _age ) {
+    
+    // This function copies an Object from the "recorded" vector to the main Object vector. It also reverses horizontal velocity if needed so the Object can travel the other direction.
+    Object tmp;
+    tmp.setup( iScaler, staffPosList, _note, _age );
+    tmp.pos.x = myPlayer.pos.x;
+    tmp.vel.set( _vel );
+    if ( tmp.vel.x < 0 ) tmp.vel.x *= -1;
+    objectList.push_back( tmp );
+}
+
+//--------------------------------------------------------------
+void testApp::fRecord( int _i ) {
+    
+    if ( bIsRecording || recordedList.size() == myPlayer.capacity ) return;
+    
+    // Set the color to be different to indicate recording.
+    objectList[ _i ].bIsRecorded = true;
+    
+    // Check the spacing between the recorded note and the previous note.
+    /*float xDist;
+     if ( recordedList.size() == 0 ) {
+     xDist = 0;
+     } else { // I may need to adjust the below in case notes aren't captured linearly.
+     xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
+     }*/
+    addRecordedObject( objectList[ _i ].whichNote, objectList[ _i ].vel, objectLife );
+    
+    // This prevents additional recording calls before the action completes.
+    bIsRecording = true;
+    
+    if ( bHighlightNote && _i != getThisOne ) {
+        getThisOne = 0;
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::fReplay() {
+    
+    // Replay mode pauses movement.
+    
+    // Don't proceed if there are zero recorded notes.
+    if ( recordedList.size() == 0 ) {
+        return;
+    }
+    
+    myPlayer.allowMove = false;
+    
+    /*float xDist;
+     if ( replayedList.size() > 0 ) {
+     xDist = replayedList[ replayedList.size() - 1 ].pos.x - myPlayer.pos.x;
+     } else {
+     xDist = 0;
+     }*/
+    
+    //if ( xDist >= recordedList[ 0 ].spacing ) {
+    addReplayedObject( recordedList[ 0 ].whichNote, recordedList[ 0 ].vel, recordedList[ 0 ].age );
+    recordedList[ 0 ].destroyMe = true;
+    //}
+    
+    myPlayer.allowMove = true;
+}
+
+//--------------------------------------------------------------
+void testApp::exit() {
+    
+    cleanup();
+}
+
+//--------------------------------------------------------------
+void testApp::cleanup() {
+    
+    // Run this function when exiting or restarting the app, just to be safe.
+    
+    // Stop any music playing.
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        for ( int j = 0; j < objectList[ i ].noteList.size(); j++ ) {
+            objectList[ i ].fCleanup();
+        }
+    }
+    for ( int i = 0; i < recordedList.size(); i++ ) {
+        for ( int j = 0; j < recordedList[ i ].noteList.size(); j++ ) {
+            recordedList[ i ].fCleanup();
+        }
+    }
+    
+    // Clear the vector.
+    obstacleList.clear();
+    objectList.clear();
+    recordedList.clear();
+}
+
 /*
  //--------------------------------------------------------------
  void testApp::mouseMoved(int x, int y ){

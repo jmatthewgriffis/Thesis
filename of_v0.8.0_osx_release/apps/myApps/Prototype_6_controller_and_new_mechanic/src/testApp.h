@@ -50,6 +50,8 @@ public:
     
     void fDrawRestartScreen();
     void fDrawStaff();
+    void fDrawGround();
+    void fDrawDebugUI();
     
     void fCalcAllNotePos();
     void fLoadPrototype();
