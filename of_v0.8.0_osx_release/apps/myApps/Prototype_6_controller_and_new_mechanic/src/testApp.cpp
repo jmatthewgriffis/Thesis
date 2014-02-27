@@ -190,7 +190,7 @@ void testApp::draw(){
             helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, iScaler * 2 );
             helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - iScaler * 12, iScaler * 2 );
         }
-        if ( myPlayer.pos.x > ofGetWidth() / 2 ) {
+        if ( myPlayer.pos.x > ofGetWidth() / 2 && gameState >= 3 ) {
             helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - iScaler * 8.4, iScaler * 2 );
         }
         
@@ -209,8 +209,7 @@ void testApp::draw(){
         if ( gameState == 1 ) {
             fDrawTutorialInstructions();
         } else if ( gameState == 2 ) {
-            //Boss battle goes here.
-            helvetica.drawString( "This is not yet fully implemented. :(\nCheck back later.", iScaler * 4, iScaler * 4 );
+            myBoss.draw( helvetica );
         }
         
         // Draw the notes.
@@ -732,10 +731,12 @@ void testApp::fLoadPrototype() {
     cleanup();
     myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
     
+    float fZoomedInX = iScaler * 7.5;
+    
     if ( gameState == 1 ) {
         
         bCamZoomedIn = true;
-        myPlayer.pos.x = iScaler * 7;
+        myPlayer.pos.x = fZoomedInX;
         addObject( myTutorial.setup( iScaler, iThirdOfScreen ) );
         obstacleList = myTutorial.obstacleList;
         
@@ -744,7 +745,7 @@ void testApp::fLoadPrototype() {
     } else if ( gameState == 2 ) {
         
         bCamZoomedIn = true;
-        myPlayer.pos.x = iScaler * 7;
+        myPlayer.pos.x = fZoomedInX;
         addObject( myBoss.setup( iScaler, fMeasureLength ) );
         
         for ( int i = 0; i < objectList.size(); i++ ) {

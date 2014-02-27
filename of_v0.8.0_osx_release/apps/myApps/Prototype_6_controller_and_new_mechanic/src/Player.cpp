@@ -58,9 +58,15 @@ void Player::update( int _gameState ) {
         fHealth = 0;
     }
     
-    if ( gameState == 2 ) {
-        if ( pos.x < iScaler * 4 ) {
-            pos.x = iScaler * 4;
+    if ( gameState < 3 ) {
+        if ( pos.x < iScaler * 7 ) {
+            pos.x = iScaler * 7;
+        }
+        
+        if ( gameState == 2 ) {
+            if ( pos.x > ofGetWidth() - iScaler * 7 ) {
+                pos.x = ofGetWidth() - iScaler * 7;
+            }
         }
     }
     

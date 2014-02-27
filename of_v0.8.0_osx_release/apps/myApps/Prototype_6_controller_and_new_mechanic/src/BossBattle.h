@@ -15,6 +15,7 @@ public:
     BossBattle();
     
     vector< string > setup( int _iScaler, float _fMeasureLength );
+    void draw( ofTrueTypeFont _font );
     void addObject( string _note, float _xPos, int _age );
     
     vector< string > stringList;

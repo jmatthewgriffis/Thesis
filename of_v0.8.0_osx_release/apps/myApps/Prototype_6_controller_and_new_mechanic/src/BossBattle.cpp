@@ -37,3 +37,7 @@ vector< string > BossBattle::setup( int _iScaler, float _fMeasureLength ) {
     
     return stringList;
 }
+
+void BossBattle::draw( ofTrueTypeFont _font ) {
+    _font.drawString( "This is not yet fully implemented. :(\nCheck back later.", iScaler * 8, iScaler * 4 );
+}
