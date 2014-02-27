@@ -77,8 +77,6 @@ void testApp::setup(){
     iStaffAlpha = iStaffAlphaMin;
     iStaffAlphaVel = 0.5;
     myTitle.iWhichPrototype = 1;
-    
-    myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen - 25 ) );
 }
 
 //--------------------------------------------------------------
@@ -335,7 +333,6 @@ void testApp::fRecord( int _i ) {
     bIsRecording = true;
     
     if ( bHighlightNote && _i != getThisOne ) {
-        //        cout<<"yes!"<<endl;
         getThisOne = 0;
     }
 }
@@ -733,11 +730,12 @@ void testApp::fDrawStaff() {
 void testApp::fLoadPrototype() {
     
     cleanup();
-    myPlayer.setup( iScaler, bUsingController );
+    myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
     
     if ( gameState == 1 ) {
         
         bCamZoomedIn = true;
+        myPlayer.pos.x = iScaler * 7;
         addObject( myTutorial.setup( iScaler, iThirdOfScreen ) );
         obstacleList = myTutorial.obstacleList;
         
@@ -746,6 +744,7 @@ void testApp::fLoadPrototype() {
     } else if ( gameState == 2 ) {
         
         bCamZoomedIn = true;
+        myPlayer.pos.x = iScaler * 7;
         addObject( myBoss.setup( iScaler, fMeasureLength ) );
         
         for ( int i = 0; i < objectList.size(); i++ ) {

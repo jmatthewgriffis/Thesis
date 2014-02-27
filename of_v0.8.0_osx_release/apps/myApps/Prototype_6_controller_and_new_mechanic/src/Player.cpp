@@ -58,6 +58,12 @@ void Player::update( int _gameState ) {
         fHealth = 0;
     }
     
+    if ( gameState == 2 ) {
+        if ( pos.x < iScaler * 4 ) {
+            pos.x = iScaler * 4;
+        }
+    }
+    
     // Movement
     if ( allowMove ) {
         
@@ -65,12 +71,12 @@ void Player::update( int _gameState ) {
             if ( gameState >= 3 ) {
                 applyForce( ofVec2f( 0.0, -maxVel ) );
             } else if ( onSurface && allowJump ) {
-                    //            pos.y -= vel.y;
-                    onSurface = false;
-                    allowJump = false;
-                    // Jump! And prevent additional jumps.
-                    applyForce( ofVec2f( 0.0, -jumpVel ) );
-                    }
+                //            pos.y -= vel.y;
+                onSurface = false;
+                allowJump = false;
+                // Jump! And prevent additional jumps.
+                applyForce( ofVec2f( 0.0, -jumpVel ) );
+            }
         }
         if ( down ) {
             if ( gameState >= 3 ) {
@@ -81,12 +87,12 @@ void Player::update( int _gameState ) {
         
         if ( left ) {
             //if ( gameState < 3 ) {
-                applyForce( ofVec2f( -maxVel, 0.0 ) );
+            applyForce( ofVec2f( -maxVel, 0.0 ) );
             //}
         }
         if ( right ) {
             //if ( gameState < 3 ) {
-                applyForce( ofVec2f( maxVel, 0.0 ) );
+            applyForce( ofVec2f( maxVel, 0.0 ) );
             //}
         }
         
@@ -157,6 +163,7 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     if ( _recordedList.size() > 0 ) {
         
         ofSetRectMode( OF_RECTMODE_CENTER );
+        ofSetColor( 0, 255 );
         ofNoFill();
         ofEllipse( pos.x, _recordedList[ 0 ].pos.y, _recordedList[ 0 ].wide, _recordedList[ 0 ].tall );
         ofFill();
@@ -165,7 +172,9 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     // Draw the player.
     ofSetRectMode( OF_RECTMODE_CENTER );
     ofSetColor( 0 );
-    ofRect( pos, wide, tall );
+    if ( gameState != 3 ) {
+        ofRect( pos, wide, tall );
+    }
     
     // Draw the health. Taken from my Space Odyssey 2 code.
     ofPushMatrix();{
@@ -194,10 +203,19 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         
     }ofPopMatrix();
     
+    
     ofSetColor( 255 );
     ofSetRectMode( OF_RECTMODE_CORNER );
-    headphones.draw( pos.x-iScaler*1.4, pos.y-iScaler*2.4, iScaler * 3, iScaler * 3 );
-    //hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall );
+    
+    if ( gameState == 3 ) {
+        wide = iScaler * 4;
+        tall = wide;
+        hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall);
+    }
+    
+    else if ( gameState >= 4 ) {
+        headphones.draw( pos.x-iScaler*1.4, pos.y-iScaler*2.4, iScaler * 3, iScaler * 3 );
+    }
     
     // Display a visual indicator of recorded capacity.
     if ( _recordedList.size() > 1 ) {

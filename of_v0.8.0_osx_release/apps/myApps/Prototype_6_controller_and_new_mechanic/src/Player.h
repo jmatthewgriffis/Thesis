@@ -17,7 +17,7 @@ class Player {
 public:
     Player();
     
-    void setup( int _iScaler, bool _bUsingController, ofVec2f _pos = ofVec2f( 100, ofGetHeight() - 50 ) );
+    void setup( int _iScaler, bool _bUsingController, ofVec2f _pos );
     void update( int _gameState );
     void draw( ofTrueTypeFont _font, vector< Object > _recordedList );
     
