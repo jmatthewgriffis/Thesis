@@ -91,7 +91,7 @@ void TitleScreen::draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty ) {
             } else {
                 ofSetColor( 0 );
             }
-            helvetica.drawString( "Proto4: Flight!", ofGetWidth() / 2, ofGetHeight() / 2 + iScaler * 6 );
+            helvetica.drawString( "NEW! Proto4: Flight!", ofGetWidth() / 2, ofGetHeight() / 2 + iScaler * 6 );
             
         }ofPopMatrix();
     }
