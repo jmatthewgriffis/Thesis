@@ -296,6 +296,11 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e)
                     float fJumpMax = -iScaler * 0.75;
                     myPlayer.jumpVel = ofMap( e.value, -0.125, -1, fJumpMin, fJumpMax );
                     myPlayer.up = true;
+                } else if ( e.value > 0 ) {
+                    float fJumpMin = iScaler * 0.25;
+                    float fJumpMax = iScaler * 0.75;
+                    myPlayer.jumpVel = ofMap( e.value, 0.125, 1, fJumpMin, fJumpMax );
+                    myPlayer.up = true;
                 }
             } else {
                 myPlayer.up = false;
