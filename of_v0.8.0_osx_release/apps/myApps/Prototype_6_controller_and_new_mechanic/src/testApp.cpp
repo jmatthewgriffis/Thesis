@@ -199,7 +199,7 @@ void testApp::draw(){
         // Draw some lines on the ground to give something to move against.
         if ( gameState < 3 ) {
             ofSetColor( 0 );
-            for ( int i = 0; i < iScaler * 12000; i += iScaler * 2 ) {
+            for ( int i = 0; i < iScaler * 800; i += iScaler * 2 ) {
                 ofLine( iScaler * 2 + ( i * 2 ), iThirdOfScreen + iScaler, iScaler * 2 + i, iThirdOfScreen );
             }
         }
