@@ -292,8 +292,10 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e)
         if ( e.axis == 3 ) {
             if ( abs( e.value ) > fStickBuffer ) {
                 if ( e.value < 0 ) {
-                    myPlayer.applyForce( ofVec2f( 0.0, -2.0 ) );
+                    myPlayer.up = true;
                 }
+            } else {
+                myPlayer.up = false;
             }
         }
     }
@@ -397,7 +399,7 @@ void testApp::keyPressed(int key){
                 } else {
                     //
                 }
-            } else {
+            } else if ( bUsingController == false ) {
                 myPlayer.up = true;
             }
             break;
@@ -449,7 +451,7 @@ void testApp::keyPressed(int key){
                 } else {
                     //
                 }
-            } else {
+            } else if ( bUsingController == false ) {
                 myPlayer.down = true;
             }
             break;
@@ -559,7 +561,7 @@ void testApp::keyReleased(int key){
                     myPlayer.up = false;
                     myPlayer.allowJump = true;
                 }
-            } else {
+            } else if ( bUsingController == false ) {
                 myPlayer.up = false;
             }
             break;
@@ -606,7 +608,7 @@ void testApp::keyReleased(int key){
                 } else {
                     //
                 }
-            } else {
+            } else if ( bUsingController == false ){
                 myPlayer.down = false;
             }
             break;
