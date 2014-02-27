@@ -19,7 +19,9 @@ void Tutorial::addObject( string _note, float _xPos, int _age ) {
     stringList.push_back( ofToString( _age ) );
 }
 
-vector< string >  Tutorial::setup( int _iScaler, int _iThirdOfScreen ) {
+vector< string >  Tutorial::setup( int _iScaler, int _iThirdOfScreen, bool _bIsLefty ) {
+    
+    fWriteControls( _bIsLefty );
     
     stringList.clear();
     obstacleList.clear();
@@ -92,10 +94,61 @@ vector< string >  Tutorial::setup( int _iScaler, int _iThirdOfScreen ) {
     return stringList;
 }
 
-void Tutorial::update() {
+void Tutorial::draw( ofTrueTypeFont _font ) {
     
+    ofTrueTypeFont helvetica = _font;
+    
+    float y = iScaler * 4;
+    // Left and right
+    helvetica.drawString( sLeft + " / " + sRight, iScaler * 8, y );
+    // Up
+    helvetica.drawString( sUp, iScaler * 64, y );
+    // Record
+    helvetica.drawString( sAltLeft, iScaler * 120, y );
+    // Replay
+    helvetica.drawString( sAltRight, iScaler * 152, y );
+    
+    // Sly note
+    helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", iScaler * 484, y );
+    
+    // Cue boss battle.
+    helvetica.drawString( "[ENTER] here for a boss battle!", iScaler * 420, y + iScaler * 5 );
 }
 
-void Tutorial::draw() {
+void Tutorial::fWriteControls( bool bIsLefty ) {
     
+    // Here we store the controls as strings we can display on-screen.
+    
+    if ( !bIsLefty ) {
+        
+        // Movement
+        
+        sUp = "[W]";
+        sLeft = "[A]";
+        sDown = "[S]";
+        sRight = "[D]";
+        
+        // Action
+        
+        sAltUp = "[UP]";
+        sAltLeft = "[LEFT]";
+        sAltDown = "[DOWN]";
+        sAltRight = "[RIGHT]";
+    }
+    else {
+        
+        // Action
+        
+        sAltUp = "[W]";
+        sAltLeft = "[A]";
+        sAltDown = "[S]";
+        sAltRight = "[D]";
+        
+        // Movement
+        
+        sUp = "[UP]";
+        sLeft = "[LEFT]";
+        sDown = "[DOWN]";
+        sRight = "[RIGHT]";
+    }
 }

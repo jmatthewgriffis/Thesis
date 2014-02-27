@@ -99,9 +99,6 @@ void testApp::update(){
          }*/
     } // End ofxGamepad stuff
     
-    // Update the control text based on the player's choice on the title screen.
-    if ( gameState == 0 ) fWriteControls();
-    
     // Don't update anything else if not on the game screen.
     if ( gameState < 1 ) return;
     
@@ -207,7 +204,7 @@ void testApp::draw(){
         // LOCATION-DEPENDENT
         
         if ( gameState == 1 ) {
-            fDrawTutorialInstructions();
+            myTutorial.draw( helvetica );
         } else if ( gameState == 2 ) {
             myBoss.draw( helvetica );
         }
@@ -610,65 +607,6 @@ void testApp::fDrawRestartScreen() {
 }
 
 //--------------------------------------------------------------
-void testApp::fDrawTutorialInstructions() {
-    
-    float y = iScaler * 4;
-    // Left and right
-    helvetica.drawString( sLeft + " / " + sRight, iScaler * 4, y );
-    // Up
-    helvetica.drawString( sUp, iScaler * 54, y );
-    // Record
-    helvetica.drawString( sAltLeft, iScaler * 120, y );
-    // Replay
-    helvetica.drawString( sAltRight, iScaler * 152, y );
-    
-    // Sly note
-    helvetica.drawString( "Warning: the rest is under construction.\nPlease wear a hard hat.\nBut feel free to wander into the infinite reaches.\n(Press [R] to restart.)", iScaler * 484, y );
-    
-    // Cue boss battle.
-    helvetica.drawString( "[ENTER] here for a boss battle!", iScaler * 420, y + iScaler * 5 );
-}
-
-//--------------------------------------------------------------
-void testApp::fWriteControls() {
-    
-    // Here we store the controls as strings we can display on-screen.
-    
-    if ( !bIsLefty ) {
-        
-        // Movement
-        
-        sUp = "[W]";
-        sLeft = "[A]";
-        sDown = "[S]";
-        sRight = "[D]";
-        
-        // Action
-        
-        sAltUp = "[UP]";
-        sAltLeft = "[LEFT]";
-        sAltDown = "[DOWN]";
-        sAltRight = "[RIGHT]";
-    }
-    else {
-        
-        // Action
-        
-        sAltUp = "[W]";
-        sAltLeft = "[A]";
-        sAltDown = "[S]";
-        sAltRight = "[D]";
-        
-        // Movement
-        
-        sUp = "[UP]";
-        sLeft = "[LEFT]";
-        sDown = "[DOWN]";
-        sRight = "[RIGHT]";
-    }
-}
-
-//--------------------------------------------------------------
 void testApp::fDrawStaff() {
     
     // Draw the staff with transparency.
@@ -737,7 +675,7 @@ void testApp::fLoadPrototype() {
         
         bCamZoomedIn = true;
         myPlayer.pos.x = fZoomedInX;
-        addObject( myTutorial.setup( iScaler, iThirdOfScreen ) );
+        addObject( myTutorial.setup( iScaler, iThirdOfScreen, bIsLefty ) );
         obstacleList = myTutorial.obstacleList;
         
         objectList[ objectList.size() - 1 ].vel.set( float( -( iScaler / 8.3333 ) ), 0.0 );

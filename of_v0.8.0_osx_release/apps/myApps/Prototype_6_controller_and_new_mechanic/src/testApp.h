@@ -50,11 +50,9 @@ public:
     
     void fDrawRestartScreen();
     void fDrawStaff();
-    void fDrawTutorialInstructions();
     
     void fCalcAllNotePos();
     void fLoadPrototype();
-    void fWriteControls();
     
     void addObject( string _note, float _xPos, int _age );
     void addObject( vector< string > _stringList );
@@ -92,9 +90,6 @@ public:
     bool bShiftIsPressed;
     bool bUsingController;
     bool bCamZoomedIn;
-    
-    // Store a bunch of strings to accomodate different controls.
-    string sUp, sLeft, sDown, sRight, sAltUp, sAltLeft, sAltDown, sAltRight;
     
     ofTrueTypeFont helvetica, helveticaJumbo;
     
