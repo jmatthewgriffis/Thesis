@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "Prototype_6_controller_and_new_mechanic.app"
+               BuildableName = "Prototype_6_controller_and_clean_code.app"
                BlueprintName = "Prototype_6_controller_and_clean_code"
                ReferencedContainer = "container:Prototype_6_controller_and_clean_code.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Prototype_6_controller_and_new_mechanic.app"
+            BuildableName = "Prototype_6_controller_and_clean_code.app"
             BlueprintName = "Prototype_6_controller_and_clean_code"
             ReferencedContainer = "container:Prototype_6_controller_and_clean_code.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Prototype_6_controller_and_new_mechanic.app"
+            BuildableName = "Prototype_6_controller_and_clean_code.app"
             BlueprintName = "Prototype_6_controller_and_clean_code"
             ReferencedContainer = "container:Prototype_6_controller_and_clean_code.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Prototype_6_controller_and_new_mechanic.app"
+            BuildableName = "Prototype_6_controller_and_clean_code.app"
             BlueprintName = "Prototype_6_controller_and_clean_code"
             ReferencedContainer = "container:Prototype_6_controller_and_clean_code.xcodeproj">
          </BuildableReference>
