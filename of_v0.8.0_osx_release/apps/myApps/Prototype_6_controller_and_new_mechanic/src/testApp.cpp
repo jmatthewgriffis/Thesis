@@ -81,7 +81,7 @@ bool bShouldIErase( Object &a ){
 //--------------------------------------------------------------
 void testApp::update(){
     
-    { // Repeated from setup. Allow controller to be switched on/off during play.
+    { // Repeated from setup. Allow controller to be switched on/off during play. Thanks to Michael Kahane for leading the way on this.
         if ( bUsingController == false ) {
             //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
             if(ofxGamepadHandler::get()->getNumPads()>0){
