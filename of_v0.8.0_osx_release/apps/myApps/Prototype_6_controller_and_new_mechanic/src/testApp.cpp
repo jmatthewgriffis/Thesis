@@ -280,31 +280,58 @@ void testApp::fApplyGravity() {
 
 // Again, from the ofxGamepad example:
 
-void testApp::axisChanged(ofxGamepadAxisEvent& e)
-{
+void testApp::axisChanged(ofxGamepadAxisEvent& e) {
+    
     float fStickBuffer = 0.125;
     
-    if ( gameState == 3 ) {
-        // P1 vertical movement
-        if ( e.axis == 5 ) {
-            if ( abs( e.value ) > fStickBuffer ) {
-                myPlayer.vel.y = ofMap( e.value, -1, 1, -myPlayer.maxVel, myPlayer.maxVel );
-                //cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
+    //-------------------------------------------
+    
+    // Left stick--up and down
+    if ( e.axis == 3 ) {
+        
+        // Menu selection
+        if ( gameState == 0 ) {
+            if ( abs( e.value ) > fStickBuffer * 3 ) {
+                if ( bLeftStickVertical == false ) {
+                    if ( !myTitle.bChoseControls ) {
+                        bIsLefty = !bIsLefty;
+                        bLeftStickVertical = true;
+                    } else {
+                        if ( e.value < 0 ) {
+                            myTitle.iWhichPrototype--;
+                            bLeftStickVertical = true;
+                        } else {
+                            myTitle.iWhichPrototype++;
+                            bLeftStickVertical = true;
+                        }
+                    }
+                }
             } else {
-                myPlayer.vel.y = 0;
+                bLeftStickVertical = false;
             }
         }
-        // P2 vertical movement
-        if ( e.axis == 3 ) {
+        
+        // Piano movement
+        else if ( gameState == 3 ) {
+            // Bass hand vertical movement
             if ( abs( e.value ) > fStickBuffer ) {
-                myPlayer2.vel.y = ofMap( e.value, -1, 1, -myPlayer2.maxVel, myPlayer2.maxVel );
-                //cout << "AXIS " << e.axis << " VALUE " << ofToString(e.value) << endl;
+                //myPlayer2.vel.y = ofMap( e.value, -1, 1, -myPlayer2.maxVel, myPlayer2.maxVel );
+                if ( e.value < 0 ) {
+                    myPlayer2.up = true;
+                    myPlayer2.down = false;
+                } else if ( e.value > 0 ) {
+                    myPlayer2.up = false;
+                    myPlayer2.down = true;
+                }
             } else {
-                myPlayer2.vel.y = 0;
+                //myPlayer2.vel.y = 0;
+                myPlayer2.up = false;
+                myPlayer2.down = false;
             }
         }
-    } else if ( gameState == 4 ) {
-        if ( e.axis == 3 ) {
+        
+        // Flap wings
+        else if ( gameState == 4 ) {
             if ( abs( e.value ) > fStickBuffer ) {
                 if ( e.value < 0 ) {
                     float fJumpMin = -iScaler * 0.25;
@@ -322,16 +349,57 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e)
             }
         }
     }
+    
+    //-------------------------------------------
+    
+    // Right stick--up and down
+    if ( e.axis == 5 ) {
+        
+        // Piano movement
+        if ( gameState == 3 ) {
+            // P1 vertical movement
+            if ( abs( e.value ) > fStickBuffer ) {
+                //myPlayer.vel.y = ofMap( e.value, -1, 1, -myPlayer.maxVel, myPlayer.maxVel );
+                if ( e.value < 0 ) {
+                    myPlayer.up = true;
+                    myPlayer.down = false;
+                } else if ( e.value > 0 ) {
+                    myPlayer.up = false;
+                    myPlayer.down = true;
+                }
+            } else {
+                //myPlayer.vel.y = 0;
+                myPlayer.up = false;
+                myPlayer.down = false;
+            }
+        }
+    }
 }
 
-void testApp::buttonPressed(ofxGamepadButtonEvent& e)
-{
-    cout << "BUTTON " << e.button << " RELEASED" << endl;
+void testApp::buttonReleased(ofxGamepadButtonEvent& e) {
+    // This is actually buttonPressed. Why? Who knows.
+    
+    // "A" button
+    if ( e.button == 11 ) {
+        
+        if ( gameState == 0 ) {
+            if ( !myTitle.bChoseControls ) {
+                myTitle.bChoseControls = true;
+            } else {
+                gameState = myTitle.iWhichPrototype;
+                currentState = gameState;
+                fLoadPrototype();
+            }
+        }
+    }
+    
+    //cout << "BUTTON " << e.button << " PRESSED" << endl;
 }
 
-void testApp::buttonReleased(ofxGamepadButtonEvent& e)
-{
-    cout << "BUTTON " << e.button << " PRESSED" << endl;
+void testApp::buttonPressed(ofxGamepadButtonEvent& e) {
+    // This is actually buttonReleased. Why? Who knows.
+    
+    //cout << "BUTTON " << e.button << " RELEASED" << endl;
 }
 
 //--------------------------------------------------------------
@@ -371,11 +439,8 @@ void testApp::keyPressed(int key){
         case OF_KEY_RETURN:
             if ( gameState == 0 ) {
                 if ( !myTitle.bChoseControls ) {
-                    
                     myTitle.bChoseControls = true;
-                    
                 } else {
-                    
                     gameState = myTitle.iWhichPrototype;
                     currentState = gameState;
                     fLoadPrototype();
@@ -405,7 +470,7 @@ void testApp::keyPressed(int key){
                 } else {
                     myPlayer.up = true;
                 }
-            } else {
+            } else if ( bUsingController == false ) {
                 myPlayer2.up = true;
             }
             break;
@@ -457,7 +522,7 @@ void testApp::keyPressed(int key){
                 } else {
                     myPlayer.down = true;
                 }
-            } else {
+            } else if ( bUsingController == false ) {
                 myPlayer2.down = true;
             }
             break;

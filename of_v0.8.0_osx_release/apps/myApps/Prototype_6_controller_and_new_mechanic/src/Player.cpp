@@ -76,6 +76,8 @@ void Player::update( int _gameState ) {
     if ( gameState >= 3 ) {
         if ( onSurface == false ) {
             pos.x += maxVel;
+        } else {
+            pos.x += maxVel * 0.25f;
         }
     }
     
@@ -89,10 +91,10 @@ void Player::update( int _gameState ) {
                     onSurface = false;
                     allowJump = false;
                 }
-            
+                
             } else if ( gameState == 3 ) {
                 applyForce( ofVec2f( 0.0, -maxVel ) );
-            
+                
             } else if ( gameState == 4 ) {
                 
                 if ( allowJump == true ) {
@@ -134,12 +136,12 @@ void Player::update( int _gameState ) {
         
         pos += vel;
         
-        if ( !bUsingController ) {
-            //        if ( onSurface ) {
+        if ( gameState < 3 ) {
             vel.x = 0;
-            if ( gameState == 3 ) {
+        } else if ( gameState == 3 ) {
+            //if ( bUsingController == false ) {
                 vel.y = 0;
-            }
+            //}
             //        }
         }
     } // End "if allowMove"

@@ -94,6 +94,7 @@ public:
     bool bShiftIsPressed;
     bool bUsingController;
     bool bCamZoomedIn;
+    bool bLeftStickVertical; // Dumb hack for menu selection, find better way if possible.
     
     ofTrueTypeFont helvetica, helveticaJumbo;
     
