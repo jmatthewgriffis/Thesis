@@ -81,14 +81,19 @@ bool bShouldIErase( Object &a ){
 //--------------------------------------------------------------
 void testApp::update(){
     
-    { // Straight from the ofxGamepad example.
-        //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
-        /*if(ofxGamepadHandler::get()->getNumPads()>0){
-         ofxGamepad* pad = ofxGamepadHandler::get()->getGamepad(0);
-         ofAddListener(pad->onAxisChanged, this, &testApp::axisChanged);
-         ofAddListener(pad->onButtonPressed, this, &testApp::buttonPressed);
-         ofAddListener(pad->onButtonReleased, this, &testApp::buttonReleased);
-         }*/
+    { // Repeated from setup. Allow controller to be switched on/off during play.
+        if ( bUsingController == false ) {
+            //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
+            if(ofxGamepadHandler::get()->getNumPads()>0){
+                bUsingController = true;
+                ofxGamepad* pad = ofxGamepadHandler::get()->getGamepad(0);
+                ofAddListener(pad->onAxisChanged, this, &testApp::axisChanged);
+                ofAddListener(pad->onButtonPressed, this, &testApp::buttonPressed);
+                ofAddListener(pad->onButtonReleased, this, &testApp::buttonReleased);
+            } else {
+                bUsingController = false;
+            }
+        }
     } // End ofxGamepad stuff
     
     // Don't update anything else if not on the game screen.
@@ -258,12 +263,13 @@ void testApp::fApplyGravity() {
     
     if ( gameState != 3 ) {
         
-        float fGravity, fGravFactor;
+        float fGravity, fGravFactor, fBaseGrav;
+        fBaseGrav = iScaler * 0.012;
         
         if ( gameState < 3 ) {
-            fGravFactor = iScaler * 0.012;
+            fGravFactor = fBaseGrav;
         } else if ( gameState == 4 ) {
-            fGravFactor = iScaler * 0.012 * 0.5;
+            fGravFactor = fBaseGrav * 0.5;
         }
         
         if ( myPlayer.vel.y <= 0 ) {
