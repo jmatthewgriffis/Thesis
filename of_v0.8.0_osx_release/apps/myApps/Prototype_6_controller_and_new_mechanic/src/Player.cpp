@@ -199,6 +199,22 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     if ( gameState != 3 ) {
         ofRect( pos, wide, tall );
     }
+    // Draw wings, if appropriate.
+    if ( gameState == 4 ) {
+        ofPushMatrix();{
+            ofTranslate( pos.x, pos.y );
+            if ( vel.y < 0 ) {
+                ofRotate( -30 );
+            } else if ( vel.y > 0 ) {
+                ofRotate( 30 );
+            } else {
+                ofRotate( 0 );
+            }
+            ofSetLineWidth( 3 );
+            ofLine( 0, 0, - iScaler * 3, 0 );
+            ofSetLineWidth( 1 );
+        }ofPopMatrix();
+    }
     
     // Draw the health. Taken from my Space Odyssey 2 code.
     ofPushMatrix();{
@@ -236,11 +252,11 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         tall = wide;
         hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall);
     }
-    
+    /*
     else if ( gameState >= 4 ) {
         headphones.draw( pos.x-iScaler*1.4, pos.y-iScaler*2.4, iScaler * 3, iScaler * 3 );
     }
-    
+    */
     // Display a visual indicator of recorded capacity.
     if ( _recordedList.size() > 1 ) {
         for ( int i = 0; i < _recordedList.size(); i++ ) {

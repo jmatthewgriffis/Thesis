@@ -272,11 +272,13 @@ void testApp::fApplyGravity() {
             fGravFactor = fBaseGrav * 0.5;
         }
         
-        if ( myPlayer.vel.y <= 0 ) {
-            fGravity = fGravFactor;
-        } else {
-            fGravity = fGravFactor * 3;
-        }
+            if ( myPlayer.vel.y <= 0 ) {
+                fGravity = fGravFactor;
+            } else if ( gameState < 3 ) {
+                fGravity = fGravFactor * 3;
+            } else if ( gameState == 4 ) {
+                fGravity = fGravFactor * 0.5;
+            }
         
         myPlayer.applyForce( ofVec2f( 0.0, fGravity ) );
     }
