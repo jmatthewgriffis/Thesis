@@ -211,6 +211,7 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
                 ofRotate( 0 );
             }
             ofSetLineWidth( 3 );
+            //ofLine( 0, 0, - iScaler * 3, -iScaler * 0.5 );
             ofLine( 0, 0, - iScaler * 3, 0 );
             ofSetLineWidth( 1 );
         }ofPopMatrix();
