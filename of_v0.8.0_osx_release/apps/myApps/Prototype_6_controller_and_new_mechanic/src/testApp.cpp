@@ -1026,6 +1026,11 @@ void testApp::fDrawGround() {
         for ( int i = 0; i < iScaler * 800; i += iScaler * 2 ) {
             ofLine( iScaler * 2 + ( i * 2 ), iThirdOfScreen + iScaler, iScaler * 2 + i, iThirdOfScreen );
         }
+    } else if ( gameState == 4 ) {
+        ofSetColor( 0 );
+        for ( int i = 0; i < iScaler * 800; i += iScaler * 2 ) {
+            ofLine( iScaler * 2 + ( i * 2 ), iThirdOfScreen + iScaler * 7, iScaler * 2 + i, iThirdOfScreen + iScaler * 8 );
+        }
     }
 }
 
