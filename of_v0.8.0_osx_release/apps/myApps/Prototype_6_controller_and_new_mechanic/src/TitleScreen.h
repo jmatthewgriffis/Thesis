@@ -14,7 +14,7 @@ class TitleScreen {
 public:
     TitleScreen();
     
-    void draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty );
+    void draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty, bool bUsingController );
     
     bool bChoseControls;
     

@@ -147,7 +147,7 @@ void testApp::draw(){
     //ofxGamepadHandler::get()->draw(10,10);
     
     if ( gameState == 0 ) {
-        myTitle.draw( iScaler, helvetica, bIsLefty );
+        myTitle.draw( iScaler, helvetica, bIsLefty, bUsingController );
     }
     
     else if ( gameState == -1 ) {

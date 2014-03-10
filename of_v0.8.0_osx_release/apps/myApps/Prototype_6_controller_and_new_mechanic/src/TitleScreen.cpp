@@ -13,7 +13,7 @@ TitleScreen::TitleScreen() {
     iWhichPrototype = 1;
 }
 
-void TitleScreen::draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty ) {
+void TitleScreen::draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty, bool bUsingController ) {
     
     ofTrueTypeFont helvetica;
     helvetica = _font;
@@ -108,5 +108,11 @@ void TitleScreen::draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty ) {
     }ofPopMatrix();
     
     helvetica.drawString( "Headphones recommended.", ofGetWidth() /2 - iScaler * 9, ofGetHeight() - iScaler * 5 );
-    helvetica.drawString( "Press ENTER to continue.", ofGetWidth() /2 - iScaler * 8.75, ofGetHeight() - iScaler * 3 );
+    string sContinue;
+    if ( bUsingController == true ) {
+        sContinue = "A";
+    } else {
+        sContinue = "ENTER";
+    }
+    helvetica.drawString( "Press " + sContinue + " to continue.", ofGetWidth() /2 - iScaler * 8.75, ofGetHeight() - iScaler * 3 );
 }
