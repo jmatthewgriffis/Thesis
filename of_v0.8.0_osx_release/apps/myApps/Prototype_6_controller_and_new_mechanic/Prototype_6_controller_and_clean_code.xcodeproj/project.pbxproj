@@ -690,6 +690,7 @@
 				);
 				PRODUCT_NAME = Prototype_6_controller_and_clean_codeDebug;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = addons/ofxGamepad/src/;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -777,6 +778,7 @@
 				);
 				PRODUCT_NAME = Prototype_6_controller_and_clean_code;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = addons/ofxGamepad/src/;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
