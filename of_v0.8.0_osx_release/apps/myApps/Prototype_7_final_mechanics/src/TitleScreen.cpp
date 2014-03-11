@@ -19,9 +19,9 @@ void TitleScreen::draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty, bool b
     helvetica = _font;
     
     if ( iWhichPrototype < 1 ) {
-        iWhichPrototype = 4;
+        iWhichPrototype = 5;
     }
-    if ( iWhichPrototype > 4 ) {
+    if ( iWhichPrototype > 5 ) {
         iWhichPrototype = 1;
     }
     
@@ -91,7 +91,14 @@ void TitleScreen::draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty, bool b
             } else {
                 ofSetColor( 0 );
             }
-            helvetica.drawString( "NEW! Proto4: Flight!", ofGetWidth() / 2, ofGetHeight() / 2 + iScaler * 6 );
+            helvetica.drawString( "Proto4: Flight!", ofGetWidth() / 2, ofGetHeight() / 2 + iScaler * 6 );
+            
+            if ( iWhichPrototype == 5 ) {
+                ofSetColor( 255 );
+            } else {
+                ofSetColor( 0 );
+            }
+            helvetica.drawString( "Proto5: NEW! Solo!", ofGetWidth() / 2, ofGetHeight() / 2 + iScaler * 8 );
             
         }ofPopMatrix();
     }

@@ -92,7 +92,7 @@ void Player::update( int _gameState ) {
                     allowJump = false;
                 }
                 
-            } else if ( gameState == 3 ) {
+            } else if ( gameState == 3 || gameState == 5 ) {
                 applyForce( ofVec2f( 0.0, -maxVel ) );
                 
             } else if ( gameState == 4 ) {
@@ -109,7 +109,7 @@ void Player::update( int _gameState ) {
         }
         
         if ( down ) {
-            if ( gameState == 3 ) {
+            if ( gameState == 3 || gameState == 5 ) {
                 //            pos.y += vel.y;
                 applyForce( ofVec2f( 0.0, maxVel ) );
             }
@@ -138,7 +138,7 @@ void Player::update( int _gameState ) {
         
         if ( gameState < 3 ) {
             vel.x = 0;
-        } else if ( gameState == 3 ) {
+        } else if ( gameState == 3 || gameState == 5 ) {
             //if ( bUsingController == false ) {
                 vel.y = 0;
             //}

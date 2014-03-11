@@ -56,11 +56,12 @@ void testApp::setup(){
      2:     boss prototype
      3:     piano prototype
      4:     boost prototype
+     5:     solo prototype
      */
     gameState = 0;
     currentState = gameState;
     
-    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = false;
+    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = false;
     bHighlightNote = false;
     bCamZoomedIn = false;
     
@@ -219,6 +220,7 @@ void testApp::fLoadPrototype() {
     
     cleanup();
     myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
+    bBassOnly = bTrebleOnly = false;
     
     float fZoomedInX = iScaler * 7.5;
     
@@ -248,12 +250,30 @@ void testApp::fLoadPrototype() {
         
         myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 6.5 ) );
         
-        addObject( myTrack.setup( iScaler, fMeasureLength ) );
+        if ( gameState != 5 ) addObject( myTrack.setup( iScaler, fMeasureLength ) );
+        /*addObject( myTrack.setup( iScaler, fMeasureLength ) );
+        if ( gameState == 5 ) {
+            bBassOnly = true;
+        }*/
         
-        if ( gameState == 4 ) {
+        if ( gameState > 3 ) {
             bCamZoomedIn = true;
             myPlayer2.tall = myPlayer2.wide * 3;
             myPlayer2.allowMove = false;
+        }
+    }
+    
+    // Remove notes if required.
+    for ( int i = 0; i < objectList.size(); i++ ) {
+        if ( bBassOnly == true ) {
+            if ( objectList[ i ].pos.y < staffPosList[ 14 ] ) {
+                objectList[ i ].destroyMe = true;
+            }
+        }
+        if ( bTrebleOnly == true ) {
+            if ( objectList[ i ].pos.y > staffPosList[ 15 ] ) {
+                objectList[ i ].destroyMe = true;
+            }
         }
     }
 }
@@ -261,7 +281,7 @@ void testApp::fLoadPrototype() {
 //--------------------------------------------------------------
 void testApp::fApplyGravity() {
     
-    if ( gameState != 3 ) {
+    if ( gameState != 3 && gameState != 5 ) {
         
         float fGravity, fGravFactor, fBaseGrav;
         fBaseGrav = iScaler * 0.012;
@@ -272,13 +292,13 @@ void testApp::fApplyGravity() {
             fGravFactor = fBaseGrav * 0.5;
         }
         
-            if ( myPlayer.vel.y <= 0 ) {
-                fGravity = fGravFactor;
-            } else if ( gameState < 3 ) {
-                fGravity = fGravFactor * 3;
-            } else if ( gameState == 4 ) {
-                fGravity = fGravFactor * 0.5;
-            }
+        if ( myPlayer.vel.y <= 0 ) {
+            fGravity = fGravFactor;
+        } else if ( gameState < 3 ) {
+            fGravity = fGravFactor * 3;
+        } else if ( gameState == 4 ) {
+            fGravity = fGravFactor * 0.5;
+        }
         
         myPlayer.applyForce( ofVec2f( 0.0, fGravity ) );
     }
@@ -356,6 +376,24 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
                 myPlayer.up = false;
             }
         }
+        
+        // Note-making ship
+        else if ( gameState == 5 ) {
+            if ( abs( e.value ) > fStickBuffer ) {
+                //myPlayer.vel.y = ofMap( e.value, -1, 1, -myPlayer.maxVel, myPlayer.maxVel );
+                if ( e.value < 0 ) {
+                    myPlayer.up = true;
+                    myPlayer.down = false;
+                } else if ( e.value > 0 ) {
+                    myPlayer.up = false;
+                    myPlayer.down = true;
+                }
+            } else {
+                //myPlayer.vel.y = 0;
+                myPlayer.up = false;
+                myPlayer.down = false;
+            }
+        }
     }
     
     //-------------------------------------------
@@ -397,6 +435,12 @@ void testApp::buttonReleased(ofxGamepadButtonEvent& e) {
                 gameState = myTitle.iWhichPrototype;
                 currentState = gameState;
                 fLoadPrototype();
+            }
+        } else if ( gameState == 5 ) {
+            if ( myPlayer.pos.y <= staffPosList[ 16 ] ) {
+                addObject( fReturnNote( myPlayer.pos.y ), myPlayer.pos.x, -1 );
+            } else {
+                addObject( "c3_middle", myPlayer.pos.x, -1 );
             }
         }
     }
@@ -1067,6 +1111,127 @@ void testApp::fCalcTrebleNotes() {
             objectList[ i ].bWasTouched = false;
         }
     }
+}
+
+//--------------------------------------------------------------
+string testApp::fReturnNote( float yPos ) {
+    
+    float _yPos;
+    
+    // Calculate which staff position is closest to the player's position.
+    // Look from the staff position half up and half down to the next positions.
+    for ( int i = 0; i < staffPosList.size(); i++ ) {
+        if ( yPos > staffPosList[ i ] - ( staffPosList[ i ] - staffPosList[ i + 1 ] ) * 0.5
+            && yPos <= staffPosList[ i ] + ( staffPosList[ i - 1 ] - staffPosList[ i ] ) * 0.5 ) {
+            _yPos = staffPosList[ i ];
+        }
+    }
+    
+    string tmp;
+    
+    if ( _yPos == staffPosList[ 0 ] ) {
+        tmp = "d1";
+        //tmp = "d1#"
+    }
+    else if ( _yPos == staffPosList[ 1 ] ) {
+        tmp = "e1";
+    }
+    else if ( _yPos == staffPosList[ 2 ] ) {
+        tmp = "f1";
+        //tmp = "f1#"
+    }
+    else if ( _yPos == staffPosList[ 3 ] ) {
+        tmp = "g1";
+        //tmp = "g1#"
+    }
+    else if ( _yPos == staffPosList[ 4 ] ) {
+        tmp = "a1";
+        //tmp = "a1#"
+    }
+    else if ( _yPos == staffPosList[ 5 ] ) {
+        tmp = "b1";
+    }
+    else if ( _yPos == staffPosList[ 6 ] ) {
+        tmp = "c2";
+        //tmp = "c2#"
+    }
+    else if ( _yPos == staffPosList[ 7 ] ) {
+        tmp = "d2";
+        //tmp = "d2#"
+    }
+    else if ( _yPos == staffPosList[ 8 ] ) {
+        tmp = "e2";
+    }
+    else if ( _yPos == staffPosList[ 9 ] ) {
+        tmp = "f2";
+        //tmp = "f2#"
+    }
+    else if ( _yPos == staffPosList[ 10 ] ) {
+        tmp = "g2";
+        //tmp = "g2#"
+    }
+    else if ( _yPos == staffPosList[ 11 ] ) {
+        tmp = "a2";
+        //tmp = "a2#"
+    }
+    else if ( _yPos == staffPosList[ 12 ] ) {
+        tmp = "b2";
+    }
+    // 13 = bass c; 14 = bass d; 15 = treble b
+    else if ( _yPos == staffPosList[ 16 ] ) {
+        tmp = "c3_middle";
+        //tmp = "c3#"
+    }
+    else if ( _yPos == staffPosList[ 17 ] ) {
+        tmp = "d3";
+        //tmp = "d3#"
+    }
+    else if ( _yPos == staffPosList[ 18 ] ) {
+        tmp = "e3";
+    }
+    else if ( _yPos == staffPosList[ 19 ] ) {
+        tmp = "f3";
+        //tmp = "f3#"
+    }
+    else if ( _yPos == staffPosList[ 20 ] ) {
+        tmp = "g3";
+        //tmp = "g3#"
+    }
+    else if ( _yPos == staffPosList[ 21 ] ) {
+        tmp = "a3";
+        //tmp = "a3#"
+    }
+    else if ( _yPos == staffPosList[ 22 ] ) {
+        tmp = "b3";
+    }
+    else if ( _yPos == staffPosList[ 23 ] ) {
+        tmp = "c4";
+        //tmp = "c4#"
+    }
+    else if ( _yPos == staffPosList[ 24 ] ) {
+        tmp = "d4";
+        //tmp = "d4#"
+    }
+    else if ( _yPos == staffPosList[ 25 ] ) {
+        tmp = "e4";
+    }
+    else if ( _yPos == staffPosList[ 26 ] ) {
+        tmp = "f4";
+        //tmp = "f4#"
+    }
+    else if ( _yPos == staffPosList[ 27 ] ) {
+        tmp = "g4";
+        //tmp = "g4#"
+    }
+    else if ( _yPos == staffPosList[ 28 ] ) {
+        tmp = "a4";
+        //tmp = "a4#"
+    }
+    else if ( _yPos == staffPosList[ 29 ] ) {
+        tmp = "b4";
+    }
+    
+    return tmp;
 }
 
 //--------------------------------------------------------------

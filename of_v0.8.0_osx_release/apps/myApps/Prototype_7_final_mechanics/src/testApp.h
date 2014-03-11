@@ -55,6 +55,7 @@ public:
     
     void fCalcAllNotePos();
     void fCalcTrebleNotes();
+    string fReturnNote( float yPos );
     void fLoadPrototype();
     
     void addObject( string _note, float _xPos, int _age );
@@ -95,6 +96,7 @@ public:
     bool bUsingController;
     bool bCamZoomedIn;
     bool bLeftStickVertical; // Dumb hack for menu selection, find better way if possible.
+    bool bBassOnly, bTrebleOnly; // Use to disable parts of a track.
     
     ofTrueTypeFont helvetica, helveticaJumbo;
     
