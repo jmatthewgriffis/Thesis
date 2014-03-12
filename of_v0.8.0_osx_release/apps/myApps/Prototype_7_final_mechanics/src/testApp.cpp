@@ -647,6 +647,12 @@ void testApp::keyPressed(int key){
             }
             break;
             
+        case ' ':
+            if (gameState == 5 && !bUsingController) {
+                bPlayerMakingNotes = true;
+            }
+            break;
+            
             // End movement and action.
             //----------------------------------------------------
             
@@ -794,6 +800,12 @@ void testApp::keyReleased(int key){
                 } else {
                     myPlayer.replay = false;
                 }
+            }
+            break;
+            
+        case ' ':
+            if (gameState == 5 && !bUsingController) {
+                bPlayerMakingNotes = false;
             }
             break;
             

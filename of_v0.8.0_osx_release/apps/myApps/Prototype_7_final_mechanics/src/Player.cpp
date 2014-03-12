@@ -104,7 +104,7 @@ void Player::update( int _gameState ) {
                     allowJump = false;
                 }
             }
-        } else if ( gameState == 4 ){
+        } else if ( gameState == 4 && !down ){
             allowJump = true;
         }
         
@@ -112,7 +112,16 @@ void Player::update( int _gameState ) {
             if ( gameState == 3 || gameState == 5 ) {
                 //            pos.y += vel.y;
                 applyForce( ofVec2f( 0.0, maxVel ) );
+            } else if (gameState == 4) {
+                if ( allowJump == true ) {
+                    vel.y = 0;
+                    applyForce( ofVec2f( 0.0, -jumpVel * 0.75 ) );
+                    //onSurface = false;
+                    allowJump = false;
+                }
             }
+        } else if (gameState == 4 && !up) {
+            allowJump = true;
         }
         
         if ( left ) {
