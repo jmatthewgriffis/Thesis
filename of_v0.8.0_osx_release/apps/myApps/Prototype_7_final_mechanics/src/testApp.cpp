@@ -61,7 +61,7 @@ void testApp::setup(){
     gameState = 0;
     currentState = gameState;
     
-    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = false;
+    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = false;
     bHighlightNote = false;
     bCamZoomedIn = false;
     
@@ -70,6 +70,8 @@ void testApp::setup(){
     objectLife = 7 * frameRate;
     fMeasureLength = iScaler * 6 * 5.333333;;
     myTitle.iWhichPrototype = 1;
+    iTimeTillNote = 0;
+    iTimeBetweenNotes = frameRate / 6;
 }
 
 //--------------------------------------------------------------
@@ -127,6 +129,23 @@ void testApp::update(){
         if ( objectList[ i ].bWasTouched == true ) {
             iHitCounter++;
         }
+    }
+    
+    // Create notes on button press and limit their frequency when the button is held.
+    if (iTimeTillNote > 0 ) {
+        iTimeTillNote--;
+    }
+    if (bPlayerMakingNotes) {
+        if (iTimeTillNote <= 0 ) {
+            if ( myPlayer.pos.y <= staffPosList[ 16 ] ) {
+                addObject( fReturnNote( myPlayer.pos.y ), myPlayer.pos.x, -1 );
+            } else {
+                addObject( "c3_middle", myPlayer.pos.x, -1 );
+            }
+            iTimeTillNote = iTimeBetweenNotes;
+        }
+    } else {
+        iTimeTillNote = 0;
     }
     
     // Update the player (duh).
@@ -439,11 +458,7 @@ void testApp::buttonReleased(ofxGamepadButtonEvent& e) {
                 fLoadPrototype();
             }
         } else if ( gameState == 5 ) {
-            if ( myPlayer.pos.y <= staffPosList[ 16 ] ) {
-                addObject( fReturnNote( myPlayer.pos.y ), myPlayer.pos.x, -1 );
-            } else {
-                addObject( "c3_middle", myPlayer.pos.x, -1 );
-            }
+            bPlayerMakingNotes = true;
         }
     }
     
@@ -453,7 +468,13 @@ void testApp::buttonReleased(ofxGamepadButtonEvent& e) {
 void testApp::buttonPressed(ofxGamepadButtonEvent& e) {
     // This is actually buttonReleased. Why? Who knows.
     
-    //cout << "BUTTON " << e.button << " RELEASED" << endl;
+    // "A" button
+    if ( e.button == 11 ) {
+        
+        if ( gameState == 5 ) {
+            bPlayerMakingNotes = false;
+        }
+    }
 }
 
 //--------------------------------------------------------------

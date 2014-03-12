@@ -85,6 +85,7 @@ public:
     int iScaler; // Scale everything based on screen size.
     int iHitCounter; // How many notes hit?
     int iTotalTrebleNotes;
+    int iTimeTillNote, iTimeBetweenNotes;
     
     float fMeasureLength;
     
@@ -97,6 +98,7 @@ public:
     bool bCamZoomedIn;
     bool bLeftStickVertical; // Dumb hack for menu selection, find better way if possible.
     bool bBassOnly, bTrebleOnly; // Use to disable parts of a track.
+    bool bPlayerMakingNotes;
     
     ofTrueTypeFont helvetica, helveticaJumbo;
     
