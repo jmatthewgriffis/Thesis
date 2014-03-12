@@ -14,13 +14,13 @@ class Track {
 public:
     Track();
     
-    vector< string > setup( int _iScaler, float _fMeasureLength );
+    vector< string > setup( int _iScaler, float _fMeasureLength, int _gameState );
     void addObject( string _note, float _xPos, int _age );
     void draw( ofTrueTypeFont _font );
     
     vector< string > stringList;
     
-    int iScaler;
+    int iScaler, gameState, iNumMeasures;
     
     float fMeasureLength;
 };

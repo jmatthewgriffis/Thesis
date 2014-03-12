@@ -228,7 +228,7 @@ void testApp::fLoadPrototype() {
         
         bCamZoomedIn = true;
         myPlayer.pos.x = fZoomedInX;
-        addObject( myTutorial.setup( iScaler, iThirdOfScreen, bIsLefty ) );
+        addObject( myTutorial.setup( iScaler, iThirdOfScreen, bIsLefty ), 1 );
         obstacleList = myTutorial.obstacleList;
         
         objectList[ objectList.size() - 1 ].vel.set( float( -( iScaler / 8.3333 ) ), 0.0 );
@@ -237,7 +237,7 @@ void testApp::fLoadPrototype() {
         
         bCamZoomedIn = true;
         myPlayer.pos.x = fZoomedInX;
-        addObject( myBoss.setup( iScaler, fMeasureLength ) );
+        addObject( myBoss.setup( iScaler, fMeasureLength ), 1 );
         
         for ( int i = 0; i < objectList.size(); i++ ) {
             objectList[ i ].vel.set( float( -( iScaler / 5.0 ) ), 0.0 );
@@ -248,17 +248,19 @@ void testApp::fLoadPrototype() {
         
     } else if ( gameState >= 3 ) {
         
-        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, ofGetHeight() - iThirdOfScreen + iScaler * 6.5 ) );
+        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ) );
         
-        if ( gameState != 5 ) addObject( myTrack.setup( iScaler, fMeasureLength ) );
-        /*addObject( myTrack.setup( iScaler, fMeasureLength ) );
-        if ( gameState == 5 ) {
-            bBassOnly = true;
-        }*/
+        float numReps;
+        if ( gameState != 5 ) {
+            numReps = 1;
+        } else {
+            numReps = 4;
+        }
+        addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
         
         if ( gameState > 3 ) {
-            bCamZoomedIn = true;
-            myPlayer2.tall = myPlayer2.wide * 3;
+            if ( gameState != 5) bCamZoomedIn = true;
+            myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
             myPlayer2.allowMove = false;
         }
     }
@@ -1244,14 +1246,14 @@ void testApp::addObject( string _note, float _xPos, int _age ) {
     objectList.push_back( tmp );
 }
 
-void testApp::addObject( vector < string > _stringList ) {
-    
-    for ( int i = 0; i < _stringList.size(); i += 3 ) {
-        // This function adds an NPC Object.
-        Object tmp;
-        tmp.setup( iScaler, staffPosList, _stringList[ i ], ofToInt( _stringList[ i + 2 ] ) );
-        tmp.pos.x = ofToFloat( _stringList[ i + 1  ] );
-        objectList.push_back( tmp );
+void testApp::addObject( vector < string > _stringList, int _numMeasures, int _numReps ) {
+    for (int j = 0; j < _numReps; j++ ) {
+        for ( int i = 0; i < _stringList.size(); i += 3 ) {
+            Object tmp;
+            tmp.setup( iScaler, staffPosList, _stringList[ i ], ofToInt( _stringList[ i + 2 ] ) );
+            tmp.pos.x = ofToFloat( _stringList[ i + 1  ] ) + (j * fMeasureLength * _numMeasures);
+            objectList.push_back( tmp );
+        }
     }
 }
 
