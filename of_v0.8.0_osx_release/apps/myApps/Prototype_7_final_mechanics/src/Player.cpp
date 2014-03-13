@@ -59,12 +59,12 @@ void Player::update( int _gameState ) {
      }
      */
     // Prevent from going offscreen.
-    if ( gameState < 3 ) {
+    if ( gameState < 3 || gameState == 6 ) {
         if ( pos.x < iScaler * 7 ) {
             pos.x = iScaler * 7;
         }
         
-        if ( gameState == 2 ) {
+        if ( gameState == 2 || gameState == 6 ) {
             if ( pos.x > ofGetWidth() - iScaler * 7 ) {
                 pos.x = ofGetWidth() - iScaler * 7;
             }
@@ -73,7 +73,7 @@ void Player::update( int _gameState ) {
     
     // Movement
     
-    if ( gameState >= 3 ) {
+    if ( gameState >= 3 && gameState != 6 ) {
         if ( onSurface == false ) {
             pos.x += maxVel;
         } else {
@@ -92,7 +92,7 @@ void Player::update( int _gameState ) {
                     allowJump = false;
                 }
                 
-            } else if ( gameState == 3 || gameState == 5 ) {
+            } else if ( gameState == 3 || gameState >= 5 ) {
                 applyForce( ofVec2f( 0.0, -maxVel ) );
                 
             } else if ( gameState == 4 ) {
@@ -109,7 +109,7 @@ void Player::update( int _gameState ) {
         }
         
         if ( down ) {
-            if ( gameState == 3 || gameState == 5 ) {
+            if ( gameState == 3 || gameState >= 5 ) {
                 //            pos.y += vel.y;
                 applyForce( ofVec2f( 0.0, maxVel ) );
             } else if (gameState == 4) {
@@ -145,11 +145,13 @@ void Player::update( int _gameState ) {
         
         pos += vel;
         
-        if ( gameState < 3 ) {
+        if ( gameState < 3 || gameState == 6 ) {
             vel.x = 0;
-        } else if ( gameState == 3 || gameState == 5 ) {
+        }
+        
+        if ( gameState == 3 || gameState >= 5 ) {
             //if ( bUsingController == false ) {
-                vel.y = 0;
+            vel.y = 0;
             //}
             //        }
         }
@@ -263,10 +265,10 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall);
     }
     /*
-    else if ( gameState >= 4 ) {
-        headphones.draw( pos.x-iScaler*1.4, pos.y-iScaler*2.4, iScaler * 3, iScaler * 3 );
-    }
-    */
+     else if ( gameState >= 4 ) {
+     headphones.draw( pos.x-iScaler*1.4, pos.y-iScaler*2.4, iScaler * 3, iScaler * 3 );
+     }
+     */
     // Display a visual indicator of recorded capacity.
     if ( _recordedList.size() > 1 ) {
         for ( int i = 0; i < _recordedList.size(); i++ ) {

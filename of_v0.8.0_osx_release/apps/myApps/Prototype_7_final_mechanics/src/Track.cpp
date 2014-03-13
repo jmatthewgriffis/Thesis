@@ -715,5 +715,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
 }
 
 void Track::draw( ofTrueTypeFont _font ) {
-    _font.drawString( "Finished! Press R to restart.", iScaler * 800, ofGetHeight() / 2 );
+    if (gameState != 5) {
+        _font.drawString( "Finished! Press R to restart.", iScaler * 800, ofGetHeight() / 2 );
+    }
 }

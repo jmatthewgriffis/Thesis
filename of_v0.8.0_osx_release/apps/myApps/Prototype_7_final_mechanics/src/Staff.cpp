@@ -55,7 +55,7 @@ void Staff::draw( int iScaler, float fMeasureLength, int gameState, ofTrueTypeFo
         ofLine( xStart, ofGetHeight() - ( iScaler * 2 * i ), myPlayerX + ofGetWidth(), ofGetHeight() - ( iScaler * 2 * i ) );
     }
     
-    if ( gameState >= 3 ) {
+    if ( gameState >= 3 && gameState != 6 ) {
         
         // Draw initial vertical line.
         ofSetLineWidth( 3 );

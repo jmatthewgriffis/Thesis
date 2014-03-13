@@ -137,10 +137,16 @@ void testApp::update(){
     }
     if (bPlayerMakingNotes) {
         if (iTimeTillNote <= 0 ) {
-            if ( myPlayer.pos.y <= staffPosList[ 16 ] ) {
-                addObject( fReturnNote( myPlayer.pos.y ), myPlayer.pos.x, -1 );
+            /*int myAge;
+            if (gameState == 6) {
+                myAge = objectLife;
             } else {
-                addObject( "c3_middle", myPlayer.pos.x, -1 );
+                myAge = -1;
+            }*/
+            if ( myPlayer.pos.y <= staffPosList[ 16 ] ) {
+                addObject( fReturnNote( myPlayer.pos.y ), myPlayer.pos.x, objectLife );
+            } else {
+                addObject( "c3_middle", myPlayer.pos.x, objectLife );
             }
             iTimeTillNote = iTimeBetweenNotes;
         }
@@ -192,7 +198,7 @@ void testApp::draw(){
             fMoveX = myPlayer.pos.x - ofGetWidth() / 2.0;
             fMoveY = 0;
         }
-        if ( fMoveX < 0 || gameState == 2 ) {
+        if ( fMoveX < 0 || gameState == 2 || gameState == 6 ) {
             myCam.move( 0, fMoveY, fZoomFactor );
         } else if ( fMoveX >= 0 ) {
             myCam.move( fMoveX, fMoveY, fZoomFactor );
@@ -278,7 +284,9 @@ void testApp::fLoadPrototype() {
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
         
         if ( gameState > 3 ) {
-            if ( gameState != 5) bCamZoomedIn = true;
+            if ( gameState != 5 ) {
+                bCamZoomedIn = true;
+            }
             myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
             myPlayer2.allowMove = false;
         }
@@ -399,7 +407,7 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
         }
         
         // Note-making ship
-        else if ( gameState == 5 ) {
+        else if ( gameState >= 5 ) {
             if ( abs( e.value ) > fStickBuffer ) {
                 //myPlayer.vel.y = ofMap( e.value, -1, 1, -myPlayer.maxVel, myPlayer.maxVel );
                 if ( e.value < 0 ) {
@@ -413,6 +421,26 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
                 //myPlayer.vel.y = 0;
                 myPlayer.up = false;
                 myPlayer.down = false;
+            }
+        }
+    }
+    
+    //-------------------------------------------
+    
+    // Left stick--left and right
+    if (e.axis == 2) {
+        if ( gameState == 6 ) {
+            if ( abs( e.value ) > fStickBuffer ) {
+                if ( e.value < 0 ) {
+                    myPlayer.left = true;
+                    myPlayer.right = false;
+                } else if ( e.value > 0 ) {
+                    myPlayer.left = false;
+                    myPlayer.right = true;
+                }
+            } else {
+                myPlayer.left = false;
+                myPlayer.right = false;
             }
         }
     }
@@ -457,7 +485,7 @@ void testApp::buttonReleased(ofxGamepadButtonEvent& e) {
                 currentState = gameState;
                 fLoadPrototype();
             }
-        } else if ( gameState == 5 ) {
+        } else if ( gameState >= 5 ) {
             bPlayerMakingNotes = true;
         }
     }
@@ -471,7 +499,7 @@ void testApp::buttonPressed(ofxGamepadButtonEvent& e) {
     // "A" button
     if ( e.button == 11 ) {
         
-        if ( gameState == 5 ) {
+        if ( gameState >= 5 ) {
             bPlayerMakingNotes = false;
         }
     }
@@ -585,6 +613,8 @@ void testApp::keyPressed(int key){
                 } else {
                     myPlayer.record = true;
                 }
+            } else if (gameState == 6) {
+                myPlayer.left = true;
             }
             break;
             
@@ -644,11 +674,13 @@ void testApp::keyPressed(int key){
                         fReplay();
                     }
                 }
+            } else if (gameState == 6) {
+                myPlayer.right = true;
             }
             break;
             
         case ' ':
-            if (gameState == 5 && !bUsingController) {
+            if (gameState >= 5 && !bUsingController) {
                 bPlayerMakingNotes = true;
             }
             break;
@@ -754,6 +786,8 @@ void testApp::keyReleased(int key){
                 } else {
                     myPlayer.record = false;
                 }
+            } else if (gameState == 6) {
+                myPlayer.left = false;
             }
             break;
             
@@ -800,11 +834,13 @@ void testApp::keyReleased(int key){
                 } else {
                     myPlayer.replay = false;
                 }
+            } else if (gameState == 6) {
+                myPlayer.right = false;
             }
             break;
             
         case ' ':
-            if (gameState == 5 && !bUsingController) {
+            if (gameState >= 5 && !bUsingController) {
                 bPlayerMakingNotes = false;
             }
             break;
