@@ -235,7 +235,7 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         // Hat
         ofSetColor(255, 255);
         ofSetRectMode(OF_RECTMODE_CORNER);
-        float hatSizer = 0.55;
+        float hatSizer = wide * 0.0131;
         float hatWidth = hat.getWidth() * hatSizer;
         float hatHeight = hat.getHeight() * hatSizer;
         ofPushMatrix();{
@@ -249,7 +249,7 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         // Appendages
         ofSetColor(255, 255);
         ofSetRectMode(OF_RECTMODE_CORNER);
-        float armSizer = 0.12;
+        float armSizer = wide * 0.00286;
         float armWidth = appendage.getWidth() * armSizer;
         float armHeight = appendage.getHeight() * armSizer;
         // Right arm
