@@ -32,9 +32,10 @@ public:
     void fDrawCharacter();
     
     ofVec2f pos, vel, acc, actPos;
-    float yPosLast;
+    float yPosLast, yPosDiff;
     float wide, tall;
     float maxVel, jumpVel;
+    float fHatSizer, fHatWidth, fHatHeight, fHatOffset, fHatOffsetDefault, fHatVel, fHatVelDefault;
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;

@@ -32,6 +32,13 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     tall = wide;
     maxVel = float( iScaler / 3.4483 ); // Yields 120bpm.
     jumpVel = -iScaler * 0.45;
+    fHatSizer = wide * 0.0131;
+    fHatWidth = hat.getWidth() * fHatSizer;
+    fHatHeight = hat.getHeight() * fHatSizer;
+    fHatOffsetDefault = pos.y - fHatHeight * 0.5 + wide * -0.65;
+    fHatOffset = fHatOffsetDefault;
+    fHatVelDefault = iScaler * 0.0095;
+    fHatVel = fHatVelDefault;
     radius = iScaler * 1.6;
     //angleVel = float( iScaler / 1.6667 );
     angleVel = 15;
@@ -44,6 +51,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     
     pos.set( _pos );
     yPosLast = pos.y;
+    yPosDiff = 0;
     vel.set( 0 );
     acc.set( 0 );
     actPos.set( 0 );
@@ -175,6 +183,36 @@ void Player::update( int _gameState ) {
     if ( pos.y >= ofGetHeight() - ( tall / 2.0 ) ) {
         pos.y = ofGetHeight() - ( tall / 2.0 );
     }
+    
+    { // Update hat.
+        fHatOffsetDefault = pos.y - fHatHeight * 0.5 + wide * -0.65;
+        // Hat has its own physics.
+        /*
+         yPosDiff = pos.y - yPosLast;
+         float multiplierRising = wide * 0.025;
+         float multiplierFalling = wide * 0.15;
+         if (yPosDiff > 0) { // Moving down
+         //fHatOffset = offsetDefault + yPosDiff * multiplierFalling;
+         //fHatOffset -= 5;
+         } else if (yPosDiff == 0) {
+         //hatOffset = offsetDefault;
+         } else if (yPosDiff < 0) { // Moving up
+         //hatOffset = offsetDefault + yPosDiff * multiplierRising;
+         }
+         */
+        if (yPosDiff < 0 && (pos.y - yPosLast == 0)) {
+            fHatOffset += yPosDiff * 2;
+        }
+        if (fHatOffset < fHatOffsetDefault) {
+            fHatOffset += fHatVel;
+            fHatVel += fHatVelDefault;
+        } else if (fHatOffset > fHatOffsetDefault) {
+            fHatOffset = fHatOffsetDefault;
+            fHatVel = fHatVelDefault;
+        }
+    }
+    
+    yPosDiff = pos.y - yPosLast;
     
     // Manage forces.
     if ( gameState < 3 ) {
@@ -423,28 +461,10 @@ void Player::fDrawCharacter() {
     // Hat
     ofSetColor(255, 255);
     ofSetRectMode(OF_RECTMODE_CORNER);
-    float hatSizer = wide * 0.0131;
-    float hatWidth = hat.getWidth() * hatSizer;
-    float hatHeight = hat.getHeight() * hatSizer;
-    float hatOffset;
-    { // Let's make the hat fly up and down based on velocity.
-        float yPosDiff = pos.y - yPosLast;
-        float offsetDefault = wide * 0.65;
-        float multiplierRising = wide * 0.025;
-        float multiplierFalling = wide * 0.15;
-        if (yPosDiff > 0) { // Moving down
-            hatOffset = offsetDefault + yPosDiff * multiplierFalling;
-        } else if (yPosDiff == 0) {
-            hatOffset = offsetDefault;
-        } else if (yPosDiff < 0) { // Moving up
-            hatOffset = offsetDefault + yPosDiff * multiplierRising;
-        }
-    }
-    // Now draw the hat.
     ofPushMatrix();{
-        ofTranslate(pos.x - hatWidth * 0.5, pos.y - hatHeight * 0.5 - hatOffset);
+        ofTranslate(pos.x - fHatWidth * 0.5, fHatOffset);
         ofRotate(-10);
-        hat.draw(-wide * 0.5 * 0.25, 0, hatWidth, hatHeight);
+        hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
     }ofPopMatrix();
     
     // Body
