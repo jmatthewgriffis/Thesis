@@ -241,7 +241,7 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         ofPushMatrix();{
             ofTranslate(pos.x - hatWidth * 0.5, pos.y - hatHeight * 0.5 - wide * 0.65);
             ofRotate(-10);
-            hat.draw(-iScaler * 0.25, 0, hatWidth, hatHeight);
+            hat.draw(-wide * 0.5 * 0.25, 0, hatWidth, hatHeight);
         }ofPopMatrix();
         // Body
         ofSetColor(0, 255);
