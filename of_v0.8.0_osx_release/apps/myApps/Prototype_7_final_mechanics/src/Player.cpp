@@ -8,6 +8,7 @@
 
 #include "Player.h"
 
+//--------------------------------------------------------------
 Player::Player() {
     
     capacity = CAPACITY;
@@ -21,6 +22,7 @@ Player::Player() {
     hat.loadImage("images/player/half-rest.png"); // https://teacher.ocps.net/karen.doss/media/halfrest.png
 }
 
+//--------------------------------------------------------------
 void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     
     iScaler = _iScaler;
@@ -46,9 +48,11 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     actPos.set( 0 );
 }
 
+//--------------------------------------------------------------
 void Player::update( int _gameState ) {
     
     gameState = _gameState;
+    
     /*
      // Health depletes constantly.
      if ( fHealth > fHealthMax ) {
@@ -61,6 +65,7 @@ void Player::update( int _gameState ) {
      fHealth = 0;
      }
      */
+    
     // Prevent from going offscreen.
     if ( gameState < 3 || gameState == 6 ) {
         if ( pos.x < iScaler * 7 ) {
@@ -182,8 +187,132 @@ void Player::update( int _gameState ) {
     fActing();
 }
 
+//--------------------------------------------------------------
 void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     
+    fDrawRecordedList(_recordedList);
+    
+    // Draw the generic player for the early prototypes.
+    ofSetRectMode( OF_RECTMODE_CENTER );
+    ofSetColor( 0 );
+    if ( gameState != 3 && gameState < 7 ) {
+        ofRect( pos, wide, tall );
+    }
+    
+    // Draw the hands for Piano groove.
+    ofSetColor( 255 );
+    ofSetRectMode( OF_RECTMODE_CORNER );
+    if ( gameState == 3 ) {
+        //fDrawHealth();
+        wide = iScaler * 4;
+        tall = wide;
+        hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall);
+    }
+    
+    /*
+     // Draw the headphones for Flight!.
+     if ( gameState >= 4 ) {
+     headphones.draw( pos.x-iScaler*1.4, pos.y-iScaler*2.4, iScaler * 3, iScaler * 3 );
+     }
+     */
+    // Draw wings for Flight!.
+    if ( gameState == 4 ) {
+        ofPushMatrix();{
+            ofTranslate( pos.x, pos.y );
+            if ( vel.y < 0 ) {
+                ofRotate( -30 );
+            } else if ( vel.y > 0 ) {
+                ofRotate( 30 );
+            } else {
+                ofRotate( 0 );
+            }
+            ofSetColor(0, 255);
+            ofSetLineWidth( 3 );
+            //ofLine( 0, 0, - iScaler * 3, -iScaler * 0.5 );
+            ofLine( 0, 0, - iScaler * 3, 0 );
+            ofSetLineWidth( 1 );
+        }ofPopMatrix();
+    }
+    
+    // Draw the actual character now that he exists.
+    if (gameState >= 7) {
+        fDrawCharacter();
+    }
+    
+    fDrawCapacity(_recordedList);
+    fDrawAction(_font);
+}
+
+//--------------------------------------------------------------
+void Player::applyForce( ofVec2f _force ) {
+    
+    acc += _force;
+}
+
+//--------------------------------------------------------------
+void Player::fPressingRecord() {
+    
+    // Player is pressing the record key.
+    if ( record ) {
+        // Make sure not already acting and/or holding the key down.
+        if ( !bIsActing && bAllowRecord ) {
+            // Trigger the action. Prevent additional calls while this one is going.
+            angle = 225;
+            bIsActing = true;
+            bIsRecording = true;
+            bAllowRecord = false;
+        }
+    } else if ( !bIsActing ) {
+        // If not already pressing the key AND not acting, enable recording.
+        bAllowRecord = true;
+    }
+}
+
+//--------------------------------------------------------------
+void Player::fPressingReplay() {
+    
+    // Player is pressing the replay key.
+    if ( replay ) {
+        // Make sure not already acting and/or holding the key down.
+        if ( !bIsActing && bAllowReplay ) {
+            // Trigger the action. Prevent additional calls while this one is going.
+            angle = 315;
+            bIsActing = true;
+            bIsReplaying = true;
+            bAllowReplay = false;
+        }
+    } else if ( !bIsActing ) {
+        // If not already pressing the key AND not acting, enable recording.
+        bAllowReplay = true;
+    }
+}
+
+//--------------------------------------------------------------
+void Player::fActing() {
+    
+    if ( bIsRecording ) {
+        angle -= angleVel;
+        if ( angle < -135 ) {
+            bIsRecording = false;
+        }
+    } else if ( bIsReplaying ) {
+        angle += angleVel;
+        if ( angle > 675 ) {
+            bIsReplaying = false;
+        }
+    } else {
+        bIsActing = false;
+    }
+    
+    // Calculate the position of the action circle.
+    if ( bIsActing ) {
+        actPos.x = pos.x + radius * sin( ofDegToRad( angle ) );
+        actPos.y = pos.y + radius * cos( ofDegToRad( angle ) );
+    }
+}
+
+//--------------------------------------------------------------
+void Player::fDrawRecordedList(vector< Object > _recordedList) {
     // We want to do something when the vector is empty, but not during the action that empties it, so we use a boolean that activates only after that last action is complete.
     if ( _recordedList.size() > 0 ) {
         bIsEmpty = false;
@@ -206,121 +335,10 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
         ofEllipse( pos.x, _recordedList[ 0 ].pos.y, _recordedList[ 0 ].wide, _recordedList[ 0 ].tall );
         ofFill();
     }
-    
-    // Draw the player.
-    ofSetRectMode( OF_RECTMODE_CENTER );
-    ofSetColor( 0 );
-    if ( gameState != 3 && gameState < 7 ) {
-        ofRect( pos, wide, tall );
-    }
-    // Draw wings, if appropriate.
-    if ( gameState == 4 ) {
-        ofPushMatrix();{
-            ofTranslate( pos.x, pos.y );
-            if ( vel.y < 0 ) {
-                ofRotate( -30 );
-            } else if ( vel.y > 0 ) {
-                ofRotate( 30 );
-            } else {
-                ofRotate( 0 );
-            }
-            ofSetLineWidth( 3 );
-            //ofLine( 0, 0, - iScaler * 3, -iScaler * 0.5 );
-            ofLine( 0, 0, - iScaler * 3, 0 );
-            ofSetLineWidth( 1 );
-        }ofPopMatrix();
-    }
-    // Draw the actual character now that he exists.
-    if (gameState >= 7) {
-        // Hat
-        ofSetColor(255, 255);
-        ofSetRectMode(OF_RECTMODE_CORNER);
-        float hatSizer = wide * 0.0131;
-        float hatWidth = hat.getWidth() * hatSizer;
-        float hatHeight = hat.getHeight() * hatSizer;
-        ofPushMatrix();{
-            ofTranslate(pos.x - hatWidth * 0.5, pos.y - hatHeight * 0.5 - wide * 0.65);
-            ofRotate(-10);
-            hat.draw(-wide * 0.5 * 0.25, 0, hatWidth, hatHeight);
-        }ofPopMatrix();
-        // Body
-        ofSetColor(0, 255);
-        ofEllipse(pos, wide, wide * 1.35);
-        // Appendages
-        ofSetColor(255, 255);
-        ofSetRectMode(OF_RECTMODE_CORNER);
-        float armSizer = wide * 0.00286;
-        float armWidth = appendage.getWidth() * armSizer;
-        float armHeight = appendage.getHeight() * armSizer;
-        // Right arm
-        ofPushMatrix();{
-            ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
-            ofRotate(55);
-            appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
-        }ofPopMatrix();
-        // Right leg
-        ofPushMatrix();{
-            ofTranslate(pos.x + wide * 0.25, pos.y + wide * 0.45);
-            ofRotate(125);
-            appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
-        }ofPopMatrix();
-        // Left arm
-        ofPushMatrix();{
-            ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
-            ofRotate(-70);
-            appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
-        }ofPopMatrix();
-        // Left leg
-        ofPushMatrix();{
-            ofTranslate(pos.x - wide * 0.25, pos.y + wide * 0.45);
-            ofRotate(-135);
-            appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
-        }ofPopMatrix();
-        
-        
-    }
-    
-    // Draw the health. Taken from my Space Odyssey 2 code.
-    ofPushMatrix();{
-        
-        ofTranslate( pos.x, pos.y);
-        
-        /*
-         {
-         // Draw the health bar
-         ofSetRectMode( OF_RECTMODE_CORNER );
-         float offset = 1;
-         float offsetBar = iScaler / 2.5;
-         float barHeight = iScaler / 2.5;
-         float barLength = wide * 2;
-         float currentHealth = ofMap( fHealth, 0, fHealthMax, 0, barLength - offset * 2 );
-         // The border.
-         ofSetColor( 255 );
-         ofNoFill();
-         ofRect( -wide, wide / 2 + offsetBar, barLength, barHeight );
-         ofFill();
-         // The current health.
-         ofSetColor( 0, 255, 0 );
-         ofRect( -wide + offset, wide / 2 + offsetBar + offset, currentHealth, barHeight - offset * 2 );
-         }
-         */
-        
-    }ofPopMatrix();
-    
-    
-    ofSetColor( 255 );
-    ofSetRectMode( OF_RECTMODE_CORNER );
-    
-    if ( gameState == 3 ) {
-        wide = iScaler * 4;
-        tall = wide;
-        hand.draw( pos.x - wide / 2, pos.y - tall / 2, wide, tall);
-    }
-    /*
-     else if ( gameState >= 4 ) {
-     headphones.draw( pos.x-iScaler*1.4, pos.y-iScaler*2.4, iScaler * 3, iScaler * 3 );
-     }
-     */
+}
+
+//--------------------------------------------------------------
+void Player::fDrawCapacity(vector< Object > _recordedList) {
     // Display a visual indicator of recorded capacity.
     if ( _recordedList.size() > 1 ) {
         for ( int i = 0; i < _recordedList.size(); i++ ) {
@@ -345,7 +363,10 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
             ofFill();
         }
     }
-    
+}
+
+//--------------------------------------------------------------
+void Player::fDrawAction(ofTrueTypeFont _font) {
     // Draw the action if called, orbiting around the player's pos.
     if ( bIsActing ) {
         if ( bIsRecording ) {
@@ -368,66 +389,76 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     }
 }
 
-void Player::applyForce( ofVec2f _force ) {
-    
-    acc += _force;
+//--------------------------------------------------------------
+void Player::fDrawHealth() {
+    // Draw the health. Taken from my Space Odyssey 2 code.
+    ofPushMatrix();{
+        
+        ofTranslate( pos.x, pos.y);
+        
+        // Draw the health bar
+        ofSetRectMode( OF_RECTMODE_CORNER );
+        float offset = 1;
+        float offsetBar = iScaler / 2.5;
+        float barHeight = iScaler / 2.5;
+        float barLength = wide * 2;
+        float currentHealth = ofMap( fHealth, 0, fHealthMax, 0, barLength - offset * 2 );
+        // The border.
+        ofSetColor( 255 );
+        ofNoFill();
+        ofRect( -wide, wide / 2 + offsetBar, barLength, barHeight );
+        ofFill();
+        // The current health.
+        ofSetColor( 0, 255, 0 );
+        ofRect( -wide + offset, wide / 2 + offsetBar + offset, currentHealth, barHeight - offset * 2 );
+        
+    }ofPopMatrix();
 }
 
-void Player::fPressingRecord() {
-    
-    // Player is pressing the record key.
-    if ( record ) {
-        // Make sure not already acting and/or holding the key down.
-        if ( !bIsActing && bAllowRecord ) {
-            // Trigger the action. Prevent additional calls while this one is going.
-            angle = 225;
-            bIsActing = true;
-            bIsRecording = true;
-            bAllowRecord = false;
-        }
-    } else if ( !bIsActing ) {
-        // If not already pressing the key AND not acting, enable recording.
-        bAllowRecord = true;
-    }
-}
-
-void Player::fPressingReplay() {
-    
-    // Player is pressing the replay key.
-    if ( replay ) {
-        // Make sure not already acting and/or holding the key down.
-        if ( !bIsActing && bAllowReplay ) {
-            // Trigger the action. Prevent additional calls while this one is going.
-            angle = 315;
-            bIsActing = true;
-            bIsReplaying = true;
-            bAllowReplay = false;
-        }
-    } else if ( !bIsActing ) {
-        // If not already pressing the key AND not acting, enable recording.
-        bAllowReplay = true;
-    }
-}
-
-void Player::fActing() {
-    
-    if ( bIsRecording ) {
-        angle -= angleVel;
-        if ( angle < -135 ) {
-            bIsRecording = false;
-        }
-    } else if ( bIsReplaying ) {
-        angle += angleVel;
-        if ( angle > 675 ) {
-            bIsReplaying = false;
-        }
-    } else {
-        bIsActing = false;
-    }
-    
-    // Calculate the position of the action circle.
-    if ( bIsActing ) {
-        actPos.x = pos.x + radius * sin( ofDegToRad( angle ) );
-        actPos.y = pos.y + radius * cos( ofDegToRad( angle ) );
-    }
+//--------------------------------------------------------------
+void Player::fDrawCharacter() {
+    // Hat
+    ofSetColor(255, 255);
+    ofSetRectMode(OF_RECTMODE_CORNER);
+    float hatSizer = wide * 0.0131;
+    float hatWidth = hat.getWidth() * hatSizer;
+    float hatHeight = hat.getHeight() * hatSizer;
+    ofPushMatrix();{
+        ofTranslate(pos.x - hatWidth * 0.5, pos.y - hatHeight * 0.5 - wide * 0.65);
+        ofRotate(-10);
+        hat.draw(-wide * 0.5 * 0.25, 0, hatWidth, hatHeight);
+    }ofPopMatrix();
+    // Body
+    ofSetColor(0, 255);
+    ofEllipse(pos, wide, wide * 1.35);
+    // Appendages
+    ofSetColor(255, 255);
+    ofSetRectMode(OF_RECTMODE_CORNER);
+    float armSizer = wide * 0.00286;
+    float armWidth = appendage.getWidth() * armSizer;
+    float armHeight = appendage.getHeight() * armSizer;
+    // Right arm
+    ofPushMatrix();{
+        ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
+        ofRotate(55);
+        appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+    }ofPopMatrix();
+    // Right leg
+    ofPushMatrix();{
+        ofTranslate(pos.x + wide * 0.25, pos.y + wide * 0.45);
+        ofRotate(125);
+        appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+    }ofPopMatrix();
+    // Left arm
+    ofPushMatrix();{
+        ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
+        ofRotate(-70);
+        appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+    }ofPopMatrix();
+    // Left leg
+    ofPushMatrix();{
+        ofTranslate(pos.x - wide * 0.25, pos.y + wide * 0.45);
+        ofRotate(-135);
+        appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+    }ofPopMatrix();
 }

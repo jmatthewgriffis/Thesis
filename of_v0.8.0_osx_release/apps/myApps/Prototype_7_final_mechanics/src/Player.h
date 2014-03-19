@@ -25,6 +25,11 @@ public:
     void fPressingRecord();
     void fPressingReplay();
     void fActing();
+    void fDrawRecordedList(vector< Object > _recordedList);
+    void fDrawCapacity(vector< Object > _recordedList);
+    void fDrawAction(ofTrueTypeFont _font);
+    void fDrawHealth();
+    void fDrawCharacter();
     
     ofVec2f pos, vel, acc, actPos;
     float wide, tall;
