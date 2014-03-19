@@ -509,6 +509,13 @@ void testApp::buttonPressed(ofxGamepadButtonEvent& e) {
 void testApp::keyPressed(int key){
     
     switch ( key ) {
+            
+            case 'k':
+            myPlayer.tmpAngle-=5;
+            break;
+            case 'l':
+            myPlayer.tmpAngle+=5;
+            break;
             // Reset
         case 'r':
         case 'R':

@@ -19,9 +19,9 @@ void TitleScreen::draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty, bool b
     helvetica = _font;
     
     if ( iWhichPrototype < 1 ) {
-        iWhichPrototype = 6;
+        iWhichPrototype = 7;
     }
-    if ( iWhichPrototype > 6 ) {
+    if ( iWhichPrototype > 7 ) {
         iWhichPrototype = 1;
     }
     
@@ -106,6 +106,13 @@ void TitleScreen::draw( int iScaler, ofTrueTypeFont _font, bool bIsLefty, bool b
                 ofSetColor( 0 );
             }
             helvetica.drawString( "Proto6: Solo--gym", ofGetWidth() / 2, ofGetHeight() / 2 + iScaler * 10 );
+            
+            if ( iWhichPrototype == 7 ) {
+                ofSetColor( 255 );
+            } else {
+                ofSetColor( 0 );
+            }
+            helvetica.drawString( "Proto7: Surfin' USA", ofGetWidth() / 2, ofGetHeight() / 2 + iScaler * 12 );
             
         }ofPopMatrix();
     }

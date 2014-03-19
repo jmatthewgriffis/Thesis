@@ -35,6 +35,7 @@ public:
     int iScaler, gameState, capacity;
     float radius, angle, angleVel;
     float fHealth, fHealthMax, fHealthLossSpeed;
+    int tmpAngle;
     
-    ofImage headphones, hand; // For some baffling reason the image is not moving when it should.
+    ofImage headphones, hand, appendage, appendage_mirrored, hat; // For some baffling reason the image is not moving when it should.
 };

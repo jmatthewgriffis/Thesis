@@ -16,6 +16,9 @@ Player::Player() {
     
     headphones.loadImage( "images/headphones.png" );
     hand.loadImage( "images/hand.png" ); // http://upload.wikimedia.org/wikipedia/commons/f/fa/Hand.svg
+    appendage.loadImage("images/player/eighth-rest.png"); // http://www.clker.com/cliparts/w/1/j/6/b/y/eighth-rest.svg
+    appendage_mirrored.loadImage("images/player/eighth-rest_mirrored.png");
+    hat.loadImage("images/player/half-rest.png"); // https://teacher.ocps.net/karen.doss/media/halfrest.png
 }
 
 void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
@@ -207,7 +210,7 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     // Draw the player.
     ofSetRectMode( OF_RECTMODE_CENTER );
     ofSetColor( 0 );
-    if ( gameState != 3 ) {
+    if ( gameState != 3 && gameState < 7 ) {
         ofRect( pos, wide, tall );
     }
     // Draw wings, if appropriate.
@@ -226,6 +229,55 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
             ofLine( 0, 0, - iScaler * 3, 0 );
             ofSetLineWidth( 1 );
         }ofPopMatrix();
+    }
+    // Draw the actual character now that he exists.
+    if (gameState >= 7) {
+        // Hat
+        ofSetColor(255, 255);
+        ofSetRectMode(OF_RECTMODE_CORNER);
+        float hatSizer = 0.55;
+        float hatWidth = hat.getWidth() * hatSizer;
+        float hatHeight = hat.getHeight() * hatSizer;
+        ofPushMatrix();{
+            ofTranslate(pos.x - hatWidth * 0.5, pos.y - hatHeight * 0.5 - wide * 0.65);
+            ofRotate(-10);
+            hat.draw(-iScaler * 0.25, 0, hatWidth, hatHeight);
+        }ofPopMatrix();
+        // Body
+        ofSetColor(0, 255);
+        ofEllipse(pos, wide, wide * 1.35);
+        // Appendages
+        ofSetColor(255, 255);
+        ofSetRectMode(OF_RECTMODE_CORNER);
+        float armSizer = 0.12;
+        float armWidth = appendage.getWidth() * armSizer;
+        float armHeight = appendage.getHeight() * armSizer;
+        // Right arm
+        ofPushMatrix();{
+            ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
+            ofRotate(55);
+            appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+        }ofPopMatrix();
+        // Right leg
+        ofPushMatrix();{
+            ofTranslate(pos.x + wide * 0.25, pos.y + wide * 0.45);
+            ofRotate(125);
+            appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+        }ofPopMatrix();
+        // Left arm
+        ofPushMatrix();{
+            ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
+            ofRotate(-70);
+            appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+        }ofPopMatrix();
+        // Left leg
+        ofPushMatrix();{
+            ofTranslate(pos.x - wide * 0.25, pos.y + wide * 0.45);
+            ofRotate(-135);
+            appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+        }ofPopMatrix();
+        
+        
     }
     
     // Draw the health. Taken from my Space Odyssey 2 code.
