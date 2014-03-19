@@ -43,6 +43,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     fHealth = fHealthMax;
     
     pos.set( _pos );
+    yPosLast = pos.y;
     vel.set( 0 );
     acc.set( 0 );
     actPos.set( 0 );
@@ -52,6 +53,8 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
 void Player::update( int _gameState ) {
     
     gameState = _gameState;
+    
+    yPosLast = pos.y;
     
     /*
      // Health depletes constantly.
@@ -423,8 +426,20 @@ void Player::fDrawCharacter() {
     float hatSizer = wide * 0.0131;
     float hatWidth = hat.getWidth() * hatSizer;
     float hatHeight = hat.getHeight() * hatSizer;
+    float yPosDiff = pos.y - yPosLast;
+    float hatOffset;
+    float offsetDefault = wide * 0.65;
+    float multiplierRising = wide * 0.025;
+    float multiplierFalling = wide * 0.15;
+    if (yPosDiff > 0) { // Moving down
+        hatOffset = offsetDefault + yPosDiff * multiplierFalling;
+    } else if (yPosDiff == 0) {
+        hatOffset = offsetDefault;
+    } else if (yPosDiff < 0) { // Moving up
+        hatOffset = offsetDefault + yPosDiff * multiplierRising;
+    }
     ofPushMatrix();{
-        ofTranslate(pos.x - hatWidth * 0.5, pos.y - hatHeight * 0.5 - wide * 0.65);
+        ofTranslate(pos.x - hatWidth * 0.5, pos.y - hatHeight * 0.5 - hatOffset);
         ofRotate(-10);
         hat.draw(-wide * 0.5 * 0.25, 0, hatWidth, hatHeight);
     }ofPopMatrix();

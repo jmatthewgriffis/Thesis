@@ -32,6 +32,7 @@ public:
     void fDrawCharacter();
     
     ofVec2f pos, vel, acc, actPos;
+    float yPosLast;
     float wide, tall;
     float maxVel, jumpVel;
     bool allowMove, allowJump, up, left, down, right;
