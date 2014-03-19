@@ -426,26 +426,31 @@ void Player::fDrawCharacter() {
     float hatSizer = wide * 0.0131;
     float hatWidth = hat.getWidth() * hatSizer;
     float hatHeight = hat.getHeight() * hatSizer;
-    float yPosDiff = pos.y - yPosLast;
     float hatOffset;
-    float offsetDefault = wide * 0.65;
-    float multiplierRising = wide * 0.025;
-    float multiplierFalling = wide * 0.15;
-    if (yPosDiff > 0) { // Moving down
-        hatOffset = offsetDefault + yPosDiff * multiplierFalling;
-    } else if (yPosDiff == 0) {
-        hatOffset = offsetDefault;
-    } else if (yPosDiff < 0) { // Moving up
-        hatOffset = offsetDefault + yPosDiff * multiplierRising;
+    { // Let's make the hat fly up and down based on velocity.
+        float yPosDiff = pos.y - yPosLast;
+        float offsetDefault = wide * 0.65;
+        float multiplierRising = wide * 0.025;
+        float multiplierFalling = wide * 0.15;
+        if (yPosDiff > 0) { // Moving down
+            hatOffset = offsetDefault + yPosDiff * multiplierFalling;
+        } else if (yPosDiff == 0) {
+            hatOffset = offsetDefault;
+        } else if (yPosDiff < 0) { // Moving up
+            hatOffset = offsetDefault + yPosDiff * multiplierRising;
+        }
     }
+    // Now draw the hat.
     ofPushMatrix();{
         ofTranslate(pos.x - hatWidth * 0.5, pos.y - hatHeight * 0.5 - hatOffset);
         ofRotate(-10);
         hat.draw(-wide * 0.5 * 0.25, 0, hatWidth, hatHeight);
     }ofPopMatrix();
+    
     // Body
     ofSetColor(0, 255);
     ofEllipse(pos, wide, wide * 1.35);
+    
     // Appendages
     ofSetColor(255, 255);
     ofSetRectMode(OF_RECTMODE_CORNER);
