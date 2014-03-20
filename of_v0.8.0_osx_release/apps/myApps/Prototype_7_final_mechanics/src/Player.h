@@ -35,7 +35,7 @@ public:
     float yPosLast, yPosDiff;
     float wide, tall;
     float maxVel, jumpVel;
-    float fHatSizer, fHatWidth, fHatHeight, fHatOffset, fHatOffsetDefault, fHatVel, fHatVelDefault;
+    float fHatSizer, fHatWidth, fHatHeight, fHatOffset, fHatOffsetDefault, fHatVel, fHatVelDefault, fHatQueuedForce;
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;

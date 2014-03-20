@@ -38,7 +38,8 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     fHatOffsetDefault = pos.y - fHatHeight * 0.5 + wide * -0.65;
     fHatOffset = fHatOffsetDefault;
     fHatVelDefault = iScaler * 0.0095;
-    fHatVel = fHatVelDefault;
+    fHatVel = 0;
+    fHatQueuedForce = 0;
     radius = iScaler * 1.6;
     //angleVel = float( iScaler / 1.6667 );
     angleVel = 15;
@@ -184,33 +185,28 @@ void Player::update( int _gameState ) {
         pos.y = ofGetHeight() - ( tall / 2.0 );
     }
     
-    { // Update hat.
+    { // Update hat. Hat has its own physics.
         fHatOffsetDefault = pos.y - fHatHeight * 0.5 + wide * -0.65;
-        // Hat has its own physics.
-        /*
-         yPosDiff = pos.y - yPosLast;
-         float multiplierRising = wide * 0.025;
-         float multiplierFalling = wide * 0.15;
-         if (yPosDiff > 0) { // Moving down
-         //fHatOffset = offsetDefault + yPosDiff * multiplierFalling;
-         //fHatOffset -= 5;
-         } else if (yPosDiff == 0) {
-         //hatOffset = offsetDefault;
-         } else if (yPosDiff < 0) { // Moving up
-         //hatOffset = offsetDefault + yPosDiff * multiplierRising;
-         }
-         */
-        if (yPosDiff < 0 && (pos.y - yPosLast == 0)) {
-            fHatOffset += yPosDiff * 2;
+        
+        // Build up force as the player rises then make the hat pop into the air when the player stops or reverses direction.
+        if (yPosDiff < 0) {
+            if (pos.y - yPosLast < 0) {
+                fHatQueuedForce += yPosDiff;
+            } else {
+                fHatVel += fHatQueuedForce * 0.025;
+                fHatQueuedForce = 0;
+            }
         }
+        
         if (fHatOffset < fHatOffsetDefault) {
-            fHatOffset += fHatVel;
             fHatVel += fHatVelDefault;
         } else if (fHatOffset > fHatOffsetDefault) {
             fHatOffset = fHatOffsetDefault;
-            fHatVel = fHatVelDefault;
+            fHatVel = 0;
         }
-    }
+        
+        fHatOffset += fHatVel;
+    } // End updating hat.
     
     yPosDiff = pos.y - yPosLast;
     
