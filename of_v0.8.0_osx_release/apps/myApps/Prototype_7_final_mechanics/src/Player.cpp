@@ -47,6 +47,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = false;
     allowMove = true;
     allowJump = bAllowRecord = bAllowReplay = true;
+    bHasShip = false;
     angle = 0;
     fHealth = fHealthMax;
     
@@ -222,6 +223,10 @@ void Player::update( int _gameState ) {
     fPressingRecord();
     fPressingReplay();
     fActing();
+    
+    if (bHasShip) {
+        myShip.update(ofVec2f(pos.x + wide * 0.45, pos.y + tall * 1.1), tall);
+    }
 }
 
 //--------------------------------------------------------------
@@ -278,6 +283,10 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     
     fDrawCapacity(_recordedList);
     fDrawAction(_font);
+    
+    if (bHasShip) {
+        myShip.draw();
+    }
 }
 
 //--------------------------------------------------------------
@@ -454,6 +463,9 @@ void Player::fDrawHealth() {
 
 //--------------------------------------------------------------
 void Player::fDrawCharacter() {
+    
+    tall = wide * 1.35;
+    
     // Hat
     ofSetColor(255, 255);
     ofSetRectMode(OF_RECTMODE_CORNER);
@@ -465,7 +477,7 @@ void Player::fDrawCharacter() {
     
     // Body
     ofSetColor(0, 255);
-    ofEllipse(pos, wide, wide * 1.35);
+    ofEllipse(pos, wide, tall);
     
     // Appendages
     ofSetColor(255, 255);

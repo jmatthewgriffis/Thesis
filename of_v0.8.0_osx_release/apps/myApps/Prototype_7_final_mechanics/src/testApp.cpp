@@ -249,6 +249,8 @@ void testApp::fLoadPrototype() {
     
     float fZoomedInX = iScaler * 7.5;
     
+    //------------
+    
     if ( gameState == 1 ) {
         
         bCamZoomedIn = true;
@@ -290,7 +292,13 @@ void testApp::fLoadPrototype() {
             myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
             myPlayer2.allowMove = false;
         }
+        
+        if (gameState == 7) {
+            myPlayer.bHasShip = true;
+        }
     }
+    
+    //------------
     
     // Remove notes if required.
     for ( int i = 0; i < objectList.size(); i++ ) {

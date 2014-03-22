@@ -9,6 +9,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Ship.h"
 #include "Object.h"
 
 #define CAPACITY 9
@@ -39,10 +40,13 @@ public:
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;
+    bool bHasShip;
     int iScaler, gameState, capacity;
     float radius, angle, angleVel;
     float fHealth, fHealthMax, fHealthLossSpeed;
     int tmpAngle;
     
     ofImage headphones, hand, appendage, appendage_mirrored, hat; // For some baffling reason the image is not moving when it should.
+    
+    Ship myShip;
 };

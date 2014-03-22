@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Note.h"
 #include "Player.h"
+#include "Ship.h"
 #include "Obstacle.h"
 #include "BossBattle.h"
 #include "Tutorial.h"
