@@ -23,10 +23,13 @@ Player::Player() {
 }
 
 //--------------------------------------------------------------
-void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
+void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList ) {
     
     iScaler = _iScaler;
     bUsingController = _bUsingController;
+    
+    staffPosList = _staffPosList;
+    myObject.setup(iScaler, staffPosList, "c3_middle", -1);
     
     wide = iScaler * 2;
     tall = wide;
@@ -43,6 +46,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
     radius = iScaler * 1.6;
     //angleVel = float( iScaler / 1.6667 );
     angleVel = 15;
+    fNoteOffsetH = 0;
     
     up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = false;
     allowMove = true;
@@ -60,11 +64,13 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos ) {
 }
 
 //--------------------------------------------------------------
-void Player::update( int _gameState ) {
+void Player::update( int _gameState, string _OnThisNote ) {
     
     gameState = _gameState;
     
     yPosLast = pos.y;
+    
+    yPosStaff = myObject.fReturnYPos(_OnThisNote);
     
     /*
      // Health depletes constantly.
@@ -373,13 +379,33 @@ void Player::fDrawRecordedList(vector< Object > _recordedList) {
     }
     
     // Display an outline of the next replayable note (drawn from the center).
-    if ( _recordedList.size() > 0 ) {
-        
-        ofSetRectMode( OF_RECTMODE_CENTER );
-        ofSetColor( 0, 255 );
-        ofNoFill();
-        ofEllipse( pos.x, _recordedList[ 0 ].pos.y, _recordedList[ 0 ].wide, _recordedList[ 0 ].tall );
-        ofFill();
+    if (gameState < 5) {
+        if ( _recordedList.size() > 0 ) {
+            
+            ofSetRectMode( OF_RECTMODE_CENTER );
+            ofSetColor( 0, 255 );
+            ofNoFill();
+            ofEllipse( pos.x, _recordedList[ 0 ].pos.y, _recordedList[ 0 ].wide, _recordedList[ 0 ].tall );
+            ofFill();
+        }
+    } else {
+        if (allowMove) {
+            ofPushMatrix();{
+                float tmpX;
+                if (bHasShip) {
+                    fNoteOffsetH = myShip.fImgHeightBass * 1.75;
+                    tmpX = myShip.pos.x;
+                } else {
+                    fNoteOffsetH = wide * 1.25;
+                    tmpX = pos.x;
+                }
+                ofSetRectMode(OF_RECTMODE_CENTER);
+                ofSetColor(0, 255);
+                ofNoFill();
+                ofEllipse(tmpX - fNoteOffsetH, yPosStaff, myObject.wide, myObject.tall);
+                ofFill();
+            }ofPopMatrix();
+        }
     }
 }
 

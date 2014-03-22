@@ -64,6 +64,7 @@ void testApp::setup(){
     bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = false;
     bHighlightNote = false;
     bCamZoomedIn = false;
+    bIsSecondPlayer = false;
     
     if ( bHighlightNote ) getThisOne = 0;
     else getThisOne = -1;
@@ -108,7 +109,10 @@ void testApp::update(){
     
     // Reset essential conditionals.
     myPlayer.onSurface = false;
-    myPlayer2.onSurface = false;
+    if (bIsSecondPlayer) {
+        myPlayer2.onSurface = false;
+    }
+    
     
     if ( bHighlightNote ) {
         if ( getThisOne < 0 ) getThisOne = objectList.size() - 1;
@@ -138,26 +142,46 @@ void testApp::update(){
     if (bPlayerMakingNotes) {
         if (iTimeTillNote <= 0 ) {
             /*int myAge;
-            if (gameState == 6) {
-                myAge = objectLife;
+             if (gameState == 6) {
+             myAge = objectLife;
+             } else {
+             myAge = -1;
+             }*/
+            ofVec2f notePos;
+            if (myPlayer.bHasShip) {
+                notePos = ofVec2f(myPlayer.myShip.pos.x - myPlayer.fNoteOffsetH, myPlayer.myShip.pos.y);
             } else {
-                myAge = -1;
-            }*/
-            if ( myPlayer.pos.y <= staffPosList[ 16 ] ) {
-                addObject( fReturnNote( myPlayer.pos.y ), myPlayer.pos.x, objectLife );
-            } else {
-                addObject( "c3_middle", myPlayer.pos.x, objectLife );
+                notePos = ofVec2f(myPlayer.pos.x - myPlayer.fNoteOffsetH, myPlayer.pos.y);
             }
+            if ( notePos.y <= staffPosList[ 16 ] ) {
+                addObject( fReturnNote( notePos.y ), notePos.x, objectLife );
+            } else {
+                addObject( "c3_middle", notePos.x, objectLife );
+            }
+            objectList[objectList.size() - 1].bIsTouched = true;
             iTimeTillNote = iTimeBetweenNotes;
         }
     } else {
         iTimeTillNote = 0;
     }
     
-    // Update the player (duh).
-    myPlayer.update( gameState );
-    if ( gameState >= 3 ) {
-        myPlayer2.update( gameState );
+    // Update the player(s) (duh).
+    float tmp;
+    if (myPlayer.bHasShip) {
+        tmp = myPlayer.myShip.pos.y;
+    } else {
+        tmp = myPlayer.pos.y;
+    }
+    myPlayer.update( gameState, fReturnNote(tmp) );
+    
+    if ( bIsSecondPlayer ) {
+        float tmp2;
+        if (myPlayer2.bHasShip) {
+            tmp2 = myPlayer2.myShip.pos.y;
+        } else {
+            tmp2 = myPlayer2.pos.y;
+        }
+        myPlayer2.update( gameState, fReturnNote(tmp2) );
     }
     
     // Update the notes.
@@ -227,7 +251,7 @@ void testApp::draw(){
         }
         
         myPlayer.draw( helvetica, recordedList );
-        if ( gameState >= 3 ) {
+        if ( bIsSecondPlayer ) {
             myPlayer2.draw( helvetica, recordedList );
         }
         
@@ -243,11 +267,19 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::fLoadPrototype() {
     
+    // Maintenance.
     cleanup();
-    myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ) );
-    bBassOnly = bTrebleOnly = false;
-    
+    bBassOnly = bTrebleOnly = bIsSecondPlayer = false;
     float fZoomedInX = iScaler * 7.5;
+    
+    // Setup player(s).
+    myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
+    if (gameState > 2 && gameState < 6){
+        bIsSecondPlayer = true;
+    }
+    if (bIsSecondPlayer) {
+        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
+    }
     
     //------------
     
@@ -273,9 +305,7 @@ void testApp::fLoadPrototype() {
         bHighlightNote = true;
         getThisOne = 0;
         
-    } else if ( gameState >= 3 ) {
-        
-        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ) );
+    } else if ( gameState > 2 ) {
         
         float numReps;
         if ( gameState != 5 ) {
@@ -286,15 +316,19 @@ void testApp::fLoadPrototype() {
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
         
         if ( gameState > 3 ) {
+            
             if ( gameState != 5 ) {
                 bCamZoomedIn = true;
             }
-            myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
-            myPlayer2.allowMove = false;
-        }
-        
-        if (gameState == 7) {
-            myPlayer.bHasShip = true;
+            
+            if (bIsSecondPlayer) {
+                myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
+                myPlayer2.allowMove = false;
+            }
+            
+            if (gameState == 7) {
+                myPlayer.bHasShip = true;
+            }
         }
     }
     
@@ -518,10 +552,10 @@ void testApp::keyPressed(int key){
     
     switch ( key ) {
             
-            case 'k':
+        case 'k':
             myPlayer.tmpAngle-=5;
             break;
-            case 'l':
+        case 'l':
             myPlayer.tmpAngle+=5;
             break;
             // Reset
@@ -589,7 +623,9 @@ void testApp::keyPressed(int key){
                     myPlayer.up = true;
                 }
             } else if ( bUsingController == false ) {
-                myPlayer2.up = true;
+                if (bIsSecondPlayer) {
+                    myPlayer2.up = true;
+                }
             }
             break;
         case OF_KEY_UP:
@@ -643,7 +679,9 @@ void testApp::keyPressed(int key){
                     myPlayer.down = true;
                 }
             } else if ( bUsingController == false ) {
-                myPlayer2.down = true;
+                if (bIsSecondPlayer) {
+                    myPlayer2.down = true;
+                }
             }
             break;
         case OF_KEY_DOWN:
@@ -768,7 +806,9 @@ void testApp::keyReleased(int key){
                     myPlayer.allowJump = true;
                 }
             } else {
-                myPlayer2.up = false;
+                if (bIsSecondPlayer) {
+                    myPlayer2.up = false;
+                }
             }
             break;
         case OF_KEY_UP:
@@ -816,7 +856,9 @@ void testApp::keyReleased(int key){
                     myPlayer.down = false;
                 }
             } else {
-                myPlayer2.down = false;
+                if (bIsSecondPlayer) {
+                    myPlayer2.down = false;
+                }
             }
             break;
         case OF_KEY_DOWN:
@@ -916,7 +958,9 @@ void testApp::playerCollidesWithGroundOrSky() {
         myPlayer.pos.y = fGoNoLower;
         if ( gameState < 3 || gameState == 4 ) {
             myPlayer.onSurface = true;
-            myPlayer2.onSurface = true;
+            if (bIsSecondPlayer) {
+                myPlayer2.onSurface = true;
+            }
         }
     }
     
@@ -935,9 +979,11 @@ void testApp::playerCollidesWithGroundOrSky() {
     // P2
     
     if ( gameState >= 3 ) {
-        float fGoNoLower2 = ofGetHeight() - iThirdOfScreen + myPlayer2.tall / 2.0;
-        if ( myPlayer2.pos.y < fGoNoLower2 ) {
-            myPlayer2.pos.y = fGoNoLower2;
+        if (bIsSecondPlayer) {
+            float fGoNoLower2 = ofGetHeight() - iThirdOfScreen + myPlayer2.tall / 2.0;
+            if ( myPlayer2.pos.y < fGoNoLower2 ) {
+                myPlayer2.pos.y = fGoNoLower2;
+            }
         }
     }
 }
@@ -961,11 +1007,6 @@ void testApp::playerCollidesWithObject() {
         float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
         float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
         
-        float player2Top = myPlayer2.pos.y - myPlayer2.tall / 2.0;
-        float player2Left = myPlayer2.pos.x - myPlayer2.wide / 2.0;
-        float player2Bottom = myPlayer2.pos.y + myPlayer2.tall / 2.0;
-        float player2Right = myPlayer2.pos.x + myPlayer2.wide / 2.0;
-        
         if ( gameState >= 3 ) {
             float fHealthMultiplier = 1.5;
             if ( playerRight > objectLeft
@@ -975,12 +1016,19 @@ void testApp::playerCollidesWithObject() {
                 myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
                 objectList[ i ].bIsTouched = true;
             }
-            if ( player2Right > objectLeft
-                && player2Left < objectRight
-                && player2Bottom > objectTop
-                && player2Top < objectBottom ) {
-                myPlayer2.fHealth += myPlayer2.fHealthLossSpeed * fHealthMultiplier;
-                objectList[ i ].bIsTouched = true;
+            if (bIsSecondPlayer) {
+                float player2Top = myPlayer2.pos.y - myPlayer2.tall / 2.0;
+                float player2Left = myPlayer2.pos.x - myPlayer2.wide / 2.0;
+                float player2Bottom = myPlayer2.pos.y + myPlayer2.tall / 2.0;
+                float player2Right = myPlayer2.pos.x + myPlayer2.wide / 2.0;
+                
+                if ( player2Right > objectLeft
+                    && player2Left < objectRight
+                    && player2Bottom > objectTop
+                    && player2Top < objectBottom ) {
+                    myPlayer2.fHealth += myPlayer2.fHealthLossSpeed * fHealthMultiplier;
+                    objectList[ i ].bIsTouched = true;
+                }
             }
         }
         

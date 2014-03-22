@@ -18,8 +18,8 @@ class Player {
 public:
     Player();
     
-    void setup( int _iScaler, bool _bUsingController, ofVec2f _pos );
-    void update( int _gameState );
+    void setup( int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList );
+    void update( int _gameState, string _OnThisNote );
     void draw( ofTrueTypeFont _font, vector< Object > _recordedList );
     
     void applyForce( ofVec2f _force );
@@ -32,8 +32,10 @@ public:
     void fDrawHealth();
     void fDrawCharacter();
     
+    vector< float > staffPosList;
+    
     ofVec2f pos, vel, acc, actPos;
-    float yPosLast, yPosDiff;
+    float yPosLast, yPosDiff, yPosStaff;
     float wide, tall;
     float maxVel, jumpVel;
     float fHatSizer, fHatWidth, fHatHeight, fHatOffset, fHatOffsetDefault, fHatVel, fHatVelDefault, fHatQueuedForce;
@@ -44,9 +46,12 @@ public:
     int iScaler, gameState, capacity;
     float radius, angle, angleVel;
     float fHealth, fHealthMax, fHealthLossSpeed;
+    float fNoteOffsetH;
     int tmpAngle;
     
     ofImage headphones, hand, appendage, appendage_mirrored, hat; // For some baffling reason the image is not moving when it should.
     
     Ship myShip;
+    
+    Object myObject; // Use just for reference to its properties. Doesn't get drawn or updated.
 };

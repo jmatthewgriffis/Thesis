@@ -100,6 +100,7 @@ public:
     bool bLeftStickVertical; // Dumb hack for menu selection, find better way if possible.
     bool bBassOnly, bTrebleOnly; // Use to disable parts of a track.
     bool bPlayerMakingNotes;
+    bool bIsSecondPlayer;
     
     ofTrueTypeFont helvetica, helveticaJumbo;
     
