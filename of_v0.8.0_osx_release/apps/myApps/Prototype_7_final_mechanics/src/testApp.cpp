@@ -545,7 +545,7 @@ void testApp::buttonReleased(ofxGamepadButtonEvent& e) {
                 currentState = gameState;
                 fLoadPrototype();
             }
-        } else if ( gameState >= 5 ) {
+        } else if (myPlayer.bCanMakeNotes) {
             bPlayerMakingNotes = true;
         }
     }
@@ -559,7 +559,7 @@ void testApp::buttonPressed(ofxGamepadButtonEvent& e) {
     // "A" button
     if ( e.button == 11 ) {
         
-        if ( gameState >= 5 ) {
+        if (myPlayer.bCanMakeNotes) {
             bPlayerMakingNotes = false;
         }
     }
@@ -751,7 +751,7 @@ void testApp::keyPressed(int key){
             break;
             
         case ' ':
-            if (gameState >= 5 && !bUsingController) {
+            if (myPlayer.bCanMakeNotes && !bUsingController) {
                 bPlayerMakingNotes = true;
             }
             break;
@@ -915,7 +915,7 @@ void testApp::keyReleased(int key){
             break;
             
         case ' ':
-            if (gameState >= 5 && !bUsingController) {
+            if (myPlayer.bCanMakeNotes && !bUsingController) {
                 bPlayerMakingNotes = false;
             }
             break;

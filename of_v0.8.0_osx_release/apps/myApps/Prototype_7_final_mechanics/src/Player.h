@@ -44,6 +44,7 @@ public:
     bool bModePlatformer, bModeSurf, bModeFlight;
     bool bIsOnlyOneRoom;
     bool bHasShip;
+    bool bCanMakeNotes;
     
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;

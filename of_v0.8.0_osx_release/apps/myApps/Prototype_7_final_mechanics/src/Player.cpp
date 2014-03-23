@@ -48,7 +48,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos, vector< 
     angleVel = 15;
     fNoteOffsetH = 0;
     
-    up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = false;
+    up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = false;
     allowMove = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     bHasShip = false;
@@ -89,9 +89,11 @@ void Player::update( int _gameState, string _OnThisNote ) {
         
     } else if (gameState == 5) { // Solo!
         bModeFlight = true;
+        bCanMakeNotes = true;
         
     } else if (gameState == 6) { // Solo--gym
         bModeFlight = true;
+        bCanMakeNotes = true;
         bIsOnlyOneRoom = true;
         
     } else if (gameState == 7) { // Surfin' USA
@@ -422,7 +424,7 @@ void Player::fDrawRecordedList(vector< Object > _recordedList) {
             ofFill();
         }
     } else {
-        if (allowMove) {
+        if (allowMove && bCanMakeNotes) {
             ofPushMatrix();{
                 float tmpX;
                 if (bHasShip) {
