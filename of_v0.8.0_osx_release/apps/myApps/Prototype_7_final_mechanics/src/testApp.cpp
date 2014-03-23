@@ -81,6 +81,12 @@ bool bShouldIErase( Object &a ){
     if ( a.destroyMe ) return true;
     else return false;
 }
+//--------------------------------------------------------------
+bool bShouldIErase2( StreamBit &a ){
+    
+    if ( a.destroyMe ) return true;
+    else return false;
+}
 
 //--------------------------------------------------------------
 void testApp::update(){
@@ -184,15 +190,19 @@ void testApp::update(){
         myPlayer2.update( gameState, fReturnNote(tmp2) );
     }
     
-    // Update the notes.
+    // Update the notes and the stream.
     updateObjectList();
+    updateStream();
     
     ofRemove( objectList, bShouldIErase );
     ofRemove( recordedList, bShouldIErase );
+    ofRemove( streamBitList, bShouldIErase2 );
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
+    cout<<streamBitList.size()<<endl;
     
     //ofxGamepadHandler::get()->draw(10,10);
     
@@ -240,9 +250,12 @@ void testApp::draw(){
             myTrack.draw( helvetica );
         }
         
-        // Draw the notes.
+        // Draw the notes and stream.
         for ( int i = 0; i < objectList.size(); i++ ) {
             objectList[ i ].draw();
+        }
+        for (int i = 0; i < streamBitList.size(); i++) {
+            streamBitList[i].draw();
         }
         
         // Draw the obstacles.
@@ -958,6 +971,17 @@ void testApp::updateObjectList() {
 }
 
 //--------------------------------------------------------------
+void testApp::updateStream() {
+    
+    // Destroy offscreen streambits.
+    for (int i = 0; i < streamBitList.size(); i++) {
+        if (streamBitList[i].pos.x < myPlayer.pos.x - ofGetWidth() || streamBitList[i].pos.x > myPlayer.pos.x + ofGetWidth()) {
+            streamBitList[i].destroyMe = true;
+        }
+    }
+}
+
+//--------------------------------------------------------------
 void testApp::playerCollidesWithGroundOrSky() {
     
     // P1
@@ -1030,13 +1054,13 @@ void testApp::playerCollidesWithObject() {
             }
         }
         
-        if ( gameState >= 3 ) {
+        if ( gameState >= 3 && gameState < 7 ) {
             float fHealthMultiplier = 1.5;
             if ( playerRight > objectLeft
                 && playerLeft < objectRight
                 && playerBottom > objectTop
                 && playerTop < objectBottom ) {
-                myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
+                //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
                 objectList[ i ].bIsTouched = true;
             }
             if (bIsSecondPlayer) {
@@ -1049,7 +1073,7 @@ void testApp::playerCollidesWithObject() {
                     && player2Left < objectRight
                     && player2Bottom > objectTop
                     && player2Top < objectBottom ) {
-                    myPlayer2.fHealth += myPlayer2.fHealthLossSpeed * fHealthMultiplier;
+                    //myPlayer2.fHealth += myPlayer2.fHealthLossSpeed * fHealthMultiplier;
                     objectList[ i ].bIsTouched = true;
                 }
             }
@@ -1513,6 +1537,7 @@ void testApp::cleanup() {
     obstacleList.clear();
     objectList.clear();
     recordedList.clear();
+    streamBitList.clear();
 }
 
 /*

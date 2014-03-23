@@ -10,6 +10,7 @@
 #include "Tutorial.h"
 #include "Track.h"
 #include "Staff.h"
+#include "StreamBit.h"
 #include "TitleScreen.h"
 #include "ofxGamepadHandler.h"
 
@@ -64,6 +65,7 @@ public:
     void addRecordedObject( string _note, ofVec2f _vel, int _age );
     void addReplayedObject( string _note, ofVec2f _vel, int _age );
     void updateObjectList();
+    void updateStream();
     void fRecord( int _i );
     void fReplay();
     
@@ -77,6 +79,7 @@ public:
     vector< Obstacle > obstacleList;
     vector< Object > objectList;
     vector< Object > recordedList;
+    vector< StreamBit > streamBitList;
     
     int gameState, currentState;
     int frameRate;
