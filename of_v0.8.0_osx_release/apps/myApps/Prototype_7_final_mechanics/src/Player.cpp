@@ -95,10 +95,6 @@ void Player::update( int _gameState, string _OnThisNote ) {
         bIsOnlyOneRoom = true;
         
     } else if (gameState == 7) { // Surfin' USA
-        bModeFlight = true;
-        bHasShip = true;
-        
-    } else if (gameState == 8) { //
         bModeSurf = true;
         bHasShip = true;
         

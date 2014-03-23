@@ -344,10 +344,6 @@ void testApp::fLoadPrototype() {
         // Surfin' USA
         bCamZoomedIn = true;
         
-    } else if (gameState == 8) {
-        //
-        bCamZoomedIn = true;
-        
     }
     
     //------------
@@ -1220,7 +1216,7 @@ void testApp::fDrawDebugUI() {
         helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, iScaler * 2 );
         helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - iScaler * 12, iScaler * 2 );
     }
-    if ( myPlayer.pos.x > ofGetWidth() / 2 && gameState >= 3 ) {
+    if ( myPlayer.pos.x > ofGetWidth() / 2 && gameState >= 3 && gameState < 6 ) {
         helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - iScaler * 8.4, iScaler * 2 );
     }
 }
