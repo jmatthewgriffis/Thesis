@@ -35,6 +35,7 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     bIsRecorded = false;
     bIsTouched = false;
     bWasTouched = false;
+    bIsPartOfStream = false;
     
     // Note stuff.
     //    myNote.setup( whichNote );

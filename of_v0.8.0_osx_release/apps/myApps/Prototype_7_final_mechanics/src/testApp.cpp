@@ -192,7 +192,9 @@ void testApp::update(){
     
     // Update the notes and the stream.
     updateObjectList();
-    updateStream();
+    if (myPlayer.bModeSurf && gameState != 4) {
+        updateStream();
+    }
     
     ofRemove( objectList, bShouldIErase );
     ofRemove( recordedList, bShouldIErase );
@@ -202,7 +204,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    cout<<streamBitList.size()<<endl;
+    //cout<<streamBitList.size()<<endl;
     
     //ofxGamepadHandler::get()->draw(10,10);
     
@@ -352,8 +354,6 @@ void testApp::fLoadPrototype() {
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
-        
-        fCreateStream();
         
     }
     
@@ -581,6 +581,9 @@ void testApp::keyPressed(int key){
     
     switch ( key ) {
             
+        case 'z':
+            myPlayer.maxVel *= -1;
+            break;
         case 'k':
             myPlayer.tmpAngle-=5;
             break;
@@ -973,11 +976,69 @@ void testApp::updateObjectList() {
 }
 
 //--------------------------------------------------------------
+int testApp::checkNextStreamNote(int _i) {
+    
+    int tmp;
+    
+    for (int i = _i; i < objectList.size(); i++) {
+        // Is in treble clef.
+        if (objectList[i].pos.y < staffPosList[14]) {
+            tmp = i;
+            return tmp;
+        }
+    }
+}
+
+//--------------------------------------------------------------
 void testApp::updateStream() {
     
-    //    if (myPlayer.bModeSurf) {
-    //        fCreateStream();
-    //    }
+    // Stream is generated dynamically based on the notes onscreen.
+    
+    for (int i = 0; i < objectList.size() - 1; i++) { // Don't check last note.
+        
+        Object currentNote = objectList[i];
+        
+        // Is in treble clef.
+        if (currentNote.pos.y < staffPosList[14]) {
+            // Is onscreen.
+            if (currentNote.pos.x > myPlayer.pos.x - ofGetWidth() && currentNote.pos.x < myPlayer.pos.x + ofGetWidth()) {
+                
+                // Figure out the line between notes and how many streamBits there should be.
+                Object nextNote = objectList[checkNextStreamNote(i + 1)];
+                // First, check if the next note is onscreen.
+                if (nextNote.pos.x > myPlayer.pos.x - ofGetWidth() && nextNote.pos.x < myPlayer.pos.x + ofGetWidth()) {
+                    
+                    // Now make sure the notes aren't already connected.
+                    if (!(currentNote.bIsPartOfStream && nextNote.bIsPartOfStream)) {
+                        
+                        // Now do the calculations.
+                        ofVec2f connection = nextNote.pos - currentNote.pos;
+                        StreamBit ref;
+                        float numBits = int(connection.length() / ref.wide);
+                        
+                        // Add the streamBits to the stream.
+                        for (int j = 1; j < numBits + 1; j++) {
+                            float xOffset = currentNote.pos.x + (connection.x / numBits) * j;
+                            float yOffset = currentNote.pos.y + (connection.y / numBits) * j;
+                            StreamBit tmp(ofVec2f(xOffset, yOffset));
+                            streamBitList.push_back(tmp);
+                        }
+                        
+                        // Tell the actual notes not to connect again.
+                        objectList[i].bIsPartOfStream = true;
+                        objectList[checkNextStreamNote(i + 1)].bIsPartOfStream = true;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Remove notes from the stream when they go offscreen.
+    for (int i = 0; i < objectList.size(); i++) {
+        if (objectList[i].pos.x < myPlayer.pos.x - ofGetWidth() || objectList[i].pos.x > myPlayer.pos.x + ofGetWidth()) {
+            objectList[i].bIsPartOfStream = false;
+        }
+    }
     
     // Figure out the angle of rotation.
     for (int i = 0; i < streamBitList.size(); i++) {
@@ -1530,54 +1591,6 @@ void testApp::fReplay() {
     //}
     
     myPlayer.allowMove = true;
-}
-
-//--------------------------------------------------------------
-void testApp::fCreateStream() {
-    
-    for (int i = 0; i < objectList.size() - 1; i++) { // Don't check last note.
-        
-        Object currentNote = objectList[i];
-        
-        // Is in treble clef.
-        if (currentNote.pos.y < staffPosList[14]) {
-            // Is onscreen.
-            if (currentNote.pos.x > myPlayer.pos.x - ofGetWidth() && currentNote.pos.x < myPlayer.pos.x + ofGetWidth()) {
-                
-                // Figure out the line between notes and how many streamBits there should be.
-                Object nextNote = objectList[fCheckNextStreamNote(i + 1)];
-                // First, check if the next note is onscreen.
-                if (nextNote.pos.x > myPlayer.pos.x - ofGetWidth() && nextNote.pos.x < myPlayer.pos.x + ofGetWidth()) {
-                    // Now do the calculations.
-                    ofVec2f connection = nextNote.pos - currentNote.pos;
-                    StreamBit ref;
-                    float numBits = int(connection.length() / ref.wide);
-                    
-                    // Add the streamBits to the stream.
-                    for (int j = 1; j < numBits + 1; j++) {
-                        float xOffset = currentNote.pos.x + (connection.x / numBits) * j;
-                        float yOffset = currentNote.pos.y + (connection.y / numBits) * j;
-                        StreamBit tmp(ofVec2f(xOffset, yOffset));
-                        streamBitList.push_back(tmp);
-                    }
-                }
-            }
-        }
-    }
-}
-
-//--------------------------------------------------------------
-int testApp::fCheckNextStreamNote(int _i) {
-    
-    int tmp;
-    
-    for (int i = _i; i < objectList.size(); i++) {
-        // Is in treble clef.
-        if (objectList[i].pos.y < staffPosList[14]) {
-            tmp = i;
-            return tmp;
-        }
-    }
 }
 
 //--------------------------------------------------------------

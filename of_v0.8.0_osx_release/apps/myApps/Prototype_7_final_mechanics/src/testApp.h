@@ -66,10 +66,9 @@ public:
     void addReplayedObject( string _note, ofVec2f _vel, int _age );
     void updateObjectList();
     void updateStream();
+    int checkNextStreamNote(int _i);
     void fRecord( int _i );
     void fReplay();
-    void fCreateStream();
-    int fCheckNextStreamNote(int _i);
     
     void fApplyGravity();
     void playerCollidesWithGroundOrSky();
