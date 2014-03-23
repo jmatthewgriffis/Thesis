@@ -315,11 +315,7 @@ void testApp::fLoadPrototype() {
     } else if (gameState == 4) {
         // Flight!
         bCamZoomedIn = true;
-        
-        bIsSecondPlayer = true;
-        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
-        myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
-        myPlayer2.allowMove = false;
+        myPlayer.bAutoplayBass = true;
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
@@ -327,11 +323,7 @@ void testApp::fLoadPrototype() {
     } else if (gameState == 5) {
         // Solo!
         bCamZoomedIn = false;
-        
-        bIsSecondPlayer = true;
-        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
-        myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
-        myPlayer2.allowMove = false;
+        myPlayer.bAutoplayBass = true;
         
         float numReps = 4;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
@@ -343,6 +335,10 @@ void testApp::fLoadPrototype() {
     } else if (gameState == 7) {
         // Surfin' USA
         bCamZoomedIn = true;
+        myPlayer.bAutoplayBass = true;
+        
+        float numReps = 1;
+        addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
         
     }
     
@@ -1024,6 +1020,15 @@ void testApp::playerCollidesWithObject() {
         float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
         float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
         float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
+        
+        // First, enable autoplay of bass if called.
+        if (myPlayer.bAutoplayBass) {
+            if (playerRight > objectLeft && playerLeft < objectRight) {
+                if (objectList[i].pos.y >= staffPosList[14]) {
+                    objectList[i].bIsTouched = true;
+                }
+            }
+        }
         
         if ( gameState >= 3 ) {
             float fHealthMultiplier = 1.5;

@@ -45,6 +45,7 @@ public:
     bool bIsOnlyOneRoom;
     bool bHasShip;
     bool bCanMakeNotes;
+    bool bAutoplayBass;
     
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;

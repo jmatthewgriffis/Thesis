@@ -33,7 +33,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
     float m1Bass;
     float spacer;
     
-    if ( gameState < 5 ) { // Start jam1.
+    if ( gameState < 5 || gameState == 7) { // Start jam1.
         
         m1Bass = iScaler * 20;
         spacer = fMeasureLength / 5.333333;
