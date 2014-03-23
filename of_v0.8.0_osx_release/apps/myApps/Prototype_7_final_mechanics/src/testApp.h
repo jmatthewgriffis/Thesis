@@ -68,6 +68,8 @@ public:
     void updateStream();
     void fRecord( int _i );
     void fReplay();
+    void fCreateStream();
+    int fCheckNextStreamNote(int _i);
     
     void fApplyGravity();
     void playerCollidesWithGroundOrSky();

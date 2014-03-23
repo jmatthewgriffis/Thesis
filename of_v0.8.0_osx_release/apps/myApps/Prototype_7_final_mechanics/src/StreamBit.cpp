@@ -11,6 +11,7 @@
 //--------------------------------------------------------------
 StreamBit::StreamBit(ofVec2f _pos) {
     pos = _pos;
+    wide = 5;
     destroyMe = false;
 }
 
@@ -20,8 +21,8 @@ void StreamBit::draw(float _angle) {
         ofTranslate(pos);
         ofRotate(_angle);
         ofFill();
-        ofSetColor(255,0,0, 255);
-        ofCircle(0, 0, 5);
+        ofSetColor(0,0,255, 255);
+        ofCircle(0, 0, wide);
         ofLine(0,0,0,-10);
     }ofPopMatrix();
 }

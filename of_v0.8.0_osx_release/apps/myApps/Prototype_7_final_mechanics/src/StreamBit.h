@@ -16,5 +16,6 @@ public:
     void draw(float _angle = 0);
     
     ofVec2f pos;
+    float wide;
     bool destroyMe;
 };
