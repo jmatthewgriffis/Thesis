@@ -179,6 +179,18 @@ void testApp::update(){
         tmp = myPlayer.pos.y;
     }
     myPlayer.update( gameState, fReturnNote(tmp) );
+    // Quick hack to make ship ride on stream.
+    if (gameState == 7) {
+        for (int i = 0; i < streamBitList.size(); i++) {
+            if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].wide / 2 && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].wide / 2) {
+                float diff = myPlayer.myShip.pos.y - myPlayer.pos.y;
+                if (myPlayer.pos.y >= streamBitList[i].pos.y - diff) {
+                    myPlayer.pos.y = streamBitList[i].pos.y - diff;
+                    myPlayer.onSurface = true;
+                }
+            }
+        }
+    }
     
     if ( bIsSecondPlayer ) {
         float tmp2;
