@@ -13,9 +13,11 @@
 class StreamBit {
 public:
     StreamBit(ofVec2f _pos = ofVec2f(0,0));
-    void draw(float _angle = 0);
+    void update(float _angle);
+    void draw();
     
     ofVec2f pos;
     float wide;
+    float angle;
     bool destroyMe;
 };

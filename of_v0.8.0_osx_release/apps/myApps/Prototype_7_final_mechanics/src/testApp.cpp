@@ -979,6 +979,22 @@ void testApp::updateStream() {
 //        fCreateStream();
 //    }
     
+    // Figure out the angle of rotation.
+    for (int i = 0; i < streamBitList.size(); i++) {
+        // Look at next bit to determine angle, unless the last bit.
+        float angleCorrection =  -(PI * 0.5);
+        if (i < streamBitList.size() - 1) {
+            ofVec2f connection = streamBitList[i].pos - streamBitList[i+1].pos;
+            float angle = atan2(connection.y, connection.x);
+            streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
+        } else {
+            // If the last bit, look at the previous bit.
+            ofVec2f connection = streamBitList[i].pos - streamBitList[i-1].pos;
+            float angle = atan2(connection.y, connection.x);
+            streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
+        }
+    }
+    
     // Destroy offscreen streambits.
     for (int i = 0; i < streamBitList.size(); i++) {
         if (streamBitList[i].pos.x < myPlayer.pos.x - ofGetWidth() || streamBitList[i].pos.x > myPlayer.pos.x + ofGetWidth()) {

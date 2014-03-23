@@ -16,14 +16,22 @@ StreamBit::StreamBit(ofVec2f _pos) {
 }
 
 //--------------------------------------------------------------
-void StreamBit::draw(float _angle) {
+void StreamBit::update(float _angle) {
+    angle = _angle;
+}
+
+//--------------------------------------------------------------
+void StreamBit::draw() {
     ofPushMatrix();{
         ofTranslate(pos);
-        ofRotate(_angle);
+        ofRotate(angle);
         ofFill();
         ofSetColor(0,0,255, 255);
         ofCircle(0, 0, wide);
+        /*ofSetColor(0, 255);
+        ofSetLineWidth(3);
         ofLine(0,0,0,-10);
+        ofCircle(0,-10, 2);*/
     }ofPopMatrix();
 }
 
