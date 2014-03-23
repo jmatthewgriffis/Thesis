@@ -272,20 +272,13 @@ void testApp::fLoadPrototype() {
     bBassOnly = bTrebleOnly = bIsSecondPlayer = false;
     float fZoomedInX = iScaler * 7.5;
     
-    // Setup player(s).
+    // Setup player.
     myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
-    if (gameState > 2 && gameState < 6){
-        bIsSecondPlayer = true;
-    }
-    if (bIsSecondPlayer) {
-        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
-    }
     
     //------------
     
     if ( gameState == 1 ) {
         // Tutorial
-        myPlayer.bModePlatformer = true;
         bCamZoomedIn = true;
         
         myPlayer.pos.x = fZoomedInX;
@@ -296,8 +289,6 @@ void testApp::fLoadPrototype() {
         
     } else if ( gameState == 2 ) {
         // Boss
-        myPlayer.bModePlatformer = true;
-        myPlayer.bIsOnlyOneRoom = true;
         bCamZoomedIn = true;
         
         myPlayer.pos.x = fZoomedInX;
@@ -312,54 +303,49 @@ void testApp::fLoadPrototype() {
         
     } else if (gameState == 3) {
         // Piano groove
-        myPlayer.bModeFlight = true;
         bCamZoomedIn = false;
+        
+        bIsSecondPlayer = true;
+        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
+        myPlayer2.bModeFlight = true;
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
         
     } else if (gameState == 4) {
         // Flight!
-        myPlayer.bModeSurf = true;
         bCamZoomedIn = true;
+        
+        bIsSecondPlayer = true;
+        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
+        myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
+        myPlayer2.allowMove = false;
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
         
-        if (bIsSecondPlayer) {
-            myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
-            myPlayer2.allowMove = false;
-        }
-        
     } else if (gameState == 5) {
         // Solo!
-        myPlayer.bModeFlight = true;
         bCamZoomedIn = false;
+        
+        bIsSecondPlayer = true;
+        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
+        myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
+        myPlayer2.allowMove = false;
         
         float numReps = 4;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
         
-        if (bIsSecondPlayer) {
-            myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
-            myPlayer2.allowMove = false;
-        }
-        
     } else if (gameState == 6) {
         // Solo--gym
-        myPlayer.bModeFlight = true;
-        myPlayer.bIsOnlyOneRoom = true;
         bCamZoomedIn = true;
         
     } else if (gameState == 7) {
         // Surfin' USA
-        myPlayer.bModeFlight = true;
-        myPlayer.bHasShip = true;
         bCamZoomedIn = true;
         
     } else if (gameState == 8) {
         //
-        myPlayer.bModeSurf = true;
-        myPlayer.bHasShip = true;
         bCamZoomedIn = true;
         
     }

@@ -72,6 +72,40 @@ void Player::update( int _gameState, string _OnThisNote ) {
     
     yPosStaff = myObject.fReturnYPos(_OnThisNote);
     
+    //------------
+    
+    if ( gameState == 1 ) { // Tutorial
+        bModePlatformer = true;
+        
+    } else if ( gameState == 2 ) { // Boss
+        bModePlatformer = true;
+        bIsOnlyOneRoom = true;
+        
+    } else if (gameState == 3) { // Piano groove
+        bModeFlight = true;
+        
+    } else if (gameState == 4) { // Flight!
+        bModeSurf = true;
+        
+    } else if (gameState == 5) { // Solo!
+        bModeFlight = true;
+        
+    } else if (gameState == 6) { // Solo--gym
+        bModeFlight = true;
+        bIsOnlyOneRoom = true;
+        
+    } else if (gameState == 7) { // Surfin' USA
+        bModeFlight = true;
+        bHasShip = true;
+        
+    } else if (gameState == 8) { //
+        bModeSurf = true;
+        bHasShip = true;
+        
+    }
+    
+    //------------
+    
     /*
      // Health depletes constantly.
      if ( fHealth > fHealthMax ) {
@@ -85,11 +119,19 @@ void Player::update( int _gameState, string _OnThisNote ) {
      }
      */
     
-    // Prevent from going offscreen to the left.
+    // Prevent going off the true left and bottom edges.
+    if ( pos.x <= wide / 2.0 ) {
+        pos.x = wide / 2.0;
+    }
+    if ( pos.y >= ofGetHeight() - ( tall / 2.0 ) ) {
+        pos.y = ofGetHeight() - ( tall / 2.0 );
+    }
+    
+    // Prevent from going offscreen to the left when zoomed in.
     if ( pos.x < iScaler * 7 ) {
         pos.x = iScaler * 7;
     }
-    // Prevent from going offscreen to the right.
+    // Prevent from going offscreen to the right when zoomed in.
     if ( bIsOnlyOneRoom ) {
         if ( pos.x > ofGetWidth() - iScaler * 7 ) {
             pos.x = ofGetWidth() - iScaler * 7;
@@ -98,7 +140,8 @@ void Player::update( int _gameState, string _OnThisNote ) {
     
     // Movement
     
-    if ( gameState >= 3 && gameState != 6 ) {
+    // Move forward constantly.
+    if ((bModeSurf || bModeFlight) && gameState != 6) {
         if ( onSurface == false ) {
             pos.x += maxVel;
         } else {
@@ -108,8 +151,9 @@ void Player::update( int _gameState, string _OnThisNote ) {
     
     if ( allowMove ) {
         
+        // Up-----------
         if ( up ) {
-            if ( gameState < 3 ) {
+            if ( bModePlatformer ) {
                 
                 if ( onSurface && allowJump ) {
                     applyForce( ofVec2f( 0.0, jumpVel ) );
@@ -117,10 +161,10 @@ void Player::update( int _gameState, string _OnThisNote ) {
                     allowJump = false;
                 }
                 
-            } else if ( gameState == 3 || gameState >= 5 ) {
+            } else if ( bModeFlight ) {
                 applyForce( ofVec2f( 0.0, -maxVel ) );
                 
-            } else if ( gameState == 4 ) {
+            } else if ( bModeSurf ) {
                 
                 if ( allowJump == true ) {
                     vel.y = 0;
@@ -129,15 +173,16 @@ void Player::update( int _gameState, string _OnThisNote ) {
                     allowJump = false;
                 }
             }
-        } else if ( gameState == 4 && !down ){
+        } else if ( bModeSurf && !down ){
             allowJump = true;
         }
         
+        // Down-----------
         if ( down ) {
-            if ( gameState == 3 || gameState >= 5 ) {
+            if ( bModeFlight ) {
                 //            pos.y += vel.y;
                 applyForce( ofVec2f( 0.0, maxVel ) );
-            } else if (gameState == 4) {
+            } else if (bModeSurf) {
                 if ( allowJump == true ) {
                     vel.y = 0;
                     applyForce( ofVec2f( 0.0, -jumpVel * 0.4 ) );
@@ -145,16 +190,18 @@ void Player::update( int _gameState, string _OnThisNote ) {
                     allowJump = false;
                 }
             }
-        } else if (gameState == 4 && !up) {
+        } else if (bModeSurf && !up) {
             allowJump = true;
         }
         
+        // Left-----------
         if ( left ) {
             //if ( gameState < 3 ) {
             applyForce( ofVec2f( -maxVel, 0.0 ) );
             //}
         }
         
+        // Right-----------
         if ( right ) {
             //if ( gameState < 3 ) {
             applyForce( ofVec2f( maxVel, 0.0 ) );
@@ -170,25 +217,17 @@ void Player::update( int _gameState, string _OnThisNote ) {
         
         pos += vel;
         
-        if ( gameState < 3 || gameState == 6 ) {
+        if ( bModePlatformer || gameState == 6 ) {
             vel.x = 0;
         }
         
-        if ( gameState == 3 || gameState >= 5 ) {
+        if ( bModeFlight ) {
             //if ( bUsingController == false ) {
             vel.y = 0;
             //}
             //        }
         }
     } // End "if allowMove"
-    
-    // Prevent going offscreen.
-    if ( pos.x <= wide / 2.0 ) {
-        pos.x = wide / 2.0;
-    }
-    if ( pos.y >= ofGetHeight() - ( tall / 2.0 ) ) {
-        pos.y = ofGetHeight() - ( tall / 2.0 );
-    }
     
     { // Update hat. Hat has its own physics.
         fHatOffsetDefault = pos.y - fHatHeight * 0.5 + wide * -0.65;
@@ -216,7 +255,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
     yPosDiff = pos.y - yPosLast;
     
     // Manage forces.
-    if ( gameState < 3 ) {
+    if ( bModePlatformer ) {
         float damping = 0.97;
         vel.y *= damping;
         //vel.y *= damping / 2.0;
