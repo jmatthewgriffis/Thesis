@@ -48,7 +48,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos, vector< 
     angleVel = 15;
     fNoteOffsetH = 0;
     
-    up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = false;
+    up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = false;
     allowMove = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     bHasShip = false;
@@ -85,16 +85,14 @@ void Player::update( int _gameState, string _OnThisNote ) {
      }
      */
     
-    // Prevent from going offscreen.
-    if ( gameState < 3 || gameState == 6 ) {
-        if ( pos.x < iScaler * 7 ) {
-            pos.x = iScaler * 7;
-        }
-        
-        if ( gameState == 2 || gameState == 6 ) {
-            if ( pos.x > ofGetWidth() - iScaler * 7 ) {
-                pos.x = ofGetWidth() - iScaler * 7;
-            }
+    // Prevent from going offscreen to the left.
+    if ( pos.x < iScaler * 7 ) {
+        pos.x = iScaler * 7;
+    }
+    // Prevent from going offscreen to the right.
+    if ( bIsOnlyOneRoom ) {
+        if ( pos.x > ofGetWidth() - iScaler * 7 ) {
+            pos.x = ofGetWidth() - iScaler * 7;
         }
     }
     
@@ -142,7 +140,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
             } else if (gameState == 4) {
                 if ( allowJump == true ) {
                     vel.y = 0;
-                    applyForce( ofVec2f( 0.0, -jumpVel * 0.75 ) );
+                    applyForce( ofVec2f( 0.0, -jumpVel * 0.4 ) );
                     //onSurface = false;
                     allowJump = false;
                 }

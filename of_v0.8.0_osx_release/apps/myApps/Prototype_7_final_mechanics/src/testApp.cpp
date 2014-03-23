@@ -284,8 +284,10 @@ void testApp::fLoadPrototype() {
     //------------
     
     if ( gameState == 1 ) {
-        
+        // Tutorial
+        myPlayer.bModePlatformer = true;
         bCamZoomedIn = true;
+        
         myPlayer.pos.x = fZoomedInX;
         addObject( myTutorial.setup( iScaler, iThirdOfScreen, bIsLefty ), 1 );
         obstacleList = myTutorial.obstacleList;
@@ -293,8 +295,11 @@ void testApp::fLoadPrototype() {
         objectList[ objectList.size() - 1 ].vel.set( float( -( iScaler / 8.3333 ) ), 0.0 );
         
     } else if ( gameState == 2 ) {
-        
+        // Boss
+        myPlayer.bModePlatformer = true;
+        myPlayer.bIsOnlyOneRoom = true;
         bCamZoomedIn = true;
+        
         myPlayer.pos.x = fZoomedInX;
         addObject( myBoss.setup( iScaler, fMeasureLength ), 1 );
         
@@ -305,31 +310,58 @@ void testApp::fLoadPrototype() {
         bHighlightNote = true;
         getThisOne = 0;
         
-    } else if ( gameState > 2 ) {
+    } else if (gameState == 3) {
+        // Piano groove
+        myPlayer.bModeFlight = true;
+        bCamZoomedIn = false;
         
-        float numReps;
-        if ( gameState != 5 ) {
-            numReps = 1;
-        } else {
-            numReps = 4;
-        }
+        float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
         
-        if ( gameState > 3 ) {
-            
-            if ( gameState != 5 ) {
-                bCamZoomedIn = true;
-            }
-            
-            if (bIsSecondPlayer) {
-                myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
-                myPlayer2.allowMove = false;
-            }
-            
-            if (gameState == 7) {
-                myPlayer.bHasShip = true;
-            }
+    } else if (gameState == 4) {
+        // Flight!
+        myPlayer.bModeSurf = true;
+        bCamZoomedIn = true;
+        
+        float numReps = 1;
+        addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
+        
+        if (bIsSecondPlayer) {
+            myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
+            myPlayer2.allowMove = false;
         }
+        
+    } else if (gameState == 5) {
+        // Solo!
+        myPlayer.bModeFlight = true;
+        bCamZoomedIn = false;
+        
+        float numReps = 4;
+        addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
+        
+        if (bIsSecondPlayer) {
+            myPlayer2.tall = staffPosList[ 0 ] - staffPosList[ 14 ];
+            myPlayer2.allowMove = false;
+        }
+        
+    } else if (gameState == 6) {
+        // Solo--gym
+        myPlayer.bModeFlight = true;
+        myPlayer.bIsOnlyOneRoom = true;
+        bCamZoomedIn = true;
+        
+    } else if (gameState == 7) {
+        // Surfin' USA
+        myPlayer.bModeFlight = true;
+        myPlayer.bHasShip = true;
+        bCamZoomedIn = true;
+        
+    } else if (gameState == 8) {
+        //
+        myPlayer.bModeSurf = true;
+        myPlayer.bHasShip = true;
+        bCamZoomedIn = true;
+        
     }
     
     //------------
@@ -360,7 +392,9 @@ void testApp::fApplyGravity() {
         if ( gameState < 3 ) {
             fGravFactor = fBaseGrav;
         } else if ( gameState == 4 ) {
-            fGravFactor = fBaseGrav * 0.5;
+            fGravFactor = fBaseGrav * 0.65;
+        } else if ( gameState == 7 ) {
+            fGravFactor = fBaseGrav * 0.65;
         }
         
         if ( myPlayer.vel.y <= 0 ) {
@@ -368,7 +402,9 @@ void testApp::fApplyGravity() {
         } else if ( gameState < 3 ) {
             fGravity = fGravFactor * 3;
         } else if ( gameState == 4 ) {
-            fGravity = fGravFactor * 0.5;
+            fGravity = fGravFactor * 0.4;
+        } else if ( gameState == 7 ) {
+            fGravity = fGravFactor * 0.4;
         }
         
         myPlayer.applyForce( ofVec2f( 0.0, fGravity ) );

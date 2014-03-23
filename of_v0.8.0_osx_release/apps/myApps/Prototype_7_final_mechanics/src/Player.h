@@ -39,10 +39,15 @@ public:
     float wide, tall;
     float maxVel, jumpVel;
     float fHatSizer, fHatWidth, fHatHeight, fHatOffset, fHatOffsetDefault, fHatVel, fHatVelDefault, fHatQueuedForce;
+    
+    // Master booleans to switch features on and off.
+    bool bModePlatformer, bModeSurf, bModeFlight;
+    bool bIsOnlyOneRoom;
+    bool bHasShip;
+    
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;
-    bool bHasShip;
     int iScaler, gameState, capacity;
     float radius, angle, angleVel;
     float fHealth, fHealthMax, fHealthLossSpeed;
