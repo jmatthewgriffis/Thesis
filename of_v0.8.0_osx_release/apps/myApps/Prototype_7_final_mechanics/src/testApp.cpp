@@ -216,7 +216,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    //cout<<streamBitList.size()<<endl;
+    cout<<streamBitList.size()<<endl;
     
     //ofxGamepadHandler::get()->draw(10,10);
     
@@ -361,7 +361,7 @@ void testApp::fLoadPrototype() {
         
     } else if (gameState == 7) {
         // Surfin' USA
-        bCamZoomedIn = true;
+        bCamZoomedIn = false;
         myPlayer.bAutoplayBass = true;
         
         float numReps = 1;
@@ -1003,7 +1003,7 @@ int testApp::checkNextStreamNote(int _i) {
 
 //--------------------------------------------------------------
 void testApp::updateStream() {
-    
+    //FIND ME
     // Stream is generated dynamically based on the notes onscreen.
     
     for (int i = 0; i < objectList.size() - 1; i++) { // Don't check last note.
@@ -1026,13 +1026,15 @@ void testApp::updateStream() {
                         // Now do the calculations.
                         ofVec2f connection = nextNote.pos - currentNote.pos;
                         StreamBit ref;
-                        float numBits = int(connection.length() / ref.wide);
+                        ref.setup(currentNote.tall);
+                        float numBits = int(connection.length() / ref.tall / 2);
                         
                         // Add the streamBits to the stream.
                         for (int j = 1; j < numBits + 1; j++) {
                             float xOffset = currentNote.pos.x + (connection.x / numBits) * j;
                             float yOffset = currentNote.pos.y + (connection.y / numBits) * j;
-                            StreamBit tmp(ofVec2f(xOffset, yOffset));
+                            StreamBit tmp;
+                            tmp.setup(currentNote.tall, ofVec2f(xOffset, yOffset));
                             streamBitList.push_back(tmp);
                         }
                         
@@ -1055,7 +1057,7 @@ void testApp::updateStream() {
     // Figure out the angle of rotation.
     for (int i = 0; i < streamBitList.size(); i++) {
         // Look at next bit to determine angle, unless the last bit.
-        float angleCorrection =  -(PI * 0.5);
+        float angleCorrection =  PI * 0.5;
         if (i < streamBitList.size() - 1) {
             ofVec2f connection = streamBitList[i].pos - streamBitList[i+1].pos;
             float angle = atan2(connection.y, connection.x);

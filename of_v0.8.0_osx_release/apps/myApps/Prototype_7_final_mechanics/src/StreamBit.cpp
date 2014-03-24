@@ -9,9 +9,15 @@
 #include "StreamBit.h"
 
 //--------------------------------------------------------------
-StreamBit::StreamBit(ofVec2f _pos) {
+StreamBit::StreamBit() {
+    slur.loadImage("images/slur.png");
+}
+
+//--------------------------------------------------------------
+void StreamBit::setup(float _noteHeight, ofVec2f _pos) {
     pos = _pos;
-    wide = 5;
+    wide = _noteHeight;
+    tall = slur.getHeight() * wide / slur.getWidth();
     destroyMe = false;
 }
 
@@ -25,9 +31,12 @@ void StreamBit::draw() {
     ofPushMatrix();{
         ofTranslate(pos);
         ofRotate(angle);
-        ofFill();
-        ofSetColor(0,0,255, 255);
-        ofCircle(0, 0, wide);
+        ofSetColor(255, 255);
+        ofSetRectMode(OF_RECTMODE_CENTER);
+        slur.draw(0, 0, wide, tall);
+        //ofFill();
+        //ofSetColor(0,0,255, 255);
+        //ofCircle(0, 0, wide);
         /*ofSetColor(0, 255);
         ofSetLineWidth(3);
         ofLine(0,0,0,-10);

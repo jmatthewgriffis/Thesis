@@ -12,12 +12,15 @@
 
 class StreamBit {
 public:
-    StreamBit(ofVec2f _pos = ofVec2f(0,0));
+    StreamBit();
+    void setup(float _noteHeight = 0, ofVec2f _pos = ofVec2f(0,0));
     void update(float _angle);
     void draw();
     
     ofVec2f pos;
-    float wide;
+    float wide, tall;
     float angle;
     bool destroyMe;
+    
+    ofImage slur;
 };
