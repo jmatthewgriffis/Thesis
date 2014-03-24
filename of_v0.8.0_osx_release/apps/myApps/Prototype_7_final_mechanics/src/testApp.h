@@ -93,6 +93,7 @@ public:
     int iTimeTillNote, iTimeBetweenNotes;
     
     float fMeasureLength;
+    float camLeft, camRight;
     
     bool bIsLefty; // Left-handed control scheme
     bool bIsRecording; // Prevent multiple record calls from the same action.

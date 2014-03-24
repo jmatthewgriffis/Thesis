@@ -216,7 +216,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    cout<<streamBitList.size()<<endl;
+    cout<<"numBits = "<<streamBitList.size()<<endl;
     
     //ofxGamepadHandler::get()->draw(10,10);
     
@@ -252,6 +252,10 @@ void testApp::draw(){
             myCam.move( fMoveX, fMoveY, fZoomFactor );
         }
         
+        float halfOfScreen = ofGetWidth() * 0.5;
+        camLeft = myCam.getPosition().x - halfOfScreen;
+        camRight = myCam.getPosition().x + halfOfScreen;
+        
         myStaff.draw( iScaler, fMeasureLength, gameState, helvetica, helveticaJumbo, myPlayer.pos.x );
         fDrawDebugUI();
         fDrawGround();
@@ -265,11 +269,13 @@ void testApp::draw(){
         }
         
         // Draw the notes and stream.
-        for (int i = 0; i < streamBitList.size(); i++) {
-            streamBitList[i].draw();
-        }
+        
         for ( int i = 0; i < objectList.size(); i++ ) {
             objectList[ i ].draw();
+        }
+        
+        for (int i = 0; i < streamBitList.size(); i++) {
+            streamBitList[i].draw();
         }
         
         // Draw the obstacles.
@@ -594,7 +600,7 @@ void testApp::keyPressed(int key){
     switch ( key ) {
             
         case 'z':
-            myPlayer.maxVel *= -1;
+            myPlayer.maxVel *= 0;
             break;
         case 'k':
             myPlayer.tmpAngle-=5;
@@ -1013,12 +1019,12 @@ void testApp::updateStream() {
         // Is in treble clef.
         if (currentNote.pos.y < staffPosList[14]) {
             // Is onscreen.
-            if (currentNote.pos.x > myPlayer.pos.x - ofGetWidth() && currentNote.pos.x < myPlayer.pos.x + ofGetWidth()) {
+            if (currentNote.pos.x > camLeft && currentNote.pos.x < camRight) {
                 
                 // Figure out the line between notes and how many streamBits there should be.
                 Object nextNote = objectList[checkNextStreamNote(i + 1)];
                 // First, check if the next note is onscreen.
-                if (nextNote.pos.x > myPlayer.pos.x - ofGetWidth() && nextNote.pos.x < myPlayer.pos.x + ofGetWidth()) {
+                if (nextNote.pos.x > camLeft && nextNote.pos.x < camRight) {
                     
                     // Now make sure the notes aren't already connected.
                     if (!(currentNote.bIsPartOfStream && nextNote.bIsPartOfStream)) {
@@ -1027,12 +1033,12 @@ void testApp::updateStream() {
                         ofVec2f connection = nextNote.pos - currentNote.pos;
                         StreamBit ref;
                         ref.setup(currentNote.tall);
-                        float numBits = int(connection.length() / ref.tall / 4);
+                        float numBits = int((connection.length() - ((currentNote.wide + currentNote.tall) * 0.5)  - ((nextNote.wide + nextNote.tall) * 0.5)) / ref.tall);
                         
                         // Add the streamBits to the stream.
-                        for (int j = 1; j < numBits + 1; j++) {
-                            float xOffset = currentNote.pos.x + (connection.x / numBits) * j;
-                            float yOffset = currentNote.pos.y + (connection.y / numBits) * j;
+                        for (int j = 0; j < numBits - 3; j++) {
+                            float xOffset = currentNote.pos.x + (connection.x / numBits) * 2 + (connection.x / numBits) * j;
+                            float yOffset = currentNote.pos.y + (connection.y / numBits) * 2 + (connection.y / numBits) * j;
                             StreamBit tmp;
                             tmp.setup(currentNote.tall, ofVec2f(xOffset, yOffset));
                             streamBitList.push_back(tmp);
@@ -1044,13 +1050,6 @@ void testApp::updateStream() {
                     }
                 }
             }
-        }
-    }
-    
-    // Remove notes from the stream when they go offscreen.
-    for (int i = 0; i < objectList.size(); i++) {
-        if (objectList[i].pos.x < myPlayer.pos.x - ofGetWidth() || objectList[i].pos.x > myPlayer.pos.x + ofGetWidth()) {
-            objectList[i].bIsPartOfStream = false;
         }
     }
     
@@ -1070,9 +1069,16 @@ void testApp::updateStream() {
         }
     }
     
+    // Remove notes from the stream when they go offscreen.
+    for (int i = 0; i < objectList.size(); i++) {
+        if (objectList[i].pos.x < camLeft || objectList[i].pos.x > camRight) {
+            objectList[i].bIsPartOfStream = false;
+        }
+    }
+    
     // Destroy offscreen streambits.
     for (int i = 0; i < streamBitList.size(); i++) {
-        if (streamBitList[i].pos.x < myPlayer.pos.x - ofGetWidth() || streamBitList[i].pos.x > myPlayer.pos.x + ofGetWidth()) {
+        if (streamBitList[i].pos.x < camLeft || streamBitList[i].pos.x > camRight) {
             streamBitList[i].destroyMe = true;
         }
     }
