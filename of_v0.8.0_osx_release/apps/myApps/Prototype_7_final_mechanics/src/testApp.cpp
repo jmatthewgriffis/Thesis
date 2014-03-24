@@ -1027,7 +1027,7 @@ void testApp::updateStream() {
                         ofVec2f connection = nextNote.pos - currentNote.pos;
                         StreamBit ref;
                         ref.setup(currentNote.tall);
-                        float numBits = int(connection.length() / ref.tall / 2);
+                        float numBits = int(connection.length() / ref.tall / 4);
                         
                         // Add the streamBits to the stream.
                         for (int j = 1; j < numBits + 1; j++) {
