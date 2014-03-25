@@ -73,6 +73,8 @@ void testApp::setup(){
     myTitle.iWhichPrototype = 1;
     iTimeTillNote = 0;
     iTimeBetweenNotes = frameRate / 6;
+    iLastOpacityChange = 0;
+    iOpacityChangeFreq = frameRate * 0.005;
 }
 
 //--------------------------------------------------------------
@@ -302,6 +304,7 @@ void testApp::fLoadPrototype() {
     cleanup();
     bBassOnly = bTrebleOnly = bIsSecondPlayer = false;
     float fZoomedInX = iScaler * 7.5;
+    iLastOpacityChange = ofGetElapsedTimef(); // Reset the clock.
     
     // Setup player.
     myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
@@ -365,7 +368,7 @@ void testApp::fLoadPrototype() {
         
     } else if (gameState == 7) {
         // Surfin' USA
-        bCamZoomedIn = false;
+        bCamZoomedIn = true;
         myPlayer.bAutoplayBass = true;
         
         float numReps = 1;
@@ -1057,11 +1060,19 @@ void testApp::updateStream() {
                         float radiusOffsetX = cos(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
                         float radiusOffsetY = sin(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
                         
-                        // Finally, we can add the streamBits. WHEW!
                         for (int j = 0; j < numBits; j++) {
                             // Calculate the offset from the note's center for each Bit.
                             float xOffset = currentNoteEdge.x + radiusOffsetX + (edgeToEdge.x / numBits) * j;
                             float yOffset = currentNoteEdge.y + radiusOffsetY + (edgeToEdge.y / numBits) * j;
+                            
+                            // Figure out what the opacity should be, to give that nice "streamlike" effect.
+                            /*if (streamBitList.size() == 0) {
+                             opacityState = 2;
+                             } else {
+                             opacityState = streamBitList[streamBitList.size() - 1].opacityState + 1;
+                             }*/
+                            
+                            // Finally, we can add the streamBits. WHEW!
                             StreamBit tmp;
                             tmp.setup(currentNote.tall, ofVec2f(xOffset, yOffset));
                             streamBitList.push_back(tmp);
@@ -1076,10 +1087,29 @@ void testApp::updateStream() {
         }
     }
     
-    // Figure out the angle of rotation.
+    // Control the opacity.
+    
+    if (ofGetElapsedTimef() >= iLastOpacityChange + iOpacityChangeFreq) {
+        streamBitList[0].opacityState++;
+        //streamBitList[whichNote].opacity = faded;
+        /*if (whichNote < streamBitList.size() - 1) {
+         streamBitList[whichNote+1].opacity = 255;
+         } else {
+         streamBitList[0].opacity = 255;
+         }*/
+        iLastOpacityChange = ofGetElapsedTimef(); // Restart the clock.
+    }
+    
     for (int i = 0; i < streamBitList.size(); i++) {
-        // Look at next bit to determine angle, unless the last bit.
+        
+        // Offset opacity.
+        if (i > 0) {
+            streamBitList[i].opacityState = streamBitList[i-1].opacityState - 1;
+        }
+        
+        // Figure out the angle of rotation.
         float angleCorrection =  PI * 0.5;
+        // Look at next bit to determine angle, unless the last bit.
         if (i < streamBitList.size() - 1) {
             ofVec2f connection = streamBitList[i].pos - streamBitList[i+1].pos;
             float angle = atan2(connection.y, connection.x);
@@ -1090,19 +1120,17 @@ void testApp::updateStream() {
             float angle = atan2(connection.y, connection.x);
             streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
         }
+        
+        // Destroy offscreen streambits.
+        if (streamBitList[i].pos.x < camLeft || streamBitList[i].pos.x > camRight) {
+            streamBitList[i].destroyMe = true;
+        }
     }
     
     // Remove notes from the stream when they go offscreen.
     for (int i = 0; i < objectList.size(); i++) {
         if (objectList[i].pos.x < camLeft || objectList[i].pos.x > camRight) {
             objectList[i].bIsPartOfStream = false;
-        }
-    }
-    
-    // Destroy offscreen streambits.
-    for (int i = 0; i < streamBitList.size(); i++) {
-        if (streamBitList[i].pos.x < camLeft || streamBitList[i].pos.x > camRight) {
-            streamBitList[i].destroyMe = true;
         }
     }
 }

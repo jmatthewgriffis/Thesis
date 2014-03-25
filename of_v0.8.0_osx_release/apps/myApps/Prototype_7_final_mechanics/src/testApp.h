@@ -90,7 +90,8 @@ public:
     int iScaler; // Scale everything based on screen size.
     int iHitCounter; // How many notes hit?
     int iTotalTrebleNotes;
-    int iTimeTillNote, iTimeBetweenNotes;
+    float iTimeTillNote, iTimeBetweenNotes;
+    float iLastOpacityChange, iOpacityChangeFreq;
     
     float fMeasureLength;
     float camLeft, camRight;

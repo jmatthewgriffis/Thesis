@@ -10,20 +10,43 @@
 
 //--------------------------------------------------------------
 StreamBit::StreamBit() {
-    slur.loadImage("images/slur.png");
+    slur.loadImage("images/slur.png"); // http://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Musical_Slur.svg/300px-Musical_Slur.svg.png
 }
 
 //--------------------------------------------------------------
-void StreamBit::setup(float _noteHeight, ofVec2f _pos) {
+void StreamBit::setup(float _noteHeight, ofVec2f _pos, int _opacityState) {
     pos = _pos;
     wide = _noteHeight;
     tall = slur.getHeight() * wide / slur.getWidth();
+    opacityState = _opacityState;
+    opacity = 0;
     destroyMe = false;
 }
 
 //--------------------------------------------------------------
 void StreamBit::update(float _angle) {
     angle = _angle;
+    
+    if (opacityState < 0) {
+        opacityState += numStates;
+    }
+    if (opacityState > numStates - 1) {
+        opacityState -= numStates;
+    }
+    
+    float base = 75;
+    float modifier = 25;
+    if (opacityState == 0) {
+        opacity = base;
+    } else if (opacityState == 1) {
+        opacity = base += modifier;
+    } else if (opacityState == 2) {
+        opacity = base += modifier * 2;
+    } else if (opacityState == 3) {
+        opacity = base += modifier * 3;
+    } else {
+        opacity = 255;
+    }
 }
 
 //--------------------------------------------------------------
@@ -32,7 +55,7 @@ void StreamBit::draw() {
         ofTranslate(pos);
         ofRotate(angle);
         
-        ofSetColor(255, 255);
+        ofSetColor(255, opacity);
         ofSetRectMode(OF_RECTMODE_CENTER);
         slur.draw(0, 0, wide, tall);
         
