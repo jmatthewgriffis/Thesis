@@ -31,6 +31,7 @@ void StreamBit::draw() {
     ofPushMatrix();{
         ofTranslate(pos);
         ofRotate(angle);
+        
         ofSetColor(255, 255);
         ofSetRectMode(OF_RECTMODE_CENTER);
         //slur.draw(0, 0, wide, tall);

@@ -139,7 +139,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
     // Movement
     
     // Move forward constantly.
-    if ((bModeSurf || bModeFlight) && gameState != 6) {
+    if ((bModeSurf || bModeFlight) && gameState != 6 && allowMove) {
         if ( onSurface == false ) {
             pos.x += maxVel;
         } else {

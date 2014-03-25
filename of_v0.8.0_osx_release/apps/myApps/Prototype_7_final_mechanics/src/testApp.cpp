@@ -600,7 +600,7 @@ void testApp::keyPressed(int key){
     switch ( key ) {
             
         case 'z':
-            myPlayer.maxVel *= 0;
+            myPlayer.allowMove = !myPlayer.allowMove;
             break;
         case 'k':
             myPlayer.tmpAngle-=5;
@@ -1030,15 +1030,30 @@ void testApp::updateStream() {
                     if (!(currentNote.bIsPartOfStream && nextNote.bIsPartOfStream)) {
                         
                         // Now do the calculations.
-                        ofVec2f connection = nextNote.pos - currentNote.pos;
                         StreamBit ref;
                         ref.setup(currentNote.tall);
-                        float numBits = int((connection.length() - ((currentNote.wide + currentNote.tall) * 0.5)  - ((nextNote.wide + nextNote.tall) * 0.5)) / ref.tall);
+                        
+                        ofVec2f connection = nextNote.pos - currentNote.pos;
+                        float currentNoteRadius = (currentNote.wide + currentNote.tall) * 0.25;
+                        float nextNoteRadius = (nextNote.wide + nextNote.tall) * 0.25;
+                        
+                        float startX = cos(atan2(connection.y, connection.x)) * (currentNoteRadius);
+                        float startY = sin(atan2(connection.y, connection.x)) * (currentNoteRadius);
+                        float endX = cos(atan2(connection.y, connection.x)) * (nextNoteRadius);
+                        float endY = sin(atan2(connection.y, connection.x)) * (nextNoteRadius);
+                        ofVec2f currentNoteEdge = ofVec2f(currentNote.pos.x + startX, currentNote.pos.y + startY);
+                        ofVec2f nextNoteEdge = ofVec2f(nextNote.pos.x - endX, nextNote.pos.y - endY);
+                        ofVec2f edgeToEdge = nextNoteEdge - currentNoteEdge;
+                        
+                        int numBits = int((edgeToEdge.length() /*- currentNoteRadius - nextNoteRadius*/) / ref.tall);
+                        
+                        float radiusOffsetX = cos(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
+                        float radiusOffsetY = sin(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
                         
                         // Add the streamBits to the stream.
-                        for (int j = 0; j < numBits - 3; j++) {
-                            float xOffset = currentNote.pos.x + (connection.x / numBits) * 2 + (connection.x / numBits) * j;
-                            float yOffset = currentNote.pos.y + (connection.y / numBits) * 2 + (connection.y / numBits) * j;
+                        for (int j = 0; j < numBits; j++) {
+                            float xOffset = currentNoteEdge.x + radiusOffsetX + (edgeToEdge.x / numBits) * j;
+                            float yOffset = currentNoteEdge.y + radiusOffsetY + (edgeToEdge.y / numBits) * j;
                             StreamBit tmp;
                             tmp.setup(currentNote.tall, ofVec2f(xOffset, yOffset));
                             streamBitList.push_back(tmp);
