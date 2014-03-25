@@ -216,7 +216,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    cout<<"numBits = "<<streamBitList.size()<<endl;
+    //cout<<"numBits = "<<streamBitList.size()<<endl;
     
     //ofxGamepadHandler::get()->draw(10,10);
     
@@ -269,13 +269,11 @@ void testApp::draw(){
         }
         
         // Draw the notes and stream.
-        
-        for ( int i = 0; i < objectList.size(); i++ ) {
-            objectList[ i ].draw();
-        }
-        
         for (int i = 0; i < streamBitList.size(); i++) {
             streamBitList[i].draw();
+        }
+        for ( int i = 0; i < objectList.size(); i++ ) {
+            objectList[ i ].draw();
         }
         
         // Draw the obstacles.
@@ -1053,7 +1051,7 @@ void testApp::updateStream() {
                         ofVec2f edgeToEdge = nextNoteEdge - currentNoteEdge;
                         
                         // Finally we can calculate how many elements can fit in between the notes.
-                        int numBits = int(edgeToEdge.length() / ref.tall);
+                        int numBits = int(edgeToEdge.length() / ref.tall) * 0.5;
                         
                         // In order to space them evenly, we have to figure out the first element's offset from the note's edge. More trig, yay.
                         float radiusOffsetX = cos(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
@@ -1088,7 +1086,7 @@ void testApp::updateStream() {
             streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
         } else {
             // If the last bit, look at the previous bit.
-            ofVec2f connection = streamBitList[i].pos - streamBitList[i-1].pos;
+            ofVec2f connection = streamBitList[i-1].pos - streamBitList[i].pos;
             float angle = atan2(connection.y, connection.x);
             streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
         }

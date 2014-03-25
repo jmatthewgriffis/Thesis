@@ -34,11 +34,11 @@ void StreamBit::draw() {
         
         ofSetColor(255, 255);
         ofSetRectMode(OF_RECTMODE_CENTER);
-        //slur.draw(0, 0, wide, tall);
+        slur.draw(0, 0, wide, tall);
         
-        ofFill();
+        /*ofFill();
         ofSetColor(255,0,0, 255);
-        ofCircle(0, 0, 5);
+        ofCircle(0, 0, 5);*/
         //ofSetColor(0, 255);
         //ofSetLineWidth(3);
         //ofLine(0,0,0,-10);
