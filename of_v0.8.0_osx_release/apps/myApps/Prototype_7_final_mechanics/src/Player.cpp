@@ -48,7 +48,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos, vector< 
     angleVel = 15;
     fNoteOffsetH = 0;
     
-    up = left = down = right = onSurface = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = false;
+    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = false;
     allowMove = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     bHasShip = false;
@@ -168,7 +168,8 @@ void Player::update( int _gameState, string _OnThisNote ) {
                     vel.y = 0;
                     applyForce( ofVec2f( 0.0, jumpVel * 0.75 ) );
                     onSurface = false;
-                    allowJump = false;
+                    onStream = false;
+                    //allowJump = false;
                 }
             }
         } else if ( bModeSurf && !down ){
@@ -209,7 +210,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
         vel += acc;
         
         // Negate velocity on a surface.
-        if ( onSurface ) {
+        if ( onSurface || onStream ) {
             vel.y = 0;
         }
         

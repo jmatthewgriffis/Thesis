@@ -117,8 +117,10 @@ void testApp::update(){
     
     // Reset essential conditionals.
     myPlayer.onSurface = false;
+    myPlayer.onStream = false;
     if (bIsSecondPlayer) {
         myPlayer2.onSurface = false;
+        myPlayer2.onStream = false;
     }
     
     
@@ -133,6 +135,7 @@ void testApp::update(){
     playerCollidesWithGroundOrSky();
     playerCollidesWithObstacle();
     playerCollidesWithObject();
+    playerCollidesWithStream();
     objectCollidesWithObstacle();
     
     // Calculate the player's success:
@@ -181,18 +184,6 @@ void testApp::update(){
         tmp = myPlayer.pos.y;
     }
     myPlayer.update( gameState, fReturnNote(tmp) );
-    // Quick hack to make ship ride on stream.
-    if (gameState == 7) {
-        for (int i = 0; i < streamBitList.size(); i++) {
-            if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].wide / 2 && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].wide / 2) {
-                float diff = myPlayer.myShip.pos.y - myPlayer.pos.y;
-                if (myPlayer.pos.y >= streamBitList[i].pos.y - diff) {
-                    myPlayer.pos.y = streamBitList[i].pos.y - diff;
-                    myPlayer.onSurface = true;
-                }
-            }
-        }
-    }
     
     if ( bIsSecondPlayer ) {
         float tmp2;
@@ -1010,7 +1001,6 @@ int testApp::checkNextStreamNote(int _i) {
 
 //--------------------------------------------------------------
 void testApp::updateStream() {
-    //FIND ME
     // Stream is generated dynamically based on the notes onscreen.
     
     for (int i = 0; i < objectList.size() - 1; i++) { // Don't check last note.
@@ -1262,6 +1252,22 @@ void testApp::playerCollidesWithObject() {
         /*if ( myPlayer.pos.x == objectList[ i ].pos.x && myPlayer.pos.y == objectList[ i ].pos.y ) {
          myPlayer.applyForce( ofVec2f( -10.0, 0.0 ) );
          }*/
+    }
+}
+
+//--------------------------------------------------------------
+void testApp::playerCollidesWithStream() {
+    //Find me
+    if (myPlayer.bModeSurf) {
+        for (int i = 0; i < streamBitList.size(); i++) {
+            if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].tall && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].tall) {
+                float diff = myPlayer.myShip.pos.y - myPlayer.pos.y + streamBitList[i].wide * 0.5;
+                if (myPlayer.pos.y >= streamBitList[i].pos.y - diff) {
+                    myPlayer.pos.y = streamBitList[i].pos.y - diff;
+                    myPlayer.onStream = true;
+                }
+            }
+        }
     }
 }
 

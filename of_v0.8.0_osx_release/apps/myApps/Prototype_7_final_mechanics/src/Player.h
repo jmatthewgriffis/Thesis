@@ -48,7 +48,7 @@ public:
     bool bAutoplayBass;
     
     bool allowMove, allowJump, up, left, down, right;
-    bool onSurface;
+    bool onSurface, onStream;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;
     int iScaler, gameState, capacity;
     float radius, angle, angleVel;

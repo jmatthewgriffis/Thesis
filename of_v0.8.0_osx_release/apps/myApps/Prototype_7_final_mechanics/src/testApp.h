@@ -74,6 +74,7 @@ public:
     void playerCollidesWithGroundOrSky();
     void playerCollidesWithObject();
     void playerCollidesWithObstacle();
+    void playerCollidesWithStream();
     void objectCollidesWithObstacle();
     
     vector< float > staffPosList;
