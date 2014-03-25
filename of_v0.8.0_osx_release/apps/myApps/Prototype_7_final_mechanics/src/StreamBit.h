@@ -14,7 +14,7 @@
 class StreamBit {
 public:
     StreamBit();
-    void setup(float _noteHeight = 0, ofVec2f _pos = ofVec2f(0,0), int _opacityState = 0);
+    void setup(float _noteHeight = 0, ofVec2f _pos = ofVec2f(0,0));
     void update(float _angle);
     void draw();
     

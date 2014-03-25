@@ -1065,13 +1065,6 @@ void testApp::updateStream() {
                             float xOffset = currentNoteEdge.x + radiusOffsetX + (edgeToEdge.x / numBits) * j;
                             float yOffset = currentNoteEdge.y + radiusOffsetY + (edgeToEdge.y / numBits) * j;
                             
-                            // Figure out what the opacity should be, to give that nice "streamlike" effect.
-                            /*if (streamBitList.size() == 0) {
-                             opacityState = 2;
-                             } else {
-                             opacityState = streamBitList[streamBitList.size() - 1].opacityState + 1;
-                             }*/
-                            
                             // Finally, we can add the streamBits. WHEW!
                             StreamBit tmp;
                             tmp.setup(currentNote.tall, ofVec2f(xOffset, yOffset));
@@ -1087,17 +1080,10 @@ void testApp::updateStream() {
         }
     }
     
-    // Control the opacity.
-    
+    // Change the opacity on a timer and restart the timer.
     if (ofGetElapsedTimef() >= iLastOpacityChange + iOpacityChangeFreq) {
         streamBitList[0].opacityState++;
-        //streamBitList[whichNote].opacity = faded;
-        /*if (whichNote < streamBitList.size() - 1) {
-         streamBitList[whichNote+1].opacity = 255;
-         } else {
-         streamBitList[0].opacity = 255;
-         }*/
-        iLastOpacityChange = ofGetElapsedTimef(); // Restart the clock.
+        iLastOpacityChange = ofGetElapsedTimef();
     }
     
     for (int i = 0; i < streamBitList.size(); i++) {

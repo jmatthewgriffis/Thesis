@@ -14,12 +14,12 @@ StreamBit::StreamBit() {
 }
 
 //--------------------------------------------------------------
-void StreamBit::setup(float _noteHeight, ofVec2f _pos, int _opacityState) {
+void StreamBit::setup(float _noteHeight, ofVec2f _pos) {
     pos = _pos;
     wide = _noteHeight;
     tall = slur.getHeight() * wide / slur.getWidth();
-    opacityState = _opacityState;
-    opacity = 0;
+    opacityState = 0;
+    opacity = 255;
     destroyMe = false;
 }
 
