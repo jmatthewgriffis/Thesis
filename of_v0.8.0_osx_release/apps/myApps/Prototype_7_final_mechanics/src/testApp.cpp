@@ -362,6 +362,8 @@ void testApp::fLoadPrototype() {
         bCamZoomedIn = true;
         myPlayer.bAutoplayBass = true;
         
+        myPlayer.vel.y = -iScaler * 0.3;
+        
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
         
@@ -1117,10 +1119,10 @@ void testApp::playerCollidesWithGroundOrSky() {
     // P1
     
     float fGoNoLower;
-    if ( gameState != 4 ) {
+    if ( !myPlayer.bModeSurf ) {
         fGoNoLower = iThirdOfScreen - myPlayer.tall / 2.0;
     } else {
-        fGoNoLower = iThirdOfScreen + iScaler * 7;
+        fGoNoLower = iThirdOfScreen + iScaler * 7 - myPlayer.tall;
     }
     if ( myPlayer.pos.y >= fGoNoLower ) {
         myPlayer.pos.y = fGoNoLower;
@@ -1133,7 +1135,7 @@ void testApp::playerCollidesWithGroundOrSky() {
     }
     
     float fGoNoHigher;
-    if ( gameState != 4 ) {
+    if ( !myPlayer.bModeSurf ) {
         fGoNoHigher = myPlayer.tall / 2.0;
         
     } else {
@@ -1165,11 +1167,19 @@ void testApp::playerCollidesWithObject() {
         // Make some floats for shorthand...
         // Player is drawn from the center.
         // Obstacles are drawn from the corner.
+        
         float margin = iScaler / 2.5;
+        
         float playerTop = myPlayer.pos.y - myPlayer.tall / 2.0;
         float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
-        float playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
+        float playerBottom;
+        if (myPlayer.bHasShip) {
+            playerBottom = myPlayer.myShip.pos.y + myPlayer.myShip.fImgHeightBass / 2.0;
+        } else {
+            playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
+        }
         float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
+        
         float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
         float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
         float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
@@ -1184,58 +1194,71 @@ void testApp::playerCollidesWithObject() {
             }
         }
         
-        if ( gameState >= 3 && gameState < 7 ) {
-            float fHealthMultiplier = 1.5;
-            if ( playerRight > objectLeft
-                && playerLeft < objectRight
-                && playerBottom > objectTop
-                && playerTop < objectBottom ) {
+        // Sound the note in proximity.
+        if ( gameState < 3 ) {
+            if ( playerRight >= objectLeft && playerLeft <= objectRight) {
+                objectList[ i ].bIsTouched = true;
+            }
+        } else {
+            
+            //float fHealthMultiplier = 1.5;
+            
+            if ( playerRight >= objectLeft && playerLeft <= objectRight
+                && playerBottom >= objectTop && playerTop <= objectBottom ) {
+                
                 //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
                 objectList[ i ].bIsTouched = true;
             }
+            
             if (bIsSecondPlayer) {
                 float player2Top = myPlayer2.pos.y - myPlayer2.tall / 2.0;
                 float player2Left = myPlayer2.pos.x - myPlayer2.wide / 2.0;
                 float player2Bottom = myPlayer2.pos.y + myPlayer2.tall / 2.0;
                 float player2Right = myPlayer2.pos.x + myPlayer2.wide / 2.0;
                 
-                if ( player2Right > objectLeft
-                    && player2Left < objectRight
-                    && player2Bottom > objectTop
-                    && player2Top < objectBottom ) {
+                if ( player2Right > objectLeft && player2Left < objectRight
+                    && player2Bottom > objectTop && player2Top < objectBottom ) {
+                    
                     //myPlayer2.fHealth += myPlayer2.fHealthLossSpeed * fHealthMultiplier;
                     objectList[ i ].bIsTouched = true;
                 }
             }
         }
         
-        if ( gameState < 3 ) {
-            // First, check if the player is in the same horizontal region as the object.
+        // Prevent the player from moving through the note.
+        if ((myPlayer.bModePlatformer || myPlayer.bModeSurf) && gameState != 4) {
+            
+            // Check if in the same horizontal region as the object.
             if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
+                
                 // Is there something directly to the right?
                 if ( playerRight >= objectLeft && playerRight < objectList[ i ].pos.x ) {
                     // Prevent the player from moving to the right.
                     myPlayer.pos.x = objectLeft - myPlayer.wide / 2.0;
                 }
+                
                 // OK, is there something directly to the left?
                 else if ( playerLeft <= objectRight && playerLeft > objectList[ i ].pos.x ) {
                     // Prevent the player from moving to the left.
                     myPlayer.pos.x = objectRight + myPlayer.wide / 2.0;
                 }
             }
+            
             // Next, check if the player is in the same vertical region as the object.
             if ( playerRight >= objectLeft + margin && playerLeft <= objectRight - margin ) {
-                
-                objectList[ i ].bIsTouched = true;
                 
                 // Is there something directly below?
                 if ( playerBottom >= objectTop && playerBottom < objectList[ i ].pos.y ) {
                     // Prevent the player from moving downward.
-                    myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
+                    if (myPlayer.bHasShip) {
+                        myPlayer.pos.y = objectTop - myPlayer.myShip.fImgHeightBass / 2.0 - (myPlayer.myShip.pos.y - myPlayer.pos.y);
+                    } else {
+                        myPlayer.pos.y = objectTop - myPlayer.tall / 2.0;
+                    }
                     myPlayer.onSurface = true;
-                    //                myPlayer.vel.set( objectList[ i ].vel );
                     myPlayer.applyForce( objectList[ i ].vel );
                 }
+                
                 // OK, is there something directly above?
                 else if ( playerTop <= objectBottom && playerTop > objectList[ i ].pos.y ) {
                     // Prevent the player from moving upward.
