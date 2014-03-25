@@ -1033,25 +1033,35 @@ void testApp::updateStream() {
                         StreamBit ref;
                         ref.setup(currentNote.tall);
                         
+                        /*
+                         The stream consists of a small element drawn repeatedly to fill the space between notes. But if there are too many, the program slows down. Optimizing for speed AND aesthetics requires that the minimum number of streamBits be drawn without losing too much of the stream. So, this function uses a series of calculations to figure out the exact space between the notes and fill it with evenly-spaced streamBits. Since the notes are often at different elevations and not circular, and it's important to draw from the edge only (not underneath or on top of the note), this gets complicated.
+                         */
+                        
+                        // First, draw a line between the note centers to get the slope.
                         ofVec2f connection = nextNote.pos - currentNote.pos;
+                        // Next, calculate a rough "radius" for the ellipsoid notes.
                         float currentNoteRadius = (currentNote.wide + currentNote.tall) * 0.25;
                         float nextNoteRadius = (nextNote.wide + nextNote.tall) * 0.25;
-                        
-                        float startX = cos(atan2(connection.y, connection.x)) * (currentNoteRadius);
-                        float startY = sin(atan2(connection.y, connection.x)) * (currentNoteRadius);
-                        float endX = cos(atan2(connection.y, connection.x)) * (nextNoteRadius);
-                        float endY = sin(atan2(connection.y, connection.x)) * (nextNoteRadius);
+                        // Now, use the slope of the connecting line and the radii of the notes to calculate where the "edges" of the notes are on the connecting line.
+                        float startX = cos(atan2(connection.y, connection.x)) * currentNoteRadius;
+                        float startY = sin(atan2(connection.y, connection.x)) * currentNoteRadius;
+                        float endX = cos(atan2(connection.y, connection.x)) * nextNoteRadius;
+                        float endY = sin(atan2(connection.y, connection.x)) * nextNoteRadius;
+                        // Now, make a new connecting line between edges.
                         ofVec2f currentNoteEdge = ofVec2f(currentNote.pos.x + startX, currentNote.pos.y + startY);
                         ofVec2f nextNoteEdge = ofVec2f(nextNote.pos.x - endX, nextNote.pos.y - endY);
                         ofVec2f edgeToEdge = nextNoteEdge - currentNoteEdge;
                         
-                        int numBits = int((edgeToEdge.length() /*- currentNoteRadius - nextNoteRadius*/) / ref.tall);
+                        // Finally we can calculate how many elements can fit in between the notes.
+                        int numBits = int(edgeToEdge.length() / ref.tall);
                         
+                        // In order to space them evenly, we have to figure out the first element's offset from the note's edge. More trig, yay.
                         float radiusOffsetX = cos(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
                         float radiusOffsetY = sin(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
                         
-                        // Add the streamBits to the stream.
+                        // Finally, we can add the streamBits. WHEW!
                         for (int j = 0; j < numBits; j++) {
+                            // Calculate the offset from the note's center for each Bit.
                             float xOffset = currentNoteEdge.x + radiusOffsetX + (edgeToEdge.x / numBits) * j;
                             float yOffset = currentNoteEdge.y + radiusOffsetY + (edgeToEdge.y / numBits) * j;
                             StreamBit tmp;
