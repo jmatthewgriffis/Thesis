@@ -1174,13 +1174,22 @@ void testApp::playerCollidesWithObject() {
         float playerLeft = myPlayer.pos.x - myPlayer.wide / 2.0;
         float playerBottom;
         if (myPlayer.bHasShip) {
-            playerBottom = myPlayer.myShip.pos.y + myPlayer.myShip.fImgHeightBass / 2.0;
+            // Bottom is center of ship, matching collision with stream.
+            playerBottom = myPlayer.myShip.pos.y;
         } else {
+            // Bottom is bottom of player.
             playerBottom = myPlayer.pos.y + myPlayer.tall / 2.0;
         }
         float playerRight = myPlayer.pos.x + myPlayer.wide / 2.0;
         
-        float objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
+        float objectTop;
+        if (myPlayer.bHasShip) {
+            // Top is center of object, matching collision with stream.
+            objectTop = objectList[ i ].pos.y;
+        } else {
+            // Top is top of object.
+            objectTop = objectList[ i ].pos.y - objectList[ i ].tall / 2.0;
+        }
         float objectLeft = objectList[ i ].pos.x - objectList[ i ].wide / 2.0;
         float objectBottom = objectList[ i ].pos.y + objectList[ i ].tall / 2.0;
         float objectRight = objectList[ i ].pos.x + objectList[ i ].wide / 2.0;
@@ -1202,9 +1211,14 @@ void testApp::playerCollidesWithObject() {
         } else {
             
             //float fHealthMultiplier = 1.5;
-            
+            float surfOffset;
+            if (myPlayer.bHasShip) {
+                surfOffset = objectList[i].tall / 2.0 + myPlayer.myShip.fImgHeightBass * 0.5;
+            } else {
+                surfOffset = 0;
+            }
             if ( playerRight >= objectLeft && playerLeft <= objectRight
-                && playerBottom >= objectTop && playerTop <= objectBottom ) {
+                && playerBottom >= (objectTop - surfOffset) && playerTop <= objectBottom ) {
                 
                 //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
                 objectList[ i ].bIsTouched = true;
