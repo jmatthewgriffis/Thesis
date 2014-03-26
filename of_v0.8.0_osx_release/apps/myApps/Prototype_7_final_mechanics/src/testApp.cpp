@@ -75,6 +75,7 @@ void testApp::setup(){
     iTimeBetweenNotes = frameRate / 6;
     iLastOpacityChange = 0;
     iOpacityChangeFreq = frameRate * 0.005;
+    inStreamTimer = 0;
 }
 
 //--------------------------------------------------------------
@@ -359,7 +360,7 @@ void testApp::fLoadPrototype() {
         
     } else if (gameState == 7) {
         // Surfin' USA
-        bCamZoomedIn = true;
+        bCamZoomedIn = true; // find me
         myPlayer.bAutoplayBass = true;
         
         myPlayer.vel.y = -iScaler * 0.3;
@@ -1240,7 +1241,7 @@ void testApp::playerCollidesWithObject() {
         }
         
         // Prevent the player from moving through the note.
-        if ((myPlayer.bModePlatformer || myPlayer.bModeSurf) && gameState != 4) {
+        if ((myPlayer.bModePlatformer /*|| myPlayer.bModeSurf*/) && gameState != 4) {
             
             // Check if in the same horizontal region as the object.
             if ( playerBottom >= objectTop + margin && playerTop <= objectBottom - margin ) {
@@ -1294,7 +1295,7 @@ void testApp::playerCollidesWithObject() {
 
 //--------------------------------------------------------------
 void testApp::playerCollidesWithStream() {
-    //Find me
+    
     if (myPlayer.bModeSurf) {
         for (int i = 0; i < streamBitList.size(); i++) {
             if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].tall && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].tall) {
@@ -1303,6 +1304,30 @@ void testApp::playerCollidesWithStream() {
                     myPlayer.pos.y = streamBitList[i].pos.y - diff;
                     myPlayer.onStream = true;
                 }
+            }
+        }
+        
+        // Make player stay in stream when it descends.
+        float timeLimit = frameRate * 0.25;
+        if (myPlayer.onStream) {
+            inStreamTimer = timeLimit;
+        } else {
+            if (inStreamTimer > 0 && !myPlayer.onStream) {
+                for (int i = 0; i < streamBitList.size(); i++) {
+                    if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].tall && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].tall) {
+                        if (myPlayer.pos.y < streamBitList[i].pos.y) {
+                            //myPlayer.pos.y = streamBitList[i].pos.y - myPlayer.myShip.pos.y - myPlayer.pos.y + streamBitList[i].wide * 0.5;
+                            myPlayer.pos.y += 10; // Find me; hacktastic
+                        }
+                    }
+                }
+            }
+        }
+        if (inStreamTimer > 0) {
+            if (myPlayer.vel.y < 0) { // Jumping
+                inStreamTimer = 0;
+            } else {
+                inStreamTimer--;
             }
         }
     }
