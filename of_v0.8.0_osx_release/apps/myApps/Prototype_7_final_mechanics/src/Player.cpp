@@ -48,7 +48,7 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos, vector< 
     angleVel = 15;
     fNoteOffsetH = 0;
     
-    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = false;
+    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = false;
     allowMove = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     bHasShip = false;
@@ -143,7 +143,11 @@ void Player::update( int _gameState, string _OnThisNote ) {
         if ( gameState == 4 && onSurface == true ) {
             pos.x += maxVel * 0.25f;
         } else {
-            pos.x += maxVel;
+            if (closeEnough) {
+                pos.x += maxVel;
+            } else {
+                pos.x += maxVel * 0.25;
+            }
         }
     }
     

@@ -49,6 +49,7 @@ public:
     
     bool allowMove, allowJump, up, left, down, right;
     bool onSurface, onStream;
+    bool closeEnough;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;
     int iScaler, gameState, capacity;
     float radius, angle, angleVel;

@@ -22,5 +22,8 @@ public:
     
     ofVec2f pos;
     
+    int angle, angleVel;
+    bool bTiltUpward, bTiltDownward;
+    
     float fImgHeightTreble, fImgHeightBass;
 };

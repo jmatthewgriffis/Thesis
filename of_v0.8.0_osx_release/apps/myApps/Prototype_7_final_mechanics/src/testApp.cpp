@@ -597,6 +597,12 @@ void testApp::keyPressed(int key){
         case 'z':
             myPlayer.allowMove = !myPlayer.allowMove;
             break;
+            case 'g':
+            myPlayer.myShip.bTiltUpward = true;
+            break;
+        case 'h':
+            myPlayer.myShip.bTiltDownward = true;
+            break;
         case 'k':
             myPlayer.tmpAngle-=5;
             break;
@@ -832,6 +838,13 @@ void testApp::keyPressed(int key){
 void testApp::keyReleased(int key){
     
     switch ( key ) {
+            
+        case 'g':
+            myPlayer.myShip.bTiltUpward = false;
+            break;
+        case 'h':
+            myPlayer.myShip.bTiltDownward = false;
+            break;
             
         case OF_KEY_SHIFT:
             bShiftIsPressed = false;
@@ -1303,6 +1316,15 @@ void testApp::playerCollidesWithStream() {
                 if (myPlayer.pos.y >= streamBitList[i].pos.y - diff) {
                     myPlayer.pos.y = streamBitList[i].pos.y - diff;
                     myPlayer.onStream = true;
+                    // Check the angle and adjust speed accordingly.
+                    float closeEnough = 15;
+                    float angleOffset = ofRadToDeg(PI / 2);
+                    //cout<<"player = "<<myPlayer.myShip.angle - ofRadToDeg(PI / 2)<<"; note = "<<streamBitList[i].angle<<endl;
+                    if (myPlayer.myShip.angle >= streamBitList[i].angle + angleOffset - closeEnough && myPlayer.myShip.angle <= streamBitList[i].angle + angleOffset + closeEnough) {
+                        myPlayer.closeEnough = true;
+                    } else {
+                        myPlayer.closeEnough = false;
+                    }
                 }
             }
         }
