@@ -491,7 +491,7 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
         }
         
         // Note-making ship
-        else if ( gameState >= 5 ) {
+        else if ( gameState >= 5 && myPlayer.bModeFlight ) {
             if ( abs( e.value ) > fStickBuffer ) {
                 //myPlayer.vel.y = ofMap( e.value, -1, 1, -myPlayer.maxVel, myPlayer.maxVel );
                 if ( e.value < 0 ) {
@@ -525,6 +525,20 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
             } else {
                 myPlayer.left = false;
                 myPlayer.right = false;
+            }
+        }
+        else if ( myPlayer.bModeSurf && gameState != 4 ) {
+            if ( abs( e.value ) > fStickBuffer * 2 ) {
+                if ( e.value < 0 ) { // find me
+                    myPlayer.myShip.bTiltUpward = true;
+                    myPlayer.myShip.bTiltDownward = false;
+                } else if ( e.value > 0 ) {
+                    myPlayer.myShip.bTiltUpward = false;
+                    myPlayer.myShip.bTiltDownward = true;
+                }
+            } else {
+                myPlayer.myShip.bTiltUpward = false;
+                myPlayer.myShip.bTiltDownward = false;
             }
         }
     }
@@ -572,6 +586,10 @@ void testApp::buttonReleased(ofxGamepadButtonEvent& e) {
         } else if (myPlayer.bCanMakeNotes) {
             bPlayerMakingNotes = true;
         }
+        
+        if (myPlayer.bModeSurf && gameState != 4) {
+            myPlayer.up = true;
+        }
     }
     
     //cout << "BUTTON " << e.button << " PRESSED" << endl;
@@ -586,6 +604,10 @@ void testApp::buttonPressed(ofxGamepadButtonEvent& e) {
         if (myPlayer.bCanMakeNotes) {
             bPlayerMakingNotes = false;
         }
+        
+        if (myPlayer.bModeSurf && gameState != 4) {
+            myPlayer.up = false;
+        }
     }
 }
 
@@ -596,12 +618,6 @@ void testApp::keyPressed(int key){
             //find me
         case 'z':
             myPlayer.allowMove = !myPlayer.allowMove;
-            break;
-        case 'g':
-            myPlayer.myShip.bTiltUpward = true;
-            break;
-        case 'h':
-            myPlayer.myShip.bTiltDownward = true;
             break;
         case 'k':
             myPlayer.tmpAngle-=5;
@@ -717,6 +733,8 @@ void testApp::keyPressed(int key){
                 }
             } else if (gameState == 6) {
                 myPlayer.left = true;
+            } else if (!bUsingController && myPlayer.bModeSurf && gameState != 4) {
+                myPlayer.myShip.bTiltUpward = true;
             }
             break;
             
@@ -780,6 +798,8 @@ void testApp::keyPressed(int key){
                 }
             } else if (gameState == 6) {
                 myPlayer.right = true;
+            } else if (!bUsingController && myPlayer.bModeSurf && gameState != 4) {
+                myPlayer.myShip.bTiltDownward = true;
             }
             break;
             
@@ -839,13 +859,6 @@ void testApp::keyReleased(int key){
     
     switch ( key ) {
             
-        case 'g':
-            myPlayer.myShip.bTiltUpward = false;
-            break;
-        case 'h':
-            myPlayer.myShip.bTiltDownward = false;
-            break;
-            
         case OF_KEY_SHIFT:
             bShiftIsPressed = false;
             break;
@@ -901,6 +914,8 @@ void testApp::keyReleased(int key){
                 }
             } else if (gameState == 6) {
                 myPlayer.left = false;
+            } else if (!bUsingController && myPlayer.bModeSurf && gameState != 4) {
+                myPlayer.myShip.bTiltUpward = false;
             }
             break;
             
@@ -951,6 +966,8 @@ void testApp::keyReleased(int key){
                 }
             } else if (gameState == 6) {
                 myPlayer.right = false;
+            } else if (!bUsingController && myPlayer.bModeSurf && gameState != 4) {
+                myPlayer.myShip.bTiltDownward = false;
             }
             break;
             
@@ -1142,6 +1159,8 @@ void testApp::playerCollidesWithGroundOrSky() {
     float fGoNoLower;
     if ( !myPlayer.bModeSurf ) {
         fGoNoLower = iThirdOfScreen - myPlayer.tall / 2.0;
+    } else if (gameState == 4) {
+        fGoNoLower = iThirdOfScreen + iScaler * 7;
     } else {
         fGoNoLower = iThirdOfScreen + iScaler * 7 - myPlayer.tall;
     }
@@ -1350,7 +1369,7 @@ void testApp::playerCollidesWithStream() {
                         myPlayer.pos.y = start.y + inc.y * j - diff;
                         myPlayer.onStream = true;
                         // Check the angle and adjust speed accordingly.
-                        int closeEnough = 20;
+                        int closeEnough = 15;
                         float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
                         if (angleDiff > 180) {
                             angleDiff = 360 - angleDiff;
