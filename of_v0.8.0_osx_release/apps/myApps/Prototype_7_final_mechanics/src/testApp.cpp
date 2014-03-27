@@ -1360,14 +1360,27 @@ void testApp::playerCollidesWithStream() {
         // Find me
         // New way
         for (int i = 0; i < streamBitList.size(); i++) {
+            
             ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;
             ofVec2f inc = streamBitList[i].slope.normalized();
             float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/;
             for (int j = 1; j < int(streamBitList[i].wide); j++) {
+                
+                // If player x is within two bits of the object's x...
                 if (myPlayer.pos.x >= start.x + inc.x * (j - 1) && myPlayer.pos.x <= start.x + inc.x * j) {
+                    
+                    // Snap to descending stream if already riding it.
+                    if (!myPlayer.onStream && inStreamTimer > 0) {
+                        if (myPlayer.pos.y < start.y + inc.y * j - diff) {
+                            myPlayer.pos.y = start.y + inc.y * j - diff;
+                        }
+                    }
+                    
+                    // Keep player on top of stream.
                     if (myPlayer.pos.y >= start.y + inc.y * j - diff) {
                         myPlayer.pos.y = start.y + inc.y * j - diff;
                         myPlayer.onStream = true;
+                        
                         // Check the angle and adjust speed accordingly.
                         int closeEnough = 15;
                         float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
@@ -1385,24 +1398,13 @@ void testApp::playerCollidesWithStream() {
             }
         }
         
-        // Make player stay in stream when it descends.
+        // Use a timer to keep the rider in the stream.
         float timeLimit = frameRate * 0.25;
         if (myPlayer.onStream) {
             inStreamTimer = timeLimit;
-        } else {
-            if (inStreamTimer > 0 && !myPlayer.onStream) {
-                for (int i = 0; i < streamBitList.size(); i++) {
-                    if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].tall && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].tall) {
-                        if (myPlayer.pos.y < streamBitList[i].pos.y) {
-                            //myPlayer.pos.y = streamBitList[i].pos.y - myPlayer.myShip.pos.y - myPlayer.pos.y + streamBitList[i].wide * 0.5;
-                            //myPlayer.pos.y += 10; // Find me; hacktastic
-                        }
-                    }
-                }
-            }
         }
         if (inStreamTimer > 0) {
-            if (myPlayer.vel.y < 0) { // Jumping
+            if (myPlayer.vel.y < 0) { // Jump to leave the stream.
                 inStreamTimer = 0;
             } else {
                 inStreamTimer--;
