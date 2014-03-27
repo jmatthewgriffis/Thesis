@@ -1350,18 +1350,13 @@ void testApp::playerCollidesWithStream() {
                         myPlayer.pos.y = start.y + inc.y * j - diff;
                         myPlayer.onStream = true;
                         // Check the angle and adjust speed accordingly.
-                        float closeEnough = 15;
-                        float closeEnoughTop = streamBitList[i].angle + closeEnough;
-                        cout<<"closeEnoughTop = "<<closeEnoughTop<<endl;
-                        float closeEnoughBottom = streamBitList[i].angle - closeEnough;
-                        cout<<"closeEnoughBottom = "<<closeEnoughBottom<<endl;
-                        /*while (closeEnoughTop > 360) {
-                            closeEnoughTop -= 360;
+                        int closeEnough = 20;
+                        float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
+                        if (angleDiff > 180) {
+                            angleDiff = 360 - angleDiff;
                         }
-                        while (closeEnoughBottom < 0) {
-                            closeEnoughBottom += 360;
-                        }*/
-                        if (myPlayer.myShip.angle >= closeEnoughBottom && myPlayer.myShip.angle <= closeEnoughTop) {
+                        //cout<<"player = "<<myPlayer.myShip.angle<<"; stream = "<<streamBitList[i].angle<<"; angleDiff = "<<angleDiff<<endl;
+                        if (angleDiff <= closeEnough) {
                             myPlayer.closeEnough = true;
                         } else {
                             myPlayer.closeEnough = false;
