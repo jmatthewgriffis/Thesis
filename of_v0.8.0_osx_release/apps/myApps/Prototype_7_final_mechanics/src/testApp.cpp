@@ -593,11 +593,11 @@ void testApp::buttonPressed(ofxGamepadButtonEvent& e) {
 void testApp::keyPressed(int key){
     
     switch ( key ) {
-            
+            //find me
         case 'z':
             myPlayer.allowMove = !myPlayer.allowMove;
             break;
-            case 'g':
+        case 'g':
             myPlayer.myShip.bTiltUpward = true;
             break;
         case 'h':
@@ -1046,6 +1046,8 @@ void testApp::updateStream() {
                         
                         // First, draw a line between the note centers to get the slope.
                         ofVec2f connection = nextNote.pos - currentNote.pos;
+                        float myAngle = ofRadToDeg(atan2(connection.y, connection.x));
+                        
                         // Next, calculate a rough "radius" for the ellipsoid notes.
                         float currentNoteRadius = (currentNote.wide + currentNote.tall) * 0.25;
                         float nextNoteRadius = (nextNote.wide + nextNote.tall) * 0.25;
@@ -1066,16 +1068,20 @@ void testApp::updateStream() {
                         float radiusOffsetX = cos(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
                         float radiusOffsetY = sin(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
                         
-                        for (int j = 0; j < numBits; j++) {
-                            // Calculate the offset from the note's center for each Bit.
-                            float xOffset = currentNoteEdge.x + radiusOffsetX + (edgeToEdge.x / numBits) * j;
-                            float yOffset = currentNoteEdge.y + radiusOffsetY + (edgeToEdge.y / numBits) * j;
-                            
-                            // Finally, we can add the streamBits. WHEW!
-                            StreamBit tmp;
-                            tmp.setup(currentNote.tall, ofVec2f(xOffset, yOffset));
-                            streamBitList.push_back(tmp);
-                        }
+                        /*for (int j = 0; j < numBits; j++) {
+                         // Calculate the offset from the note's center for each Bit.
+                         float xOffset = currentNoteEdge.x + radiusOffsetX + (edgeToEdge.x / numBits) * j;
+                         float yOffset = currentNoteEdge.y + radiusOffsetY + (edgeToEdge.y / numBits) * j;
+                         
+                         // Finally, we can add the streamBits. WHEW!
+                         StreamBit tmp;
+                         tmp.setup(currentNote.tall, ofVec2f(xOffset, yOffset));
+                         streamBitList.push_back(tmp);
+                         }*/
+                        StreamBit tmp;
+                        tmp.setup(currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
+                        tmp.slope = connection;
+                        streamBitList.push_back(tmp);
                         
                         // Tell the actual notes not to connect again.
                         objectList[i].bIsPartOfStream = true;
@@ -1099,19 +1105,20 @@ void testApp::updateStream() {
             streamBitList[i].opacityState = streamBitList[i-1].opacityState - 1;
         }
         
-        // Figure out the angle of rotation.
-        float angleCorrection =  PI * 0.5;
-        // Look at next bit to determine angle, unless the last bit.
-        if (i < streamBitList.size() - 1) {
-            ofVec2f connection = streamBitList[i].pos - streamBitList[i+1].pos;
-            float angle = atan2(connection.y, connection.x);
-            streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
-        } else {
-            // If the last bit, look at the previous bit.
-            ofVec2f connection = streamBitList[i-1].pos - streamBitList[i].pos;
-            float angle = atan2(connection.y, connection.x);
-            streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
-        }
+        /*
+         // Figure out the angle of rotation.
+         float angleCorrection = PI * 0.5;
+         // Look at next bit to determine angle, unless the last bit.
+         if (i < streamBitList.size() - 1) {
+         ofVec2f connection = streamBitList[i].pos - streamBitList[i+1].pos;
+         float angle = atan2(connection.y, connection.x);
+         //streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
+         } else {
+         // If the last bit, look at the previous bit.
+         ofVec2f connection = streamBitList[i-1].pos - streamBitList[i].pos;
+         float angle = atan2(connection.y, connection.x);
+         //streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
+         }*/
         
         // Destroy offscreen streambits.
         if (streamBitList[i].pos.x < camLeft || streamBitList[i].pos.x > camRight) {
@@ -1310,20 +1317,55 @@ void testApp::playerCollidesWithObject() {
 void testApp::playerCollidesWithStream() {
     
     if (myPlayer.bModeSurf) {
+        /*
+         // Old way
+         for (int i = 0; i < streamBitList.size(); i++) {
+         if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].tall && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].tall) {
+         float diff = myPlayer.myShip.pos.y - myPlayer.pos.y + streamBitList[i].wide * 0.5;
+         if (myPlayer.pos.y >= streamBitList[i].pos.y - diff) {
+         myPlayer.pos.y = streamBitList[i].pos.y - diff;
+         myPlayer.onStream = true;
+         // Check the angle and adjust speed accordingly.
+         float closeEnough = 15;
+         float angleOffset = ofRadToDeg(PI / 2);
+         //cout<<"player = "<<myPlayer.myShip.angle - ofRadToDeg(PI / 2)<<"; note = "<<streamBitList[i].angle<<endl;
+         if (myPlayer.myShip.angle >= streamBitList[i].angle + angleOffset - closeEnough && myPlayer.myShip.angle <= streamBitList[i].angle + angleOffset + closeEnough) {
+         myPlayer.closeEnough = true;
+         } else {
+         myPlayer.closeEnough = false;
+         }
+         }
+         }
+         }
+         */
+        // Find me
+        // New way
         for (int i = 0; i < streamBitList.size(); i++) {
-            if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].tall && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].tall) {
-                float diff = myPlayer.myShip.pos.y - myPlayer.pos.y + streamBitList[i].wide * 0.5;
-                if (myPlayer.pos.y >= streamBitList[i].pos.y - diff) {
-                    myPlayer.pos.y = streamBitList[i].pos.y - diff;
-                    myPlayer.onStream = true;
-                    // Check the angle and adjust speed accordingly.
-                    float closeEnough = 15;
-                    float angleOffset = ofRadToDeg(PI / 2);
-                    //cout<<"player = "<<myPlayer.myShip.angle - ofRadToDeg(PI / 2)<<"; note = "<<streamBitList[i].angle<<endl;
-                    if (myPlayer.myShip.angle >= streamBitList[i].angle + angleOffset - closeEnough && myPlayer.myShip.angle <= streamBitList[i].angle + angleOffset + closeEnough) {
-                        myPlayer.closeEnough = true;
-                    } else {
-                        myPlayer.closeEnough = false;
+            ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;
+            ofVec2f inc = streamBitList[i].slope.normalized();
+            float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/;
+            for (int j = 1; j < int(streamBitList[i].wide); j++) {
+                if (myPlayer.pos.x >= start.x + inc.x * (j - 1) && myPlayer.pos.x <= start.x + inc.x * j) {
+                    if (myPlayer.pos.y >= start.y + inc.y * j - diff) {
+                        myPlayer.pos.y = start.y + inc.y * j - diff;
+                        myPlayer.onStream = true;
+                        // Check the angle and adjust speed accordingly.
+                        float closeEnough = 15;
+                        float closeEnoughTop = streamBitList[i].angle + closeEnough;
+                        cout<<"closeEnoughTop = "<<closeEnoughTop<<endl;
+                        float closeEnoughBottom = streamBitList[i].angle - closeEnough;
+                        cout<<"closeEnoughBottom = "<<closeEnoughBottom<<endl;
+                        /*while (closeEnoughTop > 360) {
+                            closeEnoughTop -= 360;
+                        }
+                        while (closeEnoughBottom < 0) {
+                            closeEnoughBottom += 360;
+                        }*/
+                        if (myPlayer.myShip.angle >= closeEnoughBottom && myPlayer.myShip.angle <= closeEnoughTop) {
+                            myPlayer.closeEnough = true;
+                        } else {
+                            myPlayer.closeEnough = false;
+                        }
                     }
                 }
             }
@@ -1339,7 +1381,7 @@ void testApp::playerCollidesWithStream() {
                     if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].tall && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].tall) {
                         if (myPlayer.pos.y < streamBitList[i].pos.y) {
                             //myPlayer.pos.y = streamBitList[i].pos.y - myPlayer.myShip.pos.y - myPlayer.pos.y + streamBitList[i].wide * 0.5;
-                            myPlayer.pos.y += 10; // Find me; hacktastic
+                            //myPlayer.pos.y += 10; // Find me; hacktastic
                         }
                     }
                 }

@@ -14,10 +14,14 @@ StreamBit::StreamBit() {
 }
 
 //--------------------------------------------------------------
-void StreamBit::setup(float _noteHeight, ofVec2f _pos) {
+void StreamBit::setup(float _noteHeight, ofVec2f _pos, float _wide, int _angle) {
     pos = _pos;
-    wide = _noteHeight;
-    tall = slur.getHeight() * wide / slur.getWidth();
+    slope.set(0);
+    /*wide = _noteHeight;
+    tall = slur.getHeight() * wide / slur.getWidth();*/
+    wide = _wide;
+    tall = _noteHeight;
+    angle = _angle;
     opacityState = 0;
     opacity = 255;
     destroyMe = false;
@@ -55,10 +59,24 @@ void StreamBit::draw() {
         ofTranslate(pos);
         ofRotate(angle);
         
-        ofSetColor(255, opacity);
-        ofSetRectMode(OF_RECTMODE_CENTER);
-        slur.draw(0, 0, wide, tall);
+        while (angle > 360){
+            angle -= 360;
+        }
+        while (angle < 0){
+            angle += 360;
+        }
         
+        // Draw the collider.
+        ofSetColor(0);
+        ofSetRectMode(OF_RECTMODE_CENTER);
+        ofRect(0, 0, wide, tall);
+        
+        // Draw the slur "wave."
+        /*ofSetColor(255, opacity);
+        ofSetRectMode(OF_RECTMODE_CENTER);
+        slur.draw(0, 0, wide, tall);*/
+        
+        // Test circle.
         /*ofFill();
         ofSetColor(255,0,0, 255);
         ofCircle(0, 0, 5);*/
