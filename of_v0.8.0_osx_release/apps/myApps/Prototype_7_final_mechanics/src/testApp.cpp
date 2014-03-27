@@ -119,9 +119,11 @@ void testApp::update(){
     // Reset essential conditionals.
     myPlayer.onSurface = false;
     myPlayer.onStream = false;
+    myPlayer.closeEnough = false;
     if (bIsSecondPlayer) {
         myPlayer2.onSurface = false;
         myPlayer2.onStream = false;
+        myPlayer.closeEnough = false;
     }
     
     
@@ -1362,6 +1364,7 @@ void testApp::playerCollidesWithStream() {
         for (int i = 0; i < streamBitList.size(); i++) {
             
             ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;
+            ofVec2f end = streamBitList[i].pos + streamBitList[i].slope * 0.5;
             ofVec2f inc = streamBitList[i].slope.normalized();
             float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/;
             for (int j = 1; j < int(streamBitList[i].wide); j++) {
@@ -1381,17 +1384,61 @@ void testApp::playerCollidesWithStream() {
                         myPlayer.pos.y = start.y + inc.y * j - diff;
                         myPlayer.onStream = true;
                         
+                        /*
+                         Player must align the board to the stream to surf at full speed. Check this by comparing the board's angle to the stream's. However sometimes the player may be coming off a sharp change in angle and not be able to adjust quickly enough. So we take into account the previous and next angles, within a limited region.
+                         */
+                        // FIND ME, TUNE ME, TUNE ME SO MUCH.
                         // Check the angle and adjust speed accordingly.
-                        int closeEnough = 15;
+                        int closeEnough = 20; // How close the two angles have to be.
+                        int otherBitProximity = iScaler; // How close the other Bit's end has to be.
+                        int checkOtherBitMultiplier = otherBitProximity; // How many intervals of the current bit check against the other Bits.
                         float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
+                        
                         if (angleDiff > 180) {
                             angleDiff = 360 - angleDiff;
                         }
                         //cout<<"player = "<<myPlayer.myShip.angle<<"; stream = "<<streamBitList[i].angle<<"; angleDiff = "<<angleDiff<<endl;
+                        
                         if (angleDiff <= closeEnough) {
                             myPlayer.closeEnough = true;
-                        } else {
-                            myPlayer.closeEnough = false;
+                            //cout<<"check1"<<endl;
+                        }
+                        // If not close enough, check the previous and next angles if they exist.
+                        else {
+                            // Previous angle.
+                            if (i > 0) {
+                                
+                                ofVec2f headOfBit = start + inc * checkOtherBitMultiplier;
+                                ofVec2f endPrev = streamBitList[i - 1].pos + streamBitList[i - 1].slope * 0.5;
+                                float angleDiffPrev = abs(myPlayer.myShip.angle - streamBitList[i - 1].angle);
+                                
+                                if (angleDiffPrev > 180) {
+                                    angleDiffPrev = 360 - angleDiffPrev;
+                                }
+                                
+                                // Make sure the prev Bit is close enough too.
+                                if (angleDiffPrev <= closeEnough && myPlayer.pos.x < headOfBit.x && abs(start.x - endPrev.x) < otherBitProximity) {
+                                    myPlayer.closeEnough = true;
+                                    //cout<<"check2"<<endl;
+                                }
+                            }
+                            // Upcoming angle.
+                            if (i < streamBitList.size() - 1) {
+                                
+                                ofVec2f tailOfBit = end - inc * checkOtherBitMultiplier;
+                                ofVec2f startNext = streamBitList[i + 1].pos - streamBitList[i + 1].slope * 0.5;
+                                float angleDiffNext = abs(myPlayer.myShip.angle - streamBitList[i + 1].angle);
+                                
+                                if (angleDiffNext > 180) {
+                                    angleDiffNext = 360 - angleDiffNext;
+                                }
+                                
+                                // Make sure the next Bit is close enough too.
+                                if (angleDiffNext <= closeEnough && myPlayer.pos.x > tailOfBit.x && abs(startNext.x - end.x) < otherBitProximity) {
+                                    myPlayer.closeEnough = true;
+                                    //cout<<"check3"<<endl;
+                                }
+                            }
                         }
                     }
                 }

@@ -40,7 +40,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         
         addObject("c3#", m1Bass-iScaler * 4, -1); // test note
         
-        addObject("a4#", m1Bass, -1);
+        addObject("d2#", m1Bass, -1);
         addObject("a2#", m1Bass, -1);
         addObject("d2#", m1Bass + spacer, -1);
         addObject("a2#", m1Bass + spacer, -1);
