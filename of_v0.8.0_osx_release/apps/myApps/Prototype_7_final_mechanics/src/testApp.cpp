@@ -1060,14 +1060,18 @@ void testApp::updateStream() {
                         ofVec2f connection = nextNote.pos - currentNote.pos;
                         float myAngle = ofRadToDeg(atan2(connection.y, connection.x));
                         
-                        StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
-                        tmp.slope = connection;
-                        streamBitList.push_back(tmp);
-                        
-                        // Tell the actual notes not to connect again.
-                        objectList[i].bIsPartOfStream = true;
-                        objectList[checkNextStreamNote(i + 1)].bIsPartOfStream = true;
+                        // Now make sure the notes are close enough.
+                        if (connection.lengthSquared() <= powf(fMeasureLength * 0.33, 2)) {
+                            
+                            StreamBit tmp;
+                            tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
+                            tmp.slope = connection;
+                            streamBitList.push_back(tmp);
+                            
+                            // Tell the actual notes not to connect again.
+                            objectList[i].bIsPartOfStream = true;
+                            objectList[checkNextStreamNote(i + 1)].bIsPartOfStream = true;
+                        }
                     }
                 }
             }
@@ -1307,8 +1311,9 @@ void testApp::playerCollidesWithStream() {
                     }
                 }
                 
-                // Keep player on top of stream.
-                if (myPlayer.pos.y >= start.y + inc.y * j - diff) {
+                // Keep player on top of stream, if not underneath stream.
+                if (myPlayer.pos.y >= start.y + inc.y * j - diff
+                    && myPlayer.myShip.pos.y <= start.y + inc.y * j + streamBitList[i].tall * 0.5) {
                     myPlayer.pos.y = start.y + inc.y * j - diff;
                     myPlayer.onStream = true;
                     
@@ -1367,6 +1372,14 @@ void testApp::playerCollidesWithStream() {
                                 //cout<<"check3"<<endl;
                             }
                         }
+                    }
+                }
+                // Bonk off bottom of stream, if not above stream.
+                if (myPlayer.pos.y - myPlayer.tall * 0.5 <= start.y + inc.y * j + streamBitList[i].tall * 0.5
+                    && myPlayer.pos.y >= start.y + inc.y * j - streamBitList[i].tall * 0.5) {
+                    myPlayer.pos.y = start.y + inc.y * j + streamBitList[i].tall * 0.5 + myPlayer.tall * 0.5;
+                    if (myPlayer.vel.y < 0) {
+                        myPlayer.vel.y = 0;
                     }
                 }
             }

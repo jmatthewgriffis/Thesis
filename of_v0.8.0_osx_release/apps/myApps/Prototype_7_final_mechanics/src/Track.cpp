@@ -55,9 +55,9 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         //riff treble
         float m1Treble = m1Bass + iScaler * 4;
         addObject("f3#", m1Treble, -1);
-        addObject("d3#", m1Treble + iScaler * 4, -1);
-        addObject("c3#", m1Treble + iScaler * 12, -1);
-        addObject("d3#", m1Treble + iScaler * 16, -1);
+        //addObject("d3#", m1Treble + iScaler * 4, -1);
+        //addObject("c3#", m1Treble + iScaler * 12, -1);
+        //addObject("d3#", m1Treble + iScaler * 16, -1);
         addObject("f3#", m1Treble + iScaler * 24.4, -1);
 
         //m2
