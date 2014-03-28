@@ -17,14 +17,13 @@ StreamBit::StreamBit() {
 void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, float _wide, int _angle) {
     pos = _pos;
     slope.set(0);
-    /*wide = _noteHeight;
-    tall = slur.getHeight() * wide / slur.getWidth();*/
     wide = _wide;
     noteWidth = _noteWidth;
     tall = _noteHeight;
     slurTall = slur.getHeight() * tall / slur.getWidth();
     angle = _angle;
-    opacityState = 0;
+    numStates = 5;
+    opacityState = numStates - 1;
     opacity = 255;
     destroyMe = false;
     
@@ -35,40 +34,21 @@ void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, float _
         angle += 360;
     }
     
-    /*
-     The stream consists of a small element drawn repeatedly to fill the space between notes. But if there are too many, the program slows down. Optimizing for speed AND aesthetics requires that the minimum number of streamBits be drawn without losing too much of the stream. So, this function uses a series of calculations to figure out the exact space between the notes and fill it with evenly-spaced streamBits. Since the notes are often at different elevations and not circular, and it's important to draw from the edge only (not underneath or on top of the note), this gets complicated.
-     */
-    
+    // Calculate how many visual elements can fit in between the notes.
     edgeToEdge = wide - _noteWidth;
-    // Calculate how many elements can fit in between the notes.
     numBits = int(edgeToEdge / slurTall) * 0.67;
     spaceBits = (edgeToEdge - numBits * slurTall) / (numBits + 1);
 }
 
 //--------------------------------------------------------------
-void StreamBit::update(float _angle) {
-    /*angle = _angle;
+void StreamBit::update() {
     
-    if (opacityState < 0) {
+    while (opacityState < 0) {
         opacityState += numStates;
     }
-    if (opacityState > numStates - 1) {
+    while (opacityState > numStates - 1) {
         opacityState -= numStates;
     }
-    
-    float base = 75;
-    float modifier = 25;
-    if (opacityState == 0) {
-        opacity = base;
-    } else if (opacityState == 1) {
-        opacity = base += modifier;
-    } else if (opacityState == 2) {
-        opacity = base += modifier * 2;
-    } else if (opacityState == 3) {
-        opacity = base += modifier * 3;
-    } else {
-        opacity = 255;
-    }*/
 }
 
 //--------------------------------------------------------------
@@ -95,16 +75,42 @@ void StreamBit::draw() {
         //ofRect(0, 0, wide, tall);
         */
         
+        
         ofSetRectMode(OF_RECTMODE_CENTER);
         // Draw the slur "wave."
-        for (int j = 0; j < numBits; j++) {
+        float base = 125;
+        float modifier = 0;
+        for (int i = 0; i < numBits; i++) {
             ofPushMatrix();{
-                ofSetColor(255, 255);
-                ofTranslate(-wide * 0.5 + noteWidth * 0.5 + spaceBits + slurTall * 0.5 + (slurTall + spaceBits) * j, 0);
+                
+                float myOpacityState = opacityState - i;
+                
+                while (myOpacityState < 0) {
+                    myOpacityState += numStates;
+                }
+                while (myOpacityState > numStates - 1) {
+                    myOpacityState -= numStates;
+                }
+                
+                if (myOpacityState == 0) {
+                    opacity = base;
+                } else if (myOpacityState == 1) {
+                    opacity = base += modifier;
+                } else if (myOpacityState == 2) {
+                    opacity = base += modifier * 2;
+                } else if (myOpacityState == 3) {
+                    opacity = base += modifier * 3;
+                } else {
+                    opacity = 255;
+                }
+                
+                ofSetColor(255, opacity);
+                ofTranslate(-wide * 0.5 + noteWidth * 0.5 + spaceBits + slurTall * 0.5 + (slurTall + spaceBits) * i, 0);
                 ofRotate(ofRadToDeg(-PI * 0.5));
                 slur.draw(0, 0, tall, slurTall);
             }ofPopMatrix();
         }
+        
     }ofPopMatrix();
 }
 

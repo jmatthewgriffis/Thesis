@@ -1056,44 +1056,10 @@ void testApp::updateStream() {
                     // Now make sure the notes aren't already connected.
                     if (!(currentNote.bIsPartOfStream && nextNote.bIsPartOfStream)) {
                         
-                        // Now do the calculations.
-                        //StreamBit ref;
-                        //ref.setup(currentNote.tall);
-                        
-                        // First, draw a line between the note centers to get the slope.
+                        // Draw a line between the note centers to get the slope.
                         ofVec2f connection = nextNote.pos - currentNote.pos;
                         float myAngle = ofRadToDeg(atan2(connection.y, connection.x));
                         
-                        // Next, calculate a rough "radius" for the ellipsoid notes.
-                        //float currentNoteRadius = (currentNote.wide + currentNote.tall) * 0.25;
-                        //float nextNoteRadius = (nextNote.wide + nextNote.tall) * 0.25;
-                        // Now, use the slope of the connecting line and the radii of the notes to calculate where the "edges" of the notes are on the connecting line.
-                        //float startX = cos(atan2(connection.y, connection.x)) * currentNoteRadius;
-                        //float startY = sin(atan2(connection.y, connection.x)) * currentNoteRadius;
-                        //float endX = cos(atan2(connection.y, connection.x)) * nextNoteRadius;
-                        //float endY = sin(atan2(connection.y, connection.x)) * nextNoteRadius;
-                        // Now, make a new connecting line between edges.
-                        //ofVec2f currentNoteEdge = ofVec2f(currentNote.pos.x + startX, currentNote.pos.y + startY);
-                        //ofVec2f nextNoteEdge = ofVec2f(nextNote.pos.x - endX, nextNote.pos.y - endY);
-                        //ofVec2f edgeToEdge = nextNoteEdge - currentNoteEdge;
-                        
-                        // Finally we can calculate how many elements can fit in between the notes.
-                        //int numBits = int(edgeToEdge.length() / ref.tall) * 0.5;
-                        
-                        // In order to space them evenly, we have to figure out the first element's offset from the note's edge. More trig, yay.
-                        //float radiusOffsetX = cos(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
-                        //float radiusOffsetY = sin(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
-                        
-                        /*for (int j = 0; j < numBits; j++) {
-                         // Calculate the offset from the note's center for each Bit.
-                         float xOffset = currentNoteEdge.x + radiusOffsetX + (edgeToEdge.x / numBits) * j;
-                         float yOffset = currentNoteEdge.y + radiusOffsetY + (edgeToEdge.y / numBits) * j;
-                         
-                         // Finally, we can add the streamBits. WHEW!
-                         StreamBit tmp;
-                         tmp.setup(currentNote.tall, ofVec2f(xOffset, yOffset));
-                         streamBitList.push_back(tmp);
-                         }*/
                         StreamBit tmp;
                         tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
                         tmp.slope = connection;
@@ -1110,33 +1076,20 @@ void testApp::updateStream() {
     
     // Change the opacity on a timer and restart the timer.
     if (ofGetElapsedTimef() >= iLastOpacityChange + iOpacityChangeFreq) {
-        streamBitList[0].opacityState++;
+        for (int i = 0; i < streamBitList.size(); i++) {
+            streamBitList[i].opacityState++;
+        }
         iLastOpacityChange = ofGetElapsedTimef();
     }
-    
-    if ( streamBitList.size() > 0)cout<<"numBits: "<<streamBitList[0].numBits<<endl; // find me
+    //if (streamBitList.size() > 0)cout<<streamBitList[0].opacityState<<endl;
     
     for (int i = 0; i < streamBitList.size(); i++) {
         
-        // Offset opacity.
+        // Set the opacity based on the last bit of the previous StreamBit.
         if (i > 0) {
-            streamBitList[i].opacityState = streamBitList[i-1].opacityState - 1;
+            streamBitList[i].opacityState = streamBitList[i-1].opacityState - streamBitList[i - 1].numBits;
         }
-        
-        /*
-         // Figure out the angle of rotation.
-         float angleCorrection = PI * 0.5;
-         // Look at next bit to determine angle, unless the last bit.
-         if (i < streamBitList.size() - 1) {
-         ofVec2f connection = streamBitList[i].pos - streamBitList[i+1].pos;
-         float angle = atan2(connection.y, connection.x);
-         //streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
-         } else {
-         // If the last bit, look at the previous bit.
-         ofVec2f connection = streamBitList[i-1].pos - streamBitList[i].pos;
-         float angle = atan2(connection.y, connection.x);
-         //streamBitList[i].update(ofRadToDeg(angle + angleCorrection));
-         }*/
+        streamBitList[i].update();
         
         // Destroy offscreen streambits.
         if (streamBitList[i].pos.x < camLeft || streamBitList[i].pos.x > camRight) {
