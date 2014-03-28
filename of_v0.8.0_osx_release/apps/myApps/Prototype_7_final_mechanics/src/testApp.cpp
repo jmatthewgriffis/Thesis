@@ -303,7 +303,7 @@ void testApp::fLoadPrototype() {
     iLastOpacityChange = ofGetElapsedTimef(); // Reset the clock.
     
     // Setup player.
-    myPlayer.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
+    myPlayer.setup( gameState, iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
     
     //------------
     
@@ -336,8 +336,7 @@ void testApp::fLoadPrototype() {
         bCamZoomedIn = false;
         
         bIsSecondPlayer = true;
-        myPlayer2.setup( iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
-        myPlayer2.bModeFlight = true;
+        myPlayer2.setup( gameState, iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
@@ -345,7 +344,6 @@ void testApp::fLoadPrototype() {
     } else if (gameState == 4) {
         // Flight!
         bCamZoomedIn = true;
-        myPlayer.bAutoplayBass = true;
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
@@ -353,7 +351,6 @@ void testApp::fLoadPrototype() {
     } else if (gameState == 5) {
         // Solo!
         bCamZoomedIn = false;
-        myPlayer.bAutoplayBass = true;
         
         float numReps = 4;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
@@ -365,7 +362,6 @@ void testApp::fLoadPrototype() {
     } else if (gameState == 7) {
         // Surfin' USA
         bCamZoomedIn = true; // find me
-        myPlayer.bAutoplayBass = true;
         
         myPlayer.vel.y = -iScaler * 0.3;
         

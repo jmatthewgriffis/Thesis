@@ -18,7 +18,7 @@ class Player {
 public:
     Player();
     
-    void setup( int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList );
+    void setup(int _gameState, int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList );
     void update( int _gameState, string _OnThisNote );
     void draw( ofTrueTypeFont _font, vector< Object > _recordedList );
     

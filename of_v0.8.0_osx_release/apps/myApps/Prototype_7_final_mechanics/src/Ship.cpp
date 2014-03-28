@@ -13,13 +13,12 @@ Ship::Ship() {
     
     trebleClef.loadImage( "images/clef_treble.png" ); // http://clipartist.info/SVG/CLIPARTIST.ORG/TREBLE/treble_clef_treble_clef-555px.png
     bassClef.loadImage( "images/clef_bass.png" ); // http://clipartist.info/RSS/openclipart.org/2011/April/15-Friday/bass_clef_bassclef-1979px.png
-    angle = 0;
-    angleVel = 1;
 }
 
 //--------------------------------------------------------------
 void Ship::setup() {
-    
+    angle = 0;
+    angleVel = 1;
 }
 
 //--------------------------------------------------------------

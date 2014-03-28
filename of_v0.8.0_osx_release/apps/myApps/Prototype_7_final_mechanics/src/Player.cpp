@@ -23,8 +23,9 @@ Player::Player() {
 }
 
 //--------------------------------------------------------------
-void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList ) {
+void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList ) {
     
+    gameState = _gameState;
     iScaler = _iScaler;
     bUsingController = _bUsingController;
     
@@ -61,16 +62,6 @@ void Player::setup( int _iScaler, bool _bUsingController, ofVec2f _pos, vector< 
     vel.set( 0 );
     acc.set( 0 );
     actPos.set( 0 );
-}
-
-//--------------------------------------------------------------
-void Player::update( int _gameState, string _OnThisNote ) {
-    
-    gameState = _gameState;
-    
-    yPosLast = pos.y;
-    
-    yPosStaff = myObject.fReturnYPos(_OnThisNote);
     
     //------------
     
@@ -86,10 +77,12 @@ void Player::update( int _gameState, string _OnThisNote ) {
         
     } else if (gameState == 4) { // Flight!
         bModeSurf = true;
+        bAutoplayBass = true;
         
     } else if (gameState == 5) { // Solo!
         bModeFlight = true;
         bCanMakeNotes = true;
+        bAutoplayBass = true;
         
     } else if (gameState == 6) { // Solo--gym
         bModeFlight = true;
@@ -99,10 +92,26 @@ void Player::update( int _gameState, string _OnThisNote ) {
     } else if (gameState == 7) { // Surfin' USA
         bModeSurf = true;
         bHasShip = true;
+        bAutoplayBass = true;
         
     }
     
+    
+    if (bHasShip) {
+        myShip.setup();
+    }
+    
     //------------
+}
+
+//--------------------------------------------------------------
+void Player::update( int _gameState, string _OnThisNote ) {
+    
+    gameState = _gameState;
+    
+    yPosLast = pos.y;
+    
+    yPosStaff = myObject.fReturnYPos(_OnThisNote);
     
     /*
      // Health depletes constantly.
@@ -234,9 +243,14 @@ void Player::update( int _gameState, string _OnThisNote ) {
         // Build up force as the player rises then make the hat pop into the air when the player stops or reverses direction.
         if (yPosDiff < 0) {
             if (pos.y - yPosLast < 0) {
-                fHatQueuedForce += yPosDiff;
+                fHatQueuedForce += yPosDiff * 0.025;
+                // Add terminal upward vel to keep this under control.
+                float limit = -10;
+                if (fHatQueuedForce < limit) {
+                    fHatQueuedForce = limit;
+                }
             } else {
-                fHatVel += fHatQueuedForce * 0.025;
+                fHatVel += fHatQueuedForce;
                 fHatQueuedForce = 0;
             }
         }
