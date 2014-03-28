@@ -69,11 +69,13 @@ void StreamBit::draw() {
          */
         
         /*
-        // Draw the collider.
-        ofSetColor(0);
-        ofSetRectMode(OF_RECTMODE_CENTER);
-        //ofRect(0, 0, wide, tall);
-        */
+         // Draw the collider.
+         ofSetRectMode(OF_RECTMODE_CENTER);
+         ofSetColor(0);
+         ofRect(0, 0, wide, tall);
+         ofSetColor(255);
+         ofRect(0, 0, wide - 2, tall - 2);
+         */
         
         
         ofSetRectMode(OF_RECTMODE_CENTER);

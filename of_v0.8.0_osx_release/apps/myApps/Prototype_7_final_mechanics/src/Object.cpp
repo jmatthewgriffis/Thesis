@@ -36,6 +36,8 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     bIsTouched = false;
     bWasTouched = false;
     bIsPartOfStream = false;
+    bHasFalloffLeft = false;
+    bHasFalloffRight = false;
     
     // Note stuff.
     //    myNote.setup( whichNote );

@@ -267,11 +267,11 @@ void testApp::draw(){
         }
         
         // Draw the notes and stream.
-        for (int i = 0; i < streamBitList.size(); i++) {
-            streamBitList[i].draw();
-        }
         for ( int i = 0; i < objectList.size(); i++ ) {
             objectList[ i ].draw();
+        }
+        for (int i = 0; i < streamBitList.size(); i++) {
+            streamBitList[i].draw();
         }
         
         // Draw the obstacles.
@@ -1036,7 +1036,9 @@ int testApp::checkNextStreamNote(int _i) {
 void testApp::updateStream() {
     // Stream is generated dynamically based on the notes onscreen.
     
-    for (int i = 0; i < objectList.size() - 1; i++) { // Don't check last note.
+    float closeEnoughToTouch = powf(fMeasureLength * 0.33, 2);
+    
+    for (int i = 0; i < objectList.size(); i++) {
         
         Object currentNote = objectList[i];
         
@@ -1044,30 +1046,69 @@ void testApp::updateStream() {
         if (currentNote.pos.y < staffPosList[14]) {
             // Is onscreen.
             if (currentNote.pos.x > camLeft && currentNote.pos.x < camRight) {
-                Object nextNote = objectList[checkNextStreamNote(i + 1)];
-                
-                // First, check if the next note is onscreen.
-                if (nextNote.pos.x > camLeft && nextNote.pos.x < camRight) {
+                if (i < objectList.size() - 1) {
+                    Object nextNote = objectList[checkNextStreamNote(i + 1)];
                     
-                    // Now make sure the notes aren't already connected.
-                    if (!(currentNote.bIsPartOfStream && nextNote.bIsPartOfStream)) {
+                    // First, check if the next note is onscreen.
+                    if (nextNote.pos.x > camLeft && nextNote.pos.x < camRight) {
                         
-                        // Draw a line between the note centers to get the slope.
-                        ofVec2f connection = nextNote.pos - currentNote.pos;
-                        float myAngle = ofRadToDeg(atan2(connection.y, connection.x));
-                        
-                        // Now make sure the notes are close enough.
-                        if (connection.lengthSquared() <= powf(fMeasureLength * 0.33, 2)) {
+                        // Now make sure the notes aren't already connected.
+                        if (!(currentNote.bIsPartOfStream && nextNote.bIsPartOfStream)) {
                             
-                            StreamBit tmp;
-                            tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
-                            tmp.slope = connection;
-                            streamBitList.push_back(tmp);
+                            // Draw a line between the note centers to get the slope.
+                            ofVec2f connection = nextNote.pos - currentNote.pos;
+                            float myAngle = ofRadToDeg(atan2(connection.y, connection.x));
                             
-                            // Tell the actual notes not to connect again.
-                            objectList[i].bIsPartOfStream = true;
-                            objectList[checkNextStreamNote(i + 1)].bIsPartOfStream = true;
+                            // Now make sure the notes are close enough.
+                            if (connection.lengthSquared() <= closeEnoughToTouch) {
+                                
+                                StreamBit tmp;
+                                tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
+                                tmp.slope = connection;
+                                streamBitList.push_back(tmp);
+                                
+                                // Tell the actual notes not to connect again.
+                                objectList[i].bIsPartOfStream = true;
+                                objectList[checkNextStreamNote(i + 1)].bIsPartOfStream = true;
+                            }
                         }
+                    }
+                }
+                
+                // Make stream "runoff" where the stream begins.
+                if (!currentNote.bHasFalloffLeft) {
+                    
+                    float distToPrevNote;
+                    
+                    if (i == 0 && currentNote.bIsPartOfStream) {
+                        
+                        distToPrevNote = closeEnoughToTouch + 1;
+                    
+                    } else if (i > 0) {
+                        
+                        Object prevNote = objectList[checkNextStreamNote(i - 1)];
+                        ofVec2f connection = currentNote.pos - prevNote.pos;
+                        distToPrevNote = connection.lengthSquared();
+                    
+                    } else {
+                        
+                        distToPrevNote = closeEnoughToTouch - 1;
+                    
+                    }
+                    
+                    if (distToPrevNote > closeEnoughToTouch) {
+                        
+                        float runoffLength = iScaler * 7;
+                        float myAngle = -PI / 4;
+                        ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(myAngle) * runoffLength, currentNote.pos.y - sin(myAngle) * runoffLength);
+                        ofVec2f connection2 = currentNote.pos - endpoint;
+                        
+                        StreamBit tmp;
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), runoffLength, ofRadToDeg(myAngle));
+                        tmp.slope = connection2;
+                        streamBitList.push_back(tmp);
+                        // Tell the actual note not to repeat this.
+                        objectList[i].bHasFalloffLeft = true;
                     }
                 }
             }
@@ -1081,7 +1122,6 @@ void testApp::updateStream() {
         }
         iLastOpacityChange = ofGetElapsedTimef();
     }
-    //if (streamBitList.size() > 0)cout<<streamBitList[0].opacityState<<endl;
     
     for (int i = 0; i < streamBitList.size(); i++) {
         
@@ -1101,6 +1141,8 @@ void testApp::updateStream() {
     for (int i = 0; i < objectList.size(); i++) {
         if (objectList[i].pos.x < camLeft || objectList[i].pos.x > camRight) {
             objectList[i].bIsPartOfStream = false;
+            objectList[i].bHasFalloffLeft = false;
+            objectList[i].bHasFalloffRight = false;
         }
     }
 }
