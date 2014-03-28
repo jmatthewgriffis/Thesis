@@ -410,7 +410,7 @@ void testApp::fApplyGravity() {
         } else if ( gameState == 4 ) {
             fGravity = fGravFactor * 0.4;
         } else if ( gameState == 7 ) {
-            fGravity = fGravFactor * 0.4;
+            fGravity = fGravFactor * 1.25;
         }
         
         myPlayer.applyForce( ofVec2f( 0.0, fGravity ) );
@@ -1300,7 +1300,7 @@ void testApp::playerCollidesWithStream() {
             // If player x is within two bits of the object's x...
             if (myPlayer.pos.x >= start.x + inc.x * (j - 1) && myPlayer.pos.x <= start.x + inc.x * j) {
                 
-                // Snap to descending stream if already riding it.
+                // Snap to descending stream if already riding it and not jumping.
                 if (!myPlayer.onStream && inStreamTimer > 0) {
                     if (myPlayer.pos.y < start.y + inc.y * j - diff) {
                         myPlayer.pos.y = start.y + inc.y * j - diff;
@@ -1311,7 +1311,9 @@ void testApp::playerCollidesWithStream() {
                 if (myPlayer.pos.y >= start.y + inc.y * j - diff
                     && myPlayer.myShip.pos.y <= start.y + inc.y * j + streamBitList[i].tall * 0.5) {
                     myPlayer.pos.y = start.y + inc.y * j - diff;
-                    myPlayer.onStream = true;
+                    if (myPlayer.vel.y >= 0) { // Make sure not jumping.
+                        myPlayer.onStream = true;
+                    }
                     
                     /*
                      Player must align the board to the stream to surf at full speed. Check this by comparing the board's angle to the stream's. However sometimes the player may be coming off a sharp change in angle and not be able to adjust quickly enough. So we take into account the previous and next angles, within a limited region.

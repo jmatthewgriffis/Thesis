@@ -178,7 +178,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
                     applyForce( ofVec2f( 0.0, jumpVel * 0.75 ) );
                     onSurface = false;
                     onStream = false;
-                    //allowJump = false;
+                    allowJump = false;
                 }
             }
         } else if ( bModeSurf && !down ){
