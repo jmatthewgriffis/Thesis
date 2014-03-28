@@ -20,7 +20,7 @@ public:
     
     ofVec2f pos, slope;
     float wide, tall, noteWidth, slurTall;
-    float edgeToEdge;
+    float edgeToEdge, spaceBits;
     int numBits;
     int angle;
     int opacity, opacityState;

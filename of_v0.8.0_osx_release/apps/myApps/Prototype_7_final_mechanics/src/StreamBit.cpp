@@ -41,7 +41,8 @@ void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, float _
     
     edgeToEdge = wide - _noteWidth;
     // Calculate how many elements can fit in between the notes.
-    numBits = int(edgeToEdge / slurTall);
+    numBits = int(edgeToEdge / slurTall) * 0.67;
+    spaceBits = (edgeToEdge - numBits * slurTall) / (numBits + 1);
 }
 
 //--------------------------------------------------------------
@@ -93,12 +94,13 @@ void StreamBit::draw() {
         ofSetRectMode(OF_RECTMODE_CENTER);
         //ofRect(0, 0, wide, tall);
         */
+        
         ofSetRectMode(OF_RECTMODE_CENTER);
         // Draw the slur "wave."
         for (int j = 0; j < numBits; j++) {
             ofPushMatrix();{
                 ofSetColor(255, 255);
-                ofTranslate(-wide * 0.5 + noteWidth * 0.5 + slurTall * 0.5 + edgeToEdge / numBits * j, 0);
+                ofTranslate(-wide * 0.5 + noteWidth * 0.5 + spaceBits + slurTall * 0.5 + (slurTall + spaceBits) * j, 0);
                 ofRotate(ofRadToDeg(-PI * 0.5));
                 slur.draw(0, 0, tall, slurTall);
             }ofPopMatrix();

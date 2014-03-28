@@ -1113,7 +1113,9 @@ void testApp::updateStream() {
         streamBitList[0].opacityState++;
         iLastOpacityChange = ofGetElapsedTimef();
     }
-    if ( streamBitList.size() > 0)cout<<streamBitList[0].numBits<<endl; // find me
+    
+    if ( streamBitList.size() > 0)cout<<"numBits: "<<streamBitList[0].numBits<<endl; // find me
+    
     for (int i = 0; i < streamBitList.size(); i++) {
         
         // Offset opacity.
