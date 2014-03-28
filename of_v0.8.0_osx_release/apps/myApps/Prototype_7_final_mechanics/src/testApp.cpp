@@ -138,7 +138,9 @@ void testApp::update(){
     playerCollidesWithGroundOrSky();
     playerCollidesWithObstacle();
     playerCollidesWithObject();
-    playerCollidesWithStream();
+    if (myPlayer.bModeSurf) {
+        playerCollidesWithStream();
+    }
     objectCollidesWithObstacle();
     
     // Calculate the player's success:
@@ -1046,9 +1048,8 @@ void testApp::updateStream() {
         if (currentNote.pos.y < staffPosList[14]) {
             // Is onscreen.
             if (currentNote.pos.x > camLeft && currentNote.pos.x < camRight) {
-                
-                // Figure out the line between notes and how many streamBits there should be.
                 Object nextNote = objectList[checkNextStreamNote(i + 1)];
+                
                 // First, check if the next note is onscreen.
                 if (nextNote.pos.x > camLeft && nextNote.pos.x < camRight) {
                     
@@ -1056,36 +1057,32 @@ void testApp::updateStream() {
                     if (!(currentNote.bIsPartOfStream && nextNote.bIsPartOfStream)) {
                         
                         // Now do the calculations.
-                        StreamBit ref;
-                        ref.setup(currentNote.tall);
-                        
-                        /*
-                         The stream consists of a small element drawn repeatedly to fill the space between notes. But if there are too many, the program slows down. Optimizing for speed AND aesthetics requires that the minimum number of streamBits be drawn without losing too much of the stream. So, this function uses a series of calculations to figure out the exact space between the notes and fill it with evenly-spaced streamBits. Since the notes are often at different elevations and not circular, and it's important to draw from the edge only (not underneath or on top of the note), this gets complicated.
-                         */
+                        //StreamBit ref;
+                        //ref.setup(currentNote.tall);
                         
                         // First, draw a line between the note centers to get the slope.
                         ofVec2f connection = nextNote.pos - currentNote.pos;
                         float myAngle = ofRadToDeg(atan2(connection.y, connection.x));
                         
                         // Next, calculate a rough "radius" for the ellipsoid notes.
-                        float currentNoteRadius = (currentNote.wide + currentNote.tall) * 0.25;
-                        float nextNoteRadius = (nextNote.wide + nextNote.tall) * 0.25;
+                        //float currentNoteRadius = (currentNote.wide + currentNote.tall) * 0.25;
+                        //float nextNoteRadius = (nextNote.wide + nextNote.tall) * 0.25;
                         // Now, use the slope of the connecting line and the radii of the notes to calculate where the "edges" of the notes are on the connecting line.
-                        float startX = cos(atan2(connection.y, connection.x)) * currentNoteRadius;
-                        float startY = sin(atan2(connection.y, connection.x)) * currentNoteRadius;
-                        float endX = cos(atan2(connection.y, connection.x)) * nextNoteRadius;
-                        float endY = sin(atan2(connection.y, connection.x)) * nextNoteRadius;
+                        //float startX = cos(atan2(connection.y, connection.x)) * currentNoteRadius;
+                        //float startY = sin(atan2(connection.y, connection.x)) * currentNoteRadius;
+                        //float endX = cos(atan2(connection.y, connection.x)) * nextNoteRadius;
+                        //float endY = sin(atan2(connection.y, connection.x)) * nextNoteRadius;
                         // Now, make a new connecting line between edges.
-                        ofVec2f currentNoteEdge = ofVec2f(currentNote.pos.x + startX, currentNote.pos.y + startY);
-                        ofVec2f nextNoteEdge = ofVec2f(nextNote.pos.x - endX, nextNote.pos.y - endY);
-                        ofVec2f edgeToEdge = nextNoteEdge - currentNoteEdge;
+                        //ofVec2f currentNoteEdge = ofVec2f(currentNote.pos.x + startX, currentNote.pos.y + startY);
+                        //ofVec2f nextNoteEdge = ofVec2f(nextNote.pos.x - endX, nextNote.pos.y - endY);
+                        //ofVec2f edgeToEdge = nextNoteEdge - currentNoteEdge;
                         
                         // Finally we can calculate how many elements can fit in between the notes.
-                        int numBits = int(edgeToEdge.length() / ref.tall) * 0.5;
+                        //int numBits = int(edgeToEdge.length() / ref.tall) * 0.5;
                         
                         // In order to space them evenly, we have to figure out the first element's offset from the note's edge. More trig, yay.
-                        float radiusOffsetX = cos(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
-                        float radiusOffsetY = sin(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
+                        //float radiusOffsetX = cos(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
+                        //float radiusOffsetY = sin(atan2(connection.y, connection.x)) * (ref.tall * 0.5);
                         
                         /*for (int j = 0; j < numBits; j++) {
                          // Calculate the offset from the note's center for each Bit.
@@ -1098,7 +1095,7 @@ void testApp::updateStream() {
                          streamBitList.push_back(tmp);
                          }*/
                         StreamBit tmp;
-                        tmp.setup(currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
                         tmp.slope = connection;
                         streamBitList.push_back(tmp);
                         
@@ -1116,7 +1113,7 @@ void testApp::updateStream() {
         streamBitList[0].opacityState++;
         iLastOpacityChange = ofGetElapsedTimef();
     }
-    
+    if ( streamBitList.size() > 0)cout<<streamBitList[0].numBits<<endl; // find me
     for (int i = 0; i < streamBitList.size(); i++) {
         
         // Offset opacity.
@@ -1336,126 +1333,101 @@ void testApp::playerCollidesWithObject() {
 
 //--------------------------------------------------------------
 void testApp::playerCollidesWithStream() {
-    
-    if (myPlayer.bModeSurf) {
-        /*
-         // Old way
-         for (int i = 0; i < streamBitList.size(); i++) {
-         if (myPlayer.pos.x > streamBitList[i].pos.x - streamBitList[i].tall && myPlayer.pos.x < streamBitList[i].pos.x + streamBitList[i].tall) {
-         float diff = myPlayer.myShip.pos.y - myPlayer.pos.y + streamBitList[i].wide * 0.5;
-         if (myPlayer.pos.y >= streamBitList[i].pos.y - diff) {
-         myPlayer.pos.y = streamBitList[i].pos.y - diff;
-         myPlayer.onStream = true;
-         // Check the angle and adjust speed accordingly.
-         float closeEnough = 15;
-         float angleOffset = ofRadToDeg(PI / 2);
-         //cout<<"player = "<<myPlayer.myShip.angle - ofRadToDeg(PI / 2)<<"; note = "<<streamBitList[i].angle<<endl;
-         if (myPlayer.myShip.angle >= streamBitList[i].angle + angleOffset - closeEnough && myPlayer.myShip.angle <= streamBitList[i].angle + angleOffset + closeEnough) {
-         myPlayer.closeEnough = true;
-         } else {
-         myPlayer.closeEnough = false;
-         }
-         }
-         }
-         }
-         */
-        // Find me
-        // New way
-        for (int i = 0; i < streamBitList.size(); i++) {
+    // Find me
+    for (int i = 0; i < streamBitList.size(); i++) {
+        
+        ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;
+        ofVec2f end = streamBitList[i].pos + streamBitList[i].slope * 0.5;
+        ofVec2f inc = streamBitList[i].slope.normalized();
+        float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/;
+        for (int j = 1; j < int(streamBitList[i].wide); j++) {
             
-            ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;
-            ofVec2f end = streamBitList[i].pos + streamBitList[i].slope * 0.5;
-            ofVec2f inc = streamBitList[i].slope.normalized();
-            float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/;
-            for (int j = 1; j < int(streamBitList[i].wide); j++) {
+            // If player x is within two bits of the object's x...
+            if (myPlayer.pos.x >= start.x + inc.x * (j - 1) && myPlayer.pos.x <= start.x + inc.x * j) {
                 
-                // If player x is within two bits of the object's x...
-                if (myPlayer.pos.x >= start.x + inc.x * (j - 1) && myPlayer.pos.x <= start.x + inc.x * j) {
-                    
-                    // Snap to descending stream if already riding it.
-                    if (!myPlayer.onStream && inStreamTimer > 0) {
-                        if (myPlayer.pos.y < start.y + inc.y * j - diff) {
-                            myPlayer.pos.y = start.y + inc.y * j - diff;
-                        }
-                    }
-                    
-                    // Keep player on top of stream.
-                    if (myPlayer.pos.y >= start.y + inc.y * j - diff) {
+                // Snap to descending stream if already riding it.
+                if (!myPlayer.onStream && inStreamTimer > 0) {
+                    if (myPlayer.pos.y < start.y + inc.y * j - diff) {
                         myPlayer.pos.y = start.y + inc.y * j - diff;
-                        myPlayer.onStream = true;
-                        
-                        /*
-                         Player must align the board to the stream to surf at full speed. Check this by comparing the board's angle to the stream's. However sometimes the player may be coming off a sharp change in angle and not be able to adjust quickly enough. So we take into account the previous and next angles, within a limited region.
-                         */
-                        // FIND ME, TUNE ME, TUNE ME SO MUCH.
-                        // Check the angle and adjust speed accordingly.
-                        int closeEnough = 20; // How close the two angles have to be.
-                        int otherBitProximity = iScaler; // How close the other Bit's end has to be.
-                        int checkOtherBitMultiplier = otherBitProximity; // How many intervals of the current bit check against the other Bits.
-                        float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
-                        
-                        if (angleDiff > 180) {
-                            angleDiff = 360 - angleDiff;
-                        }
-                        //cout<<"player = "<<myPlayer.myShip.angle<<"; stream = "<<streamBitList[i].angle<<"; angleDiff = "<<angleDiff<<endl;
-                        
-                        if (angleDiff <= closeEnough) {
-                            myPlayer.closeEnough = true;
-                            //cout<<"check1"<<endl;
-                        }
-                        // If not close enough, check the previous and next angles if they exist.
-                        else {
-                            // Previous angle.
-                            if (i > 0) {
-                                
-                                ofVec2f headOfBit = start + inc * checkOtherBitMultiplier;
-                                ofVec2f endPrev = streamBitList[i - 1].pos + streamBitList[i - 1].slope * 0.5;
-                                float angleDiffPrev = abs(myPlayer.myShip.angle - streamBitList[i - 1].angle);
-                                
-                                if (angleDiffPrev > 180) {
-                                    angleDiffPrev = 360 - angleDiffPrev;
-                                }
-                                
-                                // Make sure the prev Bit is close enough too.
-                                if (angleDiffPrev <= closeEnough && myPlayer.pos.x < headOfBit.x && abs(start.x - endPrev.x) < otherBitProximity) {
-                                    myPlayer.closeEnough = true;
-                                    //cout<<"check2"<<endl;
-                                }
+                    }
+                }
+                
+                // Keep player on top of stream.
+                if (myPlayer.pos.y >= start.y + inc.y * j - diff) {
+                    myPlayer.pos.y = start.y + inc.y * j - diff;
+                    myPlayer.onStream = true;
+                    
+                    /*
+                     Player must align the board to the stream to surf at full speed. Check this by comparing the board's angle to the stream's. However sometimes the player may be coming off a sharp change in angle and not be able to adjust quickly enough. So we take into account the previous and next angles, within a limited region.
+                     */
+                    // FIND ME, TUNE ME, TUNE ME SO MUCH.
+                    // Check the angle and adjust speed accordingly.
+                    int closeEnough = 20; // How close the two angles have to be.
+                    int otherBitProximity = iScaler; // How close the other Bit's end has to be.
+                    int checkOtherBitMultiplier = otherBitProximity; // How many intervals of the current bit check against the other Bits.
+                    float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
+                    
+                    if (angleDiff > 180) {
+                        angleDiff = 360 - angleDiff;
+                    }
+                    //cout<<"player = "<<myPlayer.myShip.angle<<"; stream = "<<streamBitList[i].angle<<"; angleDiff = "<<angleDiff<<endl;
+                    
+                    if (angleDiff <= closeEnough) {
+                        myPlayer.closeEnough = true;
+                        //cout<<"check1"<<endl;
+                    }
+                    // If not close enough, check the previous and next angles if they exist.
+                    else {
+                        // Previous angle.
+                        if (i > 0) {
+                            
+                            ofVec2f headOfBit = start + inc * checkOtherBitMultiplier;
+                            ofVec2f endPrev = streamBitList[i - 1].pos + streamBitList[i - 1].slope * 0.5;
+                            float angleDiffPrev = abs(myPlayer.myShip.angle - streamBitList[i - 1].angle);
+                            
+                            if (angleDiffPrev > 180) {
+                                angleDiffPrev = 360 - angleDiffPrev;
                             }
-                            // Upcoming angle.
-                            if (i < streamBitList.size() - 1) {
-                                
-                                ofVec2f tailOfBit = end - inc * checkOtherBitMultiplier;
-                                ofVec2f startNext = streamBitList[i + 1].pos - streamBitList[i + 1].slope * 0.5;
-                                float angleDiffNext = abs(myPlayer.myShip.angle - streamBitList[i + 1].angle);
-                                
-                                if (angleDiffNext > 180) {
-                                    angleDiffNext = 360 - angleDiffNext;
-                                }
-                                
-                                // Make sure the next Bit is close enough too.
-                                if (angleDiffNext <= closeEnough && myPlayer.pos.x > tailOfBit.x && abs(startNext.x - end.x) < otherBitProximity) {
-                                    myPlayer.closeEnough = true;
-                                    //cout<<"check3"<<endl;
-                                }
+                            
+                            // Make sure the prev Bit is close enough too.
+                            if (angleDiffPrev <= closeEnough && myPlayer.pos.x < headOfBit.x && abs(start.x - endPrev.x) < otherBitProximity) {
+                                myPlayer.closeEnough = true;
+                                //cout<<"check2"<<endl;
+                            }
+                        }
+                        // Upcoming angle.
+                        if (i < streamBitList.size() - 1) {
+                            
+                            ofVec2f tailOfBit = end - inc * checkOtherBitMultiplier;
+                            ofVec2f startNext = streamBitList[i + 1].pos - streamBitList[i + 1].slope * 0.5;
+                            float angleDiffNext = abs(myPlayer.myShip.angle - streamBitList[i + 1].angle);
+                            
+                            if (angleDiffNext > 180) {
+                                angleDiffNext = 360 - angleDiffNext;
+                            }
+                            
+                            // Make sure the next Bit is close enough too.
+                            if (angleDiffNext <= closeEnough && myPlayer.pos.x > tailOfBit.x && abs(startNext.x - end.x) < otherBitProximity) {
+                                myPlayer.closeEnough = true;
+                                //cout<<"check3"<<endl;
                             }
                         }
                     }
                 }
             }
         }
-        
-        // Use a timer to keep the rider in the stream.
-        float timeLimit = frameRate * 0.25;
-        if (myPlayer.onStream) {
-            inStreamTimer = timeLimit;
-        }
-        if (inStreamTimer > 0) {
-            if (myPlayer.vel.y < 0) { // Jump to leave the stream.
-                inStreamTimer = 0;
-            } else {
-                inStreamTimer--;
-            }
+    }
+    
+    // Use a timer to keep the rider in the stream.
+    float timeLimit = frameRate * 0.25;
+    if (myPlayer.onStream) {
+        inStreamTimer = timeLimit;
+    }
+    if (inStreamTimer > 0) {
+        if (myPlayer.vel.y < 0) { // Jump to leave the stream.
+            inStreamTimer = 0;
+        } else {
+            inStreamTimer--;
         }
     }
 }

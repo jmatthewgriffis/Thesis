@@ -14,22 +14,39 @@ StreamBit::StreamBit() {
 }
 
 //--------------------------------------------------------------
-void StreamBit::setup(float _noteHeight, ofVec2f _pos, float _wide, int _angle) {
+void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, float _wide, int _angle) {
     pos = _pos;
     slope.set(0);
     /*wide = _noteHeight;
     tall = slur.getHeight() * wide / slur.getWidth();*/
     wide = _wide;
+    noteWidth = _noteWidth;
     tall = _noteHeight;
+    slurTall = slur.getHeight() * tall / slur.getWidth();
     angle = _angle;
     opacityState = 0;
     opacity = 255;
     destroyMe = false;
+    
+    while (angle > 360){
+        angle -= 360;
+    }
+    while (angle < 0){
+        angle += 360;
+    }
+    
+    /*
+     The stream consists of a small element drawn repeatedly to fill the space between notes. But if there are too many, the program slows down. Optimizing for speed AND aesthetics requires that the minimum number of streamBits be drawn without losing too much of the stream. So, this function uses a series of calculations to figure out the exact space between the notes and fill it with evenly-spaced streamBits. Since the notes are often at different elevations and not circular, and it's important to draw from the edge only (not underneath or on top of the note), this gets complicated.
+     */
+    
+    edgeToEdge = wide - _noteWidth;
+    // Calculate how many elements can fit in between the notes.
+    numBits = int(edgeToEdge / slurTall);
 }
 
 //--------------------------------------------------------------
 void StreamBit::update(float _angle) {
-    angle = _angle;
+    /*angle = _angle;
     
     if (opacityState < 0) {
         opacityState += numStates;
@@ -50,7 +67,7 @@ void StreamBit::update(float _angle) {
         opacity = base += modifier * 3;
     } else {
         opacity = 255;
-    }
+    }*/
 }
 
 //--------------------------------------------------------------
@@ -59,31 +76,33 @@ void StreamBit::draw() {
         ofTranslate(pos);
         ofRotate(angle);
         
-        while (angle > 360){
-            angle -= 360;
-        }
-        while (angle < 0){
-            angle += 360;
-        }
+        /*
+         // Test circle.
+         ofFill();
+         ofSetColor(255,0,0, 255);
+         ofCircle(0, 0, 5);
+         //ofSetColor(0, 255);
+         //ofSetLineWidth(3);
+         //ofLine(0,0,0,-10);
+         //ofCircle(0,-10, 2);
+         */
         
+        /*
         // Draw the collider.
         ofSetColor(0);
         ofSetRectMode(OF_RECTMODE_CENTER);
-        ofRect(0, 0, wide, tall);
-        
-        // Draw the slur "wave."
-        /*ofSetColor(255, opacity);
+        //ofRect(0, 0, wide, tall);
+        */
         ofSetRectMode(OF_RECTMODE_CENTER);
-        slur.draw(0, 0, wide, tall);*/
-        
-        // Test circle.
-        /*ofFill();
-        ofSetColor(255,0,0, 255);
-        ofCircle(0, 0, 5);*/
-        //ofSetColor(0, 255);
-        //ofSetLineWidth(3);
-        //ofLine(0,0,0,-10);
-        //ofCircle(0,-10, 2);
+        // Draw the slur "wave."
+        for (int j = 0; j < numBits; j++) {
+            ofPushMatrix();{
+                ofSetColor(255, 255);
+                ofTranslate(-wide * 0.5 + noteWidth * 0.5 + slurTall * 0.5 + edgeToEdge / numBits * j, 0);
+                ofRotate(ofRadToDeg(-PI * 0.5));
+                slur.draw(0, 0, tall, slurTall);
+            }ofPopMatrix();
+        }
     }ofPopMatrix();
 }
 
