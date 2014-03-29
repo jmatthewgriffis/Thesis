@@ -18,6 +18,19 @@ Staff::Staff() {
     iStaffAlphaMax = 200;
     iStaffAlpha = iStaffAlphaMin;
     iStaffAlphaVel = 0.5;
+    
+    bHideAll = false;
+    if (bHideAll) {
+        bDrawStaffLines = false;
+        bDrawStaffBracketAndClefs = false;
+        bDrawMeasureLines = false;
+        bDrawMeasureNumbers = false;
+    } else {
+        bDrawStaffLines = true;
+        bDrawStaffBracketAndClefs = true;
+        bDrawMeasureLines = true;
+        bDrawMeasureNumbers = true;
+    }
 }
 
 void Staff::update() {
@@ -50,35 +63,45 @@ void Staff::draw( int iScaler, float fMeasureLength, int gameState, ofTrueTypeFo
     ofSetLineWidth( 1 );
     
     // Draw the horizontal staff lines.
-    for ( int i = 2; i < 7; i++ ) {
-        ofLine( xStart, iScaler * 2 * i, myPlayerX + ofGetWidth(), iScaler * 2 * i );
-        ofLine( xStart, ofGetHeight() - ( iScaler * 2 * i ), myPlayerX + ofGetWidth(), ofGetHeight() - ( iScaler * 2 * i ) );
+    if (bDrawStaffLines) {
+        for ( int i = 2; i < 7; i++ ) {
+            ofLine( xStart, iScaler * 2 * i, myPlayerX + ofGetWidth(), iScaler * 2 * i );
+            ofLine( xStart, ofGetHeight() - ( iScaler * 2 * i ), myPlayerX + ofGetWidth(), ofGetHeight() - ( iScaler * 2 * i ) );
+        }
     }
     
     if ( gameState >= 3 && gameState != 6 ) {
         
         // Draw initial vertical line.
-        ofSetLineWidth( 3 );
-        ofLine( xStart, iScaler * 4, xStart, ofGetHeight() - iScaler * 4 );
-        ofSetLineWidth( 1 );
+        if (bDrawMeasureLines) {
+            ofSetLineWidth( 3 );
+            ofLine( xStart, iScaler * 4, xStart, ofGetHeight() - iScaler * 4 );
+            ofSetLineWidth( 1 );
+        }
         
-        // Draw the initial bracket.
-        staffBracket.draw( 0, iScaler * 4, ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - iScaler * 8 );
-        // Draw the clefs.
-        trebleClef.draw( iScaler * 4, iScaler * 8 - iScaler * 2 * 7 / 2.15, ( iScaler * 2 * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), iScaler * 14 );
-        bassClef.draw( iScaler * 4, ofGetHeight() - iScaler * 12, ( iScaler * 2 * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), iScaler * 6.2 );
+        if (bDrawStaffBracketAndClefs ) {
+            // Draw the initial bracket.
+            staffBracket.draw( 0, iScaler * 4, ( ofGetHeight() - iScaler * 8 ) * staffBracket.getWidth() / staffBracket.getHeight(), ofGetHeight() - iScaler * 8 );
+            // Draw the clefs.
+            trebleClef.draw( iScaler * 4, iScaler * 8 - iScaler * 2 * 7 / 2.15, ( iScaler * 2 * 7 * trebleClef.getWidth() / trebleClef.getHeight() ), iScaler * 14 );
+            bassClef.draw( iScaler * 4, ofGetHeight() - iScaler * 12, ( iScaler * 2 * 3.1 * bassClef.getWidth() / bassClef.getHeight() ), iScaler * 6.2 );
+            
+            // Draw the time signature.
+            helveticaJumbo.drawString("4", iScaler * 11, iScaler * 8 );
+            helveticaJumbo.drawString("4", iScaler * 11, iScaler * 12 );
+            helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 8 );
+            helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
+        }
         
-        // Draw the time signature.
-        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 8 );
-        helveticaJumbo.drawString("4", iScaler * 11, iScaler * 12 );
-        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 8 );
-        helveticaJumbo.drawString("4", iScaler * 11, ofGetHeight() - iScaler * 4 );
-        
-        for ( int i = 0; i < 30; i++ ) {
-            // Draw the measure lines.
-            ofLine( iScaler * 18 + fMeasureLength * i, iScaler * 4,  iScaler * 18 + fMeasureLength * i, ofGetHeight() - iScaler * 4 );
-            // Draw the measure number.
-            helvetica.drawString( ofToString( i + 1 ), iScaler * 19 + fMeasureLength * i, iScaler * 4);
+        if (bDrawMeasureLines) {
+            for ( int i = 0; i < 30; i++ ) {
+                // Draw the measure lines.
+                ofLine( iScaler * 18 + fMeasureLength * i, iScaler * 4,  iScaler * 18 + fMeasureLength * i, ofGetHeight() - iScaler * 4 );
+                if (bDrawMeasureNumbers) {
+                    // Draw the measure number.
+                    helvetica.drawString( ofToString( i + 1 ), iScaler * 19 + fMeasureLength * i, iScaler * 4);
+                }
+            }
         }
     }
 }

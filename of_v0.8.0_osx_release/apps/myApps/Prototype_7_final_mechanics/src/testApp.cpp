@@ -291,7 +291,6 @@ void testApp::draw(){
         
         myCam.end();
     }
-    cout<<streamBitList.size()<<endl;
 }
 
 //--------------------------------------------------------------

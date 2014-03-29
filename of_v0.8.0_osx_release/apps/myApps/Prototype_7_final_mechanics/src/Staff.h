@@ -21,5 +21,7 @@ public:
     
     float iStaffAlpha, iStaffAlphaVel;
     
+    bool bDrawStaffLines, bDrawStaffBracketAndClefs, bDrawMeasureLines, bDrawMeasureNumbers, bHideAll;
+    
     ofImage trebleClef, bassClef, staffBracket;
 };

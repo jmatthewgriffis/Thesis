@@ -38,6 +38,7 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     bIsPartOfStream = false;
     bHasFalloffLeft = false;
     bHasFalloffRight = false;
+    bHideNoteness = false;
     
     // Note stuff.
     //    myNote.setup( whichNote );
@@ -65,13 +66,13 @@ void Object::update( int _gameState, ofVec2f _pos ) {
     //    float dist = ofDist( _pos.x, _pos.y, pos.x, pos.y );
     float dist = ofDist( _pos.x, 0, pos.x, 0 );
     /*if ( dist > tooFar ) {
-        if ( noteList.size() != 0 ) {
-            noteList.erase( noteList.begin() );
-        }
-    } else {
-        //        vol = ofMap( dist, tooFar, 0, 0.0f, 1.0f );
-        fAddNote();
-    }*/
+     if ( noteList.size() != 0 ) {
+     noteList.erase( noteList.begin() );
+     }
+     } else {
+     //        vol = ofMap( dist, tooFar, 0, 0.0f, 1.0f );
+     fAddNote();
+     }*/
     if ( bIsTouched ) {
         bWasTouched = true;
         fAddNote();
@@ -143,12 +144,12 @@ void Object::draw() {
     
     // Draw guidelines as needed to indicate A above the staff and C below.
     ofSetColor( 0 );
-//    0 1 13 25 26
+    //    0 1 13 25 26
     float lineSpacer = staffPosList[0] - staffPosList[2];
     if ( pos.y == staffPosList[ 0 ]
         || pos.y == staffPosList[ 1 ] ) {
-     ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer, pos.x + guideLineLength, ofGetHeight() - lineSpacer );
-     }
+        ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer, pos.x + guideLineLength, ofGetHeight() - lineSpacer );
+    }
     else if ( pos.y == staffPosList[ 13 ]
              || pos.y == staffPosList[ 14 ] ) {
         ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer * 7, pos.x + guideLineLength, ofGetHeight() - lineSpacer * 7 );
@@ -156,20 +157,20 @@ void Object::draw() {
     else if ( pos.y == staffPosList[ 15 ]
              || pos.y == staffPosList[ 16 ] ) {
         ofLine( pos.x - guideLineLength, lineSpacer * 7, pos.x + guideLineLength, lineSpacer * 7 );
-     }
+    }
     else if ( pos.y == staffPosList[ 28 ]
              || pos.y == staffPosList[ 29 ] ) {
-     ofLine( pos.x - guideLineLength, lineSpacer, pos.x + guideLineLength, lineSpacer );
-     }
+        ofLine( pos.x - guideLineLength, lineSpacer, pos.x + guideLineLength, lineSpacer );
+    }
     
     // Draw!
     /*if ( pos.y + ( tall / 2 ) > ofGetHeight()) {
-        ofSetColor(100);
-    }
-    else if ( pos.y + ( tall / 2 ) == ofGetHeight()) {
-        ofSetColor(255,0,0);
-    }
-    else*/
+     ofSetColor(100);
+     }
+     else if ( pos.y + ( tall / 2 ) == ofGetHeight()) {
+     ofSetColor(255,0,0);
+     }
+     else*/
     // Draw a halo around the note to indicate it was hit.
     if ( bWasTouched && gameState == 4 ) {
         ofSetColor( 0, 0, 255 );
@@ -179,45 +180,48 @@ void Object::draw() {
     // Draw the note.
     ofSetColor( c );
     ofEllipse( pos, wide, tall);
+    
     // Draw the tail.
-    ofSetLineWidth( 2 );
-    if ( pos.y > staffPosList[ 14 ] ) {
-        ofLine( pos.x - wide / 2, pos.y, pos.x - wide / 2, pos.y + lineSpacer * 4 - lineSpacer / 2 );
-    } else {
-        ofLine( pos.x + wide / 2, pos.y, pos.x + wide / 2, pos.y - ( lineSpacer * 4 - lineSpacer / 2 ) );
+    if (!bHideNoteness) {
+        ofSetLineWidth( 2 );
+        if ( pos.y > staffPosList[ 14 ] ) {
+            ofLine( pos.x - wide / 2, pos.y, pos.x - wide / 2, pos.y + lineSpacer * 4 - lineSpacer / 2 );
+        } else {
+            ofLine( pos.x + wide / 2, pos.y, pos.x + wide / 2, pos.y - ( lineSpacer * 4 - lineSpacer / 2 ) );
+        }
+        // Draw a sharp sign where appropriate.
+        if ( ofStringTimesInString( whichNote, "#") != 0 ) {
+            ofSetLineWidth( 3 );
+            float scaler = 0.25;
+            float dist = wide / 1.5;
+            ofLine( // right vertical
+                   pos.x - dist,
+                   pos.y - lineSpacer * 1.5 * scaler,
+                   pos.x - dist,
+                   pos.y + lineSpacer * 1.5 * scaler
+                   );
+            ofLine( // left vertical
+                   pos.x - dist - ( wide - dist ) * scaler,
+                   pos.y - lineSpacer * 1.5 * scaler,
+                   pos.x - dist - ( wide - dist ) * scaler,
+                   pos.y + lineSpacer * 1.5 * scaler
+                   );
+            ofSetLineWidth( 8 );
+            ofLine( // top horizontal
+                   pos.x - dist - ( wide - dist ) * scaler - ( wide * 0.2 ) * scaler,
+                   pos.y - ( lineSpacer / 2 ) * scaler + ( 0.1 * lineSpacer ) * scaler,
+                   pos.x - dist + ( wide * 0.2 ) * scaler,
+                   pos.y - ( lineSpacer / 2 ) * scaler - ( 0.1 * lineSpacer ) * scaler
+                   );
+            ofLine( // bottom horizontal
+                   pos.x - dist - ( wide - dist ) * scaler - ( wide * 0.2 ) * scaler,
+                   pos.y + ( lineSpacer / 2 ) * scaler + ( 0.1 * lineSpacer ) * scaler,
+                   pos.x - dist + ( wide * 0.2 ) * scaler,
+                   pos.y + ( lineSpacer / 2 ) * scaler - ( 0.1 * lineSpacer ) * scaler
+                   );
+        }
+        ofSetLineWidth( 1 );
     }
-    // Draw a sharp sign where appropriate.
-    if ( ofStringTimesInString( whichNote, "#") != 0 ) {
-        ofSetLineWidth( 3 );
-        float scaler = 0.25;
-        float dist = wide / 1.5;
-        ofLine( // right vertical
-               pos.x - dist,
-               pos.y - lineSpacer * 1.5 * scaler,
-               pos.x - dist,
-               pos.y + lineSpacer * 1.5 * scaler
-               );
-        ofLine( // left vertical
-               pos.x - dist - ( wide - dist ) * scaler,
-               pos.y - lineSpacer * 1.5 * scaler,
-               pos.x - dist - ( wide - dist ) * scaler,
-               pos.y + lineSpacer * 1.5 * scaler
-               );
-        ofSetLineWidth( 8 );
-        ofLine( // top horizontal
-               pos.x - dist - ( wide - dist ) * scaler - ( wide * 0.2 ) * scaler,
-               pos.y - ( lineSpacer / 2 ) * scaler + ( 0.1 * lineSpacer ) * scaler,
-               pos.x - dist + ( wide * 0.2 ) * scaler,
-               pos.y - ( lineSpacer / 2 ) * scaler - ( 0.1 * lineSpacer ) * scaler
-               );
-        ofLine( // bottom horizontal
-               pos.x - dist - ( wide - dist ) * scaler - ( wide * 0.2 ) * scaler,
-               pos.y + ( lineSpacer / 2 ) * scaler + ( 0.1 * lineSpacer ) * scaler,
-               pos.x - dist + ( wide * 0.2 ) * scaler,
-               pos.y + ( lineSpacer / 2 ) * scaler - ( 0.1 * lineSpacer ) * scaler
-               );
-    }
-    ofSetLineWidth( 1 );
     //ofRect( pos, wide, tall);
     /*
      // Make it a whole note.
