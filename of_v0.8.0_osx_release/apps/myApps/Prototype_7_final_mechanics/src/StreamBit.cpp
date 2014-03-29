@@ -14,9 +14,10 @@ StreamBit::StreamBit() {
 }
 
 //--------------------------------------------------------------
-void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, float _wide, int _angle) {
+void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, ofVec2f _slope, float _destroyOffset, float _wide, int _angle) {
     pos = _pos;
-    slope.set(0);
+    slope = _slope;
+    destroyOffset = _destroyOffset;
     wide = _wide;
     noteWidth = _noteWidth;
     tall = _noteHeight;

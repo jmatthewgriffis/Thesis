@@ -250,7 +250,7 @@ void testApp::draw(){
             myCam.move( fMoveX, fMoveY, fZoomFactor );
         }
         
-        float halfOfScreen = ofGetWidth() * 0.5;
+        float halfOfScreen = ofGetWidth() * 0.75;
         camLeft = myCam.getPosition().x - halfOfScreen;
         camRight = myCam.getPosition().x + halfOfScreen;
         
@@ -291,6 +291,7 @@ void testApp::draw(){
         
         myCam.end();
     }
+    cout<<streamBitList.size()<<endl;
 }
 
 //--------------------------------------------------------------
@@ -1079,8 +1080,7 @@ void testApp::updateStream() {
                             if (connection.length() <= closeEnoughToTouch) {
                                 
                                 StreamBit tmp;
-                                tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
-                                tmp.slope = connection;
+                                tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection, 0, connection.length(), myAngle);
                                 streamBitList.push_back(tmp);
                                 
                                 // Tell the actual notes not to connect again.
@@ -1121,11 +1121,12 @@ void testApp::updateStream() {
                         float runoffLength = iScaler * 7;
                         ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(-myAngle) * runoffLength, currentNote.pos.y - sin(-myAngle) * runoffLength);
                         ofVec2f connection2 = currentNote.pos - endpoint;
+                        float destroyOffset = abs(connection2.x * 0.5);
                         
                         StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), runoffLength, ofRadToDeg(-myAngle));
-                        tmp.slope = connection2;
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), connection2, destroyOffset, runoffLength, ofRadToDeg(-myAngle));
                         streamBitList.push_back(tmp);
+                        
                         // Tell the actual note not to repeat this.
                         objectList[i].bHasFalloffLeft = true;
                     }
@@ -1158,11 +1159,13 @@ void testApp::updateStream() {
                         float runoffLength = iScaler * 7;
                         ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(myAngle) * runoffLength, currentNote.pos.y + sin(myAngle) * runoffLength);
                         ofVec2f connection2 = endpoint - currentNote.pos;
+                        // diff between currentnote pos.x and endstream pos.x
+                        float destroyOffset = abs(connection2.x * 0.5);
                         
                         StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), runoffLength, ofRadToDeg(myAngle));
-                        tmp.slope = connection2;
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), connection2, destroyOffset, runoffLength, ofRadToDeg(myAngle));
                         streamBitList.push_back(tmp);
+                        
                         // Tell the actual note not to repeat this.
                         objectList[i].bHasFalloffRight = true;
                         
@@ -1187,8 +1190,8 @@ void testApp::updateStream() {
         }
         streamBitList[i].update();
         
-        // Destroy offscreen streambits.
-        if (streamBitList[i].pos.x < camLeft || streamBitList[i].pos.x > camRight) {
+        // Destroy offscreen streambits. They get created beyond the note so it's necessary to offset the destruction point.
+        if (streamBitList[i].pos.x < camLeft - streamBitList[i].destroyOffset || streamBitList[i].pos.x > camRight + streamBitList[i].destroyOffset) {
             streamBitList[i].destroyMe = true;
         }
     }
@@ -1386,7 +1389,7 @@ void testApp::playerCollidesWithObject() {
 
 //--------------------------------------------------------------
 void testApp::playerCollidesWithStream() {
-    // Find me
+    
     for (int i = 0; i < streamBitList.size(); i++) {
         
         ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;

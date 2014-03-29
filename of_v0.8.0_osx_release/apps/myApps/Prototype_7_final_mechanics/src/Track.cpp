@@ -91,7 +91,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
 //        //m3
 //        
 //        //riff bass
-//        float m3Bass = m2Bass + fMeasureLength;
+        float m3Bass = m2Bass + fMeasureLength;
 //        
 //        addObject("d2#", m3Bass, -1);
 //        addObject("a2#", m3Bass, -1);
@@ -116,7 +116,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
 //        //m4
 //        
 //        //riff bass
-//        float m4Bass = m3Bass + fMeasureLength;
+        float m4Bass = m3Bass + fMeasureLength;
 //        
 //        addObject("d2#", m4Bass, -1);
 //        addObject("a2#", m4Bass, -1);
@@ -131,10 +131,10 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
 //        
 //        
 //        //riff treble
-//        float m4Treble = m4Bass + iScaler * 4;
-//        addObject("f3#", m4Treble, -1);
-//        addObject("d3#", m4Treble + iScaler * 4, -1);
-//        addObject("c3#", m4Treble + iScaler * 12, -1);
+        float m4Treble = m4Bass + iScaler * 4;
+        addObject("f3#", m4Treble, -1);
+        addObject("d3#", m4Treble + iScaler * 4, -1);
+        addObject("c3#", m4Treble + iScaler * 12, -1);
 //        addObject("d3#", m4Treble + iScaler * 16, -1);
 //        addObject("f3#", m4Treble + iScaler * 24, -1);
 //        
