@@ -1091,6 +1091,9 @@ void testApp::updateStream() {
                     }
                 }
                 
+                // Setup stream runoff. Find me
+                float myAngle = PI / 4;
+                
                 // Make stream "runoff" where the stream begins.
                 if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
                     
@@ -1107,28 +1110,27 @@ void testApp::updateStream() {
                         ofVec2f connection = currentNote.pos - prevNote.pos;
                         distToPrevNote = connection.length();
                     
-                    } else {
+                    } /*else {
                         
                         distToPrevNote = closeEnoughToTouch - 1;
                     
-                    }
+                    }*/
                     
                     if (distToPrevNote > closeEnoughToTouch) {
                         
                         float runoffLength = iScaler * 7;
-                        float myAngle = -PI / 4;
-                        ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(myAngle) * runoffLength, currentNote.pos.y - sin(myAngle) * runoffLength);
+                        ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(-myAngle) * runoffLength, currentNote.pos.y - sin(-myAngle) * runoffLength);
                         ofVec2f connection2 = currentNote.pos - endpoint;
                         
                         StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), runoffLength, ofRadToDeg(myAngle));
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), runoffLength, ofRadToDeg(-myAngle));
                         tmp.slope = connection2;
                         streamBitList.push_back(tmp);
                         // Tell the actual note not to repeat this.
                         objectList[i].bHasFalloffLeft = true;
                     }
                 }
-                // find me
+                
                 // Make stream "runoff" where the stream ends.
                 if (!currentNote.bHasFalloffRight && currentNote.bIsPartOfStream) {
                     
@@ -1139,22 +1141,21 @@ void testApp::updateStream() {
                         
                         distToNextNote = closeEnoughToTouch + 1;
                         
-                    } else if (i < objectList.size() - 1 && checkNextStreamNote(i) <= objectList.size()) {
+                    } else if (i < objectList.size() - 1 && checkNextStreamNote(i) <= objectList.size() - 1) {
                         
                         Object nextNote = objectList[checkNextStreamNote(i)];
                         ofVec2f connection = nextNote.pos - currentNote.pos;
                         distToNextNote = connection.length();
                         
-                    } else {
+                    } /*else {
                         
                         distToNextNote = closeEnoughToTouch - 1;
                         
-                    }
+                    }*/
                     
                     if (distToNextNote > closeEnoughToTouch) {
                         
                         float runoffLength = iScaler * 7;
-                        float myAngle = PI / 4;
                         ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(myAngle) * runoffLength, currentNote.pos.y + sin(myAngle) * runoffLength);
                         ofVec2f connection2 = endpoint - currentNote.pos;
                         
