@@ -23,6 +23,7 @@ public:
     int numBits;
     int angle;
     int opacity, opacityState, numStates;
+    bool bDrawCollider;
     bool destroyMe;
     
     ofImage slur;

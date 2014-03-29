@@ -93,7 +93,7 @@ bool bShouldIErase2( StreamBit &a ){
 
 //--------------------------------------------------------------
 void testApp::update(){
-    
+
     { // Repeated from setup. Allow controller to be switched on/off during play. Thanks to Michael Kahane for leading the way on this.
         if ( bUsingController == false ) {
             //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
@@ -1023,7 +1023,21 @@ int testApp::checkNextStreamNote(int _i) {
     
     int tmp;
     
-    for (int i = _i; i < objectList.size(); i++) {
+    for (int i = _i + 1; i < objectList.size(); i++) {
+        // Is in treble clef.
+        if (objectList[i].pos.y < staffPosList[14]) {
+            tmp = i;
+            return tmp;
+        }
+    }
+}
+
+//--------------------------------------------------------------
+int testApp::checkPrevStreamNote(int _i) {
+    
+    int tmp;
+    
+    for (int i = _i - 1; i > -1; i--) {
         // Is in treble clef.
         if (objectList[i].pos.y < staffPosList[14]) {
             tmp = i;
@@ -1035,8 +1049,7 @@ int testApp::checkNextStreamNote(int _i) {
 //--------------------------------------------------------------
 void testApp::updateStream() {
     // Stream is generated dynamically based on the notes onscreen.
-    
-    float closeEnoughToTouch = powf(fMeasureLength * 0.33, 2);
+    float closeEnoughToTouch = fMeasureLength * 0.33;
     
     for (int i = 0; i < objectList.size(); i++) {
         
@@ -1047,7 +1060,7 @@ void testApp::updateStream() {
             // Is onscreen.
             if (currentNote.pos.x > camLeft && currentNote.pos.x < camRight) {
                 if (i < objectList.size() - 1) {
-                    Object nextNote = objectList[checkNextStreamNote(i + 1)];
+                    Object nextNote = objectList[checkNextStreamNote(i)];
                     
                     // First, check if the next note is onscreen.
                     if (nextNote.pos.x > camLeft && nextNote.pos.x < camRight) {
@@ -1060,7 +1073,7 @@ void testApp::updateStream() {
                             float myAngle = ofRadToDeg(atan2(connection.y, connection.x));
                             
                             // Now make sure the notes are close enough.
-                            if (connection.lengthSquared() <= closeEnoughToTouch) {
+                            if (connection.length() <= closeEnoughToTouch) {
                                 
                                 StreamBit tmp;
                                 tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection.length(), myAngle);
@@ -1069,26 +1082,30 @@ void testApp::updateStream() {
                                 
                                 // Tell the actual notes not to connect again.
                                 objectList[i].bIsPartOfStream = true;
-                                objectList[checkNextStreamNote(i + 1)].bIsPartOfStream = true;
+                                objectList[checkNextStreamNote(i)].bIsPartOfStream = true;
                             }
                         }
                     }
                 }
                 
                 // Make stream "runoff" where the stream begins.
-                if (!currentNote.bHasFalloffLeft) {
+                if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
                     
                     float distToPrevNote;
                     
-                    if (i == 0 && currentNote.bIsPartOfStream) {
+                    // Check if the note is the first one in the stream.
+                    if ((i == 0 || (i == checkNextStreamNote(0) && checkPrevStreamNote(i) != 0))) {
                         
                         distToPrevNote = closeEnoughToTouch + 1;
                     
-                    } else if (i > 0) {
+                    } else if (checkPrevStreamNote(i) >= 0) {
                         
-                        Object prevNote = objectList[checkNextStreamNote(i - 1)];
+                        Object prevNote = objectList[checkPrevStreamNote(i)];
                         ofVec2f connection = currentNote.pos - prevNote.pos;
-                        distToPrevNote = connection.lengthSquared();
+                        distToPrevNote = connection.length();
+                        if ( i == 2){
+                            cout<<"dist to prev: "<<distToPrevNote<<"; closeEnough = "<<closeEnoughToTouch<<"; prev. i ="<<checkPrevStreamNote(2)<<"; bPartofStream = "<<currentNote.bIsPartOfStream<<endl;
+                        }
                     
                     } else {
                         
@@ -1111,6 +1128,45 @@ void testApp::updateStream() {
                         objectList[i].bHasFalloffLeft = true;
                     }
                 }
+                
+                // Make stream "runoff" where the stream ends.
+                /*if (!currentNote.bHasFalloffRight) {
+                    
+                    float distToNextNote;
+                    
+                    if ((i == streamBitList.size() - 1 || i == checkPrevStreamNote(streamBitList.size() - 1)) && currentNote.bIsPartOfStream) {
+                        cout<<"yes1!"<<endl;
+                        distToNextNote = closeEnoughToTouch + 1;
+                        
+                    } else if (i < streamBitList.size() - 1 || i < checkPrevStreamNote(streamBitList.size() - 1)) {
+                        
+                        Object nextNote = objectList[checkNextStreamNote(i)];
+                        ofVec2f connection = nextNote.pos - currentNote.pos;
+                        distToNextNote = connection.length();
+                        cout<<connection.length()<<"; "<<closeEnoughToTouch<<"; "<<endl;
+                        // find me
+                    } else {
+                        
+                        distToNextNote = closeEnoughToTouch - 1;
+                        
+                    }
+                    
+                    if (distToNextNote > closeEnoughToTouch) {
+                        cout<<"yes2!"<<endl;
+                        float runoffLength = iScaler * 7;
+                        float myAngle = 0;
+                        ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(myAngle) * runoffLength, currentNote.pos.y + sin(myAngle) * runoffLength);
+                        ofVec2f connection2 = endpoint - currentNote.pos;
+                        
+                        StreamBit tmp;
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), runoffLength, ofRadToDeg(myAngle));
+                        tmp.slope = connection2;
+                        streamBitList.push_back(tmp);
+                        // Tell the actual note not to repeat this.
+                        objectList[i].bHasFalloffRight = true;
+                        cout<<"yes3!"<<endl;
+                    }
+                }*/
             }
         }
     }
@@ -1557,8 +1613,15 @@ void testApp::fDrawDebugUI() {
     
     ofSetColor( 0 );
     if ( bIsDebugging ) {
+        for (int i = 0; i < streamBitList.size(); i++ ) {
+            streamBitList[i].bDrawCollider = true;
+        }
         helvetica.drawString( "FPS: " + ofToString( ofGetFrameRate() ), myPlayer.pos.x - ofGetWidth() / 2, iScaler * 2 );
         helvetica.drawString( "Debug mode ON ( '0' to turn OFF )", myPlayer.pos.x - iScaler * 12, iScaler * 2 );
+    } else {
+        for (int i = 0; i < streamBitList.size(); i++ ) {
+            streamBitList[i].bDrawCollider = false;
+        }
     }
     if ( myPlayer.pos.x > ofGetWidth() / 2 && gameState >= 3 && gameState < 6 ) {
         helvetica.drawString( "'R' to restart", myPlayer.pos.x + ofGetWidth() / 2 - iScaler * 8.4, iScaler * 2 );

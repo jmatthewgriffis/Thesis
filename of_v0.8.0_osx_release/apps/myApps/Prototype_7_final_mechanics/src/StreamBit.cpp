@@ -25,6 +25,7 @@ void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, float _
     numStates = 5;
     opacityState = numStates - 1;
     opacity = 255;
+    bDrawCollider = false;
     destroyMe = false;
     
     while (angle > 360){
@@ -68,18 +69,19 @@ void StreamBit::draw() {
          //ofCircle(0,-10, 2);
          */
         
-        /*
+        
          // Draw the collider.
-         ofSetRectMode(OF_RECTMODE_CENTER);
-         ofSetColor(0);
-         ofRect(0, 0, wide, tall);
-         ofSetColor(255);
-         ofRect(0, 0, wide - 2, tall - 2);
-         */
+        if (bDrawCollider) {
+            ofSetRectMode(OF_RECTMODE_CENTER);
+            ofSetColor(0);
+            ofRect(0, 0, wide, tall);
+            ofSetColor(255);
+            ofRect(0, 0, wide - 2, tall - 2);
+        }
         
         
-        ofSetRectMode(OF_RECTMODE_CENTER);
         // Draw the slur "wave."
+        ofSetRectMode(OF_RECTMODE_CENTER);
         float base = 125;
         float modifier = 0;
         for (int i = 0; i < numBits; i++) {

@@ -67,6 +67,7 @@ public:
     void updateObjectList();
     void updateStream();
     int checkNextStreamNote(int _i);
+    int checkPrevStreamNote(int _i);
     void fRecord( int _i );
     void fReplay();
     
