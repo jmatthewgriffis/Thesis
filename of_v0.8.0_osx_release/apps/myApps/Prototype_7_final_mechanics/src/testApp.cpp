@@ -619,6 +619,9 @@ void testApp::keyPressed(int key){
         case 'z':
             myPlayer.allowMove = !myPlayer.allowMove;
             break;
+            case 'x':
+            myPlayer.maxVel *= -1;
+            break;
         case 'k':
             myPlayer.tmpAngle-=5;
             break;
@@ -1037,7 +1040,7 @@ int testApp::checkPrevStreamNote(int _i) {
     
     int tmp;
     
-    for (int i = _i - 1; i > -1; i--) {
+    for (int i = _i - 1; i >= 0; i--) {
         // Is in treble clef.
         if (objectList[i].pos.y < staffPosList[14]) {
             tmp = i;
@@ -1098,14 +1101,11 @@ void testApp::updateStream() {
                         
                         distToPrevNote = closeEnoughToTouch + 1;
                     
-                    } else if (checkPrevStreamNote(i) >= 0) {
+                    } else if (i > 0 && checkPrevStreamNote(i) >= 0) {
                         
                         Object prevNote = objectList[checkPrevStreamNote(i)];
                         ofVec2f connection = currentNote.pos - prevNote.pos;
                         distToPrevNote = connection.length();
-                        if ( i == 2){
-                            cout<<"dist to prev: "<<distToPrevNote<<"; closeEnough = "<<closeEnoughToTouch<<"; prev. i ="<<checkPrevStreamNote(2)<<"; bPartofStream = "<<currentNote.bIsPartOfStream<<endl;
-                        }
                     
                     } else {
                         
@@ -1128,23 +1128,23 @@ void testApp::updateStream() {
                         objectList[i].bHasFalloffLeft = true;
                     }
                 }
-                
+                // find me
                 // Make stream "runoff" where the stream ends.
-                /*if (!currentNote.bHasFalloffRight) {
+                if (!currentNote.bHasFalloffRight && currentNote.bIsPartOfStream) {
                     
                     float distToNextNote;
                     
-                    if ((i == streamBitList.size() - 1 || i == checkPrevStreamNote(streamBitList.size() - 1)) && currentNote.bIsPartOfStream) {
-                        cout<<"yes1!"<<endl;
+                    // Check if the note is the last one in the stream.
+                    if ((i == objectList.size() - 1 || (i == checkPrevStreamNote(objectList.size() - 1) && checkNextStreamNote(i) != objectList.size() - 1))) {
+                        
                         distToNextNote = closeEnoughToTouch + 1;
                         
-                    } else if (i < streamBitList.size() - 1 || i < checkPrevStreamNote(streamBitList.size() - 1)) {
+                    } else if (i < objectList.size() - 1 && checkNextStreamNote(i) <= objectList.size()) {
                         
                         Object nextNote = objectList[checkNextStreamNote(i)];
                         ofVec2f connection = nextNote.pos - currentNote.pos;
                         distToNextNote = connection.length();
-                        cout<<connection.length()<<"; "<<closeEnoughToTouch<<"; "<<endl;
-                        // find me
+                        
                     } else {
                         
                         distToNextNote = closeEnoughToTouch - 1;
@@ -1152,25 +1152,24 @@ void testApp::updateStream() {
                     }
                     
                     if (distToNextNote > closeEnoughToTouch) {
-                        cout<<"yes2!"<<endl;
+                        
                         float runoffLength = iScaler * 7;
-                        float myAngle = 0;
+                        float myAngle = PI / 4;
                         ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(myAngle) * runoffLength, currentNote.pos.y + sin(myAngle) * runoffLength);
                         ofVec2f connection2 = endpoint - currentNote.pos;
                         
                         StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), runoffLength, ofRadToDeg(myAngle));
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), runoffLength, ofRadToDeg(myAngle));
                         tmp.slope = connection2;
                         streamBitList.push_back(tmp);
                         // Tell the actual note not to repeat this.
                         objectList[i].bHasFalloffRight = true;
-                        cout<<"yes3!"<<endl;
+                        
                     }
-                }*/
+                }
             }
         }
     }
-    
     // Change the opacity on a timer and restart the timer.
     if (ofGetElapsedTimef() >= iLastOpacityChange + iOpacityChangeFreq) {
         for (int i = 0; i < streamBitList.size(); i++) {
