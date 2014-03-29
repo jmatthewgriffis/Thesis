@@ -68,6 +68,8 @@ public:
     void updateStream();
     int checkNextStreamNote(int _i);
     int checkPrevStreamNote(int _i);
+    float checkNextStreamAngle(ofVec2f _currentNotePos);
+    float checkPrevStreamAngle(ofVec2f _currentNotePos);
     void fRecord( int _i );
     void fReplay();
     

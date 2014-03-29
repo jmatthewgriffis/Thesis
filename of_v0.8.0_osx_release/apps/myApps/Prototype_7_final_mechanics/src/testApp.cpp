@@ -93,7 +93,7 @@ bool bShouldIErase2( StreamBit &a ){
 
 //--------------------------------------------------------------
 void testApp::update(){
-
+    
     { // Repeated from setup. Allow controller to be switched on/off during play. Thanks to Michael Kahane for leading the way on this.
         if ( bUsingController == false ) {
             //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
@@ -213,8 +213,6 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    
-    //cout<<"numBits = "<<streamBitList.size()<<endl;
     
     //ofxGamepadHandler::get()->draw(10,10);
     
@@ -619,7 +617,7 @@ void testApp::keyPressed(int key){
         case 'z':
             myPlayer.allowMove = !myPlayer.allowMove;
             break;
-            case 'x':
+        case 'x':
             myPlayer.maxVel *= -1;
             break;
         case 'k':
@@ -1050,6 +1048,36 @@ int testApp::checkPrevStreamNote(int _i) {
 }
 
 //--------------------------------------------------------------
+float testApp::checkNextStreamAngle(ofVec2f _currentNotePos) {
+    
+    float tmp;
+    
+    for (int i = 0; i < streamBitList.size(); i++) {
+        // Find the streamBit that begins next positionally (may not be the next one in the vector).
+        ofVec2f nextBitLeftEdge = streamBitList[i].pos - streamBitList[i].slope * 0.5;
+        if (nextBitLeftEdge == _currentNotePos) {
+            tmp = streamBitList[i].angle;
+            return tmp;
+        }
+    }
+}
+
+//--------------------------------------------------------------
+float testApp::checkPrevStreamAngle(ofVec2f _currentNotePos) {
+    
+    float tmp;
+    
+    for (int i = 0; i < streamBitList.size(); i++) {
+        // Find the streamBit that ends previously positionally (may not be the previous one in the vector).
+        ofVec2f prevBitRightEdge = streamBitList[i].pos + streamBitList[i].slope * 0.5;
+        if (prevBitRightEdge == _currentNotePos) {
+            tmp = streamBitList[i].angle;
+            return tmp;
+        }
+    }
+}
+
+//--------------------------------------------------------------
 void testApp::updateStream() {
     // Stream is generated dynamically based on the notes onscreen.
     float closeEnoughToTouch = fMeasureLength * 0.33;
@@ -1090,8 +1118,8 @@ void testApp::updateStream() {
                     }
                 }
                 
-                // Setup stream runoff. Find me
-                float myAngle = PI / 4;
+                // Setup stream runoff.
+                float angleOffset = PI / 4;
                 
                 // Make stream "runoff" where the stream begins.
                 if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
@@ -1102,28 +1130,30 @@ void testApp::updateStream() {
                     if ((i == 0 || (i == checkNextStreamNote(0) && checkPrevStreamNote(i) != 0))) {
                         
                         distToPrevNote = closeEnoughToTouch + 1;
-                    
+                        
                     } else if (i > 0 && checkPrevStreamNote(i) >= 0) {
                         
                         Object prevNote = objectList[checkPrevStreamNote(i)];
                         ofVec2f connection = currentNote.pos - prevNote.pos;
                         distToPrevNote = connection.length();
-                    
-                    } /*else {
                         
-                        distToPrevNote = closeEnoughToTouch - 1;
-                    
-                    }*/
+                    } /*else {
+                       
+                       distToPrevNote = closeEnoughToTouch - 1;
+                       
+                       }*/
                     
                     if (distToPrevNote > closeEnoughToTouch) {
                         
+                        float myAngle = checkNextStreamAngle(currentNote.pos) - ofRadToDeg(angleOffset);
                         float runoffLength = iScaler * 7;
-                        ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(-myAngle) * runoffLength, currentNote.pos.y - sin(-myAngle) * runoffLength);
+                        ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y - sin(ofDegToRad(myAngle)) * runoffLength);
                         ofVec2f connection2 = currentNote.pos - endpoint;
                         float destroyOffset = abs(connection2.x * 0.5);
                         
                         StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), connection2, destroyOffset, runoffLength, ofRadToDeg(-myAngle));
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
+                        
                         streamBitList.push_back(tmp);
                         
                         // Tell the actual note not to repeat this.
@@ -1148,21 +1178,21 @@ void testApp::updateStream() {
                         distToNextNote = connection.length();
                         
                     } /*else {
-                        
-                        distToNextNote = closeEnoughToTouch - 1;
-                        
-                    }*/
+                       
+                       distToNextNote = closeEnoughToTouch - 1;
+                       
+                       }*/
                     
                     if (distToNextNote > closeEnoughToTouch) {
                         
+                        float myAngle = checkPrevStreamAngle(currentNote.pos) + ofRadToDeg(angleOffset);
                         float runoffLength = iScaler * 7;
-                        ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(myAngle) * runoffLength, currentNote.pos.y + sin(myAngle) * runoffLength);
+                        ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y + sin(ofDegToRad(myAngle)) * runoffLength);
                         ofVec2f connection2 = endpoint - currentNote.pos;
-                        // diff between currentnote pos.x and endstream pos.x
                         float destroyOffset = abs(connection2.x * 0.5);
                         
                         StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), connection2, destroyOffset, runoffLength, ofRadToDeg(myAngle));
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
                         streamBitList.push_back(tmp);
                         
                         // Tell the actual note not to repeat this.
