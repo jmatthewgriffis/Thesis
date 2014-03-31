@@ -90,6 +90,11 @@ bool bShouldIErase2( StreamBit &a ){
     if ( a.destroyMe ) return true;
     else return false;
 }
+//--------------------------------------------------------------
+bool my_compare( const Object &a, const Object &b ) {
+    
+    return a.pos.x < b.pos.x;
+}
 
 //--------------------------------------------------------------
 void testApp::update(){
@@ -169,10 +174,11 @@ void testApp::update(){
             } else {
                 notePos = ofVec2f(myPlayer.pos.x - myPlayer.fNoteOffsetH, myPlayer.pos.y);
             }
+            int stream = 1;
             if ( notePos.y <= staffPosList[ 16 ] ) {
-                addObject( fReturnNote( notePos.y ), notePos.x, objectLife );
+                addObject( fReturnNote( notePos.y ), notePos.x, stream, objectLife );
             } else {
-                addObject( "c3_middle", notePos.x, objectLife );
+                addObject( "c3_middle", notePos.x, stream, objectLife );
             }
             objectList[objectList.size() - 1].bIsTouched = true;
             iTimeTillNote = iTimeBetweenNotes;
@@ -1023,28 +1029,58 @@ void testApp::updateObjectList() {
 int testApp::checkNextStreamNote(int _i) {
     
     int tmp;
+    vector <Object> tmpList;
     
-    for (int i = _i + 1; i < objectList.size(); i++) {
-        // Is in treble clef.
-        if (objectList[i].pos.y < staffPosList[14]) {
-            tmp = i;
-            return tmp;
+    for (int i = 0; i < objectList.size(); i++) {
+        
+        // Find the notes in the same stream and to the right of the current note.
+        if (objectList[i].whichStream == objectList[_i].whichStream
+            && objectList[i].pos.x > objectList[_i].pos.x) {
+            // Store them in the vector.
+            tmpList.push_back(objectList[i]);
+            // Also store the index value from the primary object vector.
+            tmpList[tmpList.size() - 1].my_i = i;
         }
     }
+    
+    // Sort the vector by xPos.
+    ofSort(tmpList,my_compare);
+    // First element is the one we want.
+    if (tmpList.size() > 0) {
+        tmp = tmpList[0].my_i;
+    } else {
+        tmp = -1;
+    }
+    return tmp;
 }
 
 //--------------------------------------------------------------
 int testApp::checkPrevStreamNote(int _i) {
     
     int tmp;
+    vector <Object> tmpList;
     
-    for (int i = _i - 1; i >= 0; i--) {
-        // Is in treble clef.
-        if (objectList[i].pos.y < staffPosList[14]) {
-            tmp = i;
-            return tmp;
+    for (int i = 0; i < objectList.size(); i++) {
+        
+        // Find the notes in the same stream and to the left of the current note.
+        if (objectList[i].whichStream == objectList[_i].whichStream
+            && objectList[i].pos.x < objectList[_i].pos.x) {
+            // Store them in the vector.
+            tmpList.push_back(objectList[i]);
+            // Also store the index value from the primary object vector.
+            tmpList[tmpList.size() - 1].my_i = i;
         }
     }
+    
+    // Sort the vector by xPos.
+    ofSort(tmpList,my_compare);
+    // Last element is the one we want.
+    if (tmpList.size() > 0) {
+        tmp = tmpList[tmpList.size() - 1].my_i;
+    } else {
+        tmp = -1;
+    }
+    return tmp;
 }
 
 //--------------------------------------------------------------
@@ -1090,7 +1126,8 @@ void testApp::updateStream() {
         if (currentNote.pos.y < staffPosList[14]) {
             // Is onscreen.
             if (currentNote.pos.x > camLeft && currentNote.pos.x < camRight) {
-                if (i < objectList.size() - 1) {
+                // Make sure next note exists.
+                if (checkNextStreamNote(i) != -1) {
                     Object nextNote = objectList[checkNextStreamNote(i)];
                     
                     // First, check if the next note is onscreen.
@@ -1118,88 +1155,88 @@ void testApp::updateStream() {
                     }
                 }
                 
-                // Setup stream runoff.
-                float angleOffset = PI / 4;
-                
-                // Make stream "runoff" where the stream begins.
-                if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
-                    
-                    float distToPrevNote;
-                    
-                    // Check if the note is the first one in the stream.
-                    if ((i == 0 || (i == checkNextStreamNote(0) && checkPrevStreamNote(i) != 0))) {
-                        
-                        distToPrevNote = closeEnoughToTouch + 1;
-                        
-                    } else if (i > 0 && checkPrevStreamNote(i) >= 0) {
-                        
-                        Object prevNote = objectList[checkPrevStreamNote(i)];
-                        ofVec2f connection = currentNote.pos - prevNote.pos;
-                        distToPrevNote = connection.length();
-                        
-                    } /*else {
-                       
-                       distToPrevNote = closeEnoughToTouch - 1;
-                       
-                       }*/
-                    
-                    if (distToPrevNote > closeEnoughToTouch) {
-                        
-                        float myAngle = checkNextStreamAngle(currentNote.pos) - ofRadToDeg(angleOffset);
-                        float runoffLength = iScaler * 7;
-                        ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y - sin(ofDegToRad(myAngle)) * runoffLength);
-                        ofVec2f connection2 = currentNote.pos - endpoint;
-                        float destroyOffset = abs(connection2.x * 0.5);
-                        
-                        StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
-                        
-                        streamBitList.push_back(tmp);
-                        
-                        // Tell the actual note not to repeat this.
-                        objectList[i].bHasFalloffLeft = true;
-                    }
-                }
-                
-                // Make stream "runoff" where the stream ends.
-                if (!currentNote.bHasFalloffRight && currentNote.bIsPartOfStream) {
-                    
-                    float distToNextNote;
-                    
-                    // Check if the note is the last one in the stream.
-                    if ((i == objectList.size() - 1 || (i == checkPrevStreamNote(objectList.size() - 1) && checkNextStreamNote(i) != objectList.size() - 1))) {
-                        
-                        distToNextNote = closeEnoughToTouch + 1;
-                        
-                    } else if (i < objectList.size() - 1 && checkNextStreamNote(i) <= objectList.size() - 1) {
-                        
-                        Object nextNote = objectList[checkNextStreamNote(i)];
-                        ofVec2f connection = nextNote.pos - currentNote.pos;
-                        distToNextNote = connection.length();
-                        
-                    } /*else {
-                       
-                       distToNextNote = closeEnoughToTouch - 1;
-                       
-                       }*/
-                    
-                    if (distToNextNote > closeEnoughToTouch) {
-                        
-                        float myAngle = checkPrevStreamAngle(currentNote.pos) + ofRadToDeg(angleOffset);
-                        float runoffLength = iScaler * 7;
-                        ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y + sin(ofDegToRad(myAngle)) * runoffLength);
-                        ofVec2f connection2 = endpoint - currentNote.pos;
-                        float destroyOffset = abs(connection2.x * 0.5);
-                        
-                        StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
-                        streamBitList.push_back(tmp);
-                        
-                        // Tell the actual note not to repeat this.
-                        objectList[i].bHasFalloffRight = true;
-                        
-                    }
-                }
+                //                // Setup stream runoff.
+                //                float angleOffset = PI / 4;
+                //
+                //                // Make stream "runoff" where the stream begins.
+                //                if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
+                //
+                //                    float distToPrevNote;
+                //
+                //                    // Check if the note is the first one in the stream.
+                //                    if ((i == 0 || (i == checkNextStreamNote(0) && checkPrevStreamNote(i) != 0))) {
+                //
+                //                        distToPrevNote = closeEnoughToTouch + 1;
+                //
+                //                    } else if (i > 0 && checkPrevStreamNote(i) >= 0) {
+                //
+                //                        Object prevNote = objectList[checkPrevStreamNote(i)];
+                //                        ofVec2f connection = currentNote.pos - prevNote.pos;
+                //                        distToPrevNote = connection.length();
+                //
+                //                    } /*else {
+                //
+                //                       distToPrevNote = closeEnoughToTouch - 1;
+                //
+                //                       }*/
+                //
+                //                    if (distToPrevNote > closeEnoughToTouch) {
+                //
+                //                        float myAngle = checkNextStreamAngle(currentNote.pos) - ofRadToDeg(angleOffset);
+                //                        float runoffLength = iScaler * 7;
+                //                        ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y - sin(ofDegToRad(myAngle)) * runoffLength);
+                //                        ofVec2f connection2 = currentNote.pos - endpoint;
+                //                        float destroyOffset = abs(connection2.x * 0.5);
+                //
+                //                        StreamBit tmp;
+                //                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
+                //
+                //                        streamBitList.push_back(tmp);
+                //
+                //                        // Tell the actual note not to repeat this.
+                //                        objectList[i].bHasFalloffLeft = true;
+                //                    }
+                //                }
+                //
+                //                // Make stream "runoff" where the stream ends.
+                //                if (!currentNote.bHasFalloffRight && currentNote.bIsPartOfStream) {
+                //
+                //                    float distToNextNote;
+                //
+                //                    // Check if the note is the last one in the stream.
+                //                    if ((i == objectList.size() - 1 || (i == checkPrevStreamNote(objectList.size() - 1) && checkNextStreamNote(i) != objectList.size() - 1))) {
+                //
+                //                        distToNextNote = closeEnoughToTouch + 1;
+                //
+                //                    } else if (i < objectList.size() - 1 && checkNextStreamNote(i) <= objectList.size() - 1) {
+                //
+                //                        Object nextNote = objectList[checkNextStreamNote(i)];
+                //                        ofVec2f connection = nextNote.pos - currentNote.pos;
+                //                        distToNextNote = connection.length();
+                //
+                //                    } /*else {
+                //
+                //                       distToNextNote = closeEnoughToTouch - 1;
+                //
+                //                       }*/
+                //
+                //                    if (distToNextNote > closeEnoughToTouch) {
+                //
+                //                        float myAngle = checkPrevStreamAngle(currentNote.pos) + ofRadToDeg(angleOffset);
+                //                        float runoffLength = iScaler * 7;
+                //                        ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y + sin(ofDegToRad(myAngle)) * runoffLength);
+                //                        ofVec2f connection2 = endpoint - currentNote.pos;
+                //                        float destroyOffset = abs(connection2.x * 0.5);
+                //
+                //                        StreamBit tmp;
+                //                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
+                //                        streamBitList.push_back(tmp);
+                //
+                //                        // Tell the actual note not to repeat this.
+                //                        objectList[i].bHasFalloffRight = true;
+                //
+                //                    }
+                //                }
             }
         }
     }
@@ -1826,20 +1863,20 @@ string testApp::fReturnNote( float yPos ) {
 }
 
 //--------------------------------------------------------------
-void testApp::addObject( string _note, float _xPos, int _age ) {
+void testApp::addObject( string _note, float _xPos, int _stream, int _age ) {
     
     // This function adds an NPC Object.
     Object tmp;
-    tmp.setup( iScaler, staffPosList, _note, _age );
+    tmp.setup( iScaler, staffPosList, _note, _stream, _age );
     tmp.pos.x = _xPos;
     objectList.push_back( tmp );
 }
 
 void testApp::addObject( vector < string > _stringList, int _numMeasures, int _numReps ) {
     for (int j = 0; j < _numReps; j++ ) {
-        for ( int i = 0; i < _stringList.size(); i += 3 ) {
+        for ( int i = 0; i < _stringList.size(); i += 4 ) {
             Object tmp;
-            tmp.setup( iScaler, staffPosList, _stringList[ i ], ofToInt( _stringList[ i + 2 ] ) );
+            tmp.setup( iScaler, staffPosList, _stringList[ i ], ofToInt( _stringList[ i + 2 ] ), ofToInt( _stringList[ i + 3 ] ) );
             tmp.pos.x = ofToFloat( _stringList[ i + 1  ] ) + (j * fMeasureLength * _numMeasures);
             objectList.push_back( tmp );
         }
@@ -1847,21 +1884,21 @@ void testApp::addObject( vector < string > _stringList, int _numMeasures, int _n
 }
 
 //--------------------------------------------------------------
-void testApp::addRecordedObject( string _note, ofVec2f _vel, int _age ) {
+void testApp::addRecordedObject( string _note, ofVec2f _vel, int _stream, int _age ) {
     
     // This function copies a recorded Object into a static vector that gets neither updated nor drawn.
     Object tmp;
-    tmp.setup( iScaler, staffPosList, _note, _age );
+    tmp.setup( iScaler, staffPosList, _note, _stream, _age );
     tmp.vel.set( _vel );
     recordedList.push_back( tmp );
 }
 
 //--------------------------------------------------------------
-void testApp::addReplayedObject( string _note, ofVec2f _vel, int _age ) {
+void testApp::addReplayedObject( string _note, ofVec2f _vel, int _stream, int _age ) {
     
     // This function copies an Object from the "recorded" vector to the main Object vector. It also reverses horizontal velocity if needed so the Object can travel the other direction.
     Object tmp;
-    tmp.setup( iScaler, staffPosList, _note, _age );
+    tmp.setup( iScaler, staffPosList, _note, _stream, _age );
     tmp.pos.x = myPlayer.pos.x;
     tmp.vel.set( _vel );
     if ( tmp.vel.x < 0 ) tmp.vel.x *= -1;
@@ -1883,7 +1920,7 @@ void testApp::fRecord( int _i ) {
      } else { // I may need to adjust the below in case notes aren't captured linearly.
      xDist = objectList[ i ].pos.x - objectList[ i - 1 ].pos.x;
      }*/
-    addRecordedObject( objectList[ _i ].whichNote, objectList[ _i ].vel, objectLife );
+    addRecordedObject( objectList[ _i ].whichNote, objectList[ _i ].vel, objectList[ _i ].whichStream, objectLife );
     
     // This prevents additional recording calls before the action completes.
     bIsRecording = true;
@@ -1913,7 +1950,7 @@ void testApp::fReplay() {
      }*/
     
     //if ( xDist >= recordedList[ 0 ].spacing ) {
-    addReplayedObject( recordedList[ 0 ].whichNote, recordedList[ 0 ].vel, recordedList[ 0 ].age );
+    addReplayedObject( recordedList[ 0 ].whichNote, recordedList[ 0 ].vel, recordedList[ 0 ].whichStream, recordedList[ 0 ].age );
     recordedList[ 0 ].destroyMe = true;
     //}
     

@@ -60,10 +60,10 @@ public:
     string fReturnNote( float yPos );
     void fLoadPrototype();
     
-    void addObject( string _note, float _xPos, int _age );
+    void addObject( string _note, float _xPos, int _stream, int _age );
     void addObject( vector< string > _stringList, int _numMeasures = 0, int _numReps = 1 );
-    void addRecordedObject( string _note, ofVec2f _vel, int _age );
-    void addReplayedObject( string _note, ofVec2f _vel, int _age );
+    void addRecordedObject( string _note, ofVec2f _vel, int _stream, int _age );
+    void addReplayedObject( string _note, ofVec2f _vel, int _stream, int _age );
     void updateObjectList();
     void updateStream();
     int checkNextStreamNote(int _i);

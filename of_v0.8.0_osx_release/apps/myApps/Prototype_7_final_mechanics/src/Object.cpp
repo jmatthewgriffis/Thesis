@@ -12,11 +12,12 @@ Object::Object() {
     
 }
 
-void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNote, int _age ) {
+void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNote, int _whichStream, int _age ) {
     
     iScaler = _iScaler;
     staffPosList = _staffPosList;
     whichNote = _whichNote;
+    whichStream = _whichStream;
     age = _age;
     
     tall = ( staffPosList[0] - staffPosList[2] ) * 0.8;
@@ -28,7 +29,7 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     
     vel.set( 0.0, 0.0 );
     
-    colorTimer = noteTimer = 0;
+    colorTimer = noteTimer = my_i = 0;
     
     destroyMe = false;
     drawAttention = false;

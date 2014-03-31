@@ -17,11 +17,13 @@ class Object {
 public:
     Object();
     
-    void setup( int _iScaler, vector< float > _staffPosList, string _whichNote, int _age );
+    void setup( int _iScaler, vector< float > _staffPosList, string _whichNote, int _whichStream, int _age );
     void update( int _gameState, ofVec2f _pos );
     void draw();
     
     string whichNote;
+    int whichStream;
+    int my_i;
     void fLimitLife();
     float fReturnYPos( string _whichNote );
     void fAddNote();

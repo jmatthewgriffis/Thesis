@@ -30,7 +30,7 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
     bUsingController = _bUsingController;
     
     staffPosList = _staffPosList;
-    myObject.setup(iScaler, staffPosList, "c3_middle", -1);
+    myObject.setup(iScaler, staffPosList, "c3_middle", 1, -1);
     
     wide = iScaler * 2;
     tall = wide;
