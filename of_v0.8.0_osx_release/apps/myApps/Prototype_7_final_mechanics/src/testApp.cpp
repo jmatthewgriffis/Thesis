@@ -219,7 +219,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    
+    cout<<streamBitList.size()<<endl;
     //ofxGamepadHandler::get()->draw(10,10);
     
     if ( gameState == 0 ) {
@@ -365,7 +365,7 @@ void testApp::fLoadPrototype() {
         
     } else if (gameState == 7) {
         // Surfin' USA
-        bCamZoomedIn = true; // find me
+        bCamZoomedIn = false; // find me
         
         myPlayer.vel.y = -iScaler * 0.3;
         
@@ -1155,88 +1155,88 @@ void testApp::updateStream() {
                     }
                 }
                 
-                //                // Setup stream runoff.
-                //                float angleOffset = PI / 4;
-                //
-                //                // Make stream "runoff" where the stream begins.
-                //                if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
-                //
-                //                    float distToPrevNote;
-                //
-                //                    // Check if the note is the first one in the stream.
-                //                    if ((i == 0 || (i == checkNextStreamNote(0) && checkPrevStreamNote(i) != 0))) {
-                //
-                //                        distToPrevNote = closeEnoughToTouch + 1;
-                //
-                //                    } else if (i > 0 && checkPrevStreamNote(i) >= 0) {
-                //
-                //                        Object prevNote = objectList[checkPrevStreamNote(i)];
-                //                        ofVec2f connection = currentNote.pos - prevNote.pos;
-                //                        distToPrevNote = connection.length();
-                //
-                //                    } /*else {
-                //
-                //                       distToPrevNote = closeEnoughToTouch - 1;
-                //
-                //                       }*/
-                //
-                //                    if (distToPrevNote > closeEnoughToTouch) {
-                //
-                //                        float myAngle = checkNextStreamAngle(currentNote.pos) - ofRadToDeg(angleOffset);
-                //                        float runoffLength = iScaler * 7;
-                //                        ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y - sin(ofDegToRad(myAngle)) * runoffLength);
-                //                        ofVec2f connection2 = currentNote.pos - endpoint;
-                //                        float destroyOffset = abs(connection2.x * 0.5);
-                //
-                //                        StreamBit tmp;
-                //                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
-                //
-                //                        streamBitList.push_back(tmp);
-                //
-                //                        // Tell the actual note not to repeat this.
-                //                        objectList[i].bHasFalloffLeft = true;
-                //                    }
-                //                }
-                //
-                //                // Make stream "runoff" where the stream ends.
-                //                if (!currentNote.bHasFalloffRight && currentNote.bIsPartOfStream) {
-                //
-                //                    float distToNextNote;
-                //
-                //                    // Check if the note is the last one in the stream.
-                //                    if ((i == objectList.size() - 1 || (i == checkPrevStreamNote(objectList.size() - 1) && checkNextStreamNote(i) != objectList.size() - 1))) {
-                //
-                //                        distToNextNote = closeEnoughToTouch + 1;
-                //
-                //                    } else if (i < objectList.size() - 1 && checkNextStreamNote(i) <= objectList.size() - 1) {
-                //
-                //                        Object nextNote = objectList[checkNextStreamNote(i)];
-                //                        ofVec2f connection = nextNote.pos - currentNote.pos;
-                //                        distToNextNote = connection.length();
-                //
-                //                    } /*else {
-                //
-                //                       distToNextNote = closeEnoughToTouch - 1;
-                //
-                //                       }*/
-                //
-                //                    if (distToNextNote > closeEnoughToTouch) {
-                //
-                //                        float myAngle = checkPrevStreamAngle(currentNote.pos) + ofRadToDeg(angleOffset);
-                //                        float runoffLength = iScaler * 7;
-                //                        ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y + sin(ofDegToRad(myAngle)) * runoffLength);
-                //                        ofVec2f connection2 = endpoint - currentNote.pos;
-                //                        float destroyOffset = abs(connection2.x * 0.5);
-                //
-                //                        StreamBit tmp;
-                //                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
-                //                        streamBitList.push_back(tmp);
-                //
-                //                        // Tell the actual note not to repeat this.
-                //                        objectList[i].bHasFalloffRight = true;
-                //
-                //                    }
-                //                }
+                // Setup stream runoff.
+                float angleOffset = PI / 4;
+
+                // Make stream "runoff" where the stream begins.
+                if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
+
+                    float distToPrevNote;
+
+                    // Check if the note is the first one in the stream.
+                    if (checkPrevStreamNote(i) == -1) {
+
+                        distToPrevNote = closeEnoughToTouch + 1;
+
+                    } else {
+
+                        Object prevNote = objectList[checkPrevStreamNote(i)];
+                        ofVec2f connection = currentNote.pos - prevNote.pos;
+                        distToPrevNote = connection.length();
+
+                    } /*else {
+
+                       distToPrevNote = closeEnoughToTouch - 1;
+
+                       }*/
+
+                    if (distToPrevNote > closeEnoughToTouch) {
+
+                        float myAngle = checkNextStreamAngle(currentNote.pos) - ofRadToDeg(angleOffset);
+                        float runoffLength = iScaler * 7;
+                        ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y - sin(ofDegToRad(myAngle)) * runoffLength);
+                        ofVec2f connection2 = currentNote.pos - endpoint;
+                        float destroyOffset = abs(connection2.x * 0.5);
+
+                        StreamBit tmp;
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
+
+                        streamBitList.push_back(tmp);
+
+                        // Tell the actual note not to repeat this.
+                        objectList[i].bHasFalloffLeft = true;
+                    }
+                }
+
+//                // Make stream "runoff" where the stream ends.
+//                if (!currentNote.bHasFalloffRight && currentNote.bIsPartOfStream) {
+//
+//                    float distToNextNote;
+//
+//                    // Check if the note is the last one in the stream.
+//                    if (checkNextStreamNote(i) == -1) {
+//
+//                        distToNextNote = closeEnoughToTouch + 1;
+//
+//                    } else {
+//
+//                        Object nextNote = objectList[checkNextStreamNote(i)];
+//                        ofVec2f connection = nextNote.pos - currentNote.pos;
+//                        distToNextNote = connection.length();
+//
+//                    } /*else {
+//
+//                       distToNextNote = closeEnoughToTouch - 1;
+//
+//                       }*/
+//
+//                    if (distToNextNote > closeEnoughToTouch) {
+//
+//                        float myAngle = checkPrevStreamAngle(currentNote.pos) + ofRadToDeg(angleOffset);
+//                        float runoffLength = iScaler * 7;
+//                        ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y + sin(ofDegToRad(myAngle)) * runoffLength);
+//                        ofVec2f connection2 = endpoint - currentNote.pos;
+//                        float destroyOffset = abs(connection2.x * 0.5);
+//
+//                        StreamBit tmp;
+//                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
+//                        streamBitList.push_back(tmp);
+//
+//                        // Tell the actual note not to repeat this.
+//                        objectList[i].bHasFalloffRight = true;
+//
+//                    }
+//                }
             }
         }
     }
