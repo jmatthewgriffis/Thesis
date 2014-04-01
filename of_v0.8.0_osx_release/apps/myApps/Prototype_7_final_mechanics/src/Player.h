@@ -56,6 +56,7 @@ public:
     float fHealth, fHealthMax, fHealthLossSpeed;
     float fNoteOffsetH;
     int tmpAngle;
+    int currentStream;
     
     ofImage headphones, hand, appendage, appendage_mirrored, hat; // For some baffling reason the image is not moving when it should.
     

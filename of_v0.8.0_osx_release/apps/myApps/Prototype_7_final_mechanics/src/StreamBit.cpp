@@ -14,7 +14,7 @@ StreamBit::StreamBit() {
 }
 
 //--------------------------------------------------------------
-void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, ofVec2f _slope, float _destroyOffset, float _wide, int _angle) {
+void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, ofVec2f _slope, float _destroyOffset, float _wide, int _angle, int _whichStream) {
     pos = _pos;
     slope = _slope;
     destroyOffset = _destroyOffset;
@@ -23,6 +23,7 @@ void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, ofVec2f
     tall = _noteHeight;
     slurTall = slur.getHeight() * tall / slur.getWidth();
     angle = _angle;
+    whichStream = _whichStream;
     numStates = 5;
     opacityState = numStates - 1;
     opacity = 255;

@@ -1155,7 +1155,7 @@ void testApp::updateStream() {
                         if (connection.lengthSquared() <= closeEnoughToTouch) {
                             
                             StreamBit tmp;
-                            tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection, 0, connection.length(), myAngle);
+                            tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection * 0.5), connection, 0, connection.length(), myAngle, currentNote.whichStream);
                             streamBitList.push_back(tmp);
                             
                             // Tell the actual notes not to connect again.
@@ -1168,6 +1168,7 @@ void testApp::updateStream() {
                 
                 // Setup stream runoff.
                 float angleOffset = PI / 4;
+                float runoffLength = iScaler * 5;
                 
                 // Make stream "runoff" where the stream begins.
                 if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
@@ -1196,13 +1197,12 @@ void testApp::updateStream() {
                     if (distToPrevNote > closeEnoughToTouch) {
                         
                         float myAngle = checkNextStreamAngle(currentNote.pos) - ofRadToDeg(angleOffset);
-                        float runoffLength = iScaler * 7;
                         ofVec2f endpoint = ofVec2f(currentNote.pos.x - cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y - sin(ofDegToRad(myAngle)) * runoffLength);
                         ofVec2f connection2 = currentNote.pos - endpoint;
                         float destroyOffset = abs(connection2.x * 0.5);
                         
                         StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos - (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle, currentNote.whichStream);
                         
                         streamBitList.push_back(tmp);
                         
@@ -1240,13 +1240,12 @@ void testApp::updateStream() {
                     if (distToNextNote > closeEnoughToTouch) {
                         
                         float myAngle = checkPrevStreamAngle(currentNote.pos) + ofRadToDeg(angleOffset);
-                        float runoffLength = iScaler * 7;
                         ofVec2f endpoint = ofVec2f(currentNote.pos.x + cos(ofDegToRad(myAngle)) * runoffLength, currentNote.pos.y + sin(ofDegToRad(myAngle)) * runoffLength);
                         ofVec2f connection2 = endpoint - currentNote.pos;
                         float destroyOffset = abs(connection2.x * 0.5);
                         
                         StreamBit tmp;
-                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle);
+                        tmp.setup(currentNote.wide, currentNote.tall, currentNote.pos + (connection2 * 0.5), connection2, destroyOffset, runoffLength, myAngle, currentNote.whichStream);
                         streamBitList.push_back(tmp);
                         
                         // Tell the actual note not to repeat this.
@@ -1485,7 +1484,7 @@ void testApp::playerCollidesWithStream() {
             if (myPlayer.pos.x >= start.x + inc.x * (j - 1) && myPlayer.pos.x <= start.x + inc.x * j) {
                 
                 // Snap to descending stream if already riding it and not jumping.
-                if (!myPlayer.onStream && inStreamTimer > 0) {
+                if (!myPlayer.onStream && inStreamTimer > 0 && myPlayer.currentStream == streamBitList[i].whichStream) {
                     if (myPlayer.pos.y < start.y + inc.y * j - diff) {
                         myPlayer.pos.y = start.y + inc.y * j - diff;
                     }
@@ -1497,6 +1496,7 @@ void testApp::playerCollidesWithStream() {
                     myPlayer.pos.y = start.y + inc.y * j - diff;
                     if (myPlayer.vel.y >= 0) { // Make sure not jumping.
                         myPlayer.onStream = true;
+                        myPlayer.currentStream = streamBitList[i].whichStream;
                     }
                     
                     /*

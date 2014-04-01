@@ -48,6 +48,7 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
     //angleVel = float( iScaler / 1.6667 );
     angleVel = 15;
     fNoteOffsetH = 0;
+    currentStream = -1;
     
     up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = false;
     allowMove = true;
