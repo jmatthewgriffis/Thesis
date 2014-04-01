@@ -62,9 +62,9 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             }
             
             myStream = 2;
-            if (i == 2) {
-                addObject("c4#", (fMeasureLength * i) + m1Treble, myStream, -1);
-                addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+            if (i % 2 == 0 && i != iNumMeasures) {
+                addObject("f4#", (fMeasureLength * i) + m1Treble, myStream, -1);
+                addObject("g4#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
                 addObject("f4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
             }
             

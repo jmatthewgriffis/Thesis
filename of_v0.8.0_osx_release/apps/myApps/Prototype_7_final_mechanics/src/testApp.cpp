@@ -1168,7 +1168,7 @@ void testApp::updateStream() {
                 
                 // Setup stream runoff.
                 float angleOffset = PI / 4;
-                float runoffLength = iScaler * 5;
+                float runoffLength = iScaler * 4;
                 
                 // Make stream "runoff" where the stream begins.
                 if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
