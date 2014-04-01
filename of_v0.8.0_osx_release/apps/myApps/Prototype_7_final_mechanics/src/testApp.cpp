@@ -362,11 +362,12 @@ void testApp::fLoadPrototype() {
         // Solo--gym
         bCamZoomedIn = true;
         
-    } else if (gameState == 7) {
+    } else if (gameState == 7 || gameState == 8) {
         // Surfin' USA
         bCamZoomedIn = true; // find me
         
-        myPlayer.vel.y = -iScaler * 0.3;
+        if (gameState == 7) myPlayer.vel.y = -iScaler * 0.3;
+        else if (gameState == 8) myPlayer.vel.y = -iScaler * 0.4;
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
@@ -402,7 +403,7 @@ void testApp::fApplyGravity() {
             fGravFactor = fBaseGrav;
         } else if ( gameState == 4 ) {
             fGravFactor = fBaseGrav * 0.65;
-        } else if ( gameState == 7 ) {
+        } else if ( gameState == 7 || gameState == 8 ) {
             fGravFactor = fBaseGrav * 0.65;
         }
         
@@ -412,7 +413,7 @@ void testApp::fApplyGravity() {
             fGravity = fGravFactor * 3;
         } else if ( gameState == 4 ) {
             fGravity = fGravFactor * 0.4;
-        } else if ( gameState == 7 ) {
+        } else if ( gameState == 7 || gameState == 8 ) {
             fGravity = fGravFactor * 1.25;
         }
         
@@ -1308,6 +1309,13 @@ void testApp::playerCollidesWithGroundOrSky() {
             if (bIsSecondPlayer) {
                 myPlayer2.onSurface = true;
             }
+        }
+        if (gameState == 8) {
+            if (myPlayer.pos.x > streamBitList[streamBitList.size() -1].pos.x) {
+                gameState = 7;
+                
+            }
+            fLoadPrototype();
         }
     }
     

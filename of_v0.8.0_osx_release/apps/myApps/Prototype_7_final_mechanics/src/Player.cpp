@@ -34,7 +34,11 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
     
     wide = iScaler * 1.5;
     tall = wide;
-    maxVel = float( iScaler / 3.4483 ); // Yields 120bpm.
+    if (gameState == 8) {
+        maxVel = float( iScaler / 3.4483 ) * 0.75; // Yields 90bpm.
+    } else {
+        maxVel = float( iScaler / 3.4483 ); // Yields 120bpm.
+    }
     jumpVel = -iScaler * 0.45;
     fHatSizer = wide * 0.0131;
     fHatWidth = hat.getWidth() * fHatSizer;
@@ -90,7 +94,7 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
         bCanMakeNotes = true;
         bIsOnlyOneRoom = true;
         
-    } else if (gameState == 7) { // Surfin' USA
+    } else if (gameState == 7 || gameState == 8) { // Surfin' USA
         bModeSurf = true;
         bHasShip = true;
         bAutoplayBass = true;
@@ -246,7 +250,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
             if (pos.y - yPosLast < 0) {
                 fHatQueuedForce += yPosDiff * 0.025;
                 // Add terminal upward vel to keep this under control.
-                float limit = -10;
+                float limit = -wide / 5;
                 if (fHatQueuedForce < limit) {
                     fHatQueuedForce = limit;
                 }
