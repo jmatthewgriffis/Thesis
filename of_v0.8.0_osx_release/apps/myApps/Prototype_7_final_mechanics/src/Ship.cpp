@@ -26,16 +26,34 @@ void Ship::setup() {
 //--------------------------------------------------------------
 void Ship::update(ofVec2f _pos, float _playerHeight) {
     
-    pos = _pos;
-    store = _pos;
+    posPlayer = _pos;
+    pos = posPlayer;
     fImgHeightTreble = _playerHeight * 2.25;
     fImgHeightBass = fImgHeightTreble / 2;
+    rotOffset = fImgHeightBass;
     
     while (angle > 360) {
         angle -= 360;
     }
     while (angle < 0) {
         angle += 360;
+    }
+    
+    if (angle >= 180) {
+        rotPoint = -1; // Back of ship.
+    } else {
+        rotPoint = 1; // Front of ship.
+    }
+    
+    // Set the position based on the rotation point so we can rotate the ship correctly.
+    if (rotPoint == -1) {
+        pos.x = posPlayer.x - rotOffset * cos(ofDegToRad(angle));
+        pos.y = posPlayer.y - rotOffset * sin(ofDegToRad(angle));
+    } else if (rotPoint == 1) {
+        pos.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
+        pos.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - angle - 90));
+    } else {
+        //pos = store;
     }
     
     if (bTiltUpward) {
@@ -53,23 +71,6 @@ void Ship::draw() {
         
         ofSetRectMode(OF_RECTMODE_CENTER);
         
-        if (angle > 180) {
-            rotPoint = -1;
-        } else {
-            rotPoint = 1;
-        }
-        
-        float rotOffset;
-        rotOffset = fImgHeightBass;
-        if (rotPoint == -1) {
-            pos.x = store.x - rotOffset * cos(ofDegToRad(angle));
-            pos.y = store.y - rotOffset * sin(ofDegToRad(angle));
-        } else if (rotPoint == 1) {
-            pos.x = store.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
-            pos.y = store.y - rotOffset * cos(ofDegToRad(360 - angle - 90));
-        } else {
-            //pos = store;
-        }
         ofTranslate(pos);
         ofRotate(angle);
         
@@ -87,10 +88,13 @@ void Ship::draw() {
                 ofRotate(135);
                 bassClef.draw(0, 0, (fImgHeightBass * bassClef.getWidth() / bassClef.getHeight()), fImgHeightBass);
             }ofPopMatrix();
+            
         }ofPopMatrix();
         
+        // Test where the pos / rotation point is.
         ofSetColor(255,0,0);
         ofCircle(0,0,5);
+        
     }ofPopMatrix();
     
     ofSetRectMode(OF_RECTMODE_CORNER);
