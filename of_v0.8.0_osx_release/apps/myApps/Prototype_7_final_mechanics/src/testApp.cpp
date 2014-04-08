@@ -1517,28 +1517,32 @@ void testApp::playerCollidesWithStream() {
                     int checkOtherBitMultiplier = otherBitProximity; // How many intervals of the current bit check against the other Bits.
                     float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
                     
+                    // Give the ship the current stream angle.
+                    myPlayer.myShip.streamAngle = streamBitList[i].angle;
+                    
                     // Check which way the board is leaning too far.
                     int whichWay;
+                    
                     if (streamBitList[i].angle > 180) {
-                        if (angleDiff > 180) {
+                        if (angleDiff > 180 || myPlayer.myShip.angle > streamBitList[i].angle) {
                             whichWay = 1;
                         } else {
                             whichWay = -1;
                         }
                     } else {
-                        if (angleDiff > 180) {
+                        if (angleDiff > 180 || myPlayer.myShip.angle < streamBitList[i].angle) {
                             whichWay = -1;
                         } else {
                             whichWay = 1;
                         }
                     }
                     
+                    cout<<"ship: "<<myPlayer.myShip.angle<<"; stream: "<<streamBitList[i].angle<<"; diff: "<<angleDiff<<"; whichway = "<<whichWay<<endl;
+                    
                     
                     if (angleDiff > 180) {
                         angleDiff = 360 - angleDiff;
                     }
-                    
-                    cout<<"ship: "<<myPlayer.myShip.angle<<"; stream: "<<streamBitList[i].angle<<"; diff: "<<angleDiff<<"; whichway = "<<whichWay<<endl;
                     
                     myPlayer.myShip.rotPoint = whichWay;
                     

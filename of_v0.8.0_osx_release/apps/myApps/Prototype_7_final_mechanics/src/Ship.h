@@ -20,9 +20,9 @@ public:
     
     ofImage trebleClef, bassClef;
     
-    ofVec2f pos;
+    ofVec2f pos, store;
     
-    int angle, angleVel, rotPoint;
+    int angle, angleVel, rotPoint, streamAngle;
     bool bTiltUpward, bTiltDownward;
     
     float fImgHeightTreble, fImgHeightBass;

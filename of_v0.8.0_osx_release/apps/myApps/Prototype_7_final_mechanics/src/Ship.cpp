@@ -20,12 +20,14 @@ void Ship::setup() {
     angle = 0;
     angleVel = 2;
     rotPoint = 0;
+    streamAngle = 0;
 }
 
 //--------------------------------------------------------------
 void Ship::update(ofVec2f _pos, float _playerHeight) {
     
     pos = _pos;
+    store = _pos;
     fImgHeightTreble = _playerHeight * 2.25;
     fImgHeightBass = fImgHeightTreble / 2;
     
@@ -51,15 +53,29 @@ void Ship::draw() {
         
         ofSetRectMode(OF_RECTMODE_CENTER);
         
-        float rotOffset;
-        rotOffset = fImgHeightBass * rotPoint;
-        
-        ofTranslate(pos.x + rotOffset, pos.y);
+        float rotOffset, offsetX, offsetY;
+        //rotOffset = fImgHeightBass * rotPoint;
+        rotOffset = fImgHeightBass;
+        rotPoint = -1;
+        if (rotPoint == -1) {
+            pos.x = store.x - rotOffset * cos(ofDegToRad(angle));
+            pos.y = store.y - rotOffset * sin(ofDegToRad(angle));
+        } else if (rotPoint == 1) {
+            pos.x = store.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
+            pos.y = store.y - rotOffset * cos(ofDegToRad(360 - angle - 90));
+        } else {
+            
+        }
+        //angle = 25;
+        //offsetX = rotOffset * cos(ofDegToRad(streamAngle));
+        //offsetY = rotOffset * sin(ofDegToRad(streamAngle));
+        //ofTranslate(pos.x + offsetX, pos.y + offsetY);
+        ofTranslate(pos);
         ofRotate(angle);
         
         ofPushMatrix();{
             
-            ofTranslate(-rotOffset, 0);
+            ofTranslate(-rotOffset * rotPoint, 0);
             
             ofPushMatrix();{
                 //ofTranslate(pos);
