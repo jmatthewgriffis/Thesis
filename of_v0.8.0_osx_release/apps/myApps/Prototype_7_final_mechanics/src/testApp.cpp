@@ -60,7 +60,7 @@ void testApp::setup(){
     gameState = 0;
     currentState = gameState;
     
-    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = false;
+    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = bPlayerFellOver = false;
     bHighlightNote = false;
     bCamZoomedIn = false;
     bIsSecondPlayer = false;
@@ -143,7 +143,9 @@ void testApp::update(){
     playerCollidesWithObstacle();
     playerCollidesWithObject();
     if (myPlayer.bModeSurf) {
-        playerCollidesWithStream();
+        if (!bPlayerFellOver) {
+            playerCollidesWithStream();
+        }
     }
     objectCollidesWithObstacle();
     
@@ -301,7 +303,7 @@ void testApp::fLoadPrototype() {
     
     // Maintenance.
     cleanup();
-    bBassOnly = bTrebleOnly = bIsSecondPlayer = false;
+    bBassOnly = bTrebleOnly = bIsSecondPlayer = bPlayerFellOver = false;
     float fZoomedInX = iScaler * 7.5;
     iLastOpacityChange = ofGetElapsedTimef(); // Reset the clock.
     
@@ -1310,10 +1312,9 @@ void testApp::playerCollidesWithGroundOrSky() {
                 myPlayer2.onSurface = true;
             }
         }
-        if (gameState == 8) {
-            if (myPlayer.pos.x > streamBitList[streamBitList.size() -1].pos.x) {
+        if (gameState >= 7) {
+            if (gameState == 8 && myPlayer.pos.x > streamBitList[streamBitList.size() -1].pos.x) {
                 gameState = 7;
-                
             }
             fLoadPrototype();
         }
@@ -1586,6 +1587,12 @@ void testApp::playerCollidesWithStream() {
         } else {
             inStreamTimer--;
         }
+    }
+    
+    // Fall over if angled too sharply and not in stream.
+    if (myPlayer.onStream && myPlayer.myShip.angle > 90 && myPlayer.myShip.angle < 270) {
+        bPlayerFellOver = true;
+        myPlayer.allowControl = false;
     }
 }
 

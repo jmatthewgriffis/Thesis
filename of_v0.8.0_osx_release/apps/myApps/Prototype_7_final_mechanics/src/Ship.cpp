@@ -23,7 +23,7 @@ void Ship::setup() {
 }
 
 //--------------------------------------------------------------
-void Ship::update(ofVec2f _pos, float _playerHeight) {
+void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
     
     posPlayer = _pos;
     pos = posPlayer;
@@ -55,11 +55,13 @@ void Ship::update(ofVec2f _pos, float _playerHeight) {
         //pos = posPlayer;
     }
     
-    if (bTiltUpward) {
-        angle -= angleVel;
-    }
-    if (bTiltDownward) {
-        angle += angleVel;
+    if (_allowControl) {
+        if (bTiltUpward) {
+            angle -= angleVel;
+        }
+        if (bTiltDownward) {
+            angle += angleVel;
+        }
     }
 }
 
@@ -92,7 +94,7 @@ void Ship::draw() {
         
         // Test where the pos / rotation point is.
         /*ofSetColor(255,0,0);
-        ofCircle(0,0,5);*/
+         ofCircle(0,0,5);*/
         
     }ofPopMatrix();
     

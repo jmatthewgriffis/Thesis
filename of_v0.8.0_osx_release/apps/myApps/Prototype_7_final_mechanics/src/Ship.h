@@ -15,7 +15,7 @@ public:
     Ship();
     
     void setup();
-    void update(ofVec2f _pos, float _playerHeight);
+    void update(ofVec2f _pos, float _playerHeight, bool _allowControl);
     void draw();
     
     ofImage trebleClef, bassClef;
