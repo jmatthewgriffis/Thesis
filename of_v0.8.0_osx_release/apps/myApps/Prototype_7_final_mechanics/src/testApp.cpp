@@ -1562,9 +1562,10 @@ void testApp::playerCollidesWithStream() {
                         }
                     }
                 }
-                // Bonk off bottom of stream, if not above stream.
+                // Bonk off bottom of stream, if not above stream and not in stream.
                 if (myPlayer.pos.y - myPlayer.tall * 0.5 <= start.y + inc.y * j + streamBitList[i].tall * 0.5
-                    && myPlayer.pos.y >= start.y + inc.y * j - streamBitList[i].tall * 0.5) {
+                    && myPlayer.pos.y >= start.y + inc.y * j - streamBitList[i].tall * 0.5
+                    && !myPlayer.onStream) {
                     myPlayer.pos.y = start.y + inc.y * j + streamBitList[i].tall * 0.5 + myPlayer.tall * 0.5;
                     if (myPlayer.vel.y < 0) {
                         myPlayer.vel.y = 0;
