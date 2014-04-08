@@ -52,7 +52,7 @@ void Ship::update(ofVec2f _pos, float _playerHeight) {
         pos.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
         pos.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - angle - 90));
     } else {
-        //pos = store;
+        //pos = posPlayer;
     }
     
     if (bTiltUpward) {
