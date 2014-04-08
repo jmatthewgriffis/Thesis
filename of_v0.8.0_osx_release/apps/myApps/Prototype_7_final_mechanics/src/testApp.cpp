@@ -1512,20 +1512,32 @@ void testApp::playerCollidesWithStream() {
                      */
                     // FIND ME, TUNE ME, TUNE ME SO MUCH.
                     // Check the angle and adjust speed accordingly.
-                    int closeEnough = 20; // How close the two angles have to be.
+                    int closeEnough = 10; // How close the two angles have to be.
                     int otherBitProximity = iScaler; // How close the other Bit's end has to be.
                     int checkOtherBitMultiplier = otherBitProximity; // How many intervals of the current bit check against the other Bits.
                     float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
+                    
+                    // Check which way the board is leaning too far.
+                    int whichWay;
+                    if (angleDiff > 180) {
+                        whichWay = -1;
+                    } else {
+                        whichWay = 1;
+                    }
                     
                     if (angleDiff > 180) {
                         angleDiff = 360 - angleDiff;
                     }
                     
+                    cout<<"ship: "<<myPlayer.myShip.angle<<"; stream: "<<streamBitList[i].angle<<"; diff: "<<angleDiff<<"; whichway = "<<whichWay<<endl;
+                    
                     if (angleDiff <= closeEnough) {
                         myPlayer.closeEnough = true;
                     }
+                    
                     // If not close enough, check the previous and next angles if they exist.
                     else {
+                        myPlayer.myShip.angle += whichWay * 1;
                         // Previous angle.
                         if (i > 0) {
                             
