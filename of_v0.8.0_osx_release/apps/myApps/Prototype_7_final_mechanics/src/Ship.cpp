@@ -53,10 +53,14 @@ void Ship::draw() {
         
         ofSetRectMode(OF_RECTMODE_CENTER);
         
-        float rotOffset, offsetX, offsetY;
-        //rotOffset = fImgHeightBass * rotPoint;
+        if (angle > 180) {
+            rotPoint = -1;
+        } else {
+            rotPoint = 1;
+        }
+        
+        float rotOffset;
         rotOffset = fImgHeightBass;
-        rotPoint = -1;
         if (rotPoint == -1) {
             pos.x = store.x - rotOffset * cos(ofDegToRad(angle));
             pos.y = store.y - rotOffset * sin(ofDegToRad(angle));
@@ -64,12 +68,8 @@ void Ship::draw() {
             pos.x = store.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
             pos.y = store.y - rotOffset * cos(ofDegToRad(360 - angle - 90));
         } else {
-            
+            //pos = store;
         }
-        //angle = 25;
-        //offsetX = rotOffset * cos(ofDegToRad(streamAngle));
-        //offsetY = rotOffset * sin(ofDegToRad(streamAngle));
-        //ofTranslate(pos.x + offsetX, pos.y + offsetY);
         ofTranslate(pos);
         ofRotate(angle);
         
@@ -78,7 +78,6 @@ void Ship::draw() {
             ofTranslate(-rotOffset * rotPoint, 0);
             
             ofPushMatrix();{
-                //ofTranslate(pos);
                 ofRotate(90);
                 trebleClef.draw(0, 0, (fImgHeightTreble * trebleClef.getWidth() / trebleClef.getHeight()), fImgHeightTreble);
             }ofPopMatrix();
