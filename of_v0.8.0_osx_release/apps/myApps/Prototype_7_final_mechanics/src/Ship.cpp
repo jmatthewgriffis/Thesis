@@ -20,7 +20,6 @@ void Ship::setup() {
     angle = 0;
     angleVel = 2;
     rotPoint = 0;
-    streamAngle = 0;
 }
 
 //--------------------------------------------------------------
@@ -92,8 +91,8 @@ void Ship::draw() {
         }ofPopMatrix();
         
         // Test where the pos / rotation point is.
-        ofSetColor(255,0,0);
-        ofCircle(0,0,5);
+        /*ofSetColor(255,0,0);
+        ofCircle(0,0,5);*/
         
     }ofPopMatrix();
     

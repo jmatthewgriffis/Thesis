@@ -22,7 +22,7 @@ public:
     
     ofVec2f pos, posPlayer;
     
-    int angle, angleVel, rotPoint, streamAngle;
+    float angle, angleVel, rotPoint;
     bool bTiltUpward, bTiltDownward;
     
     float fImgHeightTreble, fImgHeightBass, rotOffset;

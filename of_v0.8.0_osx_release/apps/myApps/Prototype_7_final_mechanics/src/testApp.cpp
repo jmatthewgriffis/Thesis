@@ -1512,49 +1512,22 @@ void testApp::playerCollidesWithStream() {
                      */
                     // FIND ME, TUNE ME, TUNE ME SO MUCH.
                     // Check the angle and adjust speed accordingly.
-                    int closeEnough = 10; // How close the two angles have to be.
+                    int closeEnough = 15; // How close the two angles have to be.
                     int otherBitProximity = iScaler; // How close the other Bit's end has to be.
                     int checkOtherBitMultiplier = otherBitProximity; // How many intervals of the current bit check against the other Bits.
                     float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
-                    
-                    // Give the ship the current stream angle.
-                    myPlayer.myShip.streamAngle = streamBitList[i].angle;
-                    
-                    // Check which way the board is leaning too far.
-                    int whichWay;
-                    
-                    if (streamBitList[i].angle > 180) {
-                        if (angleDiff > 180 || myPlayer.myShip.angle > streamBitList[i].angle) {
-                            whichWay = 1;
-                        } else {
-                            whichWay = -1;
-                        }
-                    } else {
-                        if (angleDiff > 180 || myPlayer.myShip.angle < streamBitList[i].angle) {
-                            whichWay = -1;
-                        } else {
-                            whichWay = 1;
-                        }
-                    }
-                    
-                    cout<<"ship: "<<myPlayer.myShip.angle<<"; stream: "<<streamBitList[i].angle<<"; diff: "<<angleDiff<<"; whichway = "<<whichWay<<endl;
-                    
                     
                     if (angleDiff > 180) {
                         angleDiff = 360 - angleDiff;
                     }
                     
-                    myPlayer.myShip.rotPoint = whichWay;
-                    
                     if (angleDiff <= closeEnough) {
-                        //whichWay = 0;
-                        //myPlayer.myShip.rotPoint = whichWay;
                         myPlayer.closeEnough = true;
                     }
                     
                     // If not close enough, check the previous and next angles if they exist.
                     else {
-                        //myPlayer.myShip.angle += whichWay * 1;
+                        myPlayer.myShip.angle += myPlayer.myShip.rotPoint * 0.5;
                         // Previous angle.
                         if (i > 0) {
                             
