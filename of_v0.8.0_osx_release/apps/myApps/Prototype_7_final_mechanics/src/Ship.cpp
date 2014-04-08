@@ -50,20 +50,31 @@ void Ship::draw() {
         
         ofSetRectMode(OF_RECTMODE_CENTER);
         
-        ofTranslate(pos);
+        float rotOffset;
+        rotOffset = fImgHeightBass;
+        
+        ofTranslate(pos.x - rotOffset, pos.y);
         ofRotate(angle);
         
         ofPushMatrix();{
-            //ofTranslate(pos);
-            ofRotate(90);
-            trebleClef.draw(0, 0, (fImgHeightTreble * trebleClef.getWidth() / trebleClef.getHeight()), fImgHeightTreble);
+            
+            ofTranslate(rotOffset, 0);
+            
+            ofPushMatrix();{
+                //ofTranslate(pos);
+                ofRotate(90);
+                trebleClef.draw(0, 0, (fImgHeightTreble * trebleClef.getWidth() / trebleClef.getHeight()), fImgHeightTreble);
+            }ofPopMatrix();
+            
+            ofPushMatrix();{
+                ofTranslate(- fImgHeightTreble * 0.5, 0);
+                ofRotate(135);
+                bassClef.draw(0, 0, (fImgHeightBass * bassClef.getWidth() / bassClef.getHeight()), fImgHeightBass);
+            }ofPopMatrix();
         }ofPopMatrix();
         
-        ofPushMatrix();{
-            ofTranslate(- fImgHeightTreble * 0.5, 0);
-            ofRotate(135);
-            bassClef.draw(0, 0, (fImgHeightBass * bassClef.getWidth() / bassClef.getHeight()), fImgHeightBass);
-        }ofPopMatrix();
+        ofSetColor(255,0,0);
+        ofCircle(0,0,5);
     }ofPopMatrix();
     
     ofSetRectMode(OF_RECTMODE_CORNER);
