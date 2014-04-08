@@ -1519,11 +1519,20 @@ void testApp::playerCollidesWithStream() {
                     
                     // Check which way the board is leaning too far.
                     int whichWay;
-                    if (angleDiff > 180) {
-                        whichWay = -1;
+                    if (streamBitList[i].angle > 180) {
+                        if (angleDiff > 180) {
+                            whichWay = 1;
+                        } else {
+                            whichWay = -1;
+                        }
                     } else {
-                        whichWay = 1;
+                        if (angleDiff > 180) {
+                            whichWay = -1;
+                        } else {
+                            whichWay = 1;
+                        }
                     }
+                    
                     
                     if (angleDiff > 180) {
                         angleDiff = 360 - angleDiff;
@@ -1531,13 +1540,17 @@ void testApp::playerCollidesWithStream() {
                     
                     cout<<"ship: "<<myPlayer.myShip.angle<<"; stream: "<<streamBitList[i].angle<<"; diff: "<<angleDiff<<"; whichway = "<<whichWay<<endl;
                     
+                    myPlayer.myShip.rotPoint = whichWay;
+                    
                     if (angleDiff <= closeEnough) {
+                        //whichWay = 0;
+                        //myPlayer.myShip.rotPoint = whichWay;
                         myPlayer.closeEnough = true;
                     }
                     
                     // If not close enough, check the previous and next angles if they exist.
                     else {
-                        myPlayer.myShip.angle += whichWay * 1;
+                        //myPlayer.myShip.angle += whichWay * 1;
                         // Previous angle.
                         if (i > 0) {
                             

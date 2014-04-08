@@ -19,6 +19,7 @@ Ship::Ship() {
 void Ship::setup() {
     angle = 0;
     angleVel = 2;
+    rotPoint = 0;
 }
 
 //--------------------------------------------------------------
@@ -51,14 +52,14 @@ void Ship::draw() {
         ofSetRectMode(OF_RECTMODE_CENTER);
         
         float rotOffset;
-        rotOffset = fImgHeightBass;
+        rotOffset = fImgHeightBass * rotPoint;
         
-        ofTranslate(pos.x - rotOffset, pos.y);
+        ofTranslate(pos.x + rotOffset, pos.y);
         ofRotate(angle);
         
         ofPushMatrix();{
             
-            ofTranslate(rotOffset, 0);
+            ofTranslate(-rotOffset, 0);
             
             ofPushMatrix();{
                 //ofTranslate(pos);
