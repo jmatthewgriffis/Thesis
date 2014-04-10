@@ -15,15 +15,15 @@ public:
     Ship();
     
     void setup();
-    void update(ofVec2f _pos, float _playerHeight);
+    void update(ofVec2f _pos, float _playerHeight, bool _allowControl);
     void draw();
     
     ofImage trebleClef, bassClef;
     
-    ofVec2f pos;
+    ofVec2f pos, posPlayer;
     
-    int angle, angleVel;
+    float angle, angleVel, rotPoint;
     bool bTiltUpward, bTiltDownward;
     
-    float fImgHeightTreble, fImgHeightBass;
+    float fImgHeightTreble, fImgHeightBass, rotOffset;
 };

@@ -60,7 +60,7 @@ void testApp::setup(){
     gameState = 0;
     currentState = gameState;
     
-    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = false;
+    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = bPlayerFellOver = false;
     bHighlightNote = false;
     bCamZoomedIn = false;
     bIsSecondPlayer = false;
@@ -143,7 +143,9 @@ void testApp::update(){
     playerCollidesWithObstacle();
     playerCollidesWithObject();
     if (myPlayer.bModeSurf) {
-        playerCollidesWithStream();
+        if (!bPlayerFellOver) {
+            playerCollidesWithStream();
+        }
     }
     objectCollidesWithObstacle();
     
@@ -301,7 +303,7 @@ void testApp::fLoadPrototype() {
     
     // Maintenance.
     cleanup();
-    bBassOnly = bTrebleOnly = bIsSecondPlayer = false;
+    bBassOnly = bTrebleOnly = bIsSecondPlayer = bPlayerFellOver = false;
     float fZoomedInX = iScaler * 7.5;
     iLastOpacityChange = ofGetElapsedTimef(); // Reset the clock.
     
@@ -1310,10 +1312,9 @@ void testApp::playerCollidesWithGroundOrSky() {
                 myPlayer2.onSurface = true;
             }
         }
-        if (gameState == 8) {
-            if (myPlayer.pos.x > streamBitList[streamBitList.size() -1].pos.x) {
+        if (gameState >= 7) {
+            if (gameState == 8 && myPlayer.pos.x > streamBitList[streamBitList.size() -1].pos.x) {
                 gameState = 7;
-                
             }
             fLoadPrototype();
         }
@@ -1512,7 +1513,7 @@ void testApp::playerCollidesWithStream() {
                      */
                     // FIND ME, TUNE ME, TUNE ME SO MUCH.
                     // Check the angle and adjust speed accordingly.
-                    int closeEnough = 20; // How close the two angles have to be.
+                    int closeEnough = 15; // How close the two angles have to be.
                     int otherBitProximity = iScaler; // How close the other Bit's end has to be.
                     int checkOtherBitMultiplier = otherBitProximity; // How many intervals of the current bit check against the other Bits.
                     float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
@@ -1524,8 +1525,10 @@ void testApp::playerCollidesWithStream() {
                     if (angleDiff <= closeEnough) {
                         myPlayer.closeEnough = true;
                     }
+                    
                     // If not close enough, check the previous and next angles if they exist.
                     else {
+                        myPlayer.myShip.angle += myPlayer.myShip.rotPoint * 0.5;
                         // Previous angle.
                         if (i > 0) {
                             
@@ -1560,9 +1563,10 @@ void testApp::playerCollidesWithStream() {
                         }
                     }
                 }
-                // Bonk off bottom of stream, if not above stream.
+                // Bonk off bottom of stream, if not above stream and not in stream.
                 if (myPlayer.pos.y - myPlayer.tall * 0.5 <= start.y + inc.y * j + streamBitList[i].tall * 0.5
-                    && myPlayer.pos.y >= start.y + inc.y * j - streamBitList[i].tall * 0.5) {
+                    && myPlayer.pos.y >= start.y + inc.y * j - streamBitList[i].tall * 0.5
+                    && !myPlayer.onStream) {
                     myPlayer.pos.y = start.y + inc.y * j + streamBitList[i].tall * 0.5 + myPlayer.tall * 0.5;
                     if (myPlayer.vel.y < 0) {
                         myPlayer.vel.y = 0;
@@ -1583,6 +1587,12 @@ void testApp::playerCollidesWithStream() {
         } else {
             inStreamTimer--;
         }
+    }
+    
+    // Fall over if angled too sharply and not in stream.
+    if (myPlayer.onStream && myPlayer.myShip.angle > 90 && myPlayer.myShip.angle < 270) {
+        bPlayerFellOver = true;
+        myPlayer.allowControl = false;
     }
 }
 

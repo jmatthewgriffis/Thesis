@@ -56,6 +56,7 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
     
     up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = false;
     allowMove = true;
+    allowControl = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     bHasShip = false;
     angle = 0;
@@ -154,7 +155,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
     
     // Move forward constantly.
     if ((bModeSurf || bModeFlight) && gameState != 6 && allowMove) {
-        if ( (gameState == 4 && onSurface == true) || (gameState != 4 && bModeSurf && onStream && !closeEnough) ) {
+        if ( (gameState == 4 && onSurface == true) /*|| (gameState != 4 && bModeSurf && onStream && !closeEnough)*/ ) {
             pos.x += maxVel * 0.25f;
         } else {
             pos.x += maxVel;
@@ -163,62 +164,64 @@ void Player::update( int _gameState, string _OnThisNote ) {
     
     if ( allowMove ) {
         
-        // Up-----------
-        if ( up ) {
-            if ( bModePlatformer ) {
-                
-                if ( onSurface && allowJump ) {
-                    applyForce( ofVec2f( 0.0, jumpVel ) );
-                    onSurface = false;
-                    allowJump = false;
+        if (allowControl) {
+            // Up-----------
+            if ( up ) {
+                if ( bModePlatformer ) {
+                    
+                    if ( onSurface && allowJump ) {
+                        applyForce( ofVec2f( 0.0, jumpVel ) );
+                        onSurface = false;
+                        allowJump = false;
+                    }
+                    
+                } else if ( bModeFlight ) {
+                    applyForce( ofVec2f( 0.0, -maxVel ) );
+                    
+                } else if ( bModeSurf ) {
+                    
+                    if ( allowJump == true ) {
+                        vel.y = 0;
+                        applyForce( ofVec2f( 0.0, jumpVel * 0.75 ) );
+                        onSurface = false;
+                        onStream = false;
+                        allowJump = false;
+                    }
                 }
-                
-            } else if ( bModeFlight ) {
-                applyForce( ofVec2f( 0.0, -maxVel ) );
-                
-            } else if ( bModeSurf ) {
-                
-                if ( allowJump == true ) {
-                    vel.y = 0;
-                    applyForce( ofVec2f( 0.0, jumpVel * 0.75 ) );
-                    onSurface = false;
-                    onStream = false;
-                    allowJump = false;
-                }
+            } else if ( bModeSurf && !down ){
+                allowJump = true;
             }
-        } else if ( bModeSurf && !down ){
-            allowJump = true;
-        }
-        
-        // Down-----------
-        if ( down ) {
-            if ( bModeFlight ) {
-                //            pos.y += vel.y;
-                applyForce( ofVec2f( 0.0, maxVel ) );
-            } else if (bModeSurf) {
-                if ( allowJump == true ) {
-                    vel.y = 0;
-                    applyForce( ofVec2f( 0.0, -jumpVel * 0.4 ) );
-                    //onSurface = false;
-                    allowJump = false;
+            
+            // Down-----------
+            if ( down ) {
+                if ( bModeFlight ) {
+                    //            pos.y += vel.y;
+                    applyForce( ofVec2f( 0.0, maxVel ) );
+                } else if (bModeSurf) {
+                    if ( allowJump == true ) {
+                        vel.y = 0;
+                        applyForce( ofVec2f( 0.0, -jumpVel * 0.4 ) );
+                        //onSurface = false;
+                        allowJump = false;
+                    }
                 }
+            } else if (bModeSurf && !up) {
+                allowJump = true;
             }
-        } else if (bModeSurf && !up) {
-            allowJump = true;
-        }
-        
-        // Left-----------
-        if ( left ) {
-            //if ( gameState < 3 ) {
-            applyForce( ofVec2f( -maxVel, 0.0 ) );
-            //}
-        }
-        
-        // Right-----------
-        if ( right ) {
-            //if ( gameState < 3 ) {
-            applyForce( ofVec2f( maxVel, 0.0 ) );
-            //}
+            
+            // Left-----------
+            if ( left ) {
+                //if ( gameState < 3 ) {
+                applyForce( ofVec2f( -maxVel, 0.0 ) );
+                //}
+            }
+            
+            // Right-----------
+            if ( right ) {
+                //if ( gameState < 3 ) {
+                applyForce( ofVec2f( maxVel, 0.0 ) );
+                //}
+            }
         }
         
         vel += acc;
@@ -286,7 +289,15 @@ void Player::update( int _gameState, string _OnThisNote ) {
     fActing();
     
     if (bHasShip) {
-        myShip.update(ofVec2f(pos.x + wide * 0.45, pos.y + tall * 1.1), tall);
+        myShip.update(ofVec2f(pos.x + wide * 0.45, pos.y + tall * 1.1), tall, allowControl);
+    }
+    
+    if (!allowControl) {
+        if (myShip.angle < 180) {
+            myShip.angle += 0.5;
+        } else if (myShip.angle > 180) {
+            myShip.angle -= 0.5;
+        }
     }
 }
 

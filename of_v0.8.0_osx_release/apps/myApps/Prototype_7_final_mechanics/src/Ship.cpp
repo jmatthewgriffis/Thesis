@@ -18,15 +18,18 @@ Ship::Ship() {
 //--------------------------------------------------------------
 void Ship::setup() {
     angle = 0;
-    angleVel = 1;
+    angleVel = 2;
+    rotPoint = 0;
 }
 
 //--------------------------------------------------------------
-void Ship::update(ofVec2f _pos, float _playerHeight) {
+void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
     
-    pos = _pos;
+    posPlayer = _pos;
+    pos = posPlayer;
     fImgHeightTreble = _playerHeight * 2.25;
     fImgHeightBass = fImgHeightTreble / 2;
+    rotOffset = fImgHeightBass;
     
     while (angle > 360) {
         angle -= 360;
@@ -35,11 +38,30 @@ void Ship::update(ofVec2f _pos, float _playerHeight) {
         angle += 360;
     }
     
-    if (bTiltUpward) {
-        angle -= angleVel;
+    if (angle >= 180) {
+        rotPoint = -1; // Back of ship.
+    } else {
+        rotPoint = 1; // Front of ship.
     }
-    if (bTiltDownward) {
-        angle += angleVel;
+    
+    // Set the position based on the rotation point so we can rotate the ship correctly.
+    if (rotPoint == -1) {
+        pos.x = posPlayer.x - rotOffset * cos(ofDegToRad(angle));
+        pos.y = posPlayer.y - rotOffset * sin(ofDegToRad(angle));
+    } else if (rotPoint == 1) {
+        pos.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
+        pos.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - angle - 90));
+    } else {
+        //pos = posPlayer;
+    }
+    
+    if (_allowControl) {
+        if (bTiltUpward) {
+            angle -= angleVel;
+        }
+        if (bTiltDownward) {
+            angle += angleVel;
+        }
     }
 }
 
@@ -54,16 +76,26 @@ void Ship::draw() {
         ofRotate(angle);
         
         ofPushMatrix();{
-            //ofTranslate(pos);
-            ofRotate(90);
-            trebleClef.draw(0, 0, (fImgHeightTreble * trebleClef.getWidth() / trebleClef.getHeight()), fImgHeightTreble);
+            
+            ofTranslate(-rotOffset * rotPoint, 0);
+            
+            ofPushMatrix();{
+                ofRotate(90);
+                trebleClef.draw(0, 0, (fImgHeightTreble * trebleClef.getWidth() / trebleClef.getHeight()), fImgHeightTreble);
+            }ofPopMatrix();
+            
+            ofPushMatrix();{
+                ofTranslate(- fImgHeightTreble * 0.5, 0);
+                ofRotate(135);
+                bassClef.draw(0, 0, (fImgHeightBass * bassClef.getWidth() / bassClef.getHeight()), fImgHeightBass);
+            }ofPopMatrix();
+            
         }ofPopMatrix();
         
-        ofPushMatrix();{
-            ofTranslate(- fImgHeightTreble * 0.5, 0);
-            ofRotate(135);
-            bassClef.draw(0, 0, (fImgHeightBass * bassClef.getWidth() / bassClef.getHeight()), fImgHeightBass);
-        }ofPopMatrix();
+        // Test where the pos / rotation point is.
+        /*ofSetColor(255,0,0);
+         ofCircle(0,0,5);*/
+        
     }ofPopMatrix();
     
     ofSetRectMode(OF_RECTMODE_CORNER);

@@ -47,7 +47,7 @@ public:
     bool bCanMakeNotes;
     bool bAutoplayBass;
     
-    bool allowMove, allowJump, up, left, down, right;
+    bool allowMove, allowControl, allowJump, up, left, down, right;
     bool onSurface, onStream;
     bool closeEnough;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;
