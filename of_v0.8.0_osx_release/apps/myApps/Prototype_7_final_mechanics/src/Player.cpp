@@ -565,10 +565,8 @@ void Player::fDrawCharacter() {
     ofPushMatrix();{
         float newAngle;
         if (bHasShip) {
-            if (myShip.angle <= 34 || myShip.angle >= 302) {
+            if ((myShip.angle <= 34 && myShip.clockwise) || (myShip.angle >= 302 && !myShip.clockwise)) {
                 myAngle = myShip.angle;
-            } else {
-                
             }
             newAngle = myShip.angle;
         }
