@@ -579,20 +579,29 @@ void Player::fDrawCharacter() {
             ofTranslate(-myShip.pos);
             
             // Hat
-            ofSetColor(255, 255);
+            /*ofSetColor(255, 255);
             ofSetRectMode(OF_RECTMODE_CORNER);
             ofPushMatrix();{
                 ofTranslate(pos.x - fHatWidth * 0.5, fHatOffset);
-                ofRotate(-10 - myAngle);
+                ofRotate(-10);
                 hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
-            }ofPopMatrix();
+            }ofPopMatrix();*/
             
-            // Body
+            // Body and hat
             ofPushMatrix();{
                 ofTranslate(pos);
                 ofRotate(-myAngle);
+                // Body
                 ofSetColor(0, 255);
                 ofEllipse(0, 0, wide, tall);
+                // Hat
+                ofSetColor(255, 255);
+                ofSetRectMode(OF_RECTMODE_CORNER);
+                ofPushMatrix();{
+                    ofTranslate(-fHatWidth * 0.5, fHatOffset - pos.y);
+                    ofRotate(-10);
+                    hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
+                }ofPopMatrix();
             }ofPopMatrix();
             
             // Appendages
@@ -628,6 +637,6 @@ void Player::fDrawCharacter() {
         }ofPopMatrix();
     }ofPopMatrix();
     // Test circle
-    ofSetColor(255,0,0);
-    ofCircle(pos, 5);
+    /*ofSetColor(255,0,0);
+    ofCircle(pos, 5);*/
 }
