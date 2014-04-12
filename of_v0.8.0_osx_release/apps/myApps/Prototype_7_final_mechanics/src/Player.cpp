@@ -355,9 +355,6 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     // Draw the actual character now that he exists.
     if (gameState >= 7) {
         fDrawCharacter();
-        // Test circle
-        ofSetColor(255,0,0);
-        ofCircle(pos, 5);
     }
     
     fDrawCapacity(_recordedList);
@@ -574,12 +571,12 @@ void Player::fDrawCharacter() {
             myAngle = 0;
         }
         
-        ofTranslate(pos);
+        ofTranslate(myShip.pos);
         ofRotate(myAngle);
         
         ofPushMatrix();{
             
-            ofTranslate(-pos);
+            ofTranslate(-myShip.pos);
             
             // Hat
             ofSetColor(255, 255);
@@ -626,4 +623,7 @@ void Player::fDrawCharacter() {
             }ofPopMatrix();
         }ofPopMatrix();
     }ofPopMatrix();
+    // Test circle
+    ofSetColor(255,0,0);
+    ofCircle(pos, 5);
 }
