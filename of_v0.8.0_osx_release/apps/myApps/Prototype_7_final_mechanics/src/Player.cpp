@@ -32,7 +32,11 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
     staffPosList = _staffPosList;
     myObject.setup(iScaler, staffPosList, "c3_middle", 1, -1);
     
-    wide = iScaler * 1.5;
+    if (gameState < 7) {
+        wide = iScaler * 2;
+    } else {
+        wide = iScaler * 1.5;
+    }
     tall = wide;
     if (gameState == 8) {
         maxVel = float( iScaler / 3.4483 ) * 0.75; // Yields 90bpm.

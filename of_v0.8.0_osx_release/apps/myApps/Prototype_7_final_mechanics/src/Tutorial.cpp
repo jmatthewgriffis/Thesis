@@ -14,8 +14,11 @@ Tutorial::Tutorial() {
 
 void Tutorial::addObject( string _note, float _xPos, int _age ) {
     
+    int _stream = 1;
+    
     stringList.push_back( _note );
     stringList.push_back( ofToString( _xPos ) );
+    stringList.push_back( ofToString( _stream ) );
     stringList.push_back( ofToString( _age ) );
 }
 
