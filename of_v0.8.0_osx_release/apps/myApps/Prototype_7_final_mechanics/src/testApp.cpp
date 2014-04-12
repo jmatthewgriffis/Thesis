@@ -1586,7 +1586,10 @@ void testApp::playerCollidesWithStream() {
             inStreamTimer = 0;
         } else {
             inStreamTimer--;
+            myPlayer.myShip.onStream = true;
         }
+    } else {
+        myPlayer.myShip.onStream = false;
     }
     
     // Fall over if angled too sharply and not in stream. Find me

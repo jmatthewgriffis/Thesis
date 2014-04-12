@@ -63,7 +63,7 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
     allowControl = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     bHasShip = false;
-    angle = 0;
+    angle = myAngle = 0;
     fHealth = fHealthMax;
     
     pos.set( _pos );
@@ -563,16 +563,18 @@ void Player::fDrawCharacter() {
     tall = wide * 1.35;
     
     ofPushMatrix();{
-        
-        float myAngle;
+        float newAngle;
         if (bHasShip) {
-            myAngle = myShip.angle;
-        } else {
-            myAngle = 0;
+            if (myShip.angle <= 34 || myShip.angle >= 302) {
+                myAngle = myShip.angle;
+            } else {
+                
+            }
+            newAngle = myShip.angle;
         }
         
         ofTranslate(myShip.pos);
-        ofRotate(myAngle);
+        ofRotate(newAngle);
         
         ofPushMatrix();{
             

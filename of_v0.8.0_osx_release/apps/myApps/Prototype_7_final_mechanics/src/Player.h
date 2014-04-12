@@ -52,7 +52,7 @@ public:
     bool closeEnough;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;
     int iScaler, gameState, capacity;
-    float radius, angle, angleVel;
+    float radius, angle, angleVel, myAngle;
     float fHealth, fHealthMax, fHealthLossSpeed;
     float fNoteOffsetH;
     int tmpAngle;
