@@ -583,13 +583,17 @@ void Player::fDrawCharacter() {
             ofSetRectMode(OF_RECTMODE_CORNER);
             ofPushMatrix();{
                 ofTranslate(pos.x - fHatWidth * 0.5, fHatOffset);
-                ofRotate(-10);
+                ofRotate(-10 - myAngle);
                 hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
             }ofPopMatrix();
             
             // Body
-            ofSetColor(0, 255);
-            ofEllipse(pos, wide, tall);
+            ofPushMatrix();{
+                ofTranslate(pos);
+                ofRotate(-myAngle);
+                ofSetColor(0, 255);
+                ofEllipse(0, 0, wide, tall);
+            }ofPopMatrix();
             
             // Appendages
             ofSetColor(255, 255);
