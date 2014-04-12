@@ -602,6 +602,30 @@ void Player::fDrawCharacter() {
                     ofRotate(-10);
                     hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
                 }ofPopMatrix();
+                //
+                ofSetColor(255, 255);
+                ofSetRectMode(OF_RECTMODE_CORNER);
+                float armSizer = wide * 0.00286;
+                float armWidth = appendage.getWidth() * armSizer;
+                float armHeight = appendage.getHeight() * armSizer;
+                // Right arm
+                ofPushMatrix();{
+                    ofTranslate(wide * 0.35, -wide * 0.15);
+                    ofRotate(55);
+                    appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+                    // Test circle
+                    /*ofSetColor(255,0,0);
+                    ofCircle(0,0,5);*/
+                }ofPopMatrix();
+                // Left arm
+                ofPushMatrix();{
+                    ofTranslate(-wide * 0.35, -wide * 0.15);
+                    ofRotate(-70);
+                    appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+                    // Test circle
+                    /*ofSetColor(255,0,0);
+                    ofCircle(0,0,5);*/
+                }ofPopMatrix();
             }ofPopMatrix();
             
             // Appendages
@@ -611,11 +635,14 @@ void Player::fDrawCharacter() {
             float armWidth = appendage.getWidth() * armSizer;
             float armHeight = appendage.getHeight() * armSizer;
             // Right arm
-            ofPushMatrix();{
+            /*ofPushMatrix();{
                 ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
-                ofRotate(55);
+                ofRotate(55 - myAngle * 2);
                 appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
-            }ofPopMatrix();
+                // Test circle
+                ofSetColor(255,0,0);
+                ofCircle(0,0,5);
+            }ofPopMatrix();*/
             // Right leg
             ofPushMatrix();{
                 ofTranslate(pos.x + wide * 0.25, pos.y + wide * 0.45);
@@ -623,11 +650,14 @@ void Player::fDrawCharacter() {
                 appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
             }ofPopMatrix();
             // Left arm
-            ofPushMatrix();{
+            /*ofPushMatrix();{
                 ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
-                ofRotate(-70);
+                ofRotate(-70 - myAngle * 2);
                 appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
-            }ofPopMatrix();
+                // Test circle
+                ofSetColor(255,0,0);
+                ofCircle(0,0,5);
+            }ofPopMatrix();*/
             // Left leg
             ofPushMatrix();{
                 ofTranslate(pos.x - wide * 0.25, pos.y + wide * 0.45);

@@ -71,7 +71,7 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
 
 //--------------------------------------------------------------
 void Ship::draw() {
-    
+    cout<<angle<<endl;
     ofPushMatrix();{
         
         ofSetRectMode(OF_RECTMODE_CENTER);
