@@ -1349,7 +1349,6 @@ void testApp::playerCollidesWithObject() {
     
     // Collision with main objects vector.
     for ( int i = 0; i < objectList.size(); i++ ) {
-        
         // Make some floats for shorthand...
         // Player is drawn from the center.
         // Obstacles are drawn from the corner.
@@ -1528,7 +1527,8 @@ void testApp::playerCollidesWithStream() {
                     
                     // If not close enough, check the previous and next angles if they exist.
                     else {
-                        myPlayer.myShip.angle += myPlayer.myShip.rotPoint * 0.5;
+                        // Autorotate if leaning too far. Find me
+                        //myPlayer.myShip.angle += myPlayer.myShip.rotPoint * 0.5;
                         // Previous angle.
                         if (i > 0) {
                             
@@ -1589,10 +1589,10 @@ void testApp::playerCollidesWithStream() {
         }
     }
     
-    // Fall over if angled too sharply and not in stream.
+    // Fall over if angled too sharply and not in stream. Find me
     if (myPlayer.onStream && myPlayer.myShip.angle > 90 && myPlayer.myShip.angle < 270) {
-        bPlayerFellOver = true;
-        myPlayer.allowControl = false;
+        //bPlayerFellOver = true;
+        //myPlayer.allowControl = false;
     }
 }
 

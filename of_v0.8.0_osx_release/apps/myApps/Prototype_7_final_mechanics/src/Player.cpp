@@ -355,6 +355,9 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     // Draw the actual character now that he exists.
     if (gameState >= 7) {
         fDrawCharacter();
+        // Test circle
+        ofSetColor(255,0,0);
+        ofCircle(pos, 5);
     }
     
     fDrawCapacity(_recordedList);
@@ -562,47 +565,65 @@ void Player::fDrawCharacter() {
     
     tall = wide * 1.35;
     
-    // Hat
-    ofSetColor(255, 255);
-    ofSetRectMode(OF_RECTMODE_CORNER);
     ofPushMatrix();{
-        ofTranslate(pos.x - fHatWidth * 0.5, fHatOffset);
-        ofRotate(-10);
-        hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
-    }ofPopMatrix();
-    
-    // Body
-    ofSetColor(0, 255);
-    ofEllipse(pos, wide, tall);
-    
-    // Appendages
-    ofSetColor(255, 255);
-    ofSetRectMode(OF_RECTMODE_CORNER);
-    float armSizer = wide * 0.00286;
-    float armWidth = appendage.getWidth() * armSizer;
-    float armHeight = appendage.getHeight() * armSizer;
-    // Right arm
-    ofPushMatrix();{
-        ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
-        ofRotate(55);
-        appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
-    }ofPopMatrix();
-    // Right leg
-    ofPushMatrix();{
-        ofTranslate(pos.x + wide * 0.25, pos.y + wide * 0.45);
-        ofRotate(125);
-        appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
-    }ofPopMatrix();
-    // Left arm
-    ofPushMatrix();{
-        ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
-        ofRotate(-70);
-        appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
-    }ofPopMatrix();
-    // Left leg
-    ofPushMatrix();{
-        ofTranslate(pos.x - wide * 0.25, pos.y + wide * 0.45);
-        ofRotate(-135);
-        appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+        
+        float myAngle;
+        if (bHasShip) {
+            myAngle = myShip.angle;
+        } else {
+            myAngle = 0;
+        }
+        
+        ofTranslate(pos);
+        ofRotate(myAngle);
+        
+        ofPushMatrix();{
+            
+            ofTranslate(-pos);
+            
+            // Hat
+            ofSetColor(255, 255);
+            ofSetRectMode(OF_RECTMODE_CORNER);
+            ofPushMatrix();{
+                ofTranslate(pos.x - fHatWidth * 0.5, fHatOffset);
+                ofRotate(-10);
+                hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
+            }ofPopMatrix();
+            
+            // Body
+            ofSetColor(0, 255);
+            ofEllipse(pos, wide, tall);
+            
+            // Appendages
+            ofSetColor(255, 255);
+            ofSetRectMode(OF_RECTMODE_CORNER);
+            float armSizer = wide * 0.00286;
+            float armWidth = appendage.getWidth() * armSizer;
+            float armHeight = appendage.getHeight() * armSizer;
+            // Right arm
+            ofPushMatrix();{
+                ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
+                ofRotate(55);
+                appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+            }ofPopMatrix();
+            // Right leg
+            ofPushMatrix();{
+                ofTranslate(pos.x + wide * 0.25, pos.y + wide * 0.45);
+                ofRotate(125);
+                appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+            }ofPopMatrix();
+            // Left arm
+            ofPushMatrix();{
+                ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
+                ofRotate(-70);
+                appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+            }ofPopMatrix();
+            // Left leg
+            ofPushMatrix();{
+                ofTranslate(pos.x - wide * 0.25, pos.y + wide * 0.45);
+                ofRotate(-135);
+                appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+            }ofPopMatrix();
+        }ofPopMatrix();
     }ofPopMatrix();
 }
