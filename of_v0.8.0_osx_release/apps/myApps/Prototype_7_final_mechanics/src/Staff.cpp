@@ -19,7 +19,7 @@ Staff::Staff() {
     iStaffAlpha = iStaffAlphaMin;
     iStaffAlphaVel = 0.5;
     
-    bHideAll = true;
+    bHideAll = false;
     if (bHideAll) {
         bDrawStaffLines = false;
         bDrawStaffBracketAndClefs = false;

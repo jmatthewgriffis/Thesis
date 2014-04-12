@@ -61,11 +61,14 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("d3#", (fMeasureLength * i) + m1Bass, myStream, -1);
             }
             
-            myStream = 2;
-            if (i % 2 == 0 && i != iNumMeasures) {
-                addObject("f4#", (fMeasureLength * i) + m1Treble, myStream, -1);
-                addObject("g4#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
-                addObject("f4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
+            // Second path in treble
+            if (gameState >= 7) {
+                myStream = 2;
+                if (i % 2 == 0 && i != iNumMeasures) {
+                    addObject("f4#", (fMeasureLength * i) + m1Treble, myStream, -1);
+                    addObject("g4#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+                    addObject("f4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
+                }
             }
             
             // Bass
@@ -117,6 +120,8 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         spacer = fMeasureLength / 4;
         m1Bass = iScaler * 20 - fMeasureLength;
         
+        myStream = 2;
+        
         for (int i = 1; i < 13; i++) {
             
             /*
@@ -130,34 +135,34 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
              12: G chord
              */
             
-            //            if (i < 5 || i == 7 || i == 8 || i == 11) {
-            //                addObject("c2", (fMeasureLength * i) + m1Bass, -1);
-            //                addObject("g2", (fMeasureLength * i) + m1Bass, -1);
-            //                addObject("c2", (fMeasureLength * i) + m1Bass + spacer, -1);
-            //                addObject("g2", (fMeasureLength * i) + m1Bass + spacer, -1);
-            //                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 2, -1);
-            //                addObject("g2", (fMeasureLength * i) + m1Bass + spacer * 2, -1);
-            //                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 3, -1);
-            //                addObject("g2", (fMeasureLength * i) + m1Bass + spacer * 3, -1);
-            //            } else if (i == 5 || i == 6 || i == 10) {
-            //                addObject("f1", (fMeasureLength * i) + m1Bass, -1);
-            //                addObject("c2", (fMeasureLength * i) + m1Bass, -1);
-            //                addObject("f1", (fMeasureLength * i) + m1Bass + spacer, -1);
-            //                addObject("c2", (fMeasureLength * i) + m1Bass + spacer, -1);
-            //                addObject("f1", (fMeasureLength * i) + m1Bass + spacer * 2, -1);
-            //                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 2, -1);
-            //                addObject("f1", (fMeasureLength * i) + m1Bass + spacer * 3, -1);
-            //                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 3, -1);
-            //            } else {
-            //                addObject("g1", (fMeasureLength * i) + m1Bass, -1);
-            //                addObject("d2", (fMeasureLength * i) + m1Bass, -1);
-            //                addObject("g1", (fMeasureLength * i) + m1Bass + spacer, -1);
-            //                addObject("d2", (fMeasureLength * i) + m1Bass + spacer, -1);
-            //                addObject("g1", (fMeasureLength * i) + m1Bass + spacer * 2, -1);
-            //                addObject("d2", (fMeasureLength * i) + m1Bass + spacer * 2, -1);
-            //                addObject("g1", (fMeasureLength * i) + m1Bass + spacer * 3, -1);
-            //                addObject("d2", (fMeasureLength * i) + m1Bass + spacer * 3, -1);
-            //            }
+            if (i < 5 || i == 7 || i == 8 || i == 11) {
+                addObject("c2", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("g2", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("g2", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("g2", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+                addObject("g2", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+            } else if (i == 5 || i == 6 || i == 10) {
+                addObject("f1", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("f1", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("f1", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("f1", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+            } else {
+                addObject("g1", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("d2", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("g1", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("d2", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("g1", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("d2", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("g1", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+                addObject("d2", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+            }
         }
         
         
