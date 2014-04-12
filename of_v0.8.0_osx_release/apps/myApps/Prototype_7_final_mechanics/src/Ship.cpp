@@ -19,9 +19,9 @@ Ship::Ship() {
 void Ship::setup() {
     angle = anglePrev = 0;
     angleVel = 2;
-    rotPoint = 0;
+    rotPoint = 1;
     onStream = false;
-    clockwise = false;
+    clockwise = true;
 }
 
 //--------------------------------------------------------------
@@ -40,15 +40,11 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
         angle += 360;
     }
     
-    //if (onStream) {
-        if (angle >= 180 && !clockwise) {
-            rotPoint = -1; // Back of ship.
-        } else if (angle < 180 && clockwise) {
-            rotPoint = 1; // Front of ship.
-        }
-    //} else {
-        //rotPoint = 0;
-    //}
+    if (angle >= 180 && !clockwise) {
+        rotPoint = -1; // Back of ship.
+    } else if (angle < 180 && clockwise) {
+        rotPoint = 1; // Front of ship.
+    }
     
     // Set the position based on the rotation point so we can rotate the ship correctly.
     if (rotPoint == -1) {
@@ -62,17 +58,23 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
         /*pos.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
          pos.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - angle - 90));*/
     } else {
-        pos = posPlayer;
+        //pos = posPlayer;
     }
     
     anglePrev = angle;
     
     if (_allowControl) {
+        float airMultiplier;
+        if (onStream) {
+            airMultiplier = 1;
+        } else {
+            airMultiplier = 1;
+        }
         if (bTiltUpward) {
-            angle -= angleVel;
+            angle -= angleVel * airMultiplier;
         }
         if (bTiltDownward) {
-            angle += angleVel;
+            angle += angleVel * airMultiplier;
         }
     }
     

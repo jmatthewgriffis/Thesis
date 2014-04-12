@@ -50,7 +50,7 @@ public:
     bool allowMove, allowControl, allowJump, up, left, down, right;
     bool onSurface, onStream;
     bool closeEnough;
-    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController;
+    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController, bGrabHat;
     int iScaler, gameState, capacity;
     float radius, angle, angleVel, myAngle;
     float fHealth, fHealthMax, fHealthLossSpeed;

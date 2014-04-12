@@ -58,7 +58,7 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
     fNoteOffsetH = 0;
     currentStream = -1;
     
-    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = false;
+    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = false;
     allowMove = true;
     allowControl = true;
     allowJump = bAllowRecord = bAllowReplay = true;
@@ -253,7 +253,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
         fHatOffsetDefault = pos.y - fHatHeight * 0.5 + wide * -0.65;
         
         // Build up force as the player rises then make the hat pop into the air when the player stops or reverses direction.
-        if (yPosDiff < 0) {
+        if (yPosDiff < 0 && !bGrabHat) {
             if (pos.y - yPosLast < 0) {
                 fHatQueuedForce += yPosDiff * 0.025;
                 // Add terminal upward vel to keep this under control.
@@ -561,12 +561,17 @@ void Player::fDrawHealth() {
 void Player::fDrawCharacter() {
     
     tall = wide * 1.35;
+    bGrabHat = false;
     
     ofPushMatrix();{
         float newAngle;
+        float lowerLimit = 50;
+        float upperLimit = 295;
         if (bHasShip) {
-            if ((myShip.angle <= 34 && myShip.clockwise) || (myShip.angle >= 302 && !myShip.clockwise)) {
+            if ((myShip.angle <= lowerLimit && myShip.clockwise) || (myShip.angle >= upperLimit && !myShip.clockwise)) {
                 myAngle = myShip.angle;
+            } else {
+                bGrabHat = true;
             }
             newAngle = myShip.angle;
         }
@@ -611,7 +616,13 @@ void Player::fDrawCharacter() {
                 // Right arm
                 ofPushMatrix();{
                     ofTranslate(wide * 0.35, -wide * 0.15);
-                    ofRotate(55);
+                    float addition;
+                    if (myShip.clockwise && myAngle != newAngle) {
+                        addition = -15;
+                    } else {
+                        addition = 0;
+                    }
+                    ofRotate(55 + addition);
                     appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
                     // Test circle
                     /*ofSetColor(255,0,0);
@@ -620,7 +631,13 @@ void Player::fDrawCharacter() {
                 // Left arm
                 ofPushMatrix();{
                     ofTranslate(-wide * 0.35, -wide * 0.15);
-                    ofRotate(-70);
+                    float addition;
+                    if (!myShip.clockwise && myAngle != newAngle) {
+                        addition = 40;
+                    } else {
+                        addition = 0;
+                    }
+                    ofRotate(-70 + addition);
                     appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
                     // Test circle
                     /*ofSetColor(255,0,0);
