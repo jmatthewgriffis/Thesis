@@ -271,7 +271,9 @@ void Player::update( int _gameState, string _OnThisNote ) {
         
         if (fHatOffset < fHatOffsetDefault) {
             fHatVel += fHatVelDefault;
-            bFlyingHat = true;
+            if (!bGrabHat) {
+                bFlyingHat = true;
+            }
         } else if (fHatOffset >= fHatOffsetDefault) {
             fHatOffset = fHatOffsetDefault;
             fHatVel = 0;
@@ -280,7 +282,8 @@ void Player::update( int _gameState, string _OnThisNote ) {
         }
         
         if (inStreamTimer > 0 && bGrabHat && fHatOffset >= fHatOffsetDefault - iScaler) {
-            cout<<"yes! "<<bGrabHat<<endl;
+            fHatOffset = fHatOffsetDefault;
+        } else if (fHatOffset < fHatOffsetDefault - iScaler && !bFlyingHat) {
             fHatOffset = fHatOffsetDefault;
         } else {
             fHatOffset += fHatVel;
@@ -585,7 +588,14 @@ void Player::fDrawHealth() {
 
 //--------------------------------------------------------------
 void Player::fDrawCharacter() {
-    
+    /*
+    // Draw variable value for debugging.
+    string str;
+    if (bFlyingHat) str = "true";
+    else str = "false";
+    ofSetColor(0);
+    ofDrawBitmapString(str, pos.x + 100, pos.y - 50);
+    */
     tall = wide * 1.35;
     bGrabHat = false;
     
@@ -629,13 +639,22 @@ void Player::fDrawCharacter() {
                 ofSetColor(255, 255);
                 ofSetRectMode(OF_RECTMODE_CORNER);
                 ofPushMatrix();{
-                    if (bFlyingHat) {
+                    /*if (bFlyingHat) { // Find me
                         if (!bNoteFlyingHatAngle) {
-                            hatAngle = -myAngle;
+                            hatAngle = myAngle;
                             bNoteFlyingHatAngle = true;
                         }
-                        //ofRotate(hatAngle); // Find me
-                    }
+                        float diff = hatAngle - myAngle;
+                        float counterRot;
+                        if (diff != 0) {
+                            if (hatAngle > myAngle) {
+                                counterRot = -diff;
+                            } else {
+                                counterRot = diff;
+                            }
+                        }
+                        //ofRotate(counterRot); // Find me
+                    }*/
                     ofPushMatrix();{
                         ofTranslate(-fHatWidth * 0.5, fHatOffset - pos.y);
                         ofRotate(-10);
