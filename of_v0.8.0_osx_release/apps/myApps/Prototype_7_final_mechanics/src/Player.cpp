@@ -588,14 +588,14 @@ void Player::fDrawHealth() {
 
 //--------------------------------------------------------------
 void Player::fDrawCharacter() {
-    /*
+    
     // Draw variable value for debugging.
     string str;
     if (bFlyingHat) str = "true";
     else str = "false";
     ofSetColor(0);
-    ofDrawBitmapString(str, pos.x + 100, pos.y - 50);
-    */
+    ofDrawBitmapString(ofToString(myShip.angle), pos.x + 100, pos.y - 50);
+    
     tall = wide * 1.35;
     bGrabHat = false;
     
@@ -742,6 +742,9 @@ void Player::fDrawCharacter() {
         }ofPopMatrix();
     }ofPopMatrix();
     // Test circle
-    /*ofSetColor(255,0,0);
-    ofCircle(pos, 5);*/
+    ofSetColor(0,0,255);
+    ofCircle(pos, 5);
+    // Test lines
+    ofLine(myShip.pointFront, pos);
+    ofLine(myShip.pointRear, pos);
 }

@@ -130,4 +130,7 @@ public:
     Track myTrack;
     
     Staff myStaff;
+    
+    ofVec2f tmp;
+    bool updateGame;
 };

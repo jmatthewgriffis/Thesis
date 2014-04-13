@@ -40,25 +40,39 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
         angle += 360;
     }
     
-    if (angle >= 180 && !clockwise) {
-        rotPoint = -1; // Back of ship.
-    } else if (angle < 180 && clockwise) {
-        rotPoint = 1; // Front of ship.
+    // Store the front and rear rotation points.
+    pointRear.x = posPlayer.x - rotOffset * cos(ofDegToRad(359));
+    pointRear.y = posPlayer.y - rotOffset * sin(ofDegToRad(359));
+    /*pointRear.x = posPlayer.x - rotOffset * cos(ofDegToRad(angle));
+     pointRear.y = posPlayer.y - rotOffset * sin(ofDegToRad(angle));*/
+    pointFront.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - 0 - 90));
+    pointFront.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - 0 - 90));
+    /*pointFront.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
+     pointFront.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - angle - 90));*/
+    
+    
+    if (onStream) {
+        if (angle >= 180) {
+            rotPoint = -1; // Back of ship.
+        } else if (angle < 180) {
+            rotPoint = 1; // Front of ship.
+        }
+    } else {
+        rotPoint = 0;
+        /*if (angle >= 180 && !clockwise) {
+            rotPoint = -1; // Back of ship.
+        } else if (angle < 180 && clockwise) {
+            rotPoint = 1; // Front of ship.
+        }*/
     }
     
     // Set the position based on the rotation point so we can rotate the ship correctly.
     if (rotPoint == -1) {
-        pos.x = posPlayer.x - rotOffset * cos(ofDegToRad(359));
-        pos.y = posPlayer.y - rotOffset * sin(ofDegToRad(359));
-        /*pos.x = posPlayer.x - rotOffset * cos(ofDegToRad(angle));
-         pos.y = posPlayer.y - rotOffset * sin(ofDegToRad(angle));*/
+        pos = pointRear;
     } else if (rotPoint == 1) {
-        pos.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - 0 - 90));
-        pos.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - 0 - 90));
-        /*pos.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
-         pos.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - angle - 90));*/
+        pos = pointFront;
     } else {
-        //pos = posPlayer;
+        pos = posPlayer;
     }
     
     anglePrev = angle;

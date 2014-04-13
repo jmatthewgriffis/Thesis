@@ -20,7 +20,7 @@ public:
     
     ofImage trebleClef, bassClef;
     
-    ofVec2f pos, posPlayer;
+    ofVec2f pos, posPlayer, pointRear, pointFront;
     
     float angle, angleVel, rotPoint, anglePrev;
     bool bTiltUpward, bTiltDownward;
