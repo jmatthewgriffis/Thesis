@@ -18,7 +18,7 @@ class Player {
 public:
     Player();
     
-    void setup(int _gameState, int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList );
+    void setup(int _gameState, int _frameRate, int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList );
     void update( int _gameState, string _OnThisNote );
     void draw( ofTrueTypeFont _font, vector< Object > _recordedList );
     
@@ -50,13 +50,14 @@ public:
     bool allowMove, allowControl, allowJump, up, left, down, right;
     bool onSurface, onStream;
     bool closeEnough;
-    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController, bGrabHat;
-    int iScaler, gameState, capacity;
-    float radius, angle, angleVel, myAngle;
+    bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController, bGrabHat, bFlyingHat, bNoteFlyingHatAngle;
+    int iScaler, gameState, frameRate, capacity;
+    float radius, angle, angleVel, myAngle, hatAngle;
     float fHealth, fHealthMax, fHealthLossSpeed;
     float fNoteOffsetH;
     int tmpAngle;
     int currentStream;
+    int inStreamTimer;
     
     ofImage headphones, hand, appendage, appendage_mirrored, hat; // For some baffling reason the image is not moving when it should.
     

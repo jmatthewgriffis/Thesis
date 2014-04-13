@@ -23,9 +23,10 @@ Player::Player() {
 }
 
 //--------------------------------------------------------------
-void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList ) {
+void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList ) {
     
     gameState = _gameState;
+    frameRate = _frameRate;
     iScaler = _iScaler;
     bUsingController = _bUsingController;
     
@@ -57,13 +58,14 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
     angleVel = 15;
     fNoteOffsetH = 0;
     currentStream = -1;
+    inStreamTimer = 0;
     
-    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = false;
+    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = false;
     allowMove = true;
     allowControl = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     bHasShip = false;
-    angle = myAngle = 0;
+    angle = myAngle = hatAngle = 0;
     fHealth = fHealthMax;
     
     pos.set( _pos );
@@ -269,12 +271,20 @@ void Player::update( int _gameState, string _OnThisNote ) {
         
         if (fHatOffset < fHatOffsetDefault) {
             fHatVel += fHatVelDefault;
-        } else if (fHatOffset > fHatOffsetDefault) {
+            bFlyingHat = true;
+        } else if (fHatOffset >= fHatOffsetDefault) {
             fHatOffset = fHatOffsetDefault;
             fHatVel = 0;
+            bFlyingHat = false;
+            bNoteFlyingHatAngle = false;
         }
         
-        fHatOffset += fHatVel;
+        if (inStreamTimer > 0 && bGrabHat && fHatOffset >= fHatOffsetDefault - iScaler) {
+            cout<<"yes! "<<bGrabHat<<endl;
+            fHatOffset = fHatOffsetDefault;
+        } else {
+            fHatOffset += fHatVel;
+        }
     } // End updating hat.
     
     yPosDiff = pos.y - yPosLast;
@@ -302,6 +312,22 @@ void Player::update( int _gameState, string _OnThisNote ) {
         } else if (myShip.angle > 180) {
             myShip.angle -= 0.5;
         }
+    }
+    
+    // Use a timer to keep the rider in the stream.
+    float timeLimit = frameRate * 0.25;
+    if (onStream) {
+        inStreamTimer = timeLimit;
+    }
+    if (inStreamTimer > 0) {
+        if (vel.y < 0) { // Jump to leave the stream.
+            inStreamTimer = 0;
+        } else {
+            inStreamTimer--;
+            myShip.onStream = true;
+        }
+    } else {
+        myShip.onStream = false;
     }
 }
 
@@ -603,9 +629,22 @@ void Player::fDrawCharacter() {
                 ofSetColor(255, 255);
                 ofSetRectMode(OF_RECTMODE_CORNER);
                 ofPushMatrix();{
-                    ofTranslate(-fHatWidth * 0.5, fHatOffset - pos.y);
-                    ofRotate(-10);
-                    hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
+                    if (bFlyingHat) {
+                        if (!bNoteFlyingHatAngle) {
+                            hatAngle = -myAngle;
+                            bNoteFlyingHatAngle = true;
+                        }
+                        //ofRotate(hatAngle); // Find me
+                    }
+                    ofPushMatrix();{
+                        ofTranslate(-fHatWidth * 0.5, fHatOffset - pos.y);
+                        ofRotate(-10);
+                        //if (bFlyingHat && bGrabHat){
+                          // Find me
+                        //} else {
+                            hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
+                        //}
+                    }ofPopMatrix();
                 }ofPopMatrix();
                 //
                 ofSetColor(255, 255);
