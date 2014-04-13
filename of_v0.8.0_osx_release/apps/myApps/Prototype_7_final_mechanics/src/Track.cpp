@@ -84,7 +84,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                         float mySpacer = spacer * 0.65;
                         addObject("d3#", (fMeasureLength * i) + m1Treble + mySpacer * 2, myStream, -1);
                         addObject("a3#", (fMeasureLength * i) + m1Treble + mySpacer * 3, myStream, -1);
-                        addObject("c4#", (fMeasureLength * i) + m1Treble + mySpacer * 4, myStream + 1, -1);
+                        addObject("c4#", (fMeasureLength * i) + m1Treble + mySpacer * 4, myStream, -1);
                         addObject("g3#", (fMeasureLength * i) + m1Treble + mySpacer * 5, myStream, -1);
                         addObject("f3#", (fMeasureLength * i) + m1Treble + mySpacer * 6, myStream, -1);
                     }
