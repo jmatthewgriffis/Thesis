@@ -17,9 +17,11 @@ Ship::Ship() {
 
 //--------------------------------------------------------------
 void Ship::setup() {
-    angle = 0;
+    angle = anglePrev = 0;
     angleVel = 2;
-    rotPoint = 0;
+    rotPoint = 1;
+    onStream = false;
+    clockwise = true;
 }
 
 //--------------------------------------------------------------
@@ -38,30 +40,49 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
         angle += 360;
     }
     
-    if (angle >= 180) {
+    if (angle >= 180 && !clockwise) {
         rotPoint = -1; // Back of ship.
-    } else {
+    } else if (angle < 180 && clockwise) {
         rotPoint = 1; // Front of ship.
     }
     
     // Set the position based on the rotation point so we can rotate the ship correctly.
     if (rotPoint == -1) {
-        pos.x = posPlayer.x - rotOffset * cos(ofDegToRad(angle));
-        pos.y = posPlayer.y - rotOffset * sin(ofDegToRad(angle));
+        pos.x = posPlayer.x - rotOffset * cos(ofDegToRad(359));
+        pos.y = posPlayer.y - rotOffset * sin(ofDegToRad(359));
+        /*pos.x = posPlayer.x - rotOffset * cos(ofDegToRad(angle));
+         pos.y = posPlayer.y - rotOffset * sin(ofDegToRad(angle));*/
     } else if (rotPoint == 1) {
-        pos.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
-        pos.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - angle - 90));
+        pos.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - 0 - 90));
+        pos.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - 0 - 90));
+        /*pos.x = posPlayer.x - rotOffset * sin(ofDegToRad(360 - angle - 90));
+         pos.y = posPlayer.y - rotOffset * cos(ofDegToRad(360 - angle - 90));*/
     } else {
         //pos = posPlayer;
     }
     
+    anglePrev = angle;
+    
     if (_allowControl) {
+        float airMultiplier;
+        if (onStream) {
+            airMultiplier = 1;
+        } else {
+            airMultiplier = 1;
+        }
         if (bTiltUpward) {
-            angle -= angleVel;
+            angle -= angleVel * airMultiplier;
         }
         if (bTiltDownward) {
-            angle += angleVel;
+            angle += angleVel * airMultiplier;
         }
+    }
+    
+    // Figure out the overall direction of rotation by switching only when crossing zero.
+    if (anglePrev >= 0 && angle < 0) {
+        clockwise = false;
+    } else if (anglePrev <= 360 && angle > 360) {
+        clockwise = true;
     }
 }
 
@@ -93,8 +114,8 @@ void Ship::draw() {
         }ofPopMatrix();
         
         // Test where the pos / rotation point is.
-        /*ofSetColor(255,0,0);
-         ofCircle(0,0,5);*/
+        ofSetColor(255,0,0);
+        ofCircle(0,0,5);
         
     }ofPopMatrix();
     

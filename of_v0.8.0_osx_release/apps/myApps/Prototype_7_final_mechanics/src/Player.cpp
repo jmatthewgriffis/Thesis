@@ -23,9 +23,10 @@ Player::Player() {
 }
 
 //--------------------------------------------------------------
-void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList ) {
+void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingController, ofVec2f _pos, vector< float > _staffPosList ) {
     
     gameState = _gameState;
+    frameRate = _frameRate;
     iScaler = _iScaler;
     bUsingController = _bUsingController;
     
@@ -57,13 +58,14 @@ void Player::setup( int _gameState, int _iScaler, bool _bUsingController, ofVec2
     angleVel = 15;
     fNoteOffsetH = 0;
     currentStream = -1;
+    inStreamTimer = 0;
     
-    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = false;
+    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = false;
     allowMove = true;
     allowControl = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     bHasShip = false;
-    angle = 0;
+    angle = myAngle = hatAngle = 0;
     fHealth = fHealthMax;
     
     pos.set( _pos );
@@ -253,7 +255,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
         fHatOffsetDefault = pos.y - fHatHeight * 0.5 + wide * -0.65;
         
         // Build up force as the player rises then make the hat pop into the air when the player stops or reverses direction.
-        if (yPosDiff < 0) {
+        if (yPosDiff < 0 && !bGrabHat) {
             if (pos.y - yPosLast < 0) {
                 fHatQueuedForce += yPosDiff * 0.025;
                 // Add terminal upward vel to keep this under control.
@@ -269,12 +271,23 @@ void Player::update( int _gameState, string _OnThisNote ) {
         
         if (fHatOffset < fHatOffsetDefault) {
             fHatVel += fHatVelDefault;
-        } else if (fHatOffset > fHatOffsetDefault) {
+            if (!bGrabHat) {
+                bFlyingHat = true;
+            }
+        } else if (fHatOffset >= fHatOffsetDefault) {
             fHatOffset = fHatOffsetDefault;
             fHatVel = 0;
+            bFlyingHat = false;
+            bNoteFlyingHatAngle = false;
         }
         
-        fHatOffset += fHatVel;
+        if (inStreamTimer > 0 && bGrabHat && fHatOffset >= fHatOffsetDefault - iScaler) {
+            fHatOffset = fHatOffsetDefault;
+        } else if (fHatOffset < fHatOffsetDefault - iScaler && !bFlyingHat) {
+            fHatOffset = fHatOffsetDefault;
+        } else {
+            fHatOffset += fHatVel;
+        }
     } // End updating hat.
     
     yPosDiff = pos.y - yPosLast;
@@ -302,6 +315,22 @@ void Player::update( int _gameState, string _OnThisNote ) {
         } else if (myShip.angle > 180) {
             myShip.angle -= 0.5;
         }
+    }
+    
+    // Use a timer to keep the rider in the stream.
+    float timeLimit = frameRate * 0.25;
+    if (onStream) {
+        inStreamTimer = timeLimit;
+    }
+    if (inStreamTimer > 0) {
+        if (vel.y < 0) { // Jump to leave the stream.
+            inStreamTimer = 0;
+        } else {
+            inStreamTimer--;
+            myShip.onStream = true;
+        }
+    } else {
+        myShip.onStream = false;
     }
 }
 
@@ -559,50 +588,160 @@ void Player::fDrawHealth() {
 
 //--------------------------------------------------------------
 void Player::fDrawCharacter() {
-    
+    /*
+    // Draw variable value for debugging.
+    string str;
+    if (bFlyingHat) str = "true";
+    else str = "false";
+    ofSetColor(0);
+    ofDrawBitmapString(str, pos.x + 100, pos.y - 50);
+    */
     tall = wide * 1.35;
+    bGrabHat = false;
     
-    // Hat
-    ofSetColor(255, 255);
-    ofSetRectMode(OF_RECTMODE_CORNER);
     ofPushMatrix();{
-        ofTranslate(pos.x - fHatWidth * 0.5, fHatOffset);
-        ofRotate(-10);
-        hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
+        float newAngle;
+        float lowerLimit = 50;
+        float upperLimit = 295;
+        if (bHasShip) {
+            if ((myShip.angle <= lowerLimit && myShip.clockwise) || (myShip.angle >= upperLimit && !myShip.clockwise)) {
+                myAngle = myShip.angle;
+            } else {
+                bGrabHat = true;
+            }
+            newAngle = myShip.angle;
+        }
+        
+        ofTranslate(myShip.pos);
+        ofRotate(newAngle);
+        
+        ofPushMatrix();{
+            
+            ofTranslate(-myShip.pos);
+            
+            // Hat
+            /*ofSetColor(255, 255);
+            ofSetRectMode(OF_RECTMODE_CORNER);
+            ofPushMatrix();{
+                ofTranslate(pos.x - fHatWidth * 0.5, fHatOffset);
+                ofRotate(-10);
+                hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
+            }ofPopMatrix();*/
+            
+            // Body and hat
+            ofPushMatrix();{
+                ofTranslate(pos);
+                ofRotate(-myAngle);
+                // Body
+                ofSetColor(0, 255);
+                ofEllipse(0, 0, wide, tall);
+                // Hat
+                ofSetColor(255, 255);
+                ofSetRectMode(OF_RECTMODE_CORNER);
+                ofPushMatrix();{
+                    /*if (bFlyingHat) { // Find me
+                        if (!bNoteFlyingHatAngle) {
+                            hatAngle = myAngle;
+                            bNoteFlyingHatAngle = true;
+                        }
+                        float diff = hatAngle - myAngle;
+                        float counterRot;
+                        if (diff != 0) {
+                            if (hatAngle > myAngle) {
+                                counterRot = -diff;
+                            } else {
+                                counterRot = diff;
+                            }
+                        }
+                        //ofRotate(counterRot); // Find me
+                    }*/
+                    ofPushMatrix();{
+                        ofTranslate(-fHatWidth * 0.5, fHatOffset - pos.y);
+                        ofRotate(-10);
+                        //if (bFlyingHat && bGrabHat){
+                          // Find me
+                        //} else {
+                            hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
+                        //}
+                    }ofPopMatrix();
+                }ofPopMatrix();
+                //
+                ofSetColor(255, 255);
+                ofSetRectMode(OF_RECTMODE_CORNER);
+                float armSizer = wide * 0.00286;
+                float armWidth = appendage.getWidth() * armSizer;
+                float armHeight = appendage.getHeight() * armSizer;
+                // Right arm
+                ofPushMatrix();{
+                    ofTranslate(wide * 0.35, -wide * 0.15);
+                    float addition;
+                    if (myShip.clockwise && myAngle != newAngle) {
+                        addition = -15;
+                    } else {
+                        addition = 0;
+                    }
+                    ofRotate(55 + addition);
+                    appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+                    // Test circle
+                    /*ofSetColor(255,0,0);
+                    ofCircle(0,0,5);*/
+                }ofPopMatrix();
+                // Left arm
+                ofPushMatrix();{
+                    ofTranslate(-wide * 0.35, -wide * 0.15);
+                    float addition;
+                    if (!myShip.clockwise && myAngle != newAngle) {
+                        addition = 40;
+                    } else {
+                        addition = 0;
+                    }
+                    ofRotate(-70 + addition);
+                    appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+                    // Test circle
+                    /*ofSetColor(255,0,0);
+                    ofCircle(0,0,5);*/
+                }ofPopMatrix();
+            }ofPopMatrix();
+            
+            // Appendages
+            ofSetColor(255, 255);
+            ofSetRectMode(OF_RECTMODE_CORNER);
+            float armSizer = wide * 0.00286;
+            float armWidth = appendage.getWidth() * armSizer;
+            float armHeight = appendage.getHeight() * armSizer;
+            // Right arm
+            /*ofPushMatrix();{
+                ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
+                ofRotate(55 - myAngle * 2);
+                appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+                // Test circle
+                ofSetColor(255,0,0);
+                ofCircle(0,0,5);
+            }ofPopMatrix();*/
+            // Right leg
+            ofPushMatrix();{
+                ofTranslate(pos.x + wide * 0.25, pos.y + wide * 0.45);
+                ofRotate(125);
+                appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+            }ofPopMatrix();
+            // Left arm
+            /*ofPushMatrix();{
+                ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
+                ofRotate(-70 - myAngle * 2);
+                appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+                // Test circle
+                ofSetColor(255,0,0);
+                ofCircle(0,0,5);
+            }ofPopMatrix();*/
+            // Left leg
+            ofPushMatrix();{
+                ofTranslate(pos.x - wide * 0.25, pos.y + wide * 0.45);
+                ofRotate(-135);
+                appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+            }ofPopMatrix();
+        }ofPopMatrix();
     }ofPopMatrix();
-    
-    // Body
-    ofSetColor(0, 255);
-    ofEllipse(pos, wide, tall);
-    
-    // Appendages
-    ofSetColor(255, 255);
-    ofSetRectMode(OF_RECTMODE_CORNER);
-    float armSizer = wide * 0.00286;
-    float armWidth = appendage.getWidth() * armSizer;
-    float armHeight = appendage.getHeight() * armSizer;
-    // Right arm
-    ofPushMatrix();{
-        ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
-        ofRotate(55);
-        appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
-    }ofPopMatrix();
-    // Right leg
-    ofPushMatrix();{
-        ofTranslate(pos.x + wide * 0.25, pos.y + wide * 0.45);
-        ofRotate(125);
-        appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
-    }ofPopMatrix();
-    // Left arm
-    ofPushMatrix();{
-        ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
-        ofRotate(-70);
-        appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
-    }ofPopMatrix();
-    // Left leg
-    ofPushMatrix();{
-        ofTranslate(pos.x - wide * 0.25, pos.y + wide * 0.45);
-        ofRotate(-135);
-        appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
-    }ofPopMatrix();
+    // Test circle
+    /*ofSetColor(255,0,0);
+    ofCircle(pos, 5);*/
 }

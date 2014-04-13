@@ -74,7 +74,6 @@ void testApp::setup(){
     iTimeBetweenNotes = frameRate / 6;
     iLastOpacityChange = 0;
     iOpacityChangeFreq = frameRate * 0.005;
-    inStreamTimer = 0;
 }
 
 //--------------------------------------------------------------
@@ -308,7 +307,7 @@ void testApp::fLoadPrototype() {
     iLastOpacityChange = ofGetElapsedTimef(); // Reset the clock.
     
     // Setup player.
-    myPlayer.setup( gameState, iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
+    myPlayer.setup( gameState, frameRate, iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
     
     //------------
     
@@ -341,7 +340,7 @@ void testApp::fLoadPrototype() {
         bCamZoomedIn = false;
         
         bIsSecondPlayer = true;
-        myPlayer2.setup( gameState, iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
+        myPlayer2.setup( gameState, frameRate, iScaler, bUsingController, ofVec2f( iScaler * 4, staffPosList[ 7 ] ), staffPosList );
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
@@ -1349,7 +1348,6 @@ void testApp::playerCollidesWithObject() {
     
     // Collision with main objects vector.
     for ( int i = 0; i < objectList.size(); i++ ) {
-        
         // Make some floats for shorthand...
         // Player is drawn from the center.
         // Obstacles are drawn from the corner.
@@ -1493,7 +1491,7 @@ void testApp::playerCollidesWithStream() {
             if (myPlayer.pos.x >= start.x + inc.x * (j - 1) && myPlayer.pos.x <= start.x + inc.x * j) {
                 
                 // Snap to descending stream if already riding it and not jumping.
-                if (!myPlayer.onStream && inStreamTimer > 0 && myPlayer.currentStream == streamBitList[i].whichStream) {
+                if (!myPlayer.onStream && myPlayer.inStreamTimer > 0 && myPlayer.currentStream == streamBitList[i].whichStream) {
                     if (myPlayer.pos.y < start.y + inc.y * j - diff) {
                         myPlayer.pos.y = start.y + inc.y * j - diff;
                     }
@@ -1528,7 +1526,8 @@ void testApp::playerCollidesWithStream() {
                     
                     // If not close enough, check the previous and next angles if they exist.
                     else {
-                        myPlayer.myShip.angle += myPlayer.myShip.rotPoint * 0.5;
+                        // Autorotate if leaning too far. Find me
+                        //myPlayer.myShip.angle += myPlayer.myShip.rotPoint * 0.5;
                         // Previous angle.
                         if (i > 0) {
                             
@@ -1576,23 +1575,10 @@ void testApp::playerCollidesWithStream() {
         }
     }
     
-    // Use a timer to keep the rider in the stream.
-    float timeLimit = frameRate * 0.25;
-    if (myPlayer.onStream) {
-        inStreamTimer = timeLimit;
-    }
-    if (inStreamTimer > 0) {
-        if (myPlayer.vel.y < 0) { // Jump to leave the stream.
-            inStreamTimer = 0;
-        } else {
-            inStreamTimer--;
-        }
-    }
-    
-    // Fall over if angled too sharply and not in stream.
+    // Fall over if angled too sharply and not in stream. Find me
     if (myPlayer.onStream && myPlayer.myShip.angle > 90 && myPlayer.myShip.angle < 270) {
-        bPlayerFellOver = true;
-        myPlayer.allowControl = false;
+        //bPlayerFellOver = true;
+        //myPlayer.allowControl = false;
     }
 }
 

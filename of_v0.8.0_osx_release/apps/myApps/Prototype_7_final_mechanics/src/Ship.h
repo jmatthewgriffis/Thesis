@@ -22,8 +22,10 @@ public:
     
     ofVec2f pos, posPlayer;
     
-    float angle, angleVel, rotPoint;
+    float angle, angleVel, rotPoint, anglePrev;
     bool bTiltUpward, bTiltDownward;
+    bool onStream;
+    bool clockwise;
     
     float fImgHeightTreble, fImgHeightBass, rotOffset;
 };
