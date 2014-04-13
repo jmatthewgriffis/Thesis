@@ -128,8 +128,8 @@ void Ship::draw() {
         }ofPopMatrix();
         
         // Test where the pos / rotation point is.
-        ofSetColor(255,0,0);
-        ofCircle(0,0,5);
+        /*ofSetColor(255,0,0);
+        ofCircle(0,0,5);*/
         
     }ofPopMatrix();
     

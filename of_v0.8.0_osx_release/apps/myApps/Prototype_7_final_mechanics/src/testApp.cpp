@@ -74,7 +74,6 @@ void testApp::setup(){
     iTimeBetweenNotes = frameRate / 6;
     iLastOpacityChange = 0;
     iOpacityChangeFreq = frameRate * 0.005;
-    updateGame = true;
 }
 
 //--------------------------------------------------------------
@@ -144,7 +143,7 @@ void testApp::update(){
     playerCollidesWithObject();
     if (myPlayer.bModeSurf) {
         if (!bPlayerFellOver) {
-            if(updateGame)playerCollidesWithStream();
+            playerCollidesWithStream();
         }
     }
     objectCollidesWithObstacle();
@@ -285,9 +284,6 @@ void testApp::draw(){
         }
         
         myPlayer.draw( helvetica, recordedList );
-        ofSetColor(0,255,0);
-        ofCircle(tmp, 5); // Yo find me
-        ofLine(tmp, tmp + (myPlayer.pos - myPlayer.myShip.pointRear));
         if ( bIsSecondPlayer ) {
             myPlayer2.draw( helvetica, recordedList );
         }
@@ -1501,33 +1497,34 @@ void testApp::playerCollidesWithStream() {
                     }
                 }
                 
-                // Make the ship land correctly in the stream.
-                ofVec2f otherPoint;
-                float hyp = myPlayer.myShip.rotOffset * 2;
-                if (myPlayer.myShip.rotPoint == -1) {
-                    otherPoint.set(myPlayer.myShip.pos.x + hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y + hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
-                } else if (myPlayer.myShip.rotPoint == 1) {
-                    otherPoint.set(myPlayer.myShip.pos.x - hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y - hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
-                }
-                if(updateGame)tmp = otherPoint; // Find me
-                
-                if (otherPoint.y >= start.y + inc.y && myPlayer.myShip.pos.y < start.y + inc.y) {
-                    ofVec2f diff, refPoint, dest;
+                // Find me--delete all of this if find better solution to hiding the issue.
+                {// Make the ship land correctly in the stream.
+                    ofVec2f otherPoint;
+                    float hyp = myPlayer.myShip.rotOffset * 2;
                     if (myPlayer.myShip.rotPoint == -1) {
-                        diff = myPlayer.pos - myPlayer.myShip.pointFront;
-                        refPoint = myPlayer.myShip.pointRear;
-                        dest = refPoint + diff;
+                        otherPoint.set(myPlayer.myShip.pos.x + hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y + hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
                     } else if (myPlayer.myShip.rotPoint == 1) {
-                        diff = myPlayer.pos - myPlayer.myShip.pointRear;
-                        refPoint = myPlayer.myShip.pointFront;
-                        dest = refPoint + diff;
+                        otherPoint.set(myPlayer.myShip.pos.x - hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y - hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
                     }
-                    myPlayer.pos = otherPoint + diff;
-                    cout<<otherPoint<<" "<<myPlayer.pos<<endl;
-                    myPlayer.myShip.rotPoint *= -1;
-                    updateGame = false;
-                    //myPlayer.pos.y -= 200;
-                }
+                    
+                    if (otherPoint.y >= start.y + inc.y && myPlayer.myShip.pos.y < start.y + inc.y) {
+                        ofVec2f diff, refPoint, dest;
+                        if (myPlayer.myShip.rotPoint == -1) {
+                            diff = myPlayer.pos - myPlayer.myShip.pointFront;
+                            refPoint = myPlayer.myShip.pointRear;
+                            dest = refPoint + diff;
+                        } else if (myPlayer.myShip.rotPoint == 1) {
+                            diff = myPlayer.pos - myPlayer.myShip.pointRear;
+                            refPoint = myPlayer.myShip.pointFront;
+                            dest = refPoint + diff;
+                        }
+                        //myPlayer.pos = otherPoint + diff;
+                        //cout<<otherPoint<<" "<<myPlayer.pos<<endl;
+                        //myPlayer.myShip.rotPoint *= -1;
+                        //updateGame = false;
+                        //myPlayer.pos.y -= 200;
+                    }
+                } // End delete
                 
                 // Keep player on top of stream, if not underneath stream.
                 if (myPlayer.pos.y >= start.y + inc.y * j - diff
