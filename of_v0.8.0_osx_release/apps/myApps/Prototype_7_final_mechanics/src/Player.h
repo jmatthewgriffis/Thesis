@@ -60,6 +60,7 @@ public:
     int currentStream;
     int inStreamTimer;
     int invisibleTimer;
+    int jumpCounter;
     
     ofImage headphones, hand, appendage, appendage_mirrored, hat; // For some baffling reason the image is not moving when it should.
     
