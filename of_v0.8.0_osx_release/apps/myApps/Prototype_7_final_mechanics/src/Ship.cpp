@@ -21,7 +21,7 @@ void Ship::setup() {
     angleVel = 2;
     rotPoint = 1;
     onStream = onStreamPrev = makeBigSplash = false;
-    clockwise = true;
+    bSolid = clockwise = true;
 }
 
 //--------------------------------------------------------------
@@ -82,7 +82,7 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
         if (onStream) {
             airMultiplier = 1;
         } else {
-            airMultiplier = 1;
+            airMultiplier = 2;
         }
         if (bTiltUpward) {
             angle -= angleVel * airMultiplier;
@@ -90,6 +90,11 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
         if (bTiltDownward) {
             angle += angleVel * airMultiplier;
         }
+    }
+    
+    bSolid = true;
+    if (angle > 90 && angle < 270) {
+        bSolid = false;
     }
     
     // Figure out the overall direction of rotation by switching only when crossing zero.
@@ -108,6 +113,14 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
 
 //--------------------------------------------------------------
 void Ship::draw() {
+    
+    int alpha;
+    if (bSolid) {
+        alpha = 255;
+    } else {
+        alpha = 127;
+    }
+    ofSetColor(255, alpha);
     
     ofPushMatrix();{
         

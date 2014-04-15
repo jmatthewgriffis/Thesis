@@ -24,7 +24,7 @@ public:
     
     float angle, angleVel, rotPoint, anglePrev;
     bool bTiltUpward, bTiltDownward;
-    bool onStream, onStreamPrev, makeBigSplash;
+    bool bSolid, onStream, onStreamPrev, makeBigSplash;
     bool clockwise;
     
     float fImgHeightTreble, fImgHeightBass, rotOffset;
