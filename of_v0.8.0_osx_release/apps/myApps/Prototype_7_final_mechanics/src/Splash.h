@@ -23,7 +23,7 @@ public:
     
     ofVec2f pos1, pos2, vel1, vel2, acc;
     
-    float wide, tall, angle1, angle2, alpha;
+    float wide, tall, angle1, angle2, alpha, alphaVel;
     
     bool destroyMe;
 };

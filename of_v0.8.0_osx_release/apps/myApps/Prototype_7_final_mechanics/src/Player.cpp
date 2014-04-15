@@ -58,12 +58,12 @@ void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingCo
     angleVel = 15;
     fNoteOffsetH = 0;
     currentStream = -1;
-    inStreamTimer = 0;
+    inStreamTimer = invisibleTimer = 0;
     
     up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = false;
     allowMove = true;
     allowControl = true;
-    allowJump = bAllowRecord = bAllowReplay = true;
+    allowJump = bAllowRecord = bAllowReplay = drawPlayer = true;
     bHasShip = false;
     angle = myAngle = hatAngle = 0;
     fHealth = fHealthMax;
@@ -138,6 +138,14 @@ void Player::update( int _gameState, string _OnThisNote ) {
      fHealth = 0;
      }
      */
+    
+    if (!drawPlayer) {
+        invisibleTimer++;
+    }
+    if (invisibleTimer >= 10) {
+        drawPlayer = true;
+        invisibleTimer = 0;
+    }
     
     // Prevent going off the true left and bottom edges.
     if ( pos.x <= wide / 2.0 ) {
@@ -388,14 +396,14 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     }
     
     // Draw the actual character now that he exists.
-    if (gameState >= 7 && !myShip.makeBigSplash) {
+    if (gameState >= 7 && drawPlayer) {
         fDrawCharacter();
     }
     
     fDrawCapacity(_recordedList);
     fDrawAction(_font);
     
-    if (bHasShip && !myShip.makeBigSplash) {
+    if (bHasShip && drawPlayer) {
         myShip.draw();
     }
 }

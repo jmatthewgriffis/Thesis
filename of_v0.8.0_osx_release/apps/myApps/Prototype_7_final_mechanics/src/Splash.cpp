@@ -26,6 +26,7 @@ void Splash::setup(ofVec2f _pos, float _force) {
     tall = slur.getHeight() * wide / slur.getWidth();
     angle1 = angle2 = 0;
     alpha = 255;
+    alphaVel = 30 / abs(_force); // Inversely proportional.
     destroyMe = false;
     
     float reducer = 4;
@@ -54,7 +55,7 @@ void Splash::update() {
     
     acc.set(0);
     if (alpha > 0) {
-        alpha -= 5;
+        alpha -= alphaVel;
     } else {
         destroyMe = true;
     }

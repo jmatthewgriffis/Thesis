@@ -217,12 +217,13 @@ void testApp::update(){
     if (myPlayer.bModeSurf && gameState != 4) {
         updateStream();
         if (myPlayer.myShip.onStream && ofGetElapsedTimeMillis()%5==0) {
-            //Splash tmp;
-            //tmp.setup(myPlayer.myShip.pos, -10);
-            //splashList.push_back(tmp);
+            Splash tmp;
+            tmp.setup(myPlayer.myShip.pos, -5);
+            splashList.push_back(tmp);
         }
     }
     if (myPlayer.myShip.makeBigSplash) {
+        myPlayer.drawPlayer = false;
         Splash tmp;
         float force = myPlayer.velPrev;
         float min = 8;
