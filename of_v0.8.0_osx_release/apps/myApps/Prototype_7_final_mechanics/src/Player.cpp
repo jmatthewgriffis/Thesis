@@ -60,13 +60,14 @@ void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingCo
     currentStream = -1;
     inStreamTimer = 0;
     
-    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = false;
+    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = false;
     allowMove = true;
     allowControl = true;
     allowJump = bAllowRecord = bAllowReplay = true;
     bHasShip = false;
     angle = myAngle = hatAngle = 0;
     fHealth = fHealthMax;
+    velPrev = 0;
     
     pos.set( _pos );
     yPosLast = pos.y;
@@ -232,6 +233,10 @@ void Player::update( int _gameState, string _OnThisNote ) {
         
         vel += acc;
         
+        if (!onStreamPrev && onStream) {
+            velPrev = vel.y;
+        }
+        
         // Negate velocity on a surface.
         if ( onSurface || onStream ) {
             vel.y = 0;
@@ -332,6 +337,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
     } else {
         myShip.onStream = false;
     }
+    onStreamPrev = onStream;
 }
 
 //--------------------------------------------------------------
@@ -382,14 +388,14 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     }
     
     // Draw the actual character now that he exists.
-    if (gameState >= 7) {
+    if (gameState >= 7 && !myShip.makeBigSplash) {
         fDrawCharacter();
     }
     
     fDrawCapacity(_recordedList);
     fDrawAction(_font);
     
-    if (bHasShip) {
+    if (bHasShip && !myShip.makeBigSplash) {
         myShip.draw();
     }
 }

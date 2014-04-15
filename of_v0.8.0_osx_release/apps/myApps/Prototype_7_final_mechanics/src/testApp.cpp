@@ -217,10 +217,21 @@ void testApp::update(){
     if (myPlayer.bModeSurf && gameState != 4) {
         updateStream();
         if (myPlayer.myShip.onStream && ofGetElapsedTimeMillis()%5==0) {
-            Splash tmp;
-            tmp.setup(myPlayer.myShip.pos, -10);
-            splashList.push_back(tmp);
+            //Splash tmp;
+            //tmp.setup(myPlayer.myShip.pos, -10);
+            //splashList.push_back(tmp);
         }
+    }
+    if (myPlayer.myShip.makeBigSplash) {
+        Splash tmp;
+        float force = myPlayer.velPrev;
+        float min = 8;
+        if (force < min) {
+            force = min;
+        }
+        tmp.setup(myPlayer.myShip.pos, force * -1);
+        splashList.push_back(tmp);
+        myPlayer.myShip.makeBigSplash = false;
     }
     for (int i = 0; i < splashList.size(); i++) {
         splashList[i].update();
@@ -235,7 +246,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    cout<<splashList.size()<<endl;
+    //cout<<splashList.size()<<endl;
     
     //ofxGamepadHandler::get()->draw(10,10);
     

@@ -20,7 +20,7 @@ void Ship::setup() {
     angle = anglePrev = 0;
     angleVel = 2;
     rotPoint = 1;
-    onStream = false;
+    onStream = onStreamPrev = makeBigSplash = false;
     clockwise = true;
 }
 
@@ -98,6 +98,12 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
     } else if (anglePrev <= 360 && angle > 360) {
         clockwise = true;
     }
+    
+    if (!onStreamPrev && onStream) {
+        makeBigSplash = true;
+    }
+    
+    onStreamPrev = onStream;
 }
 
 //--------------------------------------------------------------
