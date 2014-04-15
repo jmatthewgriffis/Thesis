@@ -214,11 +214,12 @@ void testApp::update(){
     
     // Update the notes and the stream.
     updateObjectList();
+    float splashWide = objectList[0].wide;
     if (myPlayer.bModeSurf && gameState != 4) {
         updateStream();
         if (myPlayer.myShip.onStream && splashTimer <= 0) {
             Splash tmp;
-            tmp.setup(myPlayer.myShip.pos, -5);
+            tmp.setup(myPlayer.myShip.pos, splashWide, -5);
             splashList.push_back(tmp);
             splashTimer = 10;
         }
@@ -234,7 +235,7 @@ void testApp::update(){
         if (force < min) {
             force = min;
         }
-        tmp.setup(myPlayer.myShip.pos, force * -1);
+        tmp.setup(myPlayer.myShip.pos, splashWide, force * -1, true);
         splashList.push_back(tmp);
         myPlayer.myShip.makeBigSplash = false;
     }
