@@ -14,7 +14,7 @@ class Splash {
 public:
     Splash();
     
-    void setup(ofVec2f _pos);
+    void setup(ofVec2f _pos, float _force);
     void update();
     void draw();
     void applyForce(ofVec2f _force);

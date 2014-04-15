@@ -132,6 +132,4 @@ public:
     Track myTrack;
     
     Staff myStaff;
-    
-    Splash mySplash;
 };

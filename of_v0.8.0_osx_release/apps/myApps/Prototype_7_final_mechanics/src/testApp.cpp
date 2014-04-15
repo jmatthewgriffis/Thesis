@@ -200,11 +200,7 @@ void testApp::update(){
     } else {
         tmp = myPlayer.pos.y;
     }
-    /*if (updateGame)*/ myPlayer.update( gameState, fReturnNote(tmp) );
-    mySplash.update();
-    for (int i = 0; i < splashList.size(); i++) {
-        splashList[i].update();
-    }
+    myPlayer.update( gameState, fReturnNote(tmp) );
     
     if ( bIsSecondPlayer ) {
         float tmp2;
@@ -220,9 +216,14 @@ void testApp::update(){
     updateObjectList();
     if (myPlayer.bModeSurf && gameState != 4) {
         updateStream();
-        Splash tmp;
-        tmp.setup(myPlayer.pos);
-        splashList.push_back(tmp);
+        if (myPlayer.myShip.onStream && ofGetElapsedTimeMillis()%5==0) {
+            Splash tmp;
+            tmp.setup(myPlayer.myShip.pos, -10);
+            splashList.push_back(tmp);
+        }
+    }
+    for (int i = 0; i < splashList.size(); i++) {
+        splashList[i].update();
     }
     
     ofRemove( objectList, bShouldIErase );
@@ -303,7 +304,6 @@ void testApp::draw(){
         if ( bIsSecondPlayer ) {
             myPlayer2.draw( helvetica, recordedList );
         }
-        mySplash.draw();
         for (int i = 0; i < splashList.size(); i++) {
             splashList[i].draw();
         }
@@ -328,7 +328,6 @@ void testApp::fLoadPrototype() {
     
     // Setup player.
     myPlayer.setup( gameState, frameRate, iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
-    mySplash.setup(ofVec2f(myPlayer.pos.x + 300, myPlayer.pos.y - 300));
     
     //------------
     

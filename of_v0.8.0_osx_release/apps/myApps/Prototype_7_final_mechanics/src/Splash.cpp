@@ -14,7 +14,7 @@ Splash::Splash() {
 }
 
 //--------------------------------------------------------------
-void Splash::setup(ofVec2f _pos) {
+void Splash::setup(ofVec2f _pos, float _force) {
     
     pos1 = _pos;
     pos2 = _pos;
@@ -28,10 +28,9 @@ void Splash::setup(ofVec2f _pos) {
     alpha = 255;
     destroyMe = false;
     
-    float up = -2; // Initial upward vel.
-    float reducer = 2;
-    vel1.set(up / -reducer, up);
-    vel2.set(up / reducer, up);
+    float reducer = 4;
+    vel1.set(_force / -reducer, _force);
+    vel2.set(_force / reducer, _force);
 }
 
 //--------------------------------------------------------------
