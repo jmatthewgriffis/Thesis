@@ -287,6 +287,7 @@ void testApp::draw(){
         if ( bIsSecondPlayer ) {
             myPlayer2.draw( helvetica, recordedList );
         }
+        mySplash.draw(myPlayer.pos);
         
         if ( gameState == 4 ) {
             ofSetColor( 0 );

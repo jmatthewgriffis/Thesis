@@ -14,6 +14,7 @@
 		CD05237418B3FC35008FCB84 /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD05237218B3FC35008FCB84 /* Track.cpp */; };
 		CD18BDBE18DF4F9A009F9EE5 /* StreamBit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD18BDBC18DF4F9A009F9EE5 /* StreamBit.cpp */; };
 		CD69F25118BC53FC00974A55 /* TitleScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD69F24F18BC53FC00974A55 /* TitleScreen.cpp */; };
+		CD80A53518FCDEFF0069FE23 /* Splash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD80A53318FCDEFF0069FE23 /* Splash.cpp */; };
 		CDAF378718BF0EBA0005C760 /* Staff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDAF378518BF0EBA0005C760 /* Staff.cpp */; };
 		CDC60D79181C76B500A26838 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D77181C76B500A26838 /* Object.cpp */; };
 		CDC60D7C181C77B900A26838 /* Note.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDC60D7A181C77B800A26838 /* Note.cpp */; };
@@ -90,6 +91,8 @@
 		CD18BDBD18DF4F9A009F9EE5 /* StreamBit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamBit.h; sourceTree = "<group>"; };
 		CD69F24F18BC53FC00974A55 /* TitleScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScreen.cpp; sourceTree = "<group>"; };
 		CD69F25018BC53FC00974A55 /* TitleScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScreen.h; sourceTree = "<group>"; };
+		CD80A53318FCDEFF0069FE23 /* Splash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Splash.cpp; sourceTree = "<group>"; };
+		CD80A53418FCDEFF0069FE23 /* Splash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Splash.h; sourceTree = "<group>"; };
 		CDAF378518BF0EBA0005C760 /* Staff.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Staff.cpp; sourceTree = "<group>"; };
 		CDAF378618BF0EBA0005C760 /* Staff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Staff.h; sourceTree = "<group>"; };
 		CDC60D77181C76B500A26838 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
@@ -425,6 +428,8 @@
 				CDAF378618BF0EBA0005C760 /* Staff.h */,
 				CD18BDBC18DF4F9A009F9EE5 /* StreamBit.cpp */,
 				CD18BDBD18DF4F9A009F9EE5 /* StreamBit.h */,
+				CD80A53318FCDEFF0069FE23 /* Splash.cpp */,
+				CD80A53418FCDEFF0069FE23 /* Splash.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -539,6 +544,7 @@
 				CDC60D7C181C77B900A26838 /* Note.cpp in Sources */,
 				CD05237118B3FC1B008FCB84 /* Tutorial.cpp in Sources */,
 				CDF6C5E118AB2D36000B8877 /* ofxGamepadHandler.cpp in Sources */,
+				CD80A53518FCDEFF0069FE23 /* Splash.cpp in Sources */,
 				CDF6C5E218AB2D36000B8877 /* ofxGamepadLinux.cpp in Sources */,
 				CD69F25118BC53FC00974A55 /* TitleScreen.cpp in Sources */,
 				CDAF378718BF0EBA0005C760 /* Staff.cpp in Sources */,

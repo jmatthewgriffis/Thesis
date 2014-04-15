@@ -11,6 +11,7 @@
 #include "Track.h"
 #include "Staff.h"
 #include "StreamBit.h"
+#include "Splash.h"
 #include "TitleScreen.h"
 #include "ofxGamepadHandler.h"
 
@@ -130,4 +131,6 @@ public:
     Track myTrack;
     
     Staff myStaff;
+    
+    Splash mySplash;
 };
