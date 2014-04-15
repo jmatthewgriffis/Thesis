@@ -86,6 +86,7 @@ public:
     vector< Object > objectList;
     vector< Object > recordedList;
     vector< StreamBit > streamBitList;
+    vector< Splash > splashList;
     
     int gameState, currentState;
     int frameRate;

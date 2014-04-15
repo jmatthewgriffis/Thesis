@@ -89,6 +89,12 @@ bool bShouldIErase2( StreamBit &a ){
     else return false;
 }
 //--------------------------------------------------------------
+bool bShouldIErase3( Splash &a ){
+    
+    if ( a.destroyMe ) return true;
+    else return false;
+}
+//--------------------------------------------------------------
 bool my_compare( const Object &a, const Object &b ) {
     
     return a.pos.x < b.pos.x;
@@ -196,6 +202,9 @@ void testApp::update(){
     }
     /*if (updateGame)*/ myPlayer.update( gameState, fReturnNote(tmp) );
     mySplash.update();
+    for (int i = 0; i < splashList.size(); i++) {
+        splashList[i].update();
+    }
     
     if ( bIsSecondPlayer ) {
         float tmp2;
@@ -211,15 +220,21 @@ void testApp::update(){
     updateObjectList();
     if (myPlayer.bModeSurf && gameState != 4) {
         updateStream();
+        Splash tmp;
+        tmp.setup(myPlayer.pos);
+        splashList.push_back(tmp);
     }
     
     ofRemove( objectList, bShouldIErase );
     ofRemove( recordedList, bShouldIErase );
     ofRemove( streamBitList, bShouldIErase2 );
+    ofRemove( splashList, bShouldIErase3 );
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
+    cout<<splashList.size()<<endl;
     
     //ofxGamepadHandler::get()->draw(10,10);
     
@@ -289,6 +304,9 @@ void testApp::draw(){
             myPlayer2.draw( helvetica, recordedList );
         }
         mySplash.draw();
+        for (int i = 0; i < splashList.size(); i++) {
+            splashList[i].draw();
+        }
         
         if ( gameState == 4 ) {
             ofSetColor( 0 );
@@ -2034,6 +2052,7 @@ void testApp::cleanup() {
     objectList.clear();
     recordedList.clear();
     streamBitList.clear();
+    splashList.clear();
 }
 
 /*

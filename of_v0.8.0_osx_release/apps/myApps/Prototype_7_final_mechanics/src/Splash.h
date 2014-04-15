@@ -21,8 +21,9 @@ public:
     
     ofImage slur;
     
-    ofVec2f pos1, pos2, vel, acc;
+    ofVec2f pos1, pos2, vel1, vel2, acc;
     
-    float wide, tall, angle;
-    float timer, limitTimer, limitAng;
+    float wide, tall, angle1, angle2, alpha;
+    
+    bool destroyMe;
 };

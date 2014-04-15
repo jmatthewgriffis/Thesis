@@ -18,18 +18,20 @@ void Splash::setup(ofVec2f _pos) {
     
     pos1 = _pos;
     pos2 = _pos;
-    vel.set(0);
+    vel1.set(0);
+    vel2.set(0);
     acc.set(0);
     
     wide = 50;
     tall = slur.getHeight() * wide / slur.getWidth();
+    angle1 = angle2 = 0;
+    alpha = 255;
+    destroyMe = false;
     
-    timer = 0;
-    limitTimer = 60;
-    angle = 15;
-    limitAng = 120;
-    
-    vel.y = -10;
+    float up = -2; // Initial upward vel.
+    float reducer = 2;
+    vel1.set(up / -reducer, up);
+    vel2.set(up / reducer, up);
 }
 
 //--------------------------------------------------------------
@@ -40,47 +42,45 @@ void Splash::applyForce(ofVec2f _force) {
 //--------------------------------------------------------------
 void Splash::update() {
     
-    timer -= 0.5;
-    
-    if (abs(timer) > limitTimer && angle < limitAng) {
-        //angle++;
-    }
-    
     applyForce(ofVec2f(0, 0.3));
     
-    vel += acc;
+    vel1 += acc;
+    vel2 += acc;
     
-    //pos1 = _pos + ofVec2f(vel.y * sin(ofDegToRad(-angle)), vel.y * cos(ofDegToRad(-angle)));
-    //pos2 = _pos + ofVec2f(vel.y * sin(ofDegToRad(angle)), vel.y * cos(ofDegToRad(angle)));
-    pos1 += vel;
-    pos2 += vel;
+    angle1 = ofRadToDeg(atan2(vel1.y, vel1.x)) - 90;
+    angle2 = ofRadToDeg(atan2(vel2.y, vel2.x)) - 90;
+    
+    pos1 += vel1;
+    pos2 += vel2;
     
     acc.set(0);
+    if (alpha > 0) {
+        alpha -= 5;
+    } else {
+        destroyMe = true;
+    }
 }
 
 //--------------------------------------------------------------
 void Splash::draw() {
     
-    ofSetColor(0);
-    //ofDrawBitmapString(ofToString(angle), pos1.x + 100, pos1.y);
-    
     // Test
-    ofSetColor(255,0,0);
+    /*ofSetColor(255,0,0);
     ofCircle(pos1, 5);
     ofSetColor(0,255,0);
-    ofCircle(pos2, 5);
+    ofCircle(pos2, 5);*/
     
-    float posOffset = wide * 0.5;
+    ofSetColor(255, alpha);
     ofSetRectMode(OF_RECTMODE_CENTER);
     ofPushMatrix();{
         ofPushMatrix();{
             ofTranslate(pos1);
-            ofRotate(180 + angle);
+            ofRotate(angle1);
             slur.draw(0, 0, wide, tall);
         }ofPopMatrix();
         ofPushMatrix();{
             ofTranslate(pos2);
-            ofRotate(180 - angle);
+            ofRotate(angle2);
             slur.draw(0, 0, wide, tall);
         }ofPopMatrix();
     }ofPopMatrix();
