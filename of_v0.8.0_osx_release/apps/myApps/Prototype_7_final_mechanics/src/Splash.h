@@ -14,12 +14,15 @@ class Splash {
 public:
     Splash();
     
-    void draw(ofVec2f _pos);
+    void setup(ofVec2f _pos);
+    void update();
+    void draw();
+    void applyForce(ofVec2f _force);
     
     ofImage slur;
     
-    ofVec2f pos, pos1, pos2;
+    ofVec2f pos1, pos2, vel, acc;
     
-    float wide, tall, angle1, angle2;
-    float timer;
+    float wide, tall, angle;
+    float timer, limitTimer, limitAng;
 };

@@ -195,6 +195,7 @@ void testApp::update(){
         tmp = myPlayer.pos.y;
     }
     /*if (updateGame)*/ myPlayer.update( gameState, fReturnNote(tmp) );
+    mySplash.update();
     
     if ( bIsSecondPlayer ) {
         float tmp2;
@@ -287,7 +288,7 @@ void testApp::draw(){
         if ( bIsSecondPlayer ) {
             myPlayer2.draw( helvetica, recordedList );
         }
-        mySplash.draw(myPlayer.pos);
+        mySplash.draw();
         
         if ( gameState == 4 ) {
             ofSetColor( 0 );
@@ -309,6 +310,7 @@ void testApp::fLoadPrototype() {
     
     // Setup player.
     myPlayer.setup( gameState, frameRate, iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
+    mySplash.setup(ofVec2f(myPlayer.pos.x + 300, myPlayer.pos.y - 300));
     
     //------------
     
