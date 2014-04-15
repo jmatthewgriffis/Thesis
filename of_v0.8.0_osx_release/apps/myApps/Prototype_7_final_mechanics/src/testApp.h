@@ -97,6 +97,7 @@ public:
     int iHitCounter; // How many notes hit?
     int iTotalTrebleNotes;
     float iTimeTillNote, iTimeBetweenNotes;
+    float splashTimer;
     float iLastOpacityChange, iOpacityChangeFreq;
     
     float fMeasureLength;

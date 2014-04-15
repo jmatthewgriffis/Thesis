@@ -216,10 +216,14 @@ void testApp::update(){
     updateObjectList();
     if (myPlayer.bModeSurf && gameState != 4) {
         updateStream();
-        if (myPlayer.myShip.onStream && ofGetElapsedTimeMillis()%5==0) {
+        if (myPlayer.myShip.onStream && splashTimer <= 0) {
             Splash tmp;
             tmp.setup(myPlayer.myShip.pos, -5);
             splashList.push_back(tmp);
+            splashTimer = 10;
+        }
+        if (splashTimer > 0) {
+            splashTimer--;
         }
     }
     if (myPlayer.myShip.makeBigSplash) {
