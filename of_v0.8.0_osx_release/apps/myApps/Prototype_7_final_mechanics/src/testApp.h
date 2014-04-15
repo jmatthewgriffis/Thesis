@@ -11,6 +11,7 @@
 #include "Track.h"
 #include "Staff.h"
 #include "StreamBit.h"
+#include "Splash.h"
 #include "TitleScreen.h"
 #include "ofxGamepadHandler.h"
 
@@ -85,6 +86,7 @@ public:
     vector< Object > objectList;
     vector< Object > recordedList;
     vector< StreamBit > streamBitList;
+    vector< Splash > splashList;
     
     int gameState, currentState;
     int frameRate;
@@ -95,6 +97,7 @@ public:
     int iHitCounter; // How many notes hit?
     int iTotalTrebleNotes;
     float iTimeTillNote, iTimeBetweenNotes;
+    float splashTimer;
     float iLastOpacityChange, iOpacityChangeFreq;
     
     float fMeasureLength;
@@ -130,7 +133,4 @@ public:
     Track myTrack;
     
     Staff myStaff;
-    
-    ofVec2f tmp;
-    bool updateGame;
 };

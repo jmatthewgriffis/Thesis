@@ -74,7 +74,6 @@ void testApp::setup(){
     iTimeBetweenNotes = frameRate / 6;
     iLastOpacityChange = 0;
     iOpacityChangeFreq = frameRate * 0.005;
-    updateGame = true;
 }
 
 //--------------------------------------------------------------
@@ -85,6 +84,12 @@ bool bShouldIErase( Object &a ){
 }
 //--------------------------------------------------------------
 bool bShouldIErase2( StreamBit &a ){
+    
+    if ( a.destroyMe ) return true;
+    else return false;
+}
+//--------------------------------------------------------------
+bool bShouldIErase3( Splash &a ){
     
     if ( a.destroyMe ) return true;
     else return false;
@@ -144,7 +149,7 @@ void testApp::update(){
     playerCollidesWithObject();
     if (myPlayer.bModeSurf) {
         if (!bPlayerFellOver) {
-            if(updateGame)playerCollidesWithStream();
+            playerCollidesWithStream();
         }
     }
     objectCollidesWithObstacle();
@@ -195,7 +200,7 @@ void testApp::update(){
     } else {
         tmp = myPlayer.pos.y;
     }
-    /*if (updateGame)*/ myPlayer.update( gameState, fReturnNote(tmp) );
+    myPlayer.update( gameState, fReturnNote(tmp) );
     
     if ( bIsSecondPlayer ) {
         float tmp2;
@@ -209,17 +214,45 @@ void testApp::update(){
     
     // Update the notes and the stream.
     updateObjectList();
+    float splashWide = objectList[0].wide;
     if (myPlayer.bModeSurf && gameState != 4) {
         updateStream();
+        if (myPlayer.myShip.onStream && splashTimer <= 0) {
+            Splash tmp;
+            tmp.setup(myPlayer.myShip.pos, splashWide, -5);
+            splashList.push_back(tmp);
+            splashTimer = 10;
+        }
+        if (splashTimer > 0) {
+            splashTimer--;
+        }
+    }
+    if (myPlayer.myShip.makeBigSplash) {
+        myPlayer.drawPlayer = false;
+        Splash tmp;
+        float force = myPlayer.velPrev;
+        float min = 8;
+        if (force < min) {
+            force = min;
+        }
+        tmp.setup(myPlayer.myShip.pos, splashWide, force * -1, true);
+        splashList.push_back(tmp);
+        myPlayer.myShip.makeBigSplash = false;
+    }
+    for (int i = 0; i < splashList.size(); i++) {
+        splashList[i].update();
     }
     
     ofRemove( objectList, bShouldIErase );
     ofRemove( recordedList, bShouldIErase );
     ofRemove( streamBitList, bShouldIErase2 );
+    ofRemove( splashList, bShouldIErase3 );
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
+    //cout<<splashList.size()<<endl;
     
     //ofxGamepadHandler::get()->draw(10,10);
     
@@ -285,11 +318,11 @@ void testApp::draw(){
         }
         
         myPlayer.draw( helvetica, recordedList );
-        ofSetColor(0,255,0);
-        ofCircle(tmp, 5); // Yo find me
-        ofLine(tmp, tmp + (myPlayer.pos - myPlayer.myShip.pointRear));
         if ( bIsSecondPlayer ) {
             myPlayer2.draw( helvetica, recordedList );
+        }
+        for (int i = 0; i < splashList.size(); i++) {
+            splashList[i].draw();
         }
         
         if ( gameState == 4 ) {
@@ -1501,33 +1534,34 @@ void testApp::playerCollidesWithStream() {
                     }
                 }
                 
-                // Make the ship land correctly in the stream.
-                ofVec2f otherPoint;
-                float hyp = myPlayer.myShip.rotOffset * 2;
-                if (myPlayer.myShip.rotPoint == -1) {
-                    otherPoint.set(myPlayer.myShip.pos.x + hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y + hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
-                } else if (myPlayer.myShip.rotPoint == 1) {
-                    otherPoint.set(myPlayer.myShip.pos.x - hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y - hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
-                }
-                if(updateGame)tmp = otherPoint; // Find me
-                
-                if (otherPoint.y >= start.y + inc.y && myPlayer.myShip.pos.y < start.y + inc.y) {
-                    ofVec2f diff, refPoint, dest;
+                // Find me--delete all of this if find better solution to hiding the issue.
+                {// Make the ship land correctly in the stream.
+                    ofVec2f otherPoint;
+                    float hyp = myPlayer.myShip.rotOffset * 2;
                     if (myPlayer.myShip.rotPoint == -1) {
-                        diff = myPlayer.pos - myPlayer.myShip.pointFront;
-                        refPoint = myPlayer.myShip.pointRear;
-                        dest = refPoint + diff;
+                        otherPoint.set(myPlayer.myShip.pos.x + hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y + hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
                     } else if (myPlayer.myShip.rotPoint == 1) {
-                        diff = myPlayer.pos - myPlayer.myShip.pointRear;
-                        refPoint = myPlayer.myShip.pointFront;
-                        dest = refPoint + diff;
+                        otherPoint.set(myPlayer.myShip.pos.x - hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y - hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
                     }
-                    myPlayer.pos = otherPoint + diff;
-                    cout<<otherPoint<<" "<<myPlayer.pos<<endl;
-                    myPlayer.myShip.rotPoint *= -1;
-                    updateGame = false;
-                    //myPlayer.pos.y -= 200;
-                }
+                    
+                    if (otherPoint.y >= start.y + inc.y && myPlayer.myShip.pos.y < start.y + inc.y) {
+                        ofVec2f diff, refPoint, dest;
+                        if (myPlayer.myShip.rotPoint == -1) {
+                            diff = myPlayer.pos - myPlayer.myShip.pointFront;
+                            refPoint = myPlayer.myShip.pointRear;
+                            dest = refPoint + diff;
+                        } else if (myPlayer.myShip.rotPoint == 1) {
+                            diff = myPlayer.pos - myPlayer.myShip.pointRear;
+                            refPoint = myPlayer.myShip.pointFront;
+                            dest = refPoint + diff;
+                        }
+                        //myPlayer.pos = otherPoint + diff;
+                        //cout<<otherPoint<<" "<<myPlayer.pos<<endl;
+                        //myPlayer.myShip.rotPoint *= -1;
+                        //updateGame = false;
+                        //myPlayer.pos.y -= 200;
+                    }
+                } // End delete
                 
                 // Keep player on top of stream, if not underneath stream.
                 if (myPlayer.pos.y >= start.y + inc.y * j - diff
@@ -2034,6 +2068,7 @@ void testApp::cleanup() {
     objectList.clear();
     recordedList.clear();
     streamBitList.clear();
+    splashList.clear();
 }
 
 /*

@@ -35,7 +35,7 @@ public:
     vector< float > staffPosList;
     
     ofVec2f pos, vel, acc, actPos;
-    float yPosLast, yPosDiff, yPosStaff;
+    float yPosLast, yPosDiff, yPosStaff, velPrev;
     float wide, tall;
     float maxVel, jumpVel;
     float fHatSizer, fHatWidth, fHatHeight, fHatOffset, fHatOffsetDefault, fHatVel, fHatVelDefault, fHatQueuedForce;
@@ -48,8 +48,9 @@ public:
     bool bAutoplayBass;
     
     bool allowMove, allowControl, allowJump, up, left, down, right;
-    bool onSurface, onStream;
+    bool onSurface, onStream, onStreamPrev;
     bool closeEnough;
+    bool drawPlayer;
     bool record, replay, bIsRecording, bIsReplaying, bAllowRecord, bAllowReplay, bIsActing, bIsEmpty, bIsFull, bUsingController, bGrabHat, bFlyingHat, bNoteFlyingHatAngle;
     int iScaler, gameState, frameRate, capacity;
     float radius, angle, angleVel, myAngle, hatAngle;
@@ -58,6 +59,7 @@ public:
     int tmpAngle;
     int currentStream;
     int inStreamTimer;
+    int invisibleTimer;
     
     ofImage headphones, hand, appendage, appendage_mirrored, hat; // For some baffling reason the image is not moving when it should.
     
