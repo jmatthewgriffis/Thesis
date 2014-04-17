@@ -59,6 +59,7 @@ void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingCo
     fNoteOffsetH = 0;
     currentStream = -1;
     inStreamTimer = invisibleTimer = 0;
+    jumpCounter = 1;
     
     up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = false;
     allowMove = true;

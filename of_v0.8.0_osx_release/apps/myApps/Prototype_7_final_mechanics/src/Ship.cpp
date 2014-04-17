@@ -191,14 +191,14 @@ void Ship::draw() {
                 ofPushMatrix();{
                     ofRotate(-135);
                     ofPushMatrix();{
-                        ofTranslate(fImgHeightBass / -8, fImgHeightBass / 2.53);
+                        ofTranslate(fImgHeightBass / -4.8, fImgHeightBass / 3.429);
                         
                         /*ofSetColor(255, alpha);
                          ofCircle(0, 0, 17);
                          ofSetColor(255, alpha); // yo yo
                          ofCircle(0, 0, 15);*/
                         
-                        float margin = fImgHeightBass / -4.8 - jumpOffset;
+                        float margin = fImgHeightBass / -10 - jumpOffset;
                         float length = margin - (fImgHeightBass / 9.6);
                         for (int i = 0; i < 8; i++) {
                             ofPushMatrix();{
