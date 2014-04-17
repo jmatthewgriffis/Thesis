@@ -17,15 +17,23 @@ Ship::Ship() {
 
 //--------------------------------------------------------------
 void Ship::setup() {
-    angle = anglePrev = 0;
+    angle = anglePrev = jumpAngle = 0;
     angleVel = 2;
     rotPoint = 1;
     onStream = onStreamPrev = makeBigSplash = false;
-    bSolid = clockwise = true;
+    bSolid = clockwise = bHasExtraJump = true;
 }
 
 //--------------------------------------------------------------
-void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl) {
+void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _jumpCounter) {
+    
+    if (_jumpCounter < 2) {
+        bHasExtraJump = true;
+        jumpAngle--;
+    } else {
+        bHasExtraJump = false;
+        jumpAngle = 0;
+    }
     
     posPlayer = _pos;
     pos = posPlayer;
@@ -142,6 +150,33 @@ void Ship::draw() {
                 ofTranslate(- fImgHeightTreble * 0.5, 0);
                 ofRotate(135);
                 bassClef.draw(0, 0, (fImgHeightBass * bassClef.getWidth() / bassClef.getHeight()), fImgHeightBass);
+                
+                if (bHasExtraJump) {
+                    ofPushMatrix();{
+                        ofRotate(-135);
+                        ofPushMatrix();{
+                            ofTranslate(-6, 19);
+                            
+                            /*ofSetColor(255, alpha);
+                             ofCircle(0, 0, 17);
+                             ofSetColor(255, alpha); // yo yo
+                             ofCircle(0, 0, 15);*/
+                            float margin = fImgHeightBass / -4.8;
+                            float length = margin - (fImgHeightBass / 9.6);
+                            for (int i = 0; i < 8; i++) {
+                                ofPushMatrix();{
+                                    ofRotate(jumpAngle + i * 45);
+                                    ofSetLineWidth(3);
+                                    ofSetColor(0, alpha);
+                                    ofLine(0, margin, 0, length);
+                                    ofSetLineWidth(1);
+                                    ofSetColor(255, alpha);
+                                    ofLine(0, margin, 0, length);
+                                }ofPopMatrix();
+                            }
+                        }ofPopMatrix();
+                    }ofPopMatrix();
+                }
             }ofPopMatrix();
             
         }ofPopMatrix();

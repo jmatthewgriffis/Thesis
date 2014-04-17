@@ -335,7 +335,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
     fActing();
     
     if (bHasShip) {
-        myShip.update(ofVec2f(pos.x + wide * 0.45, pos.y + tall * 1.1), tall, allowControl);
+        myShip.update(ofVec2f(pos.x + wide * 0.45, pos.y + tall * 1.1), tall, allowControl, jumpCounter);
     }
     
     if (!allowControl) {
