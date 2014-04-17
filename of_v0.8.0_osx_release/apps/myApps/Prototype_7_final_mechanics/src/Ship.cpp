@@ -18,6 +18,7 @@ Ship::Ship() {
 //--------------------------------------------------------------
 void Ship::setup() {
     angle = anglePrev = jumpAngle = 0;
+    alpha = jumpAlpha = 255;
     angleVel = 2;
     rotPoint = 1;
     onStream = onStreamPrev = makeBigSplash = false;
@@ -29,7 +30,9 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
     
     if (_jumpCounter < 2) {
         bHasExtraJump = true;
-        jumpAngle--;
+        if (jumpAlpha == 255) {
+            jumpAngle--;
+        }
     } else {
         bHasExtraJump = false;
         jumpAngle = 0;
@@ -68,10 +71,10 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
     } else {
         rotPoint = 0;
         /*if (angle >= 180 && !clockwise) {
-            rotPoint = -1; // Back of ship.
-        } else if (angle < 180 && clockwise) {
-            rotPoint = 1; // Front of ship.
-        }*/
+         rotPoint = -1; // Back of ship.
+         } else if (angle < 180 && clockwise) {
+         rotPoint = 1; // Front of ship.
+         }*/
     }
     
     // Set the position based on the rotation point so we can rotate the ship correctly.
@@ -105,6 +108,31 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
         bSolid = false;
     }
     
+    if (bSolid) {
+        alpha = 255;
+    } else {
+        alpha = 127;
+    }
+    
+    { // Jump indicator fadeout and fadein.
+        int fadeVel = 5;
+        if (!bHasExtraJump) {
+            if (jumpAlpha > 0) {
+                jumpAlpha -= fadeVel;
+            }
+        } else {
+            if (jumpAlpha < 255) {
+                jumpAlpha += fadeVel;
+            }
+        }
+        if (jumpAlpha < 0) {
+            jumpAlpha = 0;
+        }
+        if (jumpAlpha > 255) {
+            jumpAlpha = 255;
+        }
+    }
+    
     // Figure out the overall direction of rotation by switching only when crossing zero.
     if (anglePrev >= 0 && angle < 0) {
         clockwise = false;
@@ -122,12 +150,6 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
 //--------------------------------------------------------------
 void Ship::draw() {
     
-    int alpha;
-    if (bSolid) {
-        alpha = 255;
-    } else {
-        alpha = 127;
-    }
     ofSetColor(255, alpha);
     
     ofPushMatrix();{
@@ -151,39 +173,39 @@ void Ship::draw() {
                 ofRotate(135);
                 bassClef.draw(0, 0, (fImgHeightBass * bassClef.getWidth() / bassClef.getHeight()), fImgHeightBass);
                 
-                if (bHasExtraJump) {
+                // Draw the jump indicator.
+                ofPushMatrix();{
+                    ofRotate(-135);
                     ofPushMatrix();{
-                        ofRotate(-135);
-                        ofPushMatrix();{
-                            ofTranslate(fImgHeightBass / -8, fImgHeightBass / 2.53);
-                            
-                            /*ofSetColor(255, alpha);
-                             ofCircle(0, 0, 17);
-                             ofSetColor(255, alpha); // yo yo
-                             ofCircle(0, 0, 15);*/
-                            float margin = fImgHeightBass / -4.8;
-                            float length = margin - (fImgHeightBass / 9.6);
-                            for (int i = 0; i < 8; i++) {
-                                ofPushMatrix();{
-                                    ofRotate(jumpAngle + i * 45);
-                                    ofSetLineWidth(3);
-                                    ofSetColor(0, alpha);
-                                    ofLine(0, margin, 0, length);
-                                    ofSetLineWidth(1);
-                                    ofSetColor(255, alpha);
-                                    ofLine(0, margin, 0, length);
-                                }ofPopMatrix();
-                            }
-                        }ofPopMatrix();
+                        ofTranslate(fImgHeightBass / -8, fImgHeightBass / 2.53);
+                        
+                        /*ofSetColor(255, alpha);
+                         ofCircle(0, 0, 17);
+                         ofSetColor(255, alpha); // yo yo
+                         ofCircle(0, 0, 15);*/
+                        
+                        float margin = fImgHeightBass / -4.8;
+                        float length = margin - (fImgHeightBass / 9.6);
+                        for (int i = 0; i < 8; i++) {
+                            ofPushMatrix();{
+                                ofRotate(jumpAngle + i * 45);
+                                ofSetLineWidth(3);
+                                ofSetColor(0, jumpAlpha);
+                                ofLine(0, margin, 0, length);
+                                ofSetLineWidth(1);
+                                ofSetColor(255, jumpAlpha);
+                                ofLine(0, margin, 0, length);
+                            }ofPopMatrix();
+                        }
                     }ofPopMatrix();
-                }
+                }ofPopMatrix();
             }ofPopMatrix();
             
         }ofPopMatrix();
         
         // Test where the pos / rotation point is.
         /*ofSetColor(255,0,0);
-        ofCircle(0,0,5);*/
+         ofCircle(0,0,5);*/
         
     }ofPopMatrix();
     

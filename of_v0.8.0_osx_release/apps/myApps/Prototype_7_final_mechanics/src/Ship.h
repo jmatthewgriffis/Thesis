@@ -22,6 +22,7 @@ public:
     
     ofVec2f pos, posPlayer, pointRear, pointFront;
     
+    int alpha, jumpAlpha;
     float angle, angleVel, rotPoint, anglePrev, jumpAngle;
     bool bTiltUpward, bTiltDownward;
     bool bSolid, onStream, onStreamPrev, makeBigSplash;
