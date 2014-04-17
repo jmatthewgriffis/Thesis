@@ -35,6 +35,7 @@ public:
     vector< float > staffPosList;
     
     ofVec2f pos, vel, acc, actPos;
+    int alpha;
     float yPosLast, yPosDiff, yPosStaff, velPrev;
     float wide, tall;
     float maxVel, jumpVel;

@@ -209,7 +209,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
                         applyForce( ofVec2f( 0.0, jumpVel * 0.75 ) );
                         onSurface = false;
                         onStream = false;
-                        allowJump = false; // yo yo
+                        allowJump = false;
                         if (gameState >= 7) {
                             jumpCounter++;
                         }
@@ -230,6 +230,9 @@ void Player::update( int _gameState, string _OnThisNote ) {
                         applyForce( ofVec2f( 0.0, -jumpVel * 0.4 ) );
                         //onSurface = false;
                         allowJump = false;
+                        if (gameState >= 7) {
+                            jumpCounter++;
+                        }
                     }
                 }
             } else if (bModeSurf && !up) {
@@ -416,8 +419,13 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     }
     
     // Draw the actual character now that he exists.
-    if (gameState >= 7 && drawPlayer) {
+    if (gameState >= 7) {
         fDrawCharacter();
+        if (drawPlayer) {
+            alpha = 255;
+        } else {
+            alpha = 0;
+        }
     }
     
     fDrawCapacity(_recordedList);
@@ -632,6 +640,7 @@ void Player::fDrawCharacter() {
     
     tall = wide * 1.35;
     bGrabHat = false;
+    ofSetColor(255, alpha);
     
     ofPushMatrix();{
         float newAngle;
@@ -666,11 +675,13 @@ void Player::fDrawCharacter() {
             ofPushMatrix();{
                 ofTranslate(pos);
                 ofRotate(-myAngle);
+                
                 // Body
-                ofSetColor(0, 255);
+                ofSetColor(0, alpha);
                 ofEllipse(0, 0, wide, tall);
+                
                 // Hat
-                ofSetColor(255, 255);
+                ofSetColor(255, alpha);
                 ofSetRectMode(OF_RECTMODE_CORNER);
                 ofPushMatrix();{
                     /*if (bFlyingHat) { // Find me
@@ -699,8 +710,10 @@ void Player::fDrawCharacter() {
                         //}
                     }ofPopMatrix();
                 }ofPopMatrix();
-                //
-                ofSetColor(255, 255);
+                
+                ofSetColor(255, alpha);
+                
+                // Appendages
                 ofSetRectMode(OF_RECTMODE_CORNER);
                 float armSizer = wide * 0.00286;
                 float armWidth = appendage.getWidth() * armSizer;
@@ -738,7 +751,6 @@ void Player::fDrawCharacter() {
             }ofPopMatrix();
             
             // Appendages
-            ofSetColor(255, 255);
             ofSetRectMode(OF_RECTMODE_CORNER);
             float armSizer = wide * 0.00286;
             float armWidth = appendage.getWidth() * armSizer;
