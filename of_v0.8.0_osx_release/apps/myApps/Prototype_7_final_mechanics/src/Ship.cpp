@@ -17,7 +17,7 @@ Ship::Ship() {
 
 //--------------------------------------------------------------
 void Ship::setup() {
-    angle = anglePrev = jumpAngle = 0;
+    angle = anglePrev = jumpAngle = jumpOffset = 0;
     alpha = jumpAlpha = 255;
     angleVel = 2;
     rotPoint = 1;
@@ -28,21 +28,28 @@ void Ship::setup() {
 //--------------------------------------------------------------
 void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _jumpCounter) {
     
+    posPlayer = _pos;
+    pos = posPlayer;
+    fImgHeightTreble = _playerHeight * 2.25;
+    fImgHeightBass = fImgHeightTreble / 2;
+    rotOffset = fImgHeightBass;
+    
     if (_jumpCounter < 2) {
         bHasExtraJump = true;
         if (jumpAlpha == 255) {
-            jumpAngle--;
+            jumpAngle -= 10;
         }
     } else {
         bHasExtraJump = false;
         jumpAngle = 0;
     }
     
-    posPlayer = _pos;
-    pos = posPlayer;
-    fImgHeightTreble = _playerHeight * 2.25;
-    fImgHeightBass = fImgHeightTreble / 2;
-    rotOffset = fImgHeightBass;
+    while (jumpAngle > 360) {
+        jumpAngle -= 360;
+    }
+    while (jumpAngle < 0) {
+        jumpAngle += 360;
+    }
     
     while (angle > 360) {
         angle -= 360;
@@ -116,13 +123,17 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
     
     { // Jump indicator fadeout and fadein.
         int fadeVel = 5;
+        int offsetVel = 2;
         if (!bHasExtraJump) {
             if (jumpAlpha > 0) {
                 jumpAlpha -= fadeVel;
+                jumpOffset += offsetVel;
             }
         } else {
+            int multipler = 2;
             if (jumpAlpha < 255) {
-                jumpAlpha += fadeVel;
+                jumpAlpha += fadeVel * multipler;
+                jumpOffset -= offsetVel * multipler;
             }
         }
         if (jumpAlpha < 0) {
@@ -130,6 +141,9 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
         }
         if (jumpAlpha > 255) {
             jumpAlpha = 255;
+        }
+        if (jumpOffset < 0) {
+            jumpOffset = 0;
         }
     }
     
@@ -184,7 +198,7 @@ void Ship::draw() {
                          ofSetColor(255, alpha); // yo yo
                          ofCircle(0, 0, 15);*/
                         
-                        float margin = fImgHeightBass / -4.8;
+                        float margin = fImgHeightBass / -4.8 - jumpOffset;
                         float length = margin - (fImgHeightBass / 9.6);
                         for (int i = 0; i < 8; i++) {
                             ofPushMatrix();{
