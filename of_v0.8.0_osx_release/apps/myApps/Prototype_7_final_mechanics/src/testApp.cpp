@@ -60,7 +60,7 @@ void testApp::setup(){
     gameState = 0;
     currentState = gameState;
     
-    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = bPlayerFellOver = false;
+    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = false;
     bHighlightNote = false;
     bCamZoomedIn = false;
     bIsSecondPlayer = false;
@@ -148,7 +148,7 @@ void testApp::update(){
     playerCollidesWithObstacle();
     playerCollidesWithObject();
     if (myPlayer.bModeSurf) {
-        if (!bPlayerFellOver) {
+        if (myPlayer.myShip.bSolid) {
             playerCollidesWithStream();
         }
     }
@@ -339,7 +339,7 @@ void testApp::fLoadPrototype() {
     
     // Maintenance.
     cleanup();
-    bBassOnly = bTrebleOnly = bIsSecondPlayer = bPlayerFellOver = false;
+    bBassOnly = bTrebleOnly = bIsSecondPlayer = false;
     float fZoomedInX = iScaler * 7.5;
     iLastOpacityChange = ofGetElapsedTimef(); // Reset the clock.
     
@@ -1639,12 +1639,6 @@ void testApp::playerCollidesWithStream() {
                 }
             }
         }
-    }
-    
-    // Fall over if angled too sharply and not in stream. Find me
-    if (myPlayer.onStream && myPlayer.myShip.angle > 90 && myPlayer.myShip.angle < 270) {
-        //bPlayerFellOver = true;
-        //myPlayer.allowControl = false;
     }
 }
 

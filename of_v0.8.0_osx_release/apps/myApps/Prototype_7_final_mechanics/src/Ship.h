@@ -15,17 +15,19 @@ public:
     Ship();
     
     void setup();
-    void update(ofVec2f _pos, float _playerHeight, bool _allowControl);
+    void update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _jumpCounter);
     void draw();
     
     ofImage trebleClef, bassClef;
     
     ofVec2f pos, posPlayer, pointRear, pointFront;
     
-    float angle, angleVel, rotPoint, anglePrev;
+    int alpha, jumpAlpha;
+    float angle, angleVel, rotPoint, anglePrev, jumpAngle, jumpOffset;
     bool bTiltUpward, bTiltDownward;
-    bool onStream, onStreamPrev, makeBigSplash;
+    bool bSolid, onStream, onStreamPrev, makeBigSplash;
     bool clockwise;
+    bool bHasExtraJump;
     
     float fImgHeightTreble, fImgHeightBass, rotOffset;
 };

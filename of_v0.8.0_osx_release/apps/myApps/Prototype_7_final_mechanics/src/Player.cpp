@@ -59,6 +59,7 @@ void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingCo
     fNoteOffsetH = 0;
     currentStream = -1;
     inStreamTimer = invisibleTimer = 0;
+    jumpCounter = 1;
     
     up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = false;
     allowMove = true;
@@ -147,6 +148,14 @@ void Player::update( int _gameState, string _OnThisNote ) {
         invisibleTimer = 0;
     }
     
+    if (gameState >= 7 && bModeSurf) {
+        if (myShip.onStream && vel.y >= 0) {
+            jumpCounter = 0;
+        } else if (!myShip.onStream && jumpCounter < 1) {
+            jumpCounter = 1;
+        }
+    }
+    
     // Prevent going off the true left and bottom edges.
     if ( pos.x <= wide / 2.0 ) {
         pos.x = wide / 2.0;
@@ -200,7 +209,10 @@ void Player::update( int _gameState, string _OnThisNote ) {
                         applyForce( ofVec2f( 0.0, jumpVel * 0.75 ) );
                         onSurface = false;
                         onStream = false;
-                        allowJump = false;
+                        allowJump = false; // yo yo
+                        if (gameState >= 7) {
+                            jumpCounter++;
+                        }
                     }
                 }
             } else if ( bModeSurf && !down ){
@@ -237,6 +249,11 @@ void Player::update( int _gameState, string _OnThisNote ) {
                 applyForce( ofVec2f( maxVel, 0.0 ) );
                 //}
             }
+        }
+        
+        // Limit jumping.
+        if (bModeSurf && gameState >= 7 && jumpCounter >= 2) {
+            allowJump = false;
         }
         
         vel += acc;
@@ -319,7 +336,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
     fActing();
     
     if (bHasShip) {
-        myShip.update(ofVec2f(pos.x + wide * 0.45, pos.y + tall * 1.1), tall, allowControl);
+        myShip.update(ofVec2f(pos.x + wide * 0.45, pos.y + tall * 1.1), tall, allowControl, jumpCounter);
     }
     
     if (!allowControl) {
@@ -350,6 +367,9 @@ void Player::update( int _gameState, string _OnThisNote ) {
 
 //--------------------------------------------------------------
 void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
+    
+    /*ofSetColor(0);
+    ofDrawBitmapString(ofToString(jumpCounter), pos.x + 100, pos.y);*/
     
     fDrawRecordedList(_recordedList);
     
@@ -605,10 +625,10 @@ void Player::fDrawCharacter() {
     
     // Draw variable value for debugging.
     /*string str;
-    if (bFlyingHat) str = "true";
-    else str = "false";
-    ofSetColor(0);
-    ofDrawBitmapString(ofToString(myShip.angle), pos.x + 100, pos.y - 50);*/
+     if (bFlyingHat) str = "true";
+     else str = "false";
+     ofSetColor(0);
+     ofDrawBitmapString(ofToString(myShip.angle), pos.x + 100, pos.y - 50);*/
     
     tall = wide * 1.35;
     bGrabHat = false;
@@ -635,12 +655,12 @@ void Player::fDrawCharacter() {
             
             // Hat
             /*ofSetColor(255, 255);
-            ofSetRectMode(OF_RECTMODE_CORNER);
-            ofPushMatrix();{
-                ofTranslate(pos.x - fHatWidth * 0.5, fHatOffset);
-                ofRotate(-10);
-                hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
-            }ofPopMatrix();*/
+             ofSetRectMode(OF_RECTMODE_CORNER);
+             ofPushMatrix();{
+             ofTranslate(pos.x - fHatWidth * 0.5, fHatOffset);
+             ofRotate(-10);
+             hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
+             }ofPopMatrix();*/
             
             // Body and hat
             ofPushMatrix();{
@@ -654,28 +674,28 @@ void Player::fDrawCharacter() {
                 ofSetRectMode(OF_RECTMODE_CORNER);
                 ofPushMatrix();{
                     /*if (bFlyingHat) { // Find me
-                        if (!bNoteFlyingHatAngle) {
-                            hatAngle = myAngle;
-                            bNoteFlyingHatAngle = true;
-                        }
-                        float diff = hatAngle - myAngle;
-                        float counterRot;
-                        if (diff != 0) {
-                            if (hatAngle > myAngle) {
-                                counterRot = -diff;
-                            } else {
-                                counterRot = diff;
-                            }
-                        }
-                        //ofRotate(counterRot); // Find me
-                    }*/
+                     if (!bNoteFlyingHatAngle) {
+                     hatAngle = myAngle;
+                     bNoteFlyingHatAngle = true;
+                     }
+                     float diff = hatAngle - myAngle;
+                     float counterRot;
+                     if (diff != 0) {
+                     if (hatAngle > myAngle) {
+                     counterRot = -diff;
+                     } else {
+                     counterRot = diff;
+                     }
+                     }
+                     //ofRotate(counterRot); // Find me
+                     }*/
                     ofPushMatrix();{
                         ofTranslate(-fHatWidth * 0.5, fHatOffset - pos.y);
                         ofRotate(-10);
                         //if (bFlyingHat && bGrabHat){
-                          // Find me
+                        // Find me
                         //} else {
-                            hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
+                        hat.draw(-wide * 0.5 * 0.25, 0, fHatWidth, fHatHeight);
                         //}
                     }ofPopMatrix();
                 }ofPopMatrix();
@@ -698,7 +718,7 @@ void Player::fDrawCharacter() {
                     appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
                     // Test circle
                     /*ofSetColor(255,0,0);
-                    ofCircle(0,0,5);*/
+                     ofCircle(0,0,5);*/
                 }ofPopMatrix();
                 // Left arm
                 ofPushMatrix();{
@@ -713,7 +733,7 @@ void Player::fDrawCharacter() {
                     appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
                     // Test circle
                     /*ofSetColor(255,0,0);
-                    ofCircle(0,0,5);*/
+                     ofCircle(0,0,5);*/
                 }ofPopMatrix();
             }ofPopMatrix();
             
@@ -725,13 +745,13 @@ void Player::fDrawCharacter() {
             float armHeight = appendage.getHeight() * armSizer;
             // Right arm
             /*ofPushMatrix();{
-                ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
-                ofRotate(55 - myAngle * 2);
-                appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
-                // Test circle
-                ofSetColor(255,0,0);
-                ofCircle(0,0,5);
-            }ofPopMatrix();*/
+             ofTranslate(pos.x + wide * 0.35, pos.y - wide * 0.15);
+             ofRotate(55 - myAngle * 2);
+             appendage.draw(-armWidth * 0.4, -armHeight, armWidth, armHeight);
+             // Test circle
+             ofSetColor(255,0,0);
+             ofCircle(0,0,5);
+             }ofPopMatrix();*/
             // Right leg
             ofPushMatrix();{
                 ofTranslate(pos.x + wide * 0.25, pos.y + wide * 0.45);
@@ -740,13 +760,13 @@ void Player::fDrawCharacter() {
             }ofPopMatrix();
             // Left arm
             /*ofPushMatrix();{
-                ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
-                ofRotate(-70 - myAngle * 2);
-                appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
-                // Test circle
-                ofSetColor(255,0,0);
-                ofCircle(0,0,5);
-            }ofPopMatrix();*/
+             ofTranslate(pos.x - wide * 0.35, pos.y - wide * 0.15);
+             ofRotate(-70 - myAngle * 2);
+             appendage_mirrored.draw(-armWidth * 0.6, -armHeight, armWidth, armHeight);
+             // Test circle
+             ofSetColor(255,0,0);
+             ofCircle(0,0,5);
+             }ofPopMatrix();*/
             // Left leg
             ofPushMatrix();{
                 ofTranslate(pos.x - wide * 0.25, pos.y + wide * 0.45);
@@ -757,8 +777,8 @@ void Player::fDrawCharacter() {
     }ofPopMatrix();
     // Test circle
     /*ofSetColor(0,0,255);
-    ofCircle(pos, 5);*/
+     ofCircle(pos, 5);*/
     // Test lines
     /*ofLine(myShip.pointFront, pos);
-    ofLine(myShip.pointRear, pos);*/
+     ofLine(myShip.pointRear, pos);*/
 }
