@@ -1587,21 +1587,22 @@ void testApp::playerCollidesWithStream() {
                     }
                     
                     // Align to the stream.
-                    float thisVel;
-                    if (streamBitList[i].angle < 180) {
-                        thisVel = 1;
-                    } else {
-                        thisVel = -1;
+                    if (!myPlayer.myShip.bTiltUpward && !myPlayer.myShip.bTiltDownward) {
+                        float thisVel;
+                        if (streamBitList[i].angle < 180) {
+                            thisVel = 1;
+                        } else {
+                            thisVel = -1;
+                        }
+                        if (myPlayer.myShip.angle < streamBitList[i].angle) {
+                            myPlayer.myShip.angle += thisVel * myPlayer.myShip.rotPoint;
+                        } else if (myPlayer.myShip.angle > streamBitList[i].angle) {
+                            myPlayer.myShip.angle -= thisVel * myPlayer.myShip.rotPoint;
+                        }
+                        if (angleDiff < thisVel) {
+                            myPlayer.myShip.angle = streamBitList[i].angle;
+                        }
                     }
-                    if (myPlayer.myShip.angle < streamBitList[i].angle) {
-                        myPlayer.myShip.angle += thisVel * myPlayer.myShip.rotPoint;
-                    } else if (myPlayer.myShip.angle > streamBitList[i].angle) {
-                        myPlayer.myShip.angle -= thisVel * myPlayer.myShip.rotPoint;
-                    }
-                    if (angleDiff < thisVel) {
-                        myPlayer.myShip.angle = streamBitList[i].angle;
-                    }
-                    //myPlayer.myShip.angle = streamBitList[i].angle;
                     
                     if (angleDiff <= closeEnough) {
                         myPlayer.closeEnough = true;
