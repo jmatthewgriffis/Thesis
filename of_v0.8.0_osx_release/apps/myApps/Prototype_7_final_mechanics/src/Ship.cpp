@@ -192,6 +192,7 @@ void Ship::draw() {
                     ofRotate(-135);
                     ofPushMatrix();{
                         ofTranslate(fImgHeightBass / -4.8, fImgHeightBass / 3.429);
+                        //ofTranslate(fImgHeightBass * -0.05, fImgHeightBass / -1.729);
                         
                         /*ofSetColor(255, alpha);
                          ofCircle(0, 0, 17);

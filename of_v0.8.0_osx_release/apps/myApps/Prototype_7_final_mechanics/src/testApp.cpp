@@ -1521,7 +1521,7 @@ void testApp::playerCollidesWithStream() {
         ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;
         ofVec2f end = streamBitList[i].pos + streamBitList[i].slope * 0.5;
         ofVec2f inc = streamBitList[i].slope.normalized();
-        float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/;
+        float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/ + myPlayer.myShip.fImgHeightBass / 2;
         for (int j = 1; j < int(streamBitList[i].wide); j++) {
             
             // If player x is within two bits of the object's x...
@@ -1585,6 +1585,23 @@ void testApp::playerCollidesWithStream() {
                     if (angleDiff > 180) {
                         angleDiff = 360 - angleDiff;
                     }
+                    
+                    // Align to the stream.
+                    float thisVel;
+                    if (streamBitList[i].angle < 180) {
+                        thisVel = 1;
+                    } else {
+                        thisVel = -1;
+                    }
+                    if (myPlayer.myShip.angle < streamBitList[i].angle) {
+                        myPlayer.myShip.angle += thisVel * myPlayer.myShip.rotPoint;
+                    } else if (myPlayer.myShip.angle > streamBitList[i].angle) {
+                        myPlayer.myShip.angle -= thisVel * myPlayer.myShip.rotPoint;
+                    }
+                    if (angleDiff < thisVel) {
+                        myPlayer.myShip.angle = streamBitList[i].angle;
+                    }
+                    //myPlayer.myShip.angle = streamBitList[i].angle;
                     
                     if (angleDiff <= closeEnough) {
                         myPlayer.closeEnough = true;
