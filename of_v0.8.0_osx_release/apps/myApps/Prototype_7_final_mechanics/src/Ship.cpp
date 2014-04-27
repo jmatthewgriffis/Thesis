@@ -21,7 +21,7 @@ void Ship::setup() {
     alpha = jumpAlpha = 255;
     angleVel = 2;
     rotPoint = 1;
-    onStream = onStreamPrev = makeBigSplash = false;
+    onStream = onStreamPrev = makeBigSplash = strongGrav = false;
     bSolid = clockwise = bHasExtraJump = true;
 }
 
@@ -34,7 +34,7 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
     fImgHeightBass = fImgHeightTreble / 2;
     rotOffset = fImgHeightBass;
     
-    if (_jumpCounter < 2) {
+    if (_jumpCounter < 1) {
         bHasExtraJump = true;
         if (jumpAlpha == 255) {
             jumpAngle -= 10;
@@ -56,6 +56,12 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
     }
     while (angle < 0) {
         angle += 360;
+    }
+    
+    if (angle > 45 && angle < 90) {
+        strongGrav = true;
+    } else {
+        strongGrav = false;
     }
     
     // Store the front and rear rotation points.
@@ -180,6 +186,15 @@ void Ship::draw() {
             ofPushMatrix();{
                 ofRotate(90);
                 trebleClef.draw(0, 0, (fImgHeightTreble * trebleClef.getWidth() / trebleClef.getHeight()), fImgHeightTreble);
+                
+                // Draw velocity lines for strong grav.
+                if (strongGrav && !onStream) { // scale to iScaler later?
+                    ofSetColor(0);
+                    ofLine(-25, -30, 5, -60);
+                    ofLine(-15, -30, 7, -60);
+                    ofLine(25, -30, 8, -60);
+                    ofLine(35, -30, 10, -60);
+                }
             }ofPopMatrix();
             
             ofPushMatrix();{

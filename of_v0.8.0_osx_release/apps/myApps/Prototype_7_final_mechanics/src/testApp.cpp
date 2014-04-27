@@ -330,8 +330,8 @@ void testApp::draw(){
             helvetica.drawString( "Notes hit: " + ofToString( iHitCounter ) + "/" + ofToString( iTotalTrebleNotes ), myPlayer.pos.x + iScaler, iScaler * 2 );
         }
         
-        ofSetColor(0);
-        ofDrawBitmapString(ofToString(myPlayer.noteBoost), myPlayer.pos.x + 100, myPlayer.pos.y);
+        //ofSetColor(0);
+        //ofDrawBitmapString(ofToString(myPlayer.noteBoost), myPlayer.pos.x + 100, myPlayer.pos.y); // Draw me
         
         myCam.end();
     }
@@ -455,7 +455,11 @@ void testApp::fApplyGravity() {
         } else if ( gameState == 4 ) {
             fGravity = fGravFactor * 0.4;
         } else if ( gameState == 7 || gameState == 8 ) {
-            fGravity = fGravFactor * 2;
+            if (myPlayer.myShip.strongGrav) {
+                fGravity = fGravFactor * 3.5;
+            } else {
+                fGravity = fGravFactor * 2;
+            }
         }
         
         myPlayer.applyForce( ofVec2f( 0.0, fGravity ) );
