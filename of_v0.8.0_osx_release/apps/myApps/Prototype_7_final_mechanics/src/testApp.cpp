@@ -330,6 +330,9 @@ void testApp::draw(){
             helvetica.drawString( "Notes hit: " + ofToString( iHitCounter ) + "/" + ofToString( iTotalTrebleNotes ), myPlayer.pos.x + iScaler, iScaler * 2 );
         }
         
+        ofSetColor(0);
+        ofDrawBitmapString(ofToString(myPlayer.noteBoost), myPlayer.pos.x + 100, myPlayer.pos.y);
+        
         myCam.end();
     }
 }
@@ -404,7 +407,7 @@ void testApp::fLoadPrototype() {
         // Surfin' USA
         bCamZoomedIn = true; // find me
         
-        if (gameState == 7) myPlayer.vel.y = -iScaler * 0.3;
+        if (gameState == 7) myPlayer.vel.y = -iScaler * 0.75;
         else if (gameState == 8) myPlayer.vel.y = -iScaler * 0.4;
         
         float numReps = 1;
@@ -442,7 +445,7 @@ void testApp::fApplyGravity() {
         } else if ( gameState == 4 ) {
             fGravFactor = fBaseGrav * 0.65;
         } else if ( gameState == 7 || gameState == 8 ) {
-            fGravFactor = fBaseGrav * 0.65;
+            fGravFactor = fBaseGrav * 1.25;
         }
         
         if ( myPlayer.vel.y <= 0 ) {
@@ -452,7 +455,7 @@ void testApp::fApplyGravity() {
         } else if ( gameState == 4 ) {
             fGravity = fGravFactor * 0.4;
         } else if ( gameState == 7 || gameState == 8 ) {
-            fGravity = fGravFactor * 1.25;
+            fGravity = fGravFactor * 2;
         }
         
         myPlayer.applyForce( ofVec2f( 0.0, fGravity ) );
@@ -1363,7 +1366,7 @@ void testApp::playerCollidesWithGroundOrSky() {
     } else {
         fGoNoHigher = -iScaler * 7;
     }
-    if ( myPlayer.pos.y <= fGoNoHigher ) {
+    if ( myPlayer.pos.y <= fGoNoHigher && gameState < 7) {
         myPlayer.pos.y = fGoNoHigher;
         myPlayer.vel.y = 0;
     }
@@ -1443,6 +1446,14 @@ void testApp::playerCollidesWithObject() {
                 
                 //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
                 objectList[ i ].bIsTouched = true;
+                if (gameState >= 7 && myPlayer.bModeSurf && myPlayer.allowNoteBoost) {
+                    if (myPlayer.myShip.angle > 270 && myPlayer.myShip.angle < 315) {
+                        myPlayer.noteBoost = true; // yo
+                        myPlayer.allowNoteBoost = false;
+                    }
+                }
+            } else if (myPlayer.vel.y == 0){
+                myPlayer.allowNoteBoost = true;
             }
             
             if (bIsSecondPlayer) {

@@ -61,10 +61,10 @@ void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingCo
     inStreamTimer = invisibleTimer = 0;
     jumpCounter = 1;
     
-    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = false;
+    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = noteBoost = false;
     allowMove = true;
     allowControl = true;
-    allowJump = bAllowRecord = bAllowReplay = drawPlayer = true;
+    allowJump = allowNoteBoost = bAllowRecord = bAllowReplay = drawPlayer = true;
     bHasShip = false;
     angle = myAngle = hatAngle = 0;
     fHealth = fHealthMax;
@@ -189,6 +189,15 @@ void Player::update( int _gameState, string _OnThisNote ) {
     if ( allowMove ) {
         
         if (allowControl) {
+            // Note boost
+            if (noteBoost) {
+                vel.y = 0;
+                applyForce( ofVec2f( 0.0, jumpVel * 1.5 ) );
+                onSurface = false;
+                onStream = false;
+                noteBoost = false;
+            }
+            
             // Up-----------
             if ( up ) {
                 if ( bModePlatformer ) {
@@ -632,11 +641,11 @@ void Player::fDrawHealth() {
 void Player::fDrawCharacter() {
     
     // Draw variable value for debugging.
-    /*string str;
+    string str;
      if (bFlyingHat) str = "true";
      else str = "false";
      ofSetColor(0);
-     ofDrawBitmapString(ofToString(myShip.angle), pos.x + 100, pos.y - 50);*/
+     //ofDrawBitmapString(ofToString(myShip.angle), pos.x + 100, pos.y - 50);
     
     tall = wide * 1.35;
     bGrabHat = false;

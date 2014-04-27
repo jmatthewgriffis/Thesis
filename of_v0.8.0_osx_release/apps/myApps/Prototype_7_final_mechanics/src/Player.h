@@ -48,7 +48,7 @@ public:
     bool bCanMakeNotes;
     bool bAutoplayBass;
     
-    bool allowMove, allowControl, allowJump, up, left, down, right;
+    bool allowMove, allowControl, allowJump, noteBoost, allowNoteBoost, up, left, down, right;
     bool onSurface, onStream, onStreamPrev;
     bool closeEnough;
     bool drawPlayer;
