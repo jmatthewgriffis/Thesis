@@ -56,8 +56,11 @@ void testApp::setup(){
      3:     piano prototype
      4:     boost prototype
      5:     solo prototype
+     6:     solo gym prototype
+     7:     surfing prototype
+     8:     tutorial / level select
      */
-    gameState = 0;
+    gameState = 8;
     currentState = gameState;
     
     bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = false;
@@ -74,6 +77,8 @@ void testApp::setup(){
     iTimeBetweenNotes = frameRate / 6;
     iLastOpacityChange = 0;
     iOpacityChangeFreq = frameRate * 0.005;
+    
+    fLoadPrototype();
 }
 
 //--------------------------------------------------------------
@@ -1356,8 +1361,8 @@ void testApp::playerCollidesWithGroundOrSky() {
             }
         }
         if (gameState >= 7) {
-            if (gameState == 8 && myPlayer.pos.x > streamBitList[streamBitList.size() -1].pos.x) {
-                gameState = 7;
+            if (gameState != 8) {
+                gameState = 8;
             }
             fLoadPrototype();
         }
@@ -1373,6 +1378,11 @@ void testApp::playerCollidesWithGroundOrSky() {
     if ( myPlayer.pos.y <= fGoNoHigher && gameState < 7) {
         myPlayer.pos.y = fGoNoHigher;
         myPlayer.vel.y = 0;
+    }
+    
+    if (gameState == 8 && myPlayer.currentStream > 1 && myPlayer.pos.y < myCam.getPosition().y - ofGetHeight() * 0.5) {
+        gameState = myPlayer.currentStream;
+        fLoadPrototype();
     }
     
     // P2

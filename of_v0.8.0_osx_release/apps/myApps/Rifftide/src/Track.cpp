@@ -230,6 +230,23 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         
         for (int i = 1; i <= iNumMeasures; i++) {
             // treble
+            
+            // go to jam 1
+            myStream = 7;
+            if (i == 2) {
+                addObject("g4#", (fMeasureLength * i) + m1Treble, myStream, -1);
+                addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+                addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
+                addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
+                addObject("g4#", (fMeasureLength * i) + m1Treble + iScaler * 24.4, myStream, -1);
+                
+                /*float nuSpacer = iScaler * 3;
+                addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer, myStream, -1);
+                addObject("g4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 2, myStream, -1);
+                addObject("a4#", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 3, myStream, -1);
+                addObject("b4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 4, myStream, -1);*/
+            }
+            
             myStream = 1;
             if (i <= 4) {
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble, myStream, -1);
@@ -285,7 +302,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             
             // bass
             myStream = 0;
-            if (i == 1 || i == 3 || i == 7 || i == 11) {
+            /*if (i == 1 || i == 3 || i == 7 || i == 11) {
                 addObject("c2", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("d2", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
                 addObject("e2", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
@@ -307,7 +324,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("e2", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("d2", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
                 addObject("c2", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
-            }
+            }*/
         }
     }
     
