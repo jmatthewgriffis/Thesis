@@ -330,6 +330,9 @@ void testApp::draw(){
             helvetica.drawString( "Notes hit: " + ofToString( iHitCounter ) + "/" + ofToString( iTotalTrebleNotes ), myPlayer.pos.x + iScaler, iScaler * 2 );
         }
         
+        //ofSetColor(0);
+        //ofDrawBitmapString(ofToString(myPlayer.noteBoost), myPlayer.pos.x + 100, myPlayer.pos.y); // Draw me
+        
         myCam.end();
     }
 }
@@ -404,7 +407,7 @@ void testApp::fLoadPrototype() {
         // Surfin' USA
         bCamZoomedIn = true; // find me
         
-        if (gameState == 7) myPlayer.vel.y = -iScaler * 0.3;
+        if (gameState == 7) myPlayer.vel.y = -iScaler * 0.75;
         else if (gameState == 8) myPlayer.vel.y = -iScaler * 0.4;
         
         float numReps = 1;
@@ -442,7 +445,7 @@ void testApp::fApplyGravity() {
         } else if ( gameState == 4 ) {
             fGravFactor = fBaseGrav * 0.65;
         } else if ( gameState == 7 || gameState == 8 ) {
-            fGravFactor = fBaseGrav * 0.65;
+            fGravFactor = fBaseGrav * 1.25;
         }
         
         if ( myPlayer.vel.y <= 0 ) {
@@ -452,7 +455,11 @@ void testApp::fApplyGravity() {
         } else if ( gameState == 4 ) {
             fGravity = fGravFactor * 0.4;
         } else if ( gameState == 7 || gameState == 8 ) {
-            fGravity = fGravFactor * 1.25;
+            if (myPlayer.myShip.strongGrav) {
+                fGravity = fGravFactor * 3.5;
+            } else {
+                fGravity = fGravFactor * 2;
+            }
         }
         
         myPlayer.applyForce( ofVec2f( 0.0, fGravity ) );
@@ -1363,7 +1370,7 @@ void testApp::playerCollidesWithGroundOrSky() {
     } else {
         fGoNoHigher = -iScaler * 7;
     }
-    if ( myPlayer.pos.y <= fGoNoHigher ) {
+    if ( myPlayer.pos.y <= fGoNoHigher && gameState < 7) {
         myPlayer.pos.y = fGoNoHigher;
         myPlayer.vel.y = 0;
     }
@@ -1443,6 +1450,14 @@ void testApp::playerCollidesWithObject() {
                 
                 //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
                 objectList[ i ].bIsTouched = true;
+                if (gameState >= 7 && myPlayer.bModeSurf && myPlayer.allowNoteBoost) {
+                    if (myPlayer.myShip.angle > 270 && myPlayer.myShip.angle < 315) {
+                        myPlayer.noteBoost = true; // yo
+                        myPlayer.allowNoteBoost = false;
+                    }
+                }
+            } else if (myPlayer.vel.y == 0){
+                myPlayer.allowNoteBoost = true;
             }
             
             if (bIsSecondPlayer) {
@@ -1521,7 +1536,7 @@ void testApp::playerCollidesWithStream() {
         ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;
         ofVec2f end = streamBitList[i].pos + streamBitList[i].slope * 0.5;
         ofVec2f inc = streamBitList[i].slope.normalized();
-        float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/;
+        float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/ + myPlayer.myShip.fImgHeightBass / 2;
         for (int j = 1; j < int(streamBitList[i].wide); j++) {
             
             // If player x is within two bits of the object's x...
@@ -1584,6 +1599,24 @@ void testApp::playerCollidesWithStream() {
                     
                     if (angleDiff > 180) {
                         angleDiff = 360 - angleDiff;
+                    }
+                    
+                    // Align to the stream.
+                    if (!myPlayer.myShip.bTiltUpward && !myPlayer.myShip.bTiltDownward) {
+                        float thisVel;
+                        if (streamBitList[i].angle < 180) {
+                            thisVel = 1;
+                        } else {
+                            thisVel = -1;
+                        }
+                        if (myPlayer.myShip.angle < streamBitList[i].angle) {
+                            myPlayer.myShip.angle += thisVel * myPlayer.myShip.rotPoint;
+                        } else if (myPlayer.myShip.angle > streamBitList[i].angle) {
+                            myPlayer.myShip.angle -= thisVel * myPlayer.myShip.rotPoint;
+                        }
+                        if (angleDiff < thisVel) {
+                            myPlayer.myShip.angle = streamBitList[i].angle;
+                        }
                     }
                     
                     if (angleDiff <= closeEnough) {

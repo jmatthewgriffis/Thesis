@@ -35,6 +35,7 @@ public:
     vector< float > staffPosList;
     
     ofVec2f pos, vel, acc, actPos;
+    int alpha;
     float yPosLast, yPosDiff, yPosStaff, velPrev;
     float wide, tall;
     float maxVel, jumpVel;
@@ -47,7 +48,7 @@ public:
     bool bCanMakeNotes;
     bool bAutoplayBass;
     
-    bool allowMove, allowControl, allowJump, up, left, down, right;
+    bool allowMove, allowControl, allowJump, noteBoost, allowNoteBoost, up, left, down, right;
     bool onSurface, onStream, onStreamPrev;
     bool closeEnough;
     bool drawPlayer;

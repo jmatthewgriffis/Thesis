@@ -59,12 +59,12 @@ void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingCo
     fNoteOffsetH = 0;
     currentStream = -1;
     inStreamTimer = invisibleTimer = 0;
-    jumpCounter = 1;
+    jumpCounter = 0;
     
-    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = false;
+    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = noteBoost = false;
     allowMove = true;
     allowControl = true;
-    allowJump = bAllowRecord = bAllowReplay = drawPlayer = true;
+    allowJump = allowNoteBoost = bAllowRecord = bAllowReplay = drawPlayer = true;
     bHasShip = false;
     angle = myAngle = hatAngle = 0;
     fHealth = fHealthMax;
@@ -151,9 +151,9 @@ void Player::update( int _gameState, string _OnThisNote ) {
     if (gameState >= 7 && bModeSurf) {
         if (myShip.onStream && vel.y >= 0) {
             jumpCounter = 0;
-        } else if (!myShip.onStream && jumpCounter < 1) {
+        } /*else if (!myShip.onStream && jumpCounter < 1) {
             jumpCounter = 1;
-        }
+        }*/
     }
     
     // Prevent going off the true left and bottom edges.
@@ -189,6 +189,15 @@ void Player::update( int _gameState, string _OnThisNote ) {
     if ( allowMove ) {
         
         if (allowControl) {
+            // Note boost
+            if (noteBoost) {
+                vel.y = 0;
+                applyForce( ofVec2f( 0.0, jumpVel * 1.5 ) );
+                onSurface = false;
+                onStream = false;
+                noteBoost = false;
+            }
+            
             // Up-----------
             if ( up ) {
                 if ( bModePlatformer ) {
@@ -209,7 +218,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
                         applyForce( ofVec2f( 0.0, jumpVel * 0.75 ) );
                         onSurface = false;
                         onStream = false;
-                        allowJump = false; // yo yo
+                        allowJump = false;
                         if (gameState >= 7) {
                             jumpCounter++;
                         }
@@ -230,6 +239,9 @@ void Player::update( int _gameState, string _OnThisNote ) {
                         applyForce( ofVec2f( 0.0, -jumpVel * 0.4 ) );
                         //onSurface = false;
                         allowJump = false;
+                        if (gameState >= 7) {
+                            jumpCounter++;
+                        }
                     }
                 }
             } else if (bModeSurf && !up) {
@@ -252,7 +264,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
         }
         
         // Limit jumping.
-        if (bModeSurf && gameState >= 7 && jumpCounter >= 2) {
+        if (bModeSurf && gameState >= 7 && jumpCounter >= 1) {
             allowJump = false;
         }
         
@@ -416,8 +428,13 @@ void Player::draw( ofTrueTypeFont _font, vector< Object > _recordedList ) {
     }
     
     // Draw the actual character now that he exists.
-    if (gameState >= 7 && drawPlayer) {
+    if (gameState >= 7) {
         fDrawCharacter();
+        if (drawPlayer) {
+            alpha = 255;
+        } else {
+            alpha = 0;
+        }
     }
     
     fDrawCapacity(_recordedList);
@@ -624,14 +641,15 @@ void Player::fDrawHealth() {
 void Player::fDrawCharacter() {
     
     // Draw variable value for debugging.
-    /*string str;
+    string str;
      if (bFlyingHat) str = "true";
      else str = "false";
      ofSetColor(0);
-     ofDrawBitmapString(ofToString(myShip.angle), pos.x + 100, pos.y - 50);*/
+     //ofDrawBitmapString(ofToString(myShip.angle), pos.x + 100, pos.y - 50);
     
     tall = wide * 1.35;
     bGrabHat = false;
+    ofSetColor(255, alpha);
     
     ofPushMatrix();{
         float newAngle;
@@ -666,11 +684,13 @@ void Player::fDrawCharacter() {
             ofPushMatrix();{
                 ofTranslate(pos);
                 ofRotate(-myAngle);
+                
                 // Body
-                ofSetColor(0, 255);
+                ofSetColor(0, alpha);
                 ofEllipse(0, 0, wide, tall);
+                
                 // Hat
-                ofSetColor(255, 255);
+                ofSetColor(255, alpha);
                 ofSetRectMode(OF_RECTMODE_CORNER);
                 ofPushMatrix();{
                     /*if (bFlyingHat) { // Find me
@@ -699,8 +719,10 @@ void Player::fDrawCharacter() {
                         //}
                     }ofPopMatrix();
                 }ofPopMatrix();
-                //
-                ofSetColor(255, 255);
+                
+                ofSetColor(255, alpha);
+                
+                // Appendages
                 ofSetRectMode(OF_RECTMODE_CORNER);
                 float armSizer = wide * 0.00286;
                 float armWidth = appendage.getWidth() * armSizer;
@@ -738,7 +760,6 @@ void Player::fDrawCharacter() {
             }ofPopMatrix();
             
             // Appendages
-            ofSetColor(255, 255);
             ofSetRectMode(OF_RECTMODE_CORNER);
             float armSizer = wide * 0.00286;
             float armWidth = appendage.getWidth() * armSizer;

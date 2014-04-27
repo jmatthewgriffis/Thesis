@@ -28,6 +28,7 @@ public:
     bool bSolid, onStream, onStreamPrev, makeBigSplash;
     bool clockwise;
     bool bHasExtraJump;
+    bool strongGrav;
     
     float fImgHeightTreble, fImgHeightBass, rotOffset;
 };
