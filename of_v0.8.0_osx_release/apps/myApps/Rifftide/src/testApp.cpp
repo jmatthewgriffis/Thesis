@@ -63,7 +63,7 @@ void testApp::setup(){
     gameState = 8;
     currentState = gameState;
     
-    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = false;
+    bIsLefty = bIsRecording = bIsDebugging = bShiftIsPressed = myTitle.bChoseControls = bBassOnly = bTrebleOnly = bPlayerMakingNotes = bFromTheSky = false;
     bHighlightNote = false;
     bCamZoomedIn = false;
     bIsSecondPlayer = false;
@@ -77,6 +77,10 @@ void testApp::setup(){
     iTimeBetweenNotes = frameRate / 6;
     iLastOpacityChange = 0;
     iOpacityChangeFreq = frameRate * 0.005;
+    
+    if (gameState >= 7) {
+        myPlayer.setup( gameState, frameRate, iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
+    }
     
     fLoadPrototype();
 }
@@ -352,7 +356,12 @@ void testApp::fLoadPrototype() {
     iLastOpacityChange = ofGetElapsedTimef(); // Reset the clock.
     
     // Setup player.
-    myPlayer.setup( gameState, frameRate, iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
+    if (gameState < 7) {
+        myPlayer.setup( gameState, frameRate, iScaler, bUsingController, ofVec2f( iScaler * 4, iThirdOfScreen ), staffPosList );
+    } else {
+        myPlayer.vel.y = 0;
+        myPlayer.pos.set(ofVec2f(iScaler * 4, iThirdOfScreen));
+    }
     
     //------------
     
@@ -412,8 +421,20 @@ void testApp::fLoadPrototype() {
         // Surfin' USA
         bCamZoomedIn = true; // find me
         
-        if (gameState == 7) myPlayer.vel.y = -iScaler * 0.75;
-        else if (gameState == 8) myPlayer.vel.y = -iScaler * 0.4;
+        if (gameState == 7) {
+            myPlayer.vel.y = -iScaler * 0.75;
+        } else if (gameState == 8) {
+            if (bFromTheSky) {
+                myPlayer.pos.y = myCam.getPosition().y - ofGetHeight() * 0.5;
+                //if (myPlayer.currentStream == 7) {
+                    myPlayer.pos.x = iScaler * 30;
+                //}
+            } else {
+                myPlayer.vel.y = -iScaler * 0.4;
+                myPlayer.myShip.angle = 0;
+            }
+            
+        }
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
@@ -674,12 +695,6 @@ void testApp::keyPressed(int key){
         case 'x':
             myPlayer.maxVel *= -1;
             break;
-        case 'k':
-            myPlayer.tmpAngle-=5;
-            break;
-        case 'l':
-            myPlayer.tmpAngle+=5;
-            break;
             // Reset
         case 'r':
         case 'R':
@@ -688,10 +703,10 @@ void testApp::keyPressed(int key){
              gameState = 1;
              }*/
             //else {
-            if ( gameState > 0 ) {
+            /*if ( gameState > 0 ) {
                 currentState = gameState;
                 gameState = -1;
-            }
+            }*/
             //}
             break;
             
@@ -1362,7 +1377,10 @@ void testApp::playerCollidesWithGroundOrSky() {
         }
         if (gameState >= 7) {
             if (gameState != 8) {
+                bFromTheSky = true;
                 gameState = 8;
+            } else {
+                bFromTheSky = false;
             }
             fLoadPrototype();
         }

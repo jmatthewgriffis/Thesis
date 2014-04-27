@@ -31,6 +31,7 @@ public:
     void fDrawAction(ofTrueTypeFont _font);
     void fDrawHealth();
     void fDrawCharacter();
+    void fSetMaxSpeed();
     
     vector< float > staffPosList;
     
@@ -57,7 +58,6 @@ public:
     float radius, angle, angleVel, myAngle, hatAngle;
     float fHealth, fHealthMax, fHealthLossSpeed;
     float fNoteOffsetH;
-    int tmpAngle;
     int currentStream;
     int inStreamTimer;
     int invisibleTimer;

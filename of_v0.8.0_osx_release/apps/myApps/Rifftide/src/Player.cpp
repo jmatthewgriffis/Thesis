@@ -119,9 +119,21 @@ void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingCo
 }
 
 //--------------------------------------------------------------
+void Player::fSetMaxSpeed() {
+    if (gameState == 8) {
+        maxVel = float( iScaler / 3.4483 ) * 0.75; // Yields 90bpm.
+    } else {
+        maxVel = float( iScaler / 3.4483 ); // Yields 120bpm.
+    }
+}
+
+//--------------------------------------------------------------
 void Player::update( int _gameState, string _OnThisNote ) {
     
-    gameState = _gameState;
+    if (gameState != _gameState) {
+        gameState = _gameState;
+        fSetMaxSpeed();
+    }
     
     yPosLast = pos.y;
     

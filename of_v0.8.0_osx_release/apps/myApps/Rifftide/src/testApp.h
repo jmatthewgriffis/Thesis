@@ -114,6 +114,7 @@ public:
     bool bBassOnly, bTrebleOnly; // Use to disable parts of a track.
     bool bPlayerMakingNotes;
     bool bIsSecondPlayer;
+    bool bFromTheSky;
     
     ofTrueTypeFont helvetica, helveticaJumbo;
     
