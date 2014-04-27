@@ -181,11 +181,11 @@ void testApp::update(){
                 notePos = ofVec2f(myPlayer.pos.x - myPlayer.fNoteOffsetH, myPlayer.pos.y);
             }
             int stream = 1;
-            if ( notePos.y <= staffPosList[ 16 ] ) {
+            //if ( notePos.y <= staffPosList[ 16 ] ) {
                 addObject( fReturnNote( notePos.y ), notePos.x, stream, objectLife );
-            } else {
-                addObject( "c3_middle", notePos.x, stream, objectLife );
-            }
+            //} else {
+                //addObject( "c3_middle", notePos.x, stream, objectLife );
+            //}
             objectList[objectList.size() - 1].bIsTouched = true;
             iTimeTillNote = iTimeBetweenNotes;
         }
@@ -1913,9 +1913,20 @@ string testApp::fReturnNote( float yPos ) {
         //tmp = "a2#"
     }
     else if ( _yPos == staffPosList[ 12 ] ) {
+        tmp = "b2_bass";
+    }
+    else if ( _yPos == staffPosList[ 13 ] ) {
+        tmp = "c3_middle_bass";
+        //tmp = "c3#_bass"
+    }
+    else if ( _yPos == staffPosList[ 14 ] ) {
+        tmp = "d3_bass";
+        //tmp = "d3#_bass"
+    }
+    else if ( _yPos == staffPosList[ 15 ] ) {
         tmp = "b2";
     }
-    // 13 = bass c; 14 = bass d; 15 = treble b
+    // 15 = treble b
     else if ( _yPos == staffPosList[ 16 ] ) {
         tmp = "c3_middle";
         //tmp = "c3#"

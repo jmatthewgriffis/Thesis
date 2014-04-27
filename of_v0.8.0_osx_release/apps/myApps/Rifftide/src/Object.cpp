@@ -307,10 +307,18 @@ float Object::fReturnYPos( string _whichNote ) {
     else if ( _whichNote == "a2" || _whichNote == "a2#") {
         tmp = staffPosList[ 11 ];
     }
-    else if ( _whichNote == "b2") {
+    else if ( _whichNote == "b2_bass") {
         tmp = staffPosList[ 12 ];
     }
-    // 13 = bass c; 14 = bass d; 15 = treble b
+    else if ( _whichNote == "c3_middle_bass" || _whichNote == "c3#_bass") {
+        tmp = staffPosList[ 13 ];
+    }
+    else if ( _whichNote == "d3_bass" || _whichNote == "d3#_bass") {
+        tmp = staffPosList[ 14 ];
+    }
+    else if ( _whichNote == "b2") {
+        tmp = staffPosList[ 15 ];
+    }
     else if ( _whichNote == "c3_middle" || _whichNote == "c3#") {
         tmp = staffPosList[ 16 ];
     }
