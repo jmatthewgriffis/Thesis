@@ -41,7 +41,7 @@ public:
     int colorTimer, noteTimer;
     
     bool destroyMe;
-    bool drawAttention, bIsRecorded, bIsTouched, bWasTouched, bIsPartOfStream, bHasFalloffLeft, bHasFalloffRight, bHideNoteness, bJiggling;
+    bool drawAttention, bIsRecorded, bIsTouched, bWasTouched, bIsPartOfStream, bHasFalloffLeft, bHasFalloffRight, bHideNoteness, bJiggling, bJiggleGrow, bJiggleShrink;
     
     vector< Note > noteList;
     vector< float > staffPosList;
