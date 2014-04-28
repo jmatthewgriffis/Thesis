@@ -33,8 +33,8 @@ public:
     int iScaler, gameState, age;
     
     ofVec2f pos, vel;
-    float tall, tallDefault;
-    float wide, wideDefault;
+    float tall, tallStretch;
+    float wide, wideStretch;
     float guideLineLength;
     float jiggleForce;
     ofColor c;

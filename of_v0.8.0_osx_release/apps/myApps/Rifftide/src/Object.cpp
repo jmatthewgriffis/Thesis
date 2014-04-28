@@ -20,10 +20,10 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     whichStream = _whichStream;
     age = _age;
     
-    tallDefault = ( staffPosList[0] - staffPosList[2] ) * 0.8;
-    tall = tallDefault;
-    wideDefault = tall * 1.5;
-    wide = wideDefault;
+    tall = ( staffPosList[0] - staffPosList[2] ) * 0.8;
+    tallStretch = tall;
+    wide = tall * 1.5;
+    wideStretch = wide;
     guideLineLength = wide * 0.75;
     c = ofColor( 0 );
     jiggleForce = 0;
@@ -54,15 +54,15 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
 void Object::jiggle() {
     float jiggleVel = 3 + jiggleForce;
     if (bJiggling) {
-        if (wide < wideDefault + jiggleVel * 7) {
-            wide += jiggleVel;
-            //tall = tallDefault * 0.5;
+        if (wideStretch < wide + jiggleVel * 7) {
+            wideStretch += jiggleVel;
+            //tallStretch = tall * 0.5;
         } else {
             bJiggling = false;
         }
     } else {
-        if (wide > wideDefault) {
-            wide -= jiggleVel * 0.5;
+        if (wideStretch > wide) {
+            wideStretch -= jiggleVel * 0.5;
         }
     }
 }
@@ -172,21 +172,24 @@ void Object::draw() {
     ofSetColor( 0 );
     //    0 1 13 25 26
     float lineSpacer = staffPosList[0] - staffPosList[2];
-    if ( pos.y == staffPosList[ 0 ]
-        || pos.y == staffPosList[ 1 ] ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer, pos.x + guideLineLength, ofGetHeight() - lineSpacer );
-    }
-    else if ( pos.y == staffPosList[ 13 ]
-             || pos.y == staffPosList[ 14 ] ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer * 7, pos.x + guideLineLength, ofGetHeight() - lineSpacer * 7 );
-    }
-    else if ( pos.y == staffPosList[ 15 ]
-             || pos.y == staffPosList[ 16 ] ) {
-        ofLine( pos.x - guideLineLength, lineSpacer * 7, pos.x + guideLineLength, lineSpacer * 7 );
-    }
-    else if ( pos.y == staffPosList[ 28 ]
-             || pos.y == staffPosList[ 29 ] ) {
-        ofLine( pos.x - guideLineLength, lineSpacer, pos.x + guideLineLength, lineSpacer );
+    
+    if (!bHideNoteness) {
+        if ( pos.y == staffPosList[ 0 ]
+            || pos.y == staffPosList[ 1 ] ) {
+            ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer, pos.x + guideLineLength, ofGetHeight() - lineSpacer );
+        }
+        else if ( pos.y == staffPosList[ 13 ]
+                 || pos.y == staffPosList[ 14 ] ) {
+            ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer * 7, pos.x + guideLineLength, ofGetHeight() - lineSpacer * 7 );
+        }
+        else if ( pos.y == staffPosList[ 15 ]
+                 || pos.y == staffPosList[ 16 ] ) {
+            ofLine( pos.x - guideLineLength, lineSpacer * 7, pos.x + guideLineLength, lineSpacer * 7 );
+        }
+        else if ( pos.y == staffPosList[ 28 ]
+                 || pos.y == staffPosList[ 29 ] ) {
+            ofLine( pos.x - guideLineLength, lineSpacer, pos.x + guideLineLength, lineSpacer );
+        }
     }
     
     // Draw!
@@ -205,7 +208,7 @@ void Object::draw() {
     }
     // Draw the note.
     ofSetColor( c );
-    ofEllipse( pos, wide, tall);
+    ofEllipse( pos, wideStretch, tallStretch);
     
     // Draw the tail.
     if (!bHideNoteness) {
