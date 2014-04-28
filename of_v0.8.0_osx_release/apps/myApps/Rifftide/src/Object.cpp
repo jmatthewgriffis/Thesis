@@ -44,6 +44,7 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     bHasFalloffRight = false;
     bHideNoteness = true;
     bJiggling = bJiggleGrow = bJiggleShrink = false;
+    bJiggleVert = false;
     
     // Note stuff.
     //    myNote.setup( whichNote );
@@ -56,25 +57,48 @@ void Object::jiggle() {
     if (bJiggling) {
         if (bJiggleGrow) {
             // Grow
-            if (wideStretch < wide + jiggleVel * 7) {
-                wideStretch += jiggleVel;
-                tallStretch -= jiggleVel * 0.25;
+            if (!bJiggleVert) {
+                if (wideStretch < wide + jiggleVel * 7) {
+                    wideStretch += jiggleVel;
+                    tallStretch -= jiggleVel * 0.25;
+                } else {
+                    bJiggleGrow = false;
+                    bJiggleShrink = true;
+                }
             } else {
-                bJiggleGrow = false;
-                bJiggleShrink = true;
+                if (tallStretch < tall + jiggleVel * 7) {
+                    tallStretch += jiggleVel;
+                    wideStretch -= jiggleVel * 0.25;
+                } else {
+                    bJiggleGrow = false;
+                    bJiggleShrink = true;
+                }
             }
         } else if (bJiggleShrink) {
             // Shrink
             bool ok1, ok2;
-            if (wideStretch > wide - (jiggleVel * 5)) {
-                wideStretch -= jiggleVel;
+            if (!bJiggleVert) {
+                if (wideStretch > wide - (jiggleVel * 5)) {
+                    wideStretch -= jiggleVel;
+                } else {
+                    ok1 = true;
+                }
+                if (tallStretch < tall + (jiggleVel * (5 * 0.25))) {
+                    tallStretch += jiggleVel * 0.25;
+                } else {
+                    ok2 = true;
+                }
             } else {
-                ok1 = true;
-            }
-            if (tallStretch < tall + (jiggleVel * (5 * 0.25))) {
-                tallStretch += jiggleVel * 0.25;
-            } else {
-                ok2 = true;
+                if (tallStretch > tall - (jiggleVel * 5)) {
+                    tallStretch -= jiggleVel;
+                } else {
+                    ok1 = true;
+                }
+                if (wideStretch < wide + (jiggleVel * (5 * 0.25))) {
+                    wideStretch += jiggleVel * 0.25;
+                } else {
+                    ok2 = true;
+                }
             }
             if (ok1 && ok2) {
                 bJiggleShrink = false;
@@ -82,33 +106,52 @@ void Object::jiggle() {
         } else {
             // Reset
             
-            if (tallStretch < tall) {
-                tallStretch += jiggleVel * 0.25;
-            } else if (tallStretch > tall) {
-                tallStretch -= jiggleVel * 0.25;
-            }
-            if (abs(tallStretch - tall) < 2) {
-                tallStretch = tall;
+            if (!bJiggleVert) {
+                if (tallStretch < tall) {
+                    tallStretch += jiggleVel * 0.25;
+                } else if (tallStretch > tall) {
+                    tallStretch -= jiggleVel * 0.25;
+                }
+                if (wideStretch < wide) {
+                    wideStretch += jiggleVel;
+                } else if (wideStretch > wide) {
+                    wideStretch -= jiggleVel;
+                }
+            } else {
+                if (wideStretch < wide) {
+                    wideStretch += jiggleVel * 0.25;
+                } else if (wideStretch > wide) {
+                    wideStretch -= jiggleVel * 0.25;
+                }
+                if (tallStretch < tall) {
+                    tallStretch += jiggleVel;
+                } else if (tallStretch > tall) {
+                    tallStretch -= jiggleVel;
+                }
             }
             
-            if (wideStretch < wide) {
-                wideStretch += jiggleVel;
-            } else if (wideStretch > wide) {
-                wideStretch -= jiggleVel;
+            if (abs(tallStretch - tall) < jiggleVel) {
+                tallStretch = tall;
             }
-            if (abs(wideStretch - wide) < 2) {
+            if (abs(wideStretch - wide) < jiggleVel) {
                 wideStretch = wide;
             }
             
             if (tallStretch == tall && wideStretch == wide) {
                 bJiggling = false;
+                if (bJiggleVert) {
+                    bJiggleVert = false;
+                }
             }
         }
     }
     
     // Minimum value.
-    if (tallStretch < tall / 5) {
-        tallStretch = tall / 5;
+    if (tallStretch < tall / 3) {
+        tallStretch = tall / 3;
+    }
+    if (wideStretch < wide / 3) {
+        wideStretch = wide / 3;
     }
 }
 
@@ -254,7 +297,12 @@ void Object::draw() {
     }
     // Draw the note.
     ofSetColor( c );
-    ofEllipse( pos, wideStretch, tallStretch);
+    if (bJiggleVert) {
+        ofSetRectMode(OF_RECTMODE_CENTER);
+        ofRect(pos, wideStretch, tallStretch);
+    } else {
+        ofEllipse(pos, wideStretch, tallStretch);
+    }
     
     // Draw the tail.
     if (!bHideNoteness) {

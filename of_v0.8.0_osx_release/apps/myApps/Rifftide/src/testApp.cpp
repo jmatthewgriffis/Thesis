@@ -1489,6 +1489,7 @@ void testApp::playerCollidesWithObject() {
                     if (myPlayer.myShip.angle > 270 && myPlayer.myShip.angle < 315) {
                         myPlayer.noteBoost = true; // yo
                         myPlayer.allowNoteBoost = false;
+                        objectList[i].bJiggleVert = true;
                     }
                 }
             } else if (myPlayer.vel.y == 0){
