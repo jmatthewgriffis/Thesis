@@ -20,10 +20,13 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     whichStream = _whichStream;
     age = _age;
     
-    tall = ( staffPosList[0] - staffPosList[2] ) * 0.8;
-    wide = tall * 1.5;
+    tallDefault = ( staffPosList[0] - staffPosList[2] ) * 0.8;
+    tall = tallDefault;
+    wideDefault = tall * 1.5;
+    wide = wideDefault;
     guideLineLength = wide * 0.75;
     c = ofColor( 0 );
+    jiggleForce = 0;
     
     pos.set( ofGetWidth(), fReturnYPos( _whichNote ) );
     
@@ -39,12 +42,29 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     bIsPartOfStream = false;
     bHasFalloffLeft = false;
     bHasFalloffRight = false;
-    bHideNoteness = false;
+    bHideNoteness = true;
+    bJiggling = false;
     
     // Note stuff.
     //    myNote.setup( whichNote );
     vol = 0.5f;
     noteDuration = 30;
+}
+
+void Object::jiggle() {
+    float jiggleVel = 3 + jiggleForce;
+    if (bJiggling) {
+        if (wide < wideDefault + jiggleVel * 7) {
+            wide += jiggleVel;
+            //tall = tallDefault * 0.5;
+        } else {
+            bJiggling = false;
+        }
+    } else {
+        if (wide > wideDefault) {
+            wide -= jiggleVel * 0.5;
+        }
+    }
 }
 
 void Object::update( int _gameState, ofVec2f _pos ) {
@@ -75,6 +95,7 @@ void Object::update( int _gameState, ofVec2f _pos ) {
      fAddNote();
      }*/
     if ( bIsTouched ) {
+        bJiggling = true;
         bWasTouched = true;
         fAddNote();
     } else if ( noteList.size() != 0 ) {
@@ -130,12 +151,16 @@ void Object::update( int _gameState, ofVec2f _pos ) {
         c = ofColor( 0, 255, 0, alpha );
         colorTimer = 10;
     } else if ( bIsTouched && _gameState >= 3 ) {
-        c = ofColor( 255, 0 , 0, alpha );
+        if (gameState < 7) {
+            c = ofColor( 255, 0 , 0, alpha );
+        }
     } else if ( drawAttention && colorTimer == 0 ) {
         c = ofColor( 255, 0, 0, alpha );
     } else if ( colorTimer == 0 ) {
         c = ofColor( 0, alpha );
     }
+    
+    jiggle();
     
     // Reset this so the color goes back to normal.
     bIsRecorded = bIsTouched = false;

@@ -426,7 +426,7 @@ void testApp::fLoadPrototype() {
         } else if (gameState == 8) {
             if (bFromTheSky) {
                 myPlayer.pos.y = myCam.getPosition().y - ofGetHeight() * 0.5;
-                //if (myPlayer.currentStream == 7) {
+                //if (myPlayer.currentStream == 7) { // Find me
                     myPlayer.pos.x = iScaler * 30;
                 //}
             } else {
@@ -1477,7 +1477,12 @@ void testApp::playerCollidesWithObject() {
                 && playerBottom >= (objectTop - surfOffset) && playerTop <= objectBottom ) {
                 
                 //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
+                if (!objectList[ i ].bIsTouched) {
+                    objectList[i].jiggleForce = abs(myPlayer.vel.y); // Find me
+                }
                 objectList[ i ].bIsTouched = true;
+                
+                // Boost off note.
                 if (gameState >= 7 && myPlayer.bModeSurf && myPlayer.allowNoteBoost) {
                     if (myPlayer.myShip.angle > 270 && myPlayer.myShip.angle < 315) {
                         myPlayer.noteBoost = true; // yo
