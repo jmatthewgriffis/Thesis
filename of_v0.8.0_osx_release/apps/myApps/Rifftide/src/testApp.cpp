@@ -9,6 +9,13 @@ void testApp::setup(){
     cleanup();
     staffPosList.clear();
     
+    // Load images.
+    sign1.loadImage("images/signs/1_tilt.png");
+    sign2.loadImage("images/signs/2_jump.png");
+    sign3.loadImage("images/signs/3_fall.png");
+    sign4.loadImage("images/signs/4_boost.png");
+    sign5.loadImage("images/signs/5_grav.png");
+    
     // Maintenance
     frameRate = 60;
     ofSetFrameRate( frameRate );
@@ -309,6 +316,8 @@ void testApp::draw(){
             myTutorial.draw( helvetica );
         } else if ( gameState == 2 ) {
             myBoss.draw( helvetica );
+        } else if (gameState == 8) {
+            fDrawTutorialSigns();
         } else {
             myTrack.draw( helvetica );
         }
@@ -1821,6 +1830,71 @@ void testApp::fDrawRestartScreen() {
     
     ofSetColor( 0 );
     helvetica.drawString( "Are you sure you want to restart? Y / N ", ofGetWidth() / 2 - iScaler * 13, ofGetHeight() / 2.0 );
+}
+
+//--------------------------------------------------------------
+void testApp::fDrawTutorialSigns() {
+    ofSetRectMode(OF_RECTMODE_CORNER);
+    
+    float margin = 2;
+    ofVec2f upperLeft;
+    float wide;
+    float tall;
+    
+    // 1
+    
+    upperLeft = ofVec2f(fMeasureLength, myCam.getPosition().y - iScaler * 10);
+    wide = sign1.getWidth() * 0.75;
+    tall = sign1.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign1.draw(upperLeft, wide, tall);
+    
+    // 2
+    
+    upperLeft = ofVec2f(fMeasureLength * 3, myCam.getPosition().y - iScaler * 10);
+    wide = sign2.getWidth() * 0.75;
+    tall = sign2.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign2.draw(upperLeft, wide, tall);
+    
+    // 3
+    
+    upperLeft = ofVec2f(fMeasureLength * 5, myCam.getPosition().y - iScaler * 15);
+    wide = sign3.getWidth() * 0.75;
+    tall = sign3.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign3.draw(upperLeft, wide, tall);
+    
+    // 4
+    
+    upperLeft = ofVec2f(fMeasureLength * 7, myCam.getPosition().y - iScaler * 15);
+    wide = sign4.getWidth() * 0.5;
+    tall = sign4.getHeight() * 0.5;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign4.draw(upperLeft, wide, tall);
+    
+    // 5
+    
+    upperLeft = ofVec2f(fMeasureLength * 9, myCam.getPosition().y - iScaler * 15);
+    wide = sign5.getWidth() * 0.75;
+    tall = sign5.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign5.draw(upperLeft, wide, tall);
 }
 
 //--------------------------------------------------------------

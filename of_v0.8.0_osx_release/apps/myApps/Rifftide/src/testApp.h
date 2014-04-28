@@ -55,6 +55,7 @@ public:
     void fDrawRestartScreen();
     void fDrawGround();
     void fDrawDebugUI();
+    void fDrawTutorialSigns();
     
     void fCalcAllNotePos();
     void fCalcTrebleNotes();
@@ -119,6 +120,8 @@ public:
     ofTrueTypeFont helvetica, helveticaJumbo;
     
     ofEasyCam myCam;
+    
+    ofImage sign1, sign2, sign3, sign4, sign5;
     
     // New classes:
     
