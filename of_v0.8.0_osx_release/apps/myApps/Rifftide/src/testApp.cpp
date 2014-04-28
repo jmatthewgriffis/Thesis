@@ -53,6 +53,7 @@ void testApp::setup(){
     fCalcAllNotePos();
     
     helvetica.loadFont( "fonts/helvetica.otf", iScaler );
+    helveticaMed.loadFont( "fonts/helvetica.otf", iScaler * 2.5 );
     helveticaJumbo.loadFont("fonts/helvetica.otf", iScaler * 4 );
     
     /* Gamestates:
@@ -1837,6 +1838,18 @@ void testApp::fDrawTutorialSigns() {
     ofSetRectMode(OF_RECTMODE_CORNER);
     
     float margin = 2;
+    
+    ofPushMatrix();{
+        ofTranslate(myPlayer.pos.x - iScaler * 16, myCam.getPosition().y + iScaler * 12.5);
+        ofSetColor(0);
+        ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 50.75 + margin * 2, iScaler * 3.25 + margin * 2);
+        ofSetColor(255);
+        ofRect(-margin, -iScaler * 2.75 - margin, iScaler * 50.75, iScaler * 3.25);
+        ofSetColor(0);
+        helveticaMed.drawString("RIFFTIDE", 0, 0);
+        helvetica.drawString("a musical exploration game by J. MATTHEW GRIFFIS.\ncreated/composed by JMG. feat. guest performer YOU.", iScaler * 15, -iScaler * 1.5);
+    }ofPopMatrix();
+    
     ofVec2f upperLeft;
     float wide;
     float tall;

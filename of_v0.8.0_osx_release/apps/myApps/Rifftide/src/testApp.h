@@ -117,7 +117,7 @@ public:
     bool bIsSecondPlayer;
     bool bFromTheSky;
     
-    ofTrueTypeFont helvetica, helveticaJumbo;
+    ofTrueTypeFont helvetica, helveticaMed, helveticaJumbo;
     
     ofEasyCam myCam;
     
