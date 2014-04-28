@@ -52,11 +52,11 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
 }
 
 void Object::jiggle() {
-    float jiggleVel = 3 + jiggleForce;
+    float jiggleVel = 5 + jiggleForce;
     if (bJiggling) {
         if (wideStretch < wide + jiggleVel * 7) {
             wideStretch += jiggleVel;
-            //tallStretch = tall * 0.5;
+            tallStretch -= jiggleVel * 0.25;
         } else {
             bJiggling = false;
         }
@@ -64,6 +64,15 @@ void Object::jiggle() {
         if (wideStretch > wide) {
             wideStretch -= jiggleVel * 0.5;
         }
+        if (tallStretch < tall) {
+            tallStretch += jiggleVel * 0.25 * 0.5;
+        } else if (tallStretch > tall) {
+            tallStretch -= jiggleVel * 0.25;
+        }
+    }
+    
+    if (tallStretch < tall / 5) {
+        tallStretch = tall / 5;
     }
 }
 

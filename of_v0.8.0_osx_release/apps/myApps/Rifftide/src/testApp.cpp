@@ -1478,7 +1478,9 @@ void testApp::playerCollidesWithObject() {
                 
                 //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
                 if (!objectList[ i ].bIsTouched) {
-                    objectList[i].jiggleForce = abs(myPlayer.vel.y); // Find me
+                    if (myPlayer.vel.y > 0) {
+                        objectList[i].jiggleForce = myPlayer.vel.y * 0.75; // Find me
+                    }
                 }
                 objectList[ i ].bIsTouched = true;
                 

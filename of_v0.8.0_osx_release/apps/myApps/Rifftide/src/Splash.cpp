@@ -102,12 +102,12 @@ void Splash::draw() {
             ofPushMatrix();{
                 ofTranslate(posList1[i]);
                 ofRotate(angleList1[i]);
-                slur.draw(0, 0, wide, tall);
+                slur.draw(0, 0, wide * 2, tall * 2);
             }ofPopMatrix();
             ofPushMatrix();{
                 ofTranslate(posList2[i]);
                 ofRotate(angleList2[i]);
-                slur.draw(0, 0, wide, tall);
+                slur.draw(0, 0, wide * 2, tall * 2);
             }ofPopMatrix();
         }
     }
