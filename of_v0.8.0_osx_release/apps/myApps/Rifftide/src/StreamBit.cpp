@@ -39,7 +39,7 @@ void StreamBit::setup(float _noteWidth, float _noteHeight, ofVec2f _pos, ofVec2f
     
     // Calculate how many visual elements can fit in between the notes.
     edgeToEdge = wide - _noteWidth;
-    numBits = int(edgeToEdge / slurTall) * 0.67;
+    numBits = int((edgeToEdge / slurTall) * 0.67) * 0.5;
     spaceBits = (edgeToEdge - numBits * slurTall) / (numBits + 1);
 }
 
@@ -113,7 +113,7 @@ void StreamBit::draw() {
                 ofSetColor(255, opacity);
                 ofTranslate(-wide * 0.5 + noteWidth * 0.5 + spaceBits + slurTall * 0.5 + (slurTall + spaceBits) * i, 0);
                 ofRotate(ofRadToDeg(-PI * 0.5));
-                slur.draw(0, 0, tall, slurTall);
+                slur.draw(0, 0, tall * 2, slurTall * 2);
             }ofPopMatrix();
         }
         

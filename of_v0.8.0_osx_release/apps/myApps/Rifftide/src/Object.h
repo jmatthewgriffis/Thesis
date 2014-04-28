@@ -28,18 +28,20 @@ public:
     float fReturnYPos( string _whichNote );
     void fAddNote();
     void fCleanup();
+    void jiggle();
     
     int iScaler, gameState, age;
     
     ofVec2f pos, vel;
-    float tall;
-    float wide;
+    float tall, tallStretch;
+    float wide, wideStretch;
     float guideLineLength;
+    float jiggleForce;
     ofColor c;
     int colorTimer, noteTimer;
     
     bool destroyMe;
-    bool drawAttention, bIsRecorded, bIsTouched, bWasTouched, bIsPartOfStream, bHasFalloffLeft, bHasFalloffRight, bHideNoteness;
+    bool drawAttention, bIsRecorded, bIsTouched, bWasTouched, bIsPartOfStream, bHasFalloffLeft, bHasFalloffRight, bHideNoteness, bJiggling, bJiggleGrow, bJiggleShrink, bJiggleVert;
     
     vector< Note > noteList;
     vector< float > staffPosList;

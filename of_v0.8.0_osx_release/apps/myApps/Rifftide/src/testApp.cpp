@@ -426,7 +426,7 @@ void testApp::fLoadPrototype() {
         } else if (gameState == 8) {
             if (bFromTheSky) {
                 myPlayer.pos.y = myCam.getPosition().y - ofGetHeight() * 0.5;
-                //if (myPlayer.currentStream == 7) {
+                //if (myPlayer.currentStream == 7) { // Find me
                     myPlayer.pos.x = iScaler * 30;
                 //}
             } else {
@@ -1234,7 +1234,7 @@ void testApp::updateStream() {
                 
                 // Setup stream runoff.
                 float angleOffset = PI / 4;
-                float runoffLength = iScaler * 4;
+                float runoffLength = iScaler * 5;
                 
                 // Make stream "runoff" where the stream begins.
                 if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
@@ -1477,11 +1477,19 @@ void testApp::playerCollidesWithObject() {
                 && playerBottom >= (objectTop - surfOffset) && playerTop <= objectBottom ) {
                 
                 //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
+                if (!objectList[ i ].bIsTouched) {
+                    if (myPlayer.vel.y > 0) {
+                        objectList[i].jiggleForce = myPlayer.vel.y * 0.75; // Find me
+                    }
+                }
                 objectList[ i ].bIsTouched = true;
+                
+                // Boost off note.
                 if (gameState >= 7 && myPlayer.bModeSurf && myPlayer.allowNoteBoost) {
                     if (myPlayer.myShip.angle > 270 && myPlayer.myShip.angle < 315) {
                         myPlayer.noteBoost = true; // yo
                         myPlayer.allowNoteBoost = false;
+                        objectList[i].bJiggleVert = true;
                     }
                 }
             } else if (myPlayer.vel.y == 0){

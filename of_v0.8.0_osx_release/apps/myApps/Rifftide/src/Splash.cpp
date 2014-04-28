@@ -77,17 +77,20 @@ void Splash::draw() {
     
     ofSetRectMode(OF_RECTMODE_CENTER);
     
+    float wider = wide * 2;
+    float taller = tall * 2;
+    
     ofSetColor(255, alpha);
     ofPushMatrix();{
         ofPushMatrix();{
             ofTranslate(pos1);
             ofRotate(angle1);
-            slur.draw(0, 0, wide, tall);
+            slur.draw(0, 0, wider, taller);
         }ofPopMatrix();
         ofPushMatrix();{
             ofTranslate(pos2);
             ofRotate(angle2);
-            slur.draw(0, 0, wide, tall);
+            slur.draw(0, 0, wider, taller);
         }ofPopMatrix();
     }ofPopMatrix();
     
@@ -102,12 +105,12 @@ void Splash::draw() {
             ofPushMatrix();{
                 ofTranslate(posList1[i]);
                 ofRotate(angleList1[i]);
-                slur.draw(0, 0, wide, tall);
+                slur.draw(0, 0, wider, taller);
             }ofPopMatrix();
             ofPushMatrix();{
                 ofTranslate(posList2[i]);
                 ofRotate(angleList2[i]);
-                slur.draw(0, 0, wide, tall);
+                slur.draw(0, 0, wider, taller);
             }ofPopMatrix();
         }
     }

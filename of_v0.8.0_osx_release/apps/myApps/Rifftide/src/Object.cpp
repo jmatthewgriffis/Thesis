@@ -21,9 +21,12 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     age = _age;
     
     tall = ( staffPosList[0] - staffPosList[2] ) * 0.8;
+    tallStretch = tall;
     wide = tall * 1.5;
+    wideStretch = wide;
     guideLineLength = wide * 0.75;
     c = ofColor( 0 );
+    jiggleForce = 0;
     
     pos.set( ofGetWidth(), fReturnYPos( _whichNote ) );
     
@@ -39,12 +42,117 @@ void Object::setup( int _iScaler, vector< float > _staffPosList, string _whichNo
     bIsPartOfStream = false;
     bHasFalloffLeft = false;
     bHasFalloffRight = false;
-    bHideNoteness = false;
+    bHideNoteness = true;
+    bJiggling = bJiggleGrow = bJiggleShrink = false;
+    bJiggleVert = false;
     
     // Note stuff.
     //    myNote.setup( whichNote );
     vol = 0.5f;
     noteDuration = 30;
+}
+
+void Object::jiggle() {
+    float jiggleVel = 5 + jiggleForce;
+    if (bJiggling) {
+        if (bJiggleGrow) {
+            // Grow
+            if (!bJiggleVert) {
+                if (wideStretch < wide + jiggleVel * 7) {
+                    wideStretch += jiggleVel;
+                    tallStretch -= jiggleVel * 0.25;
+                } else {
+                    bJiggleGrow = false;
+                    bJiggleShrink = true;
+                }
+            } else {
+                if (tallStretch < tall + jiggleVel * 7) {
+                    tallStretch += jiggleVel;
+                    wideStretch -= jiggleVel * 0.25;
+                } else {
+                    bJiggleGrow = false;
+                    bJiggleShrink = true;
+                }
+            }
+        } else if (bJiggleShrink) {
+            // Shrink
+            bool ok1, ok2;
+            if (!bJiggleVert) {
+                if (wideStretch > wide - (jiggleVel * 5)) {
+                    wideStretch -= jiggleVel;
+                } else {
+                    ok1 = true;
+                }
+                if (tallStretch < tall + (jiggleVel * (5 * 0.25))) {
+                    tallStretch += jiggleVel * 0.25;
+                } else {
+                    ok2 = true;
+                }
+            } else {
+                if (tallStretch > tall - (jiggleVel * 5)) {
+                    tallStretch -= jiggleVel;
+                } else {
+                    ok1 = true;
+                }
+                if (wideStretch < wide + (jiggleVel * (5 * 0.25))) {
+                    wideStretch += jiggleVel * 0.25;
+                } else {
+                    ok2 = true;
+                }
+            }
+            if (ok1 && ok2) {
+                bJiggleShrink = false;
+            }
+        } else {
+            // Reset
+            
+            if (!bJiggleVert) {
+                if (tallStretch < tall) {
+                    tallStretch += jiggleVel * 0.25;
+                } else if (tallStretch > tall) {
+                    tallStretch -= jiggleVel * 0.25;
+                }
+                if (wideStretch < wide) {
+                    wideStretch += jiggleVel;
+                } else if (wideStretch > wide) {
+                    wideStretch -= jiggleVel;
+                }
+            } else {
+                if (wideStretch < wide) {
+                    wideStretch += jiggleVel * 0.25;
+                } else if (wideStretch > wide) {
+                    wideStretch -= jiggleVel * 0.25;
+                }
+                if (tallStretch < tall) {
+                    tallStretch += jiggleVel;
+                } else if (tallStretch > tall) {
+                    tallStretch -= jiggleVel;
+                }
+            }
+            
+            if (abs(tallStretch - tall) < jiggleVel) {
+                tallStretch = tall;
+            }
+            if (abs(wideStretch - wide) < jiggleVel) {
+                wideStretch = wide;
+            }
+            
+            if (tallStretch == tall && wideStretch == wide) {
+                bJiggling = false;
+                if (bJiggleVert) {
+                    bJiggleVert = false;
+                }
+            }
+        }
+    }
+    
+    // Minimum value.
+    if (tallStretch < tall / 3) {
+        tallStretch = tall / 3;
+    }
+    if (wideStretch < wide / 3) {
+        wideStretch = wide / 3;
+    }
 }
 
 void Object::update( int _gameState, ofVec2f _pos ) {
@@ -75,6 +183,8 @@ void Object::update( int _gameState, ofVec2f _pos ) {
      fAddNote();
      }*/
     if ( bIsTouched ) {
+        bJiggling = true;
+        bJiggleGrow = true;
         bWasTouched = true;
         fAddNote();
     } else if ( noteList.size() != 0 ) {
@@ -130,12 +240,16 @@ void Object::update( int _gameState, ofVec2f _pos ) {
         c = ofColor( 0, 255, 0, alpha );
         colorTimer = 10;
     } else if ( bIsTouched && _gameState >= 3 ) {
-        c = ofColor( 255, 0 , 0, alpha );
+        if (gameState < 7) {
+            c = ofColor( 255, 0 , 0, alpha );
+        }
     } else if ( drawAttention && colorTimer == 0 ) {
         c = ofColor( 255, 0, 0, alpha );
     } else if ( colorTimer == 0 ) {
         c = ofColor( 0, alpha );
     }
+    
+    jiggle();
     
     // Reset this so the color goes back to normal.
     bIsRecorded = bIsTouched = false;
@@ -147,21 +261,24 @@ void Object::draw() {
     ofSetColor( 0 );
     //    0 1 13 25 26
     float lineSpacer = staffPosList[0] - staffPosList[2];
-    if ( pos.y == staffPosList[ 0 ]
-        || pos.y == staffPosList[ 1 ] ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer, pos.x + guideLineLength, ofGetHeight() - lineSpacer );
-    }
-    else if ( pos.y == staffPosList[ 13 ]
-             || pos.y == staffPosList[ 14 ] ) {
-        ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer * 7, pos.x + guideLineLength, ofGetHeight() - lineSpacer * 7 );
-    }
-    else if ( pos.y == staffPosList[ 15 ]
-             || pos.y == staffPosList[ 16 ] ) {
-        ofLine( pos.x - guideLineLength, lineSpacer * 7, pos.x + guideLineLength, lineSpacer * 7 );
-    }
-    else if ( pos.y == staffPosList[ 28 ]
-             || pos.y == staffPosList[ 29 ] ) {
-        ofLine( pos.x - guideLineLength, lineSpacer, pos.x + guideLineLength, lineSpacer );
+    
+    if (!bHideNoteness) {
+        if ( pos.y == staffPosList[ 0 ]
+            || pos.y == staffPosList[ 1 ] ) {
+            ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer, pos.x + guideLineLength, ofGetHeight() - lineSpacer );
+        }
+        else if ( pos.y == staffPosList[ 13 ]
+                 || pos.y == staffPosList[ 14 ] ) {
+            ofLine( pos.x - guideLineLength, ofGetHeight() - lineSpacer * 7, pos.x + guideLineLength, ofGetHeight() - lineSpacer * 7 );
+        }
+        else if ( pos.y == staffPosList[ 15 ]
+                 || pos.y == staffPosList[ 16 ] ) {
+            ofLine( pos.x - guideLineLength, lineSpacer * 7, pos.x + guideLineLength, lineSpacer * 7 );
+        }
+        else if ( pos.y == staffPosList[ 28 ]
+                 || pos.y == staffPosList[ 29 ] ) {
+            ofLine( pos.x - guideLineLength, lineSpacer, pos.x + guideLineLength, lineSpacer );
+        }
     }
     
     // Draw!
@@ -180,7 +297,12 @@ void Object::draw() {
     }
     // Draw the note.
     ofSetColor( c );
-    ofEllipse( pos, wide, tall);
+    if (bJiggleVert) {
+        ofSetRectMode(OF_RECTMODE_CENTER);
+        ofRect(pos, wideStretch, tallStretch);
+    } else {
+        ofEllipse(pos, wideStretch, tallStretch);
+    }
     
     // Draw the tail.
     if (!bHideNoteness) {
