@@ -15,6 +15,7 @@ void testApp::setup(){
     sign3.loadImage("images/signs/3_fall.png");
     sign4.loadImage("images/signs/4_boost.png");
     sign5.loadImage("images/signs/5_grav.png");
+    camera.loadImage("images/signs/camera.png");
     
     // Maintenance
     frameRate = 60;
@@ -1840,26 +1841,6 @@ void testApp::fDrawTutorialSigns() {
     
     float margin = 2;
     
-    ofPushMatrix();{
-        ofTranslate(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
-        ofSetColor(0);
-        ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 50.75 + margin * 2, iScaler * 3.25 + margin * 2);
-        ofSetColor(255);
-        ofRect(-margin, -iScaler * 2.75 - margin, iScaler * 50.75, iScaler * 3.25);
-        ofSetColor(0);
-        helveticaMed.drawString("RIFFTIDE", 0, 0);
-        helvetica.drawString("a musical exploration game by J. MATTHEW GRIFFIS.\ncreated/composed by JMG. feat. guest performer YOU.", iScaler * 15, -iScaler * 1.5);
-        ofPushMatrix();{
-            ofTranslate(iScaler * 42, iScaler * 2);
-            ofSetColor(0);
-            ofRect(-margin * 2, -iScaler * 0.65 - margin * 2, iScaler * 12 + margin * 2, iScaler + margin * 2);
-            ofSetColor(255);
-            ofRect(-margin, -iScaler * 0.65 - margin, iScaler * 12, iScaler * 1);
-            ofSetColor(0);
-            helveticaSmall.drawString("Copyright (c) 2014 John Matthew Griffis", 0, 0);
-        }ofPopMatrix();
-    }ofPopMatrix();
-    
     ofVec2f upperLeft;
     float wide;
     float tall;
@@ -1918,6 +1899,41 @@ void testApp::fDrawTutorialSigns() {
     ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
     ofSetColor(255);
     sign5.draw(upperLeft, wide, tall);
+    
+    
+    // Title card and copyright (and camera).
+    ofPushMatrix();{
+        
+        ofTranslate(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
+        
+        ofVec2f cameraPos = ofVec2f(iScaler * 49, -iScaler * 11);
+        
+        ofSetColor(0);
+        ofSetLineWidth(3);
+        ofLine(cameraPos.x + camera.getWidth() / 2.5 / 1.5, cameraPos.y + camera.getHeight() / 2.5 / 2, iScaler * 50, 0);
+        ofLine(cameraPos.x + camera.getWidth() / 2.5 / 1.25, cameraPos.y + camera.getHeight() / 2.5 / 2, iScaler * 52, iScaler * 2);
+        ofSetLineWidth(1);
+        
+        ofSetColor(0);
+        ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 50.75 + margin * 2, iScaler * 3.25 + margin * 2);
+        ofSetColor(255);
+        ofRect(-margin, -iScaler * 2.75 - margin, iScaler * 50.75, iScaler * 3.25);
+        ofSetColor(0);
+        helveticaMed.drawString("RIFFTIDE", 0, 0);
+        helvetica.drawString("a musical exploration game by J. MATTHEW GRIFFIS.\ncreated/composed by JMG. feat. guest performer YOU.", iScaler * 15, -iScaler * 1.5);
+        ofPushMatrix();{
+            ofTranslate(iScaler * 42, iScaler * 2);
+            ofSetColor(0);
+            ofRect(-margin * 2, -iScaler * 0.65 - margin * 2, iScaler * 12 + margin * 2, iScaler + margin * 2);
+            ofSetColor(255);
+            ofRect(-margin, -iScaler * 0.65 - margin, iScaler * 12, iScaler * 1);
+            ofSetColor(0);
+            helveticaSmall.drawString("Copyright (c) 2014 John Matthew Griffis", 0, 0);
+        }ofPopMatrix();
+        
+        ofSetColor(255);
+        camera.draw(cameraPos, camera.getWidth() / 2.5, camera.getHeight() / 2.5);
+    }ofPopMatrix();
 }
 
 //--------------------------------------------------------------

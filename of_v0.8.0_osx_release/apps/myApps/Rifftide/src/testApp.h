@@ -121,7 +121,7 @@ public:
     
     ofEasyCam myCam;
     
-    ofImage sign1, sign2, sign3, sign4, sign5;
+    ofImage sign1, sign2, sign3, sign4, sign5, camera;
     
     // New classes:
     
