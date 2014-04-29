@@ -332,7 +332,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
 }
 
 void Track::draw( ofTrueTypeFont _font ) {
-    if (gameState != 5) {
+    if (gameState != 5 && gameState < 7) {
         _font.drawString( "Finished! Press R to restart.", iScaler * 800, ofGetHeight() / 2 );
     }
 }

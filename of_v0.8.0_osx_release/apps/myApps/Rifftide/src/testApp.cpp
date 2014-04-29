@@ -53,6 +53,7 @@ void testApp::setup(){
     fCalcAllNotePos();
     
     helvetica.loadFont( "fonts/helvetica.otf", iScaler );
+    helveticaSmall.loadFont( "fonts/helvetica.otf", iScaler * 0.5 );
     helveticaMed.loadFont( "fonts/helvetica.otf", iScaler * 2.5 );
     helveticaJumbo.loadFont("fonts/helvetica.otf", iScaler * 4 );
     
@@ -1840,7 +1841,7 @@ void testApp::fDrawTutorialSigns() {
     float margin = 2;
     
     ofPushMatrix();{
-        ofTranslate(myPlayer.pos.x - iScaler * 16, myCam.getPosition().y + iScaler * 12.5);
+        ofTranslate(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
         ofSetColor(0);
         ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 50.75 + margin * 2, iScaler * 3.25 + margin * 2);
         ofSetColor(255);
@@ -1848,6 +1849,15 @@ void testApp::fDrawTutorialSigns() {
         ofSetColor(0);
         helveticaMed.drawString("RIFFTIDE", 0, 0);
         helvetica.drawString("a musical exploration game by J. MATTHEW GRIFFIS.\ncreated/composed by JMG. feat. guest performer YOU.", iScaler * 15, -iScaler * 1.5);
+        ofPushMatrix();{
+            ofTranslate(iScaler * 42, iScaler * 2);
+            ofSetColor(0);
+            ofRect(-margin * 2, -iScaler * 0.65 - margin * 2, iScaler * 12 + margin * 2, iScaler + margin * 2);
+            ofSetColor(255);
+            ofRect(-margin, -iScaler * 0.65 - margin, iScaler * 12, iScaler * 1);
+            ofSetColor(0);
+            helveticaSmall.drawString("Copyright (c) 2014 John Matthew Griffis", 0, 0);
+        }ofPopMatrix();
     }ofPopMatrix();
     
     ofVec2f upperLeft;
