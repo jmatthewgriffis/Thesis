@@ -1906,33 +1906,43 @@ void testApp::fDrawTutorialSigns() {
         
         ofTranslate(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
         
-        ofVec2f cameraPos = ofVec2f(iScaler * 49, -iScaler * 11);
+        ofVec2f cameraPos = ofVec2f(iScaler * 52, -iScaler * 11);
         
         ofSetColor(0);
         ofSetLineWidth(3);
-        ofLine(cameraPos.x + camera.getWidth() / 2.5 / 1.5, cameraPos.y + camera.getHeight() / 2.5 / 2, iScaler * 50, 0);
-        ofLine(cameraPos.x + camera.getWidth() / 2.5 / 1.25, cameraPos.y + camera.getHeight() / 2.5 / 2, iScaler * 52, iScaler * 2);
+        ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.1, cameraPos.y, iScaler * 50, 0);
+        ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.25, cameraPos.y, iScaler * 52, iScaler * 2);
         ofSetLineWidth(1);
         
         ofSetColor(0);
-        ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 50.75 + margin * 2, iScaler * 3.25 + margin * 2);
+        ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 51.25 + margin * 2, iScaler * 3.25 + margin * 2);
         ofSetColor(255);
-        ofRect(-margin, -iScaler * 2.75 - margin, iScaler * 50.75, iScaler * 3.25);
+        ofRect(-margin, -iScaler * 2.75 - margin, iScaler * 51.25, iScaler * 3.25);
         ofSetColor(0);
         helveticaMed.drawString("RIFFTIDE", 0, 0);
-        helvetica.drawString("a musical exploration game by J. MATTHEW GRIFFIS.\ncreated/composed by JMG. feat. guest performer YOU.", iScaler * 15, -iScaler * 1.5);
+        helvetica.drawString("a musical exploration game by J. MATTHEW GRIFFIS.\ncreated/composed by J.M.G. feat. guest explorer Y.O.U.", iScaler * 15, -iScaler * 1.5);
         ofPushMatrix();{
             ofTranslate(iScaler * 42, iScaler * 2);
             ofSetColor(0);
-            ofRect(-margin * 2, -iScaler * 0.65 - margin * 2, iScaler * 12 + margin * 2, iScaler + margin * 2);
+            ofRect(-margin * 2, -iScaler * 0.65 - margin * 2, iScaler * 12.1 + margin * 2, iScaler + margin * 2);
             ofSetColor(255);
-            ofRect(-margin, -iScaler * 0.65 - margin, iScaler * 12, iScaler * 1);
+            ofRect(-margin, -iScaler * 0.65 - margin, iScaler * 12.1, iScaler * 1);
             ofSetColor(0);
-            helveticaSmall.drawString("Copyright (c) 2014 John Matthew Griffis", 0, 0);
+            helveticaSmall.drawString("Copyright (c) 2014 John Matthew Griffis", iScaler * 0.1, 0);
         }ofPopMatrix();
         
-        ofSetColor(255);
-        camera.draw(cameraPos, camera.getWidth() / 2.5, camera.getHeight() / 2.5);
+        ofPushMatrix();{
+            ofSetColor(0);
+            // Have to offset the translation for this calculation.
+            ofVec2f player = myPlayer.pos - ofVec2f(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
+            ofVec2f tmp = cameraPos - player;
+            float tmpAngle = atan2(tmp.y, tmp.x);
+            ofSetRectMode(OF_RECTMODE_CENTER);
+            ofTranslate(cameraPos);
+            ofRotate(ofRadToDeg(tmpAngle));
+            ofSetColor(255);
+            camera.draw(0, 0, camera.getWidth() / 2.5, camera.getHeight() / 2.5);
+        }ofPopMatrix();
     }ofPopMatrix();
 }
 
