@@ -55,6 +55,7 @@ public:
     void fDrawRestartScreen();
     void fDrawGround();
     void fDrawDebugUI();
+    void fDrawTutorialSigns();
     
     void fCalcAllNotePos();
     void fCalcTrebleNotes();
@@ -116,9 +117,11 @@ public:
     bool bIsSecondPlayer;
     bool bFromTheSky;
     
-    ofTrueTypeFont helvetica, helveticaJumbo;
+    ofTrueTypeFont helvetica, helveticaSmall, helveticaMed, helveticaJumbo;
     
     ofEasyCam myCam;
+    
+    ofImage sign1, sign2, sign3, sign4, sign5, camera;
     
     // New classes:
     

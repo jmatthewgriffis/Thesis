@@ -9,6 +9,14 @@ void testApp::setup(){
     cleanup();
     staffPosList.clear();
     
+    // Load images.
+    sign1.loadImage("images/signs/1_tilt.png");
+    sign2.loadImage("images/signs/2_jump.png");
+    sign3.loadImage("images/signs/3_fall.png");
+    sign4.loadImage("images/signs/4_boost.png");
+    sign5.loadImage("images/signs/5_grav.png");
+    camera.loadImage("images/signs/camera.png");
+    
     // Maintenance
     frameRate = 60;
     ofSetFrameRate( frameRate );
@@ -46,6 +54,8 @@ void testApp::setup(){
     fCalcAllNotePos();
     
     helvetica.loadFont( "fonts/helvetica.otf", iScaler );
+    helveticaSmall.loadFont( "fonts/helvetica.otf", iScaler * 0.5 );
+    helveticaMed.loadFont( "fonts/helvetica.otf", iScaler * 2.5 );
     helveticaJumbo.loadFont("fonts/helvetica.otf", iScaler * 4 );
     
     /* Gamestates:
@@ -309,6 +319,8 @@ void testApp::draw(){
             myTutorial.draw( helvetica );
         } else if ( gameState == 2 ) {
             myBoss.draw( helvetica );
+        } else if (gameState == 8) {
+            fDrawTutorialSigns();
         } else {
             myTrack.draw( helvetica );
         }
@@ -1234,7 +1246,7 @@ void testApp::updateStream() {
                 
                 // Setup stream runoff.
                 float angleOffset = PI / 4;
-                float runoffLength = iScaler * 5;
+                float runoffLength = iScaler * 4.1;
                 
                 // Make stream "runoff" where the stream begins.
                 if (!currentNote.bHasFalloffLeft && currentNote.bIsPartOfStream) {
@@ -1821,6 +1833,117 @@ void testApp::fDrawRestartScreen() {
     
     ofSetColor( 0 );
     helvetica.drawString( "Are you sure you want to restart? Y / N ", ofGetWidth() / 2 - iScaler * 13, ofGetHeight() / 2.0 );
+}
+
+//--------------------------------------------------------------
+void testApp::fDrawTutorialSigns() {
+    ofSetRectMode(OF_RECTMODE_CORNER);
+    
+    float margin = 2;
+    
+    ofVec2f upperLeft;
+    float wide;
+    float tall;
+    
+    // 1
+    
+    upperLeft = ofVec2f(fMeasureLength, myCam.getPosition().y - iScaler * 10);
+    wide = sign1.getWidth() * 0.75;
+    tall = sign1.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign1.draw(upperLeft, wide, tall);
+    
+    // 2
+    
+    upperLeft = ofVec2f(fMeasureLength * 3, myCam.getPosition().y - iScaler * 10);
+    wide = sign2.getWidth() * 0.75;
+    tall = sign2.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign2.draw(upperLeft, wide, tall);
+    
+    // 3
+    
+    upperLeft = ofVec2f(fMeasureLength * 5, myCam.getPosition().y - iScaler * 15);
+    wide = sign3.getWidth() * 0.75;
+    tall = sign3.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign3.draw(upperLeft, wide, tall);
+    
+    // 4
+    
+    upperLeft = ofVec2f(fMeasureLength * 7, myCam.getPosition().y - iScaler * 15);
+    wide = sign4.getWidth() * 0.5;
+    tall = sign4.getHeight() * 0.5;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign4.draw(upperLeft, wide, tall);
+    
+    // 5
+    
+    upperLeft = ofVec2f(fMeasureLength * 9, myCam.getPosition().y - iScaler * 15);
+    wide = sign5.getWidth() * 0.75;
+    tall = sign5.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign5.draw(upperLeft, wide, tall);
+    
+    
+    // Title card and copyright (and camera).
+    ofPushMatrix();{
+        
+        ofTranslate(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
+        
+        ofVec2f cameraPos = ofVec2f(iScaler * 52, -iScaler * 11);
+        
+        ofSetColor(0);
+        ofSetLineWidth(3);
+        ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.1, cameraPos.y, iScaler * 50, 0);
+        ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.25, cameraPos.y, iScaler * 52, iScaler * 2);
+        ofSetLineWidth(1);
+        
+        ofSetColor(0);
+        ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 51.25 + margin * 2, iScaler * 3.25 + margin * 2);
+        ofSetColor(255);
+        ofRect(-margin, -iScaler * 2.75 - margin, iScaler * 51.25, iScaler * 3.25);
+        ofSetColor(0);
+        helveticaMed.drawString("RIFFTIDE", 0, 0);
+        helvetica.drawString("a musical exploration game by J. MATTHEW GRIFFIS.\ncreated/composed by J.M.G. feat. guest explorer Y.O.U.", iScaler * 15, -iScaler * 1.5);
+        ofPushMatrix();{
+            ofTranslate(iScaler * 42, iScaler * 2);
+            ofSetColor(0);
+            ofRect(-margin * 2, -iScaler * 0.65 - margin * 2, iScaler * 12.1 + margin * 2, iScaler + margin * 2);
+            ofSetColor(255);
+            ofRect(-margin, -iScaler * 0.65 - margin, iScaler * 12.1, iScaler * 1);
+            ofSetColor(0);
+            helveticaSmall.drawString("Copyright (c) 2014 John Matthew Griffis", iScaler * 0.1, 0);
+        }ofPopMatrix();
+        
+        ofPushMatrix();{
+            ofSetColor(0);
+            // Have to offset the translation for this calculation.
+            ofVec2f player = myPlayer.pos - ofVec2f(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
+            ofVec2f tmp = cameraPos - player;
+            float tmpAngle = atan2(tmp.y, tmp.x);
+            ofSetRectMode(OF_RECTMODE_CENTER);
+            ofTranslate(cameraPos);
+            ofRotate(ofRadToDeg(tmpAngle));
+            ofSetColor(255);
+            camera.draw(0, 0, camera.getWidth() / 2.5, camera.getHeight() / 2.5);
+        }ofPopMatrix();
+    }ofPopMatrix();
 }
 
 //--------------------------------------------------------------
