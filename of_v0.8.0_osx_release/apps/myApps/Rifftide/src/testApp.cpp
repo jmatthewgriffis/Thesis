@@ -16,6 +16,7 @@ void testApp::setup(){
     sign4.loadImage("images/signs/4_boost.png");
     sign5.loadImage("images/signs/5_grav.png");
     camera.loadImage("images/signs/camera.png");
+    upArrow.loadImage("images/signs/up_arrow.png");
     
     // Maintenance
     frameRate = 60;
@@ -1954,6 +1955,12 @@ void testApp::fDrawTutorialSigns() {
     ofRect(fMeasureLength * 2 - margin * 2, -iScaler - margin, iScaler * 10.3 + margin * 4, iScaler * 1.25 + margin * 2);
     ofSetColor(255);
     helveticaMed.drawString("''No Shaman, That''", fMeasureLength * 2, 0);
+    // Draw up arrow for Jam 1.
+    if (myPlayer.currentStream == 7 && myPlayer.myShip.onStream) {
+        float myAlpha = abs(sin(ofGetElapsedTimef())) * 255;
+        ofSetColor(255, myAlpha);
+        upArrow.draw(fMeasureLength * 2.5, -iScaler * 7, upArrow.getWidth() * 0.5, upArrow.getHeight() * 0.5);
+    }
 }
 
 //--------------------------------------------------------------

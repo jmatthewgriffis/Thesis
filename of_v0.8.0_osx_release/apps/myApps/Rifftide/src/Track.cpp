@@ -44,7 +44,9 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         
         iNumMeasures = 24;
         
-        addObject("c3#", m1Bass + fMeasureLength - iScaler * 4, 1, -1); // test note
+        if (gameState < 7) {
+            addObject("c3#", m1Bass + fMeasureLength - iScaler * 4, 1, -1); // test note
+        }
         
         for (int i = 1; i <= iNumMeasures; i++) {
             
