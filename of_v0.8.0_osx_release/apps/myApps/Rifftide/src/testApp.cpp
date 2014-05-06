@@ -1945,6 +1945,15 @@ void testApp::fDrawTutorialSigns() {
             camera.draw(0, 0, camera.getWidth() / 2.5, camera.getHeight() / 2.5);
         }ofPopMatrix();
     }ofPopMatrix();
+    
+    // Individual track cards.
+    
+    // Jam 1
+    ofSetColor(0);
+    ofSetRectMode(OF_RECTMODE_CORNER);
+    ofRect(fMeasureLength * 2 - margin * 2, -iScaler - margin, iScaler * 10.3 + margin * 4, iScaler * 1.25 + margin * 2);
+    ofSetColor(255);
+    helveticaMed.drawString("''No Shaman, That''", fMeasureLength * 2, 0);
 }
 
 //--------------------------------------------------------------
