@@ -333,8 +333,15 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
     return stringList;
 }
 
-void Track::draw( ofTrueTypeFont _font ) {
+void Track::draw( ofTrueTypeFont _font, ofVec2f _pos ) {
     if (gameState != 5 && gameState < 7) {
         _font.drawString( "Finished! Press R to restart.", iScaler * 800, ofGetHeight() / 2 );
+    } else if (gameState == 7) {
+        float margin = 2;
+        ofSetColor(0);
+        ofSetRectMode(OF_RECTMODE_CORNER);
+        ofRect(_pos.x - iScaler * 6 - margin * 2, _pos.y + iScaler * 9.75 - margin, iScaler * 12.25 + margin * 4, iScaler * 1.5 + margin * 2);
+        ofSetColor(255);
+        _font.drawString("''No Shaman, That''", _pos.x - iScaler * 6, _pos.y + iScaler * 11);
     }
 }

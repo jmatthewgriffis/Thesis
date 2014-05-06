@@ -16,7 +16,7 @@ public:
     
     vector< string > setup( int _iScaler, float _fMeasureLength, int _gameState );
     void addObject( string _note, float _xPos, int _stream, int _age );
-    void draw( ofTrueTypeFont _font );
+    void draw( ofTrueTypeFont _font, ofVec2f _pos );
     
     vector< string > stringList;
     

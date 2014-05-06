@@ -324,7 +324,7 @@ void testApp::draw(){
         } else if (gameState == 8) {
             fDrawTutorialSigns();
         } else {
-            myTrack.draw( helvetica );
+            myTrack.draw( helvetica, myCam.getPosition() );
         }
         
         // Draw the notes and stream.
