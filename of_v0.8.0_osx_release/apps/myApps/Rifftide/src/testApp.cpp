@@ -329,10 +329,10 @@ void testApp::draw(){
         
         // Draw the notes and stream.
         for ( int i = 0; i < objectList.size(); i++ ) {
-            objectList[ i ].draw();
+            objectList[ i ].draw(myPlayer.myShip.onStream, myPlayer.currentStream);
         }
         for (int i = 0; i < streamBitList.size(); i++) {
-            streamBitList[i].draw();
+            streamBitList[i].draw(myPlayer.myShip.onStream, myPlayer.currentStream);
         }
         
         // Draw the obstacles.
@@ -1391,6 +1391,7 @@ void testApp::playerCollidesWithGroundOrSky() {
         }
         if (gameState >= 7) {
             if (gameState != 8) {
+                myPlayer.currentStream = gameState;
                 bFromTheSky = true;
                 gameState = 8;
             } else {

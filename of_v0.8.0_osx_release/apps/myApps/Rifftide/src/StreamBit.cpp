@@ -55,7 +55,7 @@ void StreamBit::update() {
 }
 
 //--------------------------------------------------------------
-void StreamBit::draw() {
+void StreamBit::draw(bool _onStream, int _playerStream) {
     ofPushMatrix();{
         ofTranslate(pos);
         ofRotate(angle);
@@ -110,7 +110,14 @@ void StreamBit::draw() {
                     opacity = 255;
                 }
                 
-                ofSetColor(255, opacity);
+                float alpha;
+                if (!_onStream || (_onStream && whichStream == _playerStream)) {
+                    alpha = opacity;
+                } else {
+                    alpha = ofMap(opacity, 0, 255, 0, 100);
+                }
+                
+                ofSetColor(255, alpha);
                 ofTranslate(-wide * 0.5 + noteWidth * 0.5 + spaceBits + slurTall * 0.5 + (slurTall + spaceBits) * i, 0);
                 ofRotate(ofRadToDeg(-PI * 0.5));
                 slur.draw(0, 0, tall * 2, slurTall * 2);
