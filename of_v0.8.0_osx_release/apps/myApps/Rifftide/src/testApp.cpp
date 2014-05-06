@@ -1412,7 +1412,7 @@ void testApp::playerCollidesWithGroundOrSky() {
         myPlayer.vel.y = 0;
     }
     
-    if (gameState == 8 && myPlayer.currentStream > 1 && myPlayer.pos.y < myCam.getPosition().y - ofGetHeight() * 0.5) {
+    if (gameState == 8 && myPlayer.currentStream > 1 && myPlayer.pos.y < myCam.getPosition().y - ofGetHeight() * 0.5 + iScaler) {
         gameState = myPlayer.currentStream;
         fLoadPrototype();
     }
