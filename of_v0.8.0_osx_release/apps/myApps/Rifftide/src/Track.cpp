@@ -66,14 +66,25 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 }
             } else {
                 if (i < iNumMeasures) {
-                    /*if (i == 1 || i == 5 || i == 9) {
+                    // Repeating riff
+                    myStream = 1;
+                    //if (i < iNumMeasures /*i == 3 || i == 4 || i == 7 || i == 8 || i == 11 || i == 12 || i == 15 || i == 16*/) {
+                        //addObject("f3#", (fMeasureLength * i) + m1Treble, myStream, -1);
+                        addObject("d3#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+                        addObject("c3#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
+                        addObject("d3#", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
+                        addObject("f3#", (fMeasureLength * i) + m1Treble + iScaler * 24.4, myStream, -1);
+                    //}
+                    
+                    myStream = 2;
+                    if (/*i == 1 ||*/ i == 5 || i == 9) {
                         float mySpacer = spacer * 0.65;
-                        addObject("d3#", (fMeasureLength * i) + m1Treble, myStream, -1);
-                        addObject("f3", (fMeasureLength * i) + m1Treble + mySpacer, myStream, -1);
-                        addObject("f3#", (fMeasureLength * i) + m1Treble + mySpacer * 2, myStream, -1);
-                        addObject("g3#", (fMeasureLength * i) + m1Treble + mySpacer * 3, myStream, -1);
+                        addObject("d4#", (fMeasureLength * i) + m1Treble, myStream, -1);
+                        addObject("f4", (fMeasureLength * i) + m1Treble + mySpacer, myStream, -1);
+                        addObject("f4#", (fMeasureLength * i) + m1Treble + mySpacer * 2, myStream, -1);
+                        addObject("g4#", (fMeasureLength * i) + m1Treble + mySpacer * 3, myStream, -1);
                     }
-                    if (i == 2) {
+                    /*if (i == 2) {
                         float mySpacer = spacer * 0.65;
                         addObject("d3#", (fMeasureLength * i) + m1Treble, myStream, -1);
                         addObject("d3#", (fMeasureLength * i) + m1Treble + mySpacer, myStream, -1);
@@ -81,7 +92,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                         addObject("g3#", (fMeasureLength * i) + m1Treble + mySpacer * 3, myStream, -1);
                         addObject("c4#", (fMeasureLength * i) + m1Treble + mySpacer * 5, myStream + 1, -1);
                         addObject("a3#", (fMeasureLength * i) + m1Treble + mySpacer * 6, myStream + 1, -1);
-                    }
+                    }*/
                     if (i == 6) {
                         float mySpacer = spacer * 0.65;
                         addObject("d3#", (fMeasureLength * i) + m1Treble + mySpacer * 2, myStream, -1);
@@ -92,22 +103,14 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                     }
                     if (i == 9) {
                         float mySpacer = spacer * 0.65;
-                        myStream = 2;
+                        myStream = 3;
                         addObject("d4#", (fMeasureLength * i) + m1Treble, myStream, -1);
                         addObject("c4#", (fMeasureLength * i) + m1Treble + mySpacer, myStream, -1);
                         addObject("a3#", (fMeasureLength * i) + m1Treble + mySpacer * 2, myStream, -1);
                         addObject("c4#", (fMeasureLength * i) + m1Treble + mySpacer * 3, myStream, -1);
-                    }*/
-                    // Repeating riff
-                    if (i < iNumMeasures /*i == 3 || i == 4 || i == 7 || i == 8 || i == 11 || i == 12 || i == 15 || i == 16*/) {
-                        //addObject("f3#", (fMeasureLength * i) + m1Treble, myStream, -1);
-                        addObject("d3#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
-                        addObject("c3#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
-                        addObject("d3#", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
-                        addObject("f3#", (fMeasureLength * i) + m1Treble + iScaler * 24.4, myStream, -1);
                     }
-                    if (i > 1 && i < iNumMeasures) {
-                        myStream = 2;
+                    if (i >= 17 && i < iNumMeasures) {
+                        //myStream = 2;
                         float base = m1Treble;
                         addObject("d4#", (fMeasureLength * i) + base + iScaler * 0, myStream, -1);
                         addObject("a3#", (fMeasureLength * i) + base + iScaler * 2.5, myStream, -1);
