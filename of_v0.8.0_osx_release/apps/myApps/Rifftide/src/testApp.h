@@ -117,11 +117,11 @@ public:
     bool bIsSecondPlayer;
     bool bFromTheSky;
     
-    ofTrueTypeFont helvetica, helveticaSmall, helveticaMed, helveticaJumbo;
+    ofTrueTypeFont helvetica, helveticaSmall, helveticaMed, helveticaLarge, helveticaJumbo;
     
     ofEasyCam myCam;
     
-    ofImage sign1, sign2, sign3, sign4, sign5, camera;
+    ofImage sign1, sign2, sign3, sign4, sign5, camera, upArrow;
     
     // New classes:
     
