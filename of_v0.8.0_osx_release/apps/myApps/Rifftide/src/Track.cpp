@@ -134,6 +134,20 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                         addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
                         
                     }
+                    if (i == 7) {
+                        addObject("g3#", (fMeasureLength * i) + m1Treble + iScaler * 0, myStream, -1);
+                        addObject("a3#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+                        addObject("c4#", (fMeasureLength * i) + m1Treble + iScaler * 8, myStream, -1);
+                        addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
+                        addObject("f4#", (fMeasureLength * i) + m1Treble + iScaler * 18, myStream, -1);
+                        addObject("g4#", (fMeasureLength * i) + m1Treble + iScaler * 24, myStream, -1);
+                    }
+                    if (i == 8) {
+                        addObject("f4#", (fMeasureLength * i) + m1Treble + iScaler * 0, myStream, -1);
+                        addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 18, myStream, -1);
+                        addObject("c4#", (fMeasureLength * i) + m1Treble + iScaler * 22, myStream, -1);
+                        addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 26, myStream, -1);
+                    }
                     if (i == 9 || i == 11) {
                         if (i == 9) {
                             myStream = 2;
