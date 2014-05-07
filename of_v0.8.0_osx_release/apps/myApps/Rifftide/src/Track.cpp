@@ -109,6 +109,31 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                         addObject("a3#", (fMeasureLength * i) + m1Treble + mySpacer * 2, myStream, -1);
                         addObject("c4#", (fMeasureLength * i) + m1Treble + mySpacer * 3, myStream, -1);
                     }*/
+                    if (i == 3) {
+                        addObject("g3#", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
+                        addObject("a3#", (fMeasureLength * i) + m1Treble + iScaler * 20, myStream, -1);
+                        addObject("c4#", (fMeasureLength * i) + m1Treble + iScaler * 24, myStream, -1);
+                    }
+                    if (i == 4) {
+                        addObject("g3#", (fMeasureLength * i) + m1Treble + iScaler * 0, myStream, -1);
+                        addObject("a3#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+                        addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 8, myStream, -1);
+                        addObject("c4#", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
+                    }
+                    if (i == 5) {
+                        addObject("c4#", (fMeasureLength * i) + m1Treble + iScaler * 0, myStream, -1);
+                        addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+                        addObject("f4#", (fMeasureLength * i) + m1Treble + iScaler * 8, myStream, -1);
+                        addObject("f4#", (fMeasureLength * i) + m1Treble + iScaler * 24, myStream, -1);
+                    }
+                    if (i == 6) {
+                        addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * -4, myStream, -1);
+                        addObject("c4#", (fMeasureLength * i) + m1Treble + iScaler * 0, myStream, -1);
+                        addObject("a3#", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+                        addObject("c4#", (fMeasureLength * i) + m1Treble + iScaler * 8, myStream, -1);
+                        addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
+                        
+                    }
                     if (i == 9 || i == 11) {
                         if (i == 9) {
                             myStream = 2;
