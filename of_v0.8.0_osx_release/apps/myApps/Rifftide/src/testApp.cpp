@@ -1525,7 +1525,7 @@ void testApp::playerCollidesWithObject() {
                     
                     // Boost off note.
                     if (gameState >= 7 && myPlayer.bModeSurf && myPlayer.allowNoteBoost) {
-                        if (myPlayer.myShip.angle > 270 && myPlayer.myShip.angle < 315) {
+                        if ((myPlayer.myShip.angle > 270 && myPlayer.myShip.angle < 315) || (myPlayer.myShip.angle > 45 && myPlayer.myShip.angle < 90)) {
                             myPlayer.currentStream = objectList[i].whichStream;
                             myPlayer.noteBoost = true; // yo
                             myPlayer.allowNoteBoost = false;
