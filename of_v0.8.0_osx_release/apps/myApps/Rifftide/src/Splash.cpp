@@ -25,8 +25,9 @@ void Splash::setup(ofVec2f _pos, float _wide, float _force, bool _trail) {
     wide = _wide;
     tall = slur.getHeight() * wide / slur.getWidth();
     angle1 = angle2 = 0;
-    alpha = 255;
-    alphaVel = 30 / abs(_force); // Inversely proportional.
+    float lightener = 0.5;
+    alpha = 255 * lightener;
+    alphaVel = (30 / abs(_force)) * lightener; // Inversely proportional.
     trail = _trail;
     destroyMe = false;
     
@@ -95,8 +96,8 @@ void Splash::draw() {
     }ofPopMatrix();
     
     if (trail) {
-        float inc = 3;
-        for (int i = 0; i < posList1.size(); i += 3) {
+        float inc = 5;
+        for (int i = 0; i < posList1.size(); i += inc) {
             float alphaTrail = alpha - inc - posList1.size() * inc + i * inc;
             if (alphaTrail < 0) {
                 alphaTrail = 0;
