@@ -10,12 +10,13 @@ void testApp::setup(){
     staffPosList.clear();
     
     // Load images.
-    sign1.loadImage("images/signs/1_tilt.png");
+    sign1a.loadImage("images/signs/1_tilt_a.png");
+    sign1b.loadImage("images/signs/1_tilt_b.png");
     sign2.loadImage("images/signs/2_jump.png");
-    sign3.loadImage("images/signs/3_fall.png");
-    sign4.loadImage("images/signs/4_boost.png");
-    sign5.loadImage("images/signs/5_grav.png");
-    camera.loadImage("images/signs/camera.png");
+    //sign3.loadImage("images/signs/3_fall.png");
+    //sign4.loadImage("images/signs/4_boost.png");
+    //sign5.loadImage("images/signs/5_grav.png");
+    //camera.loadImage("images/signs/camera.png");
     upArrow.loadImage("images/signs/up_arrow.png");
     
     // Maintenance
@@ -124,6 +125,8 @@ bool my_compare( const Object &a, const Object &b ) {
 //--------------------------------------------------------------
 void testApp::update(){
     
+    bUsingControllerPrev = bUsingController;
+    
     { // Repeated from setup. Allow controller to be switched on/off during play. Thanks to Michael Kahane for leading the way on this.
         //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
         if(ofxGamepadHandler::get()->getNumPads()>0){
@@ -138,6 +141,18 @@ void testApp::update(){
             bUsingController = false;
         }
     } // End ofxGamepad stuff
+    
+    if (bUsingControllerPrev != bUsingController) {
+        if (bUsingController) {
+            sign1a.loadImage("images/signs/1_tilt_xbox_a.png");
+            sign1b.loadImage("images/signs/1_tilt_xbox_b.png");
+            sign2.loadImage("images/signs/2_jump_xbox.png");
+        } else {
+            sign1a.loadImage("images/signs/1_tilt_a.png");
+            sign1b.loadImage("images/signs/1_tilt_b.png");
+            sign2.loadImage("images/signs/2_jump.png");
+        }
+    }
     
     // Don't update anything else if not on the game screen.
     if ( gameState < 1 ) return;
@@ -1881,17 +1896,6 @@ void testApp::fDrawTutorialSigns() {
     // 1
     
     upperLeft = ofVec2f(fMeasureLength, myCam.getPosition().y - iScaler * 10);
-    wide = sign1.getWidth() * 0.75;
-    tall = sign1.getHeight() * 0.75;
-    
-    ofSetColor(0);
-    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
-    ofSetColor(255);
-    sign1.draw(upperLeft, wide, tall);
-    
-    // 2
-    
-    upperLeft = ofVec2f(fMeasureLength * 3, myCam.getPosition().y - iScaler * 10);
     wide = sign2.getWidth() * 0.75;
     tall = sign2.getHeight() * 0.75;
     
@@ -1900,6 +1904,29 @@ void testApp::fDrawTutorialSigns() {
     ofSetColor(255);
     sign2.draw(upperLeft, wide, tall);
     
+    // 2a
+    
+    upperLeft = ofVec2f(fMeasureLength * 3, myCam.getPosition().y - iScaler * 10);
+    wide = sign1a.getWidth() * 0.75;
+    tall = sign1a.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign1a.draw(upperLeft, wide, tall);
+    
+    // 2b
+    
+    upperLeft = ofVec2f(fMeasureLength * 6, myCam.getPosition().y - iScaler * 10);
+    wide = sign1b.getWidth() * 0.75;
+    tall = sign1b.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign1b.draw(upperLeft, wide, tall);
+    
+    /*
     // 3
     
     upperLeft = ofVec2f(fMeasureLength * 5, myCam.getPosition().y - iScaler * 15);
@@ -1932,13 +1959,14 @@ void testApp::fDrawTutorialSigns() {
     ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
     ofSetColor(255);
     sign5.draw(upperLeft, wide, tall);
-    
+    */
     
     // Title card and copyright (and camera).
     ofPushMatrix();{
         
         ofTranslate(myCam.getPosition().x - iScaler * 23, myCam.getPosition().y + iScaler * 12);
         
+        /*
         ofVec2f cameraPos = ofVec2f(iScaler * 44, -iScaler * 11);
         
         ofSetColor(0);
@@ -1946,6 +1974,7 @@ void testApp::fDrawTutorialSigns() {
         ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.1, cameraPos.y, iScaler * 43.75, 0);
         ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.25, cameraPos.y, iScaler * 44.5, iScaler * 2);
         ofSetLineWidth(1);
+        */
         
         ofSetColor(0);
         ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 44 + margin * 2, iScaler * 3.25 + margin * 2);
@@ -1964,7 +1993,7 @@ void testApp::fDrawTutorialSigns() {
             helveticaSmall.drawString("Copyright (c) 2014 John Matthew Griffis", iScaler * 0.1, 0);
         }ofPopMatrix();
         
-        ofPushMatrix();{
+        /*ofPushMatrix();{
             ofSetColor(0);
             // Have to offset the translation for this calculation.
             ofVec2f player = myPlayer.pos - ofVec2f(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
@@ -1975,7 +2004,7 @@ void testApp::fDrawTutorialSigns() {
             ofRotate(ofRadToDeg(tmpAngle));
             ofSetColor(255);
             camera.draw(0, 0, camera.getWidth() / 2.5, camera.getHeight() / 2.5);
-        }ofPopMatrix();
+        }ofPopMatrix();*/
     }ofPopMatrix();
     
     // Individual track cards.
