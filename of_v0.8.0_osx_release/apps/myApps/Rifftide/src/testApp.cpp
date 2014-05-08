@@ -10,12 +10,13 @@ void testApp::setup(){
     staffPosList.clear();
     
     // Load images.
-    sign1.loadImage("images/signs/1_tilt.png");
+    sign1a.loadImage("images/signs/1_tilt_a.png");
+    sign1b.loadImage("images/signs/1_tilt_b.png");
     sign2.loadImage("images/signs/2_jump.png");
-    sign3.loadImage("images/signs/3_fall.png");
-    sign4.loadImage("images/signs/4_boost.png");
-    sign5.loadImage("images/signs/5_grav.png");
-    camera.loadImage("images/signs/camera.png");
+    //sign3.loadImage("images/signs/3_fall.png");
+    //sign4.loadImage("images/signs/4_boost.png");
+    //sign5.loadImage("images/signs/5_grav.png");
+    //camera.loadImage("images/signs/camera.png");
     upArrow.loadImage("images/signs/up_arrow.png");
     
     // Maintenance
@@ -124,20 +125,34 @@ bool my_compare( const Object &a, const Object &b ) {
 //--------------------------------------------------------------
 void testApp::update(){
     
+    bUsingControllerPrev = bUsingController;
+    
     { // Repeated from setup. Allow controller to be switched on/off during play. Thanks to Michael Kahane for leading the way on this.
-        if ( bUsingController == false ) {
-            //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
-            if(ofxGamepadHandler::get()->getNumPads()>0){
+        //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
+        if(ofxGamepadHandler::get()->getNumPads()>0){
+            if ( bUsingController == false ) {
                 bUsingController = true;
                 ofxGamepad* pad = ofxGamepadHandler::get()->getGamepad(0);
                 ofAddListener(pad->onAxisChanged, this, &testApp::axisChanged);
                 ofAddListener(pad->onButtonPressed, this, &testApp::buttonPressed);
                 ofAddListener(pad->onButtonReleased, this, &testApp::buttonReleased);
-            } else {
-                bUsingController = false;
             }
+        } else {
+            bUsingController = false;
         }
     } // End ofxGamepad stuff
+    
+    if (bUsingControllerPrev != bUsingController) {
+        if (bUsingController) {
+            sign1a.loadImage("images/signs/1_tilt_xbox_a.png");
+            sign1b.loadImage("images/signs/1_tilt_xbox_b.png");
+            sign2.loadImage("images/signs/2_jump_xbox.png");
+        } else {
+            sign1a.loadImage("images/signs/1_tilt_a.png");
+            sign1b.loadImage("images/signs/1_tilt_b.png");
+            sign2.loadImage("images/signs/2_jump.png");
+        }
+    }
     
     // Don't update anything else if not on the game screen.
     if ( gameState < 1 ) return;
@@ -203,9 +218,9 @@ void testApp::update(){
             }
             int stream = 1;
             //if ( notePos.y <= staffPosList[ 16 ] ) {
-                addObject( fReturnNote( notePos.y ), notePos.x, stream, objectLife );
+            addObject( fReturnNote( notePos.y ), notePos.x, stream, objectLife );
             //} else {
-                //addObject( "c3_middle", notePos.x, stream, objectLife );
+            //addObject( "c3_middle", notePos.x, stream, objectLife );
             //}
             objectList[objectList.size() - 1].bIsTouched = true;
             iTimeTillNote = iTimeBetweenNotes;
@@ -329,10 +344,10 @@ void testApp::draw(){
         
         // Draw the notes and stream.
         for ( int i = 0; i < objectList.size(); i++ ) {
-            objectList[ i ].draw();
+            objectList[ i ].draw(myPlayer.myShip.onStream, myPlayer.currentStream);
         }
         for (int i = 0; i < streamBitList.size(); i++) {
-            streamBitList[i].draw();
+            streamBitList[i].draw(myPlayer.myShip.onStream, myPlayer.currentStream);
         }
         
         // Draw the obstacles.
@@ -441,7 +456,7 @@ void testApp::fLoadPrototype() {
             if (bFromTheSky) {
                 myPlayer.pos.y = myCam.getPosition().y - ofGetHeight() * 0.5;
                 //if (myPlayer.currentStream == 7) { // Find me
-                    myPlayer.pos.x = iScaler * 30;
+                myPlayer.pos.x = iScaler * 30;
                 //}
             } else {
                 myPlayer.vel.y = -iScaler * 0.4;
@@ -601,7 +616,7 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
     //-------------------------------------------
     
     // Left stick--left and right
-    if (e.axis == 2) {
+    if (e.axis == 2 && gameState < 7) {
         if ( gameState == 6 ) {
             if ( abs( e.value ) > fStickBuffer ) {
                 if ( e.value < 0 ) {
@@ -629,6 +644,28 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
                 myPlayer.myShip.bTiltUpward = false;
                 myPlayer.myShip.bTiltDownward = false;
             }
+        }
+    }
+    
+    //-------------------------------------------
+    
+    // Left trigger
+    
+    if (e.axis == 0 && gameState > 6) {
+        if ( e.value > fStickBuffer * 2 ) {
+            myPlayer.myShip.bTiltUpward = true;
+        } else {
+            myPlayer.myShip.bTiltUpward = false;
+        }
+    }
+    
+    // Right trigger
+    
+    if (e.axis == 1 && gameState > 6) {
+        if ( e.value > fStickBuffer * 2 ) {
+            myPlayer.myShip.bTiltDownward = true;
+        } else {
+            myPlayer.myShip.bTiltDownward = false;
         }
     }
     
@@ -718,9 +755,9 @@ void testApp::keyPressed(int key){
              }*/
             //else {
             /*if ( gameState > 0 ) {
-                currentState = gameState;
-                gameState = -1;
-            }*/
+             currentState = gameState;
+             gameState = -1;
+             }*/
             //}
             break;
             
@@ -1391,6 +1428,7 @@ void testApp::playerCollidesWithGroundOrSky() {
         }
         if (gameState >= 7) {
             if (gameState != 8) {
+                myPlayer.currentStream = gameState;
                 bFromTheSky = true;
                 gameState = 8;
             } else {
@@ -1487,23 +1525,27 @@ void testApp::playerCollidesWithObject() {
             } else {
                 surfOffset = 0;
             }
+            // Actual collision.
             if ( playerRight >= objectLeft && playerLeft <= objectRight
                 && playerBottom >= (objectTop - surfOffset) && playerTop <= objectBottom ) {
-                
-                //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
-                if (!objectList[ i ].bIsTouched) {
-                    if (myPlayer.vel.y > 0) {
-                        objectList[i].jiggleForce = myPlayer.vel.y * 0.75; // Find me
+                // Prevent colliding with a second stream while riding a stream.
+                if (/*!myPlayer.myShip.onStream || */(myPlayer.myShip.onStream && myPlayer.currentStream == objectList[i].whichStream)) {
+                    //myPlayer.fHealth += myPlayer.fHealthLossSpeed * fHealthMultiplier;
+                    if (!objectList[ i ].bIsTouched) {
+                        if (myPlayer.vel.y > 0) {
+                            objectList[i].jiggleForce = myPlayer.vel.y * 0.75; // Find me
+                        }
                     }
-                }
-                objectList[ i ].bIsTouched = true;
-                
-                // Boost off note.
-                if (gameState >= 7 && myPlayer.bModeSurf && myPlayer.allowNoteBoost) {
-                    if (myPlayer.myShip.angle > 270 && myPlayer.myShip.angle < 315) {
-                        myPlayer.noteBoost = true; // yo
-                        myPlayer.allowNoteBoost = false;
-                        objectList[i].bJiggleVert = true;
+                    objectList[ i ].bIsTouched = true;
+                    
+                    // Boost off note.
+                    if (gameState >= 7 && myPlayer.bModeSurf && myPlayer.allowNoteBoost) {
+                        if ((myPlayer.myShip.angle > 270 && myPlayer.myShip.angle < 315) || (myPlayer.myShip.angle > 45 && myPlayer.myShip.angle < 90)) {
+                            myPlayer.currentStream = objectList[i].whichStream;
+                            myPlayer.noteBoost = true; // yo
+                            myPlayer.allowNoteBoost = false;
+                            objectList[i].bJiggleVert = true;
+                        }
                     }
                 }
             } else if (myPlayer.vel.y == 0){
@@ -1583,141 +1625,145 @@ void testApp::playerCollidesWithStream() {
     
     for (int i = 0; i < streamBitList.size(); i++) {
         
-        ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;
-        ofVec2f end = streamBitList[i].pos + streamBitList[i].slope * 0.5;
-        ofVec2f inc = streamBitList[i].slope.normalized();
-        float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/ + myPlayer.myShip.fImgHeightBass / 2;
-        for (int j = 1; j < int(streamBitList[i].wide); j++) {
+        // Only collide with the current stream when riding a stream.
+        if (!myPlayer.myShip.onStream || (myPlayer.myShip.onStream && myPlayer.currentStream == streamBitList[i].whichStream)) {
             
-            // If player x is within two bits of the object's x...
-            if (myPlayer.pos.x >= start.x + inc.x * (j - 1) && myPlayer.pos.x <= start.x + inc.x * j) {
+            ofVec2f start = streamBitList[i].pos - streamBitList[i].slope * 0.5;
+            ofVec2f end = streamBitList[i].pos + streamBitList[i].slope * 0.5;
+            ofVec2f inc = streamBitList[i].slope.normalized();
+            float diff = myPlayer.myShip.pos.y - myPlayer.pos.y /*+ streamBitList[i].wide * 0.5*/ + myPlayer.myShip.fImgHeightBass / 2;
+            for (int j = 1; j < int(streamBitList[i].wide); j++) {
                 
-                // Snap to descending stream if already riding it and not jumping.
-                if (!myPlayer.onStream && myPlayer.inStreamTimer > 0 && myPlayer.currentStream == streamBitList[i].whichStream) {
-                    if (myPlayer.pos.y < start.y + inc.y * j - diff) {
-                        myPlayer.pos.y = start.y + inc.y * j - diff;
-                    }
-                }
-                
-                // Find me--delete all of this if find better solution to hiding the issue.
-                {// Make the ship land correctly in the stream.
-                    ofVec2f otherPoint;
-                    float hyp = myPlayer.myShip.rotOffset * 2;
-                    if (myPlayer.myShip.rotPoint == -1) {
-                        otherPoint.set(myPlayer.myShip.pos.x + hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y + hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
-                    } else if (myPlayer.myShip.rotPoint == 1) {
-                        otherPoint.set(myPlayer.myShip.pos.x - hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y - hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
+                // If player x is within two bits of the object's x...
+                if (myPlayer.pos.x >= start.x + inc.x * (j - 1) && myPlayer.pos.x <= start.x + inc.x * j) {
+                    
+                    // Snap to descending stream if already riding it and not jumping.
+                    if (!myPlayer.onStream && myPlayer.inStreamTimer > 0 && myPlayer.currentStream == streamBitList[i].whichStream) {
+                        if (myPlayer.pos.y < start.y + inc.y * j - diff) {
+                            myPlayer.pos.y = start.y + inc.y * j - diff;
+                        }
                     }
                     
-                    if (otherPoint.y >= start.y + inc.y && myPlayer.myShip.pos.y < start.y + inc.y) {
-                        ofVec2f diff, refPoint, dest;
+                    // Find me--delete all of this if find better solution to hiding the issue.
+                    {// Make the ship land correctly in the stream.
+                        ofVec2f otherPoint;
+                        float hyp = myPlayer.myShip.rotOffset * 2;
                         if (myPlayer.myShip.rotPoint == -1) {
-                            diff = myPlayer.pos - myPlayer.myShip.pointFront;
-                            refPoint = myPlayer.myShip.pointRear;
-                            dest = refPoint + diff;
+                            otherPoint.set(myPlayer.myShip.pos.x + hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y + hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
                         } else if (myPlayer.myShip.rotPoint == 1) {
-                            diff = myPlayer.pos - myPlayer.myShip.pointRear;
-                            refPoint = myPlayer.myShip.pointFront;
-                            dest = refPoint + diff;
+                            otherPoint.set(myPlayer.myShip.pos.x - hyp * (cos(ofDegToRad(myPlayer.myShip.angle))), myPlayer.myShip.pos.y - hyp * (sin(ofDegToRad(myPlayer.myShip.angle))));
                         }
-                        //myPlayer.pos = otherPoint + diff;
-                        //cout<<otherPoint<<" "<<myPlayer.pos<<endl;
-                        //myPlayer.myShip.rotPoint *= -1;
-                        //updateGame = false;
-                        //myPlayer.pos.y -= 200;
-                    }
-                } // End delete
-                
-                // Keep player on top of stream, if not underneath stream.
-                if (myPlayer.pos.y >= start.y + inc.y * j - diff
-                    && myPlayer.myShip.pos.y <= start.y + inc.y * j + streamBitList[i].tall * 0.5) {
-                    myPlayer.pos.y = start.y + inc.y * j - diff;
-                    if (myPlayer.vel.y >= 0) { // Make sure not jumping.
-                        myPlayer.onStream = true;
-                        myPlayer.currentStream = streamBitList[i].whichStream;
-                    }
-                    
-                    /*
-                     Player must align the board to the stream to surf at full speed. Check this by comparing the board's angle to the stream's. However sometimes the player may be coming off a sharp change in angle and not be able to adjust quickly enough. So we take into account the previous and next angles, within a limited region.
-                     */
-                    // FIND ME, TUNE ME, TUNE ME SO MUCH.
-                    // Check the angle and adjust speed accordingly.
-                    int closeEnough = 15; // How close the two angles have to be.
-                    int otherBitProximity = iScaler; // How close the other Bit's end has to be.
-                    int checkOtherBitMultiplier = otherBitProximity; // How many intervals of the current bit check against the other Bits.
-                    float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
-                    
-                    if (angleDiff > 180) {
-                        angleDiff = 360 - angleDiff;
-                    }
-                    
-                    // Align to the stream.
-                    if (!myPlayer.myShip.bTiltUpward && !myPlayer.myShip.bTiltDownward) {
-                        float thisVel;
-                        if (streamBitList[i].angle < 180) {
-                            thisVel = 1;
-                        } else {
-                            thisVel = -1;
-                        }
-                        if (myPlayer.myShip.angle < streamBitList[i].angle) {
-                            myPlayer.myShip.angle += thisVel * myPlayer.myShip.rotPoint;
-                        } else if (myPlayer.myShip.angle > streamBitList[i].angle) {
-                            myPlayer.myShip.angle -= thisVel * myPlayer.myShip.rotPoint;
-                        }
-                        if (angleDiff < thisVel) {
-                            myPlayer.myShip.angle = streamBitList[i].angle;
-                        }
-                    }
-                    
-                    if (angleDiff <= closeEnough) {
-                        myPlayer.closeEnough = true;
-                    }
-                    
-                    // If not close enough, check the previous and next angles if they exist.
-                    else {
-                        // Autorotate if leaning too far. Find me
-                        //myPlayer.myShip.angle += myPlayer.myShip.rotPoint * 0.5;
-                        // Previous angle.
-                        if (i > 0) {
-                            
-                            ofVec2f headOfBit = start + inc * checkOtherBitMultiplier;
-                            ofVec2f endPrev = streamBitList[i - 1].pos + streamBitList[i - 1].slope * 0.5;
-                            float angleDiffPrev = abs(myPlayer.myShip.angle - streamBitList[i - 1].angle);
-                            
-                            if (angleDiffPrev > 180) {
-                                angleDiffPrev = 360 - angleDiffPrev;
+                        
+                        if (otherPoint.y >= start.y + inc.y && myPlayer.myShip.pos.y < start.y + inc.y) {
+                            ofVec2f diff, refPoint, dest;
+                            if (myPlayer.myShip.rotPoint == -1) {
+                                diff = myPlayer.pos - myPlayer.myShip.pointFront;
+                                refPoint = myPlayer.myShip.pointRear;
+                                dest = refPoint + diff;
+                            } else if (myPlayer.myShip.rotPoint == 1) {
+                                diff = myPlayer.pos - myPlayer.myShip.pointRear;
+                                refPoint = myPlayer.myShip.pointFront;
+                                dest = refPoint + diff;
                             }
-                            
-                            // Make sure the prev Bit is close enough too.
-                            if (angleDiffPrev <= closeEnough && myPlayer.pos.x < headOfBit.x && abs(start.x - endPrev.x) < otherBitProximity) {
-                                myPlayer.closeEnough = true;
+                            //myPlayer.pos = otherPoint + diff;
+                            //cout<<otherPoint<<" "<<myPlayer.pos<<endl;
+                            //myPlayer.myShip.rotPoint *= -1;
+                            //updateGame = false;
+                            //myPlayer.pos.y -= 200;
+                        }
+                    } // End delete
+                    
+                    // Keep player on top of stream, if not underneath stream.
+                    if (myPlayer.pos.y >= start.y + inc.y * j - diff
+                        && myPlayer.myShip.pos.y <= start.y + inc.y * j + streamBitList[i].tall * 0.5) {
+                        myPlayer.pos.y = start.y + inc.y * j - diff;
+                        if (myPlayer.vel.y >= 0) { // Make sure not jumping.
+                            myPlayer.onStream = true;
+                            myPlayer.currentStream = streamBitList[i].whichStream;
+                        }
+                        
+                        /*
+                         Player must align the board to the stream to surf at full speed. Check this by comparing the board's angle to the stream's. However sometimes the player may be coming off a sharp change in angle and not be able to adjust quickly enough. So we take into account the previous and next angles, within a limited region.
+                         */
+                        // FIND ME, TUNE ME, TUNE ME SO MUCH.
+                        // Check the angle and adjust speed accordingly.
+                        int closeEnough = 15; // How close the two angles have to be.
+                        int otherBitProximity = iScaler; // How close the other Bit's end has to be.
+                        int checkOtherBitMultiplier = otherBitProximity; // How many intervals of the current bit check against the other Bits.
+                        float angleDiff = abs(myPlayer.myShip.angle - streamBitList[i].angle);
+                        
+                        if (angleDiff > 180) {
+                            angleDiff = 360 - angleDiff;
+                        }
+                        
+                        // Align to the stream.
+                        if (!myPlayer.myShip.bTiltUpward && !myPlayer.myShip.bTiltDownward) {
+                            float thisVel;
+                            if (streamBitList[i].angle < 180) {
+                                thisVel = 1;
+                            } else {
+                                thisVel = -1;
+                            }
+                            if (myPlayer.myShip.angle < streamBitList[i].angle) {
+                                myPlayer.myShip.angle += thisVel * myPlayer.myShip.rotPoint;
+                            } else if (myPlayer.myShip.angle > streamBitList[i].angle) {
+                                myPlayer.myShip.angle -= thisVel * myPlayer.myShip.rotPoint;
+                            }
+                            if (angleDiff < thisVel) {
+                                myPlayer.myShip.angle = streamBitList[i].angle;
                             }
                         }
-                        // Upcoming angle.
-                        if (i < streamBitList.size() - 1) {
-                            
-                            ofVec2f tailOfBit = end - inc * checkOtherBitMultiplier;
-                            ofVec2f startNext = streamBitList[i + 1].pos - streamBitList[i + 1].slope * 0.5;
-                            float angleDiffNext = abs(myPlayer.myShip.angle - streamBitList[i + 1].angle);
-                            
-                            if (angleDiffNext > 180) {
-                                angleDiffNext = 360 - angleDiffNext;
+                        
+                        if (angleDiff <= closeEnough) {
+                            myPlayer.closeEnough = true;
+                        }
+                        
+                        // If not close enough, check the previous and next angles if they exist.
+                        else {
+                            // Autorotate if leaning too far. Find me
+                            //myPlayer.myShip.angle += myPlayer.myShip.rotPoint * 0.5;
+                            // Previous angle.
+                            if (i > 0) {
+                                
+                                ofVec2f headOfBit = start + inc * checkOtherBitMultiplier;
+                                ofVec2f endPrev = streamBitList[i - 1].pos + streamBitList[i - 1].slope * 0.5;
+                                float angleDiffPrev = abs(myPlayer.myShip.angle - streamBitList[i - 1].angle);
+                                
+                                if (angleDiffPrev > 180) {
+                                    angleDiffPrev = 360 - angleDiffPrev;
+                                }
+                                
+                                // Make sure the prev Bit is close enough too.
+                                if (angleDiffPrev <= closeEnough && myPlayer.pos.x < headOfBit.x && abs(start.x - endPrev.x) < otherBitProximity) {
+                                    myPlayer.closeEnough = true;
+                                }
                             }
-                            
-                            // Make sure the next Bit is close enough too.
-                            if (angleDiffNext <= closeEnough && myPlayer.pos.x > tailOfBit.x && abs(startNext.x - end.x) < otherBitProximity) {
-                                myPlayer.closeEnough = true;
+                            // Upcoming angle.
+                            if (i < streamBitList.size() - 1) {
+                                
+                                ofVec2f tailOfBit = end - inc * checkOtherBitMultiplier;
+                                ofVec2f startNext = streamBitList[i + 1].pos - streamBitList[i + 1].slope * 0.5;
+                                float angleDiffNext = abs(myPlayer.myShip.angle - streamBitList[i + 1].angle);
+                                
+                                if (angleDiffNext > 180) {
+                                    angleDiffNext = 360 - angleDiffNext;
+                                }
+                                
+                                // Make sure the next Bit is close enough too.
+                                if (angleDiffNext <= closeEnough && myPlayer.pos.x > tailOfBit.x && abs(startNext.x - end.x) < otherBitProximity) {
+                                    myPlayer.closeEnough = true;
+                                }
                             }
                         }
                     }
-                }
-                // Bonk off bottom of stream, if not above stream and not in stream.
-                if (myPlayer.pos.y - myPlayer.tall * 0.5 <= start.y + inc.y * j + streamBitList[i].tall * 0.5
-                    && myPlayer.pos.y >= start.y + inc.y * j - streamBitList[i].tall * 0.5
-                    && !myPlayer.onStream) {
-                    myPlayer.pos.y = start.y + inc.y * j + streamBitList[i].tall * 0.5 + myPlayer.tall * 0.5;
-                    if (myPlayer.vel.y < 0) {
-                        myPlayer.vel.y = 0;
+                    // Bonk off bottom of stream, if not above stream and not in stream.
+                    if (myPlayer.pos.y - myPlayer.tall * 0.5 <= start.y + inc.y * j + streamBitList[i].tall * 0.5
+                        && myPlayer.pos.y >= start.y + inc.y * j - streamBitList[i].tall * 0.5
+                        && !myPlayer.onStream) {
+                        myPlayer.pos.y = start.y + inc.y * j + streamBitList[i].tall * 0.5 + myPlayer.tall * 0.5;
+                        if (myPlayer.vel.y < 0) {
+                            myPlayer.vel.y = 0;
+                        }
                     }
                 }
             }
@@ -1850,17 +1896,6 @@ void testApp::fDrawTutorialSigns() {
     // 1
     
     upperLeft = ofVec2f(fMeasureLength, myCam.getPosition().y - iScaler * 10);
-    wide = sign1.getWidth() * 0.75;
-    tall = sign1.getHeight() * 0.75;
-    
-    ofSetColor(0);
-    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
-    ofSetColor(255);
-    sign1.draw(upperLeft, wide, tall);
-    
-    // 2
-    
-    upperLeft = ofVec2f(fMeasureLength * 3, myCam.getPosition().y - iScaler * 10);
     wide = sign2.getWidth() * 0.75;
     tall = sign2.getHeight() * 0.75;
     
@@ -1869,6 +1904,29 @@ void testApp::fDrawTutorialSigns() {
     ofSetColor(255);
     sign2.draw(upperLeft, wide, tall);
     
+    // 2a
+    
+    upperLeft = ofVec2f(fMeasureLength * 3, myCam.getPosition().y - iScaler * 10);
+    wide = sign1a.getWidth() * 0.75;
+    tall = sign1a.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign1a.draw(upperLeft, wide, tall);
+    
+    // 2b
+    
+    upperLeft = ofVec2f(fMeasureLength * 6, myCam.getPosition().y - iScaler * 10);
+    wide = sign1b.getWidth() * 0.75;
+    tall = sign1b.getHeight() * 0.75;
+    
+    ofSetColor(0);
+    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+    ofSetColor(255);
+    sign1b.draw(upperLeft, wide, tall);
+    
+    /*
     // 3
     
     upperLeft = ofVec2f(fMeasureLength * 5, myCam.getPosition().y - iScaler * 15);
@@ -1901,13 +1959,14 @@ void testApp::fDrawTutorialSigns() {
     ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
     ofSetColor(255);
     sign5.draw(upperLeft, wide, tall);
-    
+    */
     
     // Title card and copyright (and camera).
     ofPushMatrix();{
         
         ofTranslate(myCam.getPosition().x - iScaler * 23, myCam.getPosition().y + iScaler * 12);
         
+        /*
         ofVec2f cameraPos = ofVec2f(iScaler * 44, -iScaler * 11);
         
         ofSetColor(0);
@@ -1915,6 +1974,7 @@ void testApp::fDrawTutorialSigns() {
         ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.1, cameraPos.y, iScaler * 43.75, 0);
         ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.25, cameraPos.y, iScaler * 44.5, iScaler * 2);
         ofSetLineWidth(1);
+        */
         
         ofSetColor(0);
         ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 44 + margin * 2, iScaler * 3.25 + margin * 2);
@@ -1933,7 +1993,7 @@ void testApp::fDrawTutorialSigns() {
             helveticaSmall.drawString("Copyright (c) 2014 John Matthew Griffis", iScaler * 0.1, 0);
         }ofPopMatrix();
         
-        ofPushMatrix();{
+        /*ofPushMatrix();{
             ofSetColor(0);
             // Have to offset the translation for this calculation.
             ofVec2f player = myPlayer.pos - ofVec2f(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
@@ -1944,7 +2004,7 @@ void testApp::fDrawTutorialSigns() {
             ofRotate(ofRadToDeg(tmpAngle));
             ofSetColor(255);
             camera.draw(0, 0, camera.getWidth() / 2.5, camera.getHeight() / 2.5);
-        }ofPopMatrix();
+        }ofPopMatrix();*/
     }ofPopMatrix();
     
     // Individual track cards.

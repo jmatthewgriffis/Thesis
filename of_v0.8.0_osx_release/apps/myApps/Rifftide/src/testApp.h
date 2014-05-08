@@ -109,7 +109,7 @@ public:
     bool bIsDebugging;
     bool bHighlightNote;
     bool bShiftIsPressed;
-    bool bUsingController;
+    bool bUsingController, bUsingControllerPrev;
     bool bCamZoomedIn;
     bool bLeftStickVertical; // Dumb hack for menu selection, find better way if possible.
     bool bBassOnly, bTrebleOnly; // Use to disable parts of a track.
@@ -121,7 +121,7 @@ public:
     
     ofEasyCam myCam;
     
-    ofImage sign1, sign2, sign3, sign4, sign5, camera, upArrow;
+    ofImage sign1a, sign1b, sign2, sign3, sign4, sign5, camera, upArrow;
     
     // New classes:
     

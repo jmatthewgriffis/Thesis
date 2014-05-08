@@ -255,7 +255,7 @@ void Object::update( int _gameState, ofVec2f _pos ) {
     bIsRecorded = bIsTouched = false;
 }
 
-void Object::draw() {
+void Object::draw( bool _onStream, int _playerStream ) {
     
     // Draw guidelines as needed to indicate A above the staff and C below.
     ofSetColor( 0 );
@@ -296,7 +296,13 @@ void Object::draw() {
         ofEllipse( pos, wide + fHaloThickness, tall + fHaloThickness );
     }
     // Draw the note.
-    ofSetColor( c );
+    float alpha;
+    if (!_onStream || (_onStream && whichStream == _playerStream)) {
+        alpha = 255;
+    } else {
+        alpha = 100;
+    }
+    ofSetColor( c, alpha );
     if (bJiggleVert) {
         ofSetRectMode(OF_RECTMODE_CENTER);
         ofRect(pos, wideStretch, tallStretch);

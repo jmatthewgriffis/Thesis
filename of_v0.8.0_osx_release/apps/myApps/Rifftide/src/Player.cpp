@@ -163,9 +163,9 @@ void Player::update( int _gameState, string _OnThisNote ) {
     if (gameState >= 7 && bModeSurf) {
         if (myShip.onStream && vel.y >= 0) {
             jumpCounter = 0;
-        } /*else if (!myShip.onStream && jumpCounter < 1) {
+        } else if (!myShip.onStream && jumpCounter < 1) {
             jumpCounter = 1;
-        }*/
+        }
     }
     
     // Prevent going off the true left and bottom edges.
@@ -276,7 +276,7 @@ void Player::update( int _gameState, string _OnThisNote ) {
         }
         
         // Limit jumping.
-        if (bModeSurf && gameState >= 7 && jumpCounter >= 1) {
+        if (bModeSurf && gameState >= 7 && jumpCounter >= 2) {
             allowJump = false;
         }
         

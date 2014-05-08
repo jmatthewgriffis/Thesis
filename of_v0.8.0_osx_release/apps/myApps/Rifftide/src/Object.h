@@ -19,7 +19,7 @@ public:
     
     void setup( int _iScaler, vector< float > _staffPosList, string _whichNote, int _whichStream, int _age );
     void update( int _gameState, ofVec2f _pos );
-    void draw();
+    void draw( bool _onStream, int _playerStream );
     
     string whichNote;
     int whichStream;
