@@ -34,7 +34,7 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
     fImgHeightBass = fImgHeightTreble / 2;
     rotOffset = fImgHeightBass;
     
-    if (_jumpCounter < 1) {
+    if (_jumpCounter < 2) {
         bHasExtraJump = true;
         if (jumpAlpha == 255) {
             jumpAngle -= 10;
@@ -106,7 +106,7 @@ void Ship::update(ofVec2f _pos, float _playerHeight, bool _allowControl, int _ju
         if (onStream) {
             airMultiplier = 1;
         } else {
-            airMultiplier = 2;
+            airMultiplier = 2.5;
         }
         if (bTiltUpward) {
             angle -= angleVel * airMultiplier;
@@ -188,13 +188,13 @@ void Ship::draw() {
                 trebleClef.draw(0, 0, (fImgHeightTreble * trebleClef.getWidth() / trebleClef.getHeight()), fImgHeightTreble);
                 
                 // Draw velocity lines for strong grav.
-                if (strongGrav && !onStream) { // scale to iScaler later?
+                /*if (strongGrav && !onStream) { // scale to iScaler later?
                     ofSetColor(0);
                     ofLine(-25, -30, 5, -60);
                     ofLine(-15, -30, 7, -60);
                     ofLine(25, -30, 8, -60);
                     ofLine(35, -30, 10, -60);
-                }
+                }*/
             }ofPopMatrix();
             
             ofPushMatrix();{
