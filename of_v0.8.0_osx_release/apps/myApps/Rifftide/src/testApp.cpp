@@ -601,7 +601,7 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
     //-------------------------------------------
     
     // Left stick--left and right
-    if (e.axis == 2) {
+    if (e.axis == 2 && gameState < 7) {
         if ( gameState == 6 ) {
             if ( abs( e.value ) > fStickBuffer ) {
                 if ( e.value < 0 ) {
@@ -629,6 +629,28 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
                 myPlayer.myShip.bTiltUpward = false;
                 myPlayer.myShip.bTiltDownward = false;
             }
+        }
+    }
+    
+    //-------------------------------------------
+    
+    // Left trigger
+
+    if (e.axis == 0 && gameState > 6) {
+        if ( e.value > fStickBuffer * 2 ) {
+            myPlayer.myShip.bTiltUpward = true;
+        } else {
+            myPlayer.myShip.bTiltUpward = false;
+        }
+    }
+    
+    // Right trigger
+    
+    if (e.axis == 1 && gameState > 6) {
+        if ( e.value > fStickBuffer * 2 ) {
+            myPlayer.myShip.bTiltDownward = true;
+        } else {
+            myPlayer.myShip.bTiltDownward = false;
         }
     }
     
