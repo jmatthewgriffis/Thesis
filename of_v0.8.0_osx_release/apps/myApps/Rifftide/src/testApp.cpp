@@ -125,17 +125,17 @@ bool my_compare( const Object &a, const Object &b ) {
 void testApp::update(){
     
     { // Repeated from setup. Allow controller to be switched on/off during play. Thanks to Michael Kahane for leading the way on this.
-        if ( bUsingController == false ) {
-            //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
-            if(ofxGamepadHandler::get()->getNumPads()>0){
+        //CHECK IF THERE EVEN IS A GAMEPAD CONNECTED
+        if(ofxGamepadHandler::get()->getNumPads()>0){
+            if ( bUsingController == false ) {
                 bUsingController = true;
                 ofxGamepad* pad = ofxGamepadHandler::get()->getGamepad(0);
                 ofAddListener(pad->onAxisChanged, this, &testApp::axisChanged);
                 ofAddListener(pad->onButtonPressed, this, &testApp::buttonPressed);
                 ofAddListener(pad->onButtonReleased, this, &testApp::buttonReleased);
-            } else {
-                bUsingController = false;
             }
+        } else {
+            bUsingController = false;
         }
     } // End ofxGamepad stuff
     
@@ -635,7 +635,7 @@ void testApp::axisChanged(ofxGamepadAxisEvent& e) {
     //-------------------------------------------
     
     // Left trigger
-
+    
     if (e.axis == 0 && gameState > 6) {
         if ( e.value > fStickBuffer * 2 ) {
             myPlayer.myShip.bTiltUpward = true;
