@@ -446,13 +446,13 @@ void testApp::fLoadPrototype() {
         // Solo--gym
         bCamZoomedIn = true;
         
-    } else if (gameState == 7 || gameState == 8) {
+    } else if (gameState >= 7) {
         // Surfin' USA
         bCamZoomedIn = true; // find me
         
-        if (gameState == 7) {
+        if (gameState != 8) {
             myPlayer.vel.y = -iScaler * 0.75;
-        } else if (gameState == 8) {
+        } else {
             if (bFromTheSky) {
                 myPlayer.pos.y = myCam.getPosition().y - ofGetHeight() * 0.5;
                 //if (myPlayer.currentStream == 7) { // Find me
@@ -499,7 +499,7 @@ void testApp::fApplyGravity() {
             fGravFactor = fBaseGrav;
         } else if ( gameState == 4 ) {
             fGravFactor = fBaseGrav * 0.65;
-        } else if ( gameState == 7 || gameState == 8 ) {
+        } else if ( gameState >= 7 ) {
             fGravFactor = fBaseGrav * 1.25;
         }
         
@@ -509,7 +509,7 @@ void testApp::fApplyGravity() {
             fGravity = fGravFactor * 3;
         } else if ( gameState == 4 ) {
             fGravity = fGravFactor * 0.4;
-        } else if ( gameState == 7 || gameState == 8 ) {
+        } else if ( gameState >= 7 ) {
             if (myPlayer.myShip.strongGrav) {
                 fGravity = fGravFactor * 3.5;
             } else {

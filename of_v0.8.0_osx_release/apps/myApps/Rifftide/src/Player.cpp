@@ -103,7 +103,7 @@ void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingCo
         bCanMakeNotes = true;
         bIsOnlyOneRoom = true;
         
-    } else if (gameState == 7 || gameState == 8) { // Surfin' USA
+    } else if (gameState >= 7) { // Surfin' USA
         bModeSurf = true;
         bHasShip = true;
         bAutoplayBass = true;
