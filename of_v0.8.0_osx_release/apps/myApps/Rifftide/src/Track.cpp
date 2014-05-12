@@ -262,7 +262,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
     
     else if (gameState == 9) { // Start new jam 2
         
-        iNumMeasures = 12;
+        iNumMeasures = 16;
         
         m1Bass = iScaler * 20 - fMeasureLength;
         m1Treble = m1Bass /*+ iScaler * 4*/;
@@ -300,6 +300,23 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 7, myStream, -1);
                 addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 8, myStream, -1);
             }
+            if (i == 13) {
+                addObject("a3", (fMeasureLength * i) + m1Treble + spacer * 0, myStream, -1);
+                addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 4, myStream, -1);
+                addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 6, myStream, -1);
+                addObject("a3", (fMeasureLength * i) + m1Treble + spacer * 7, myStream, -1);
+            }
+            if (i == 14) {
+                addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("a3", (fMeasureLength * i) + m1Treble + spacer * 4, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 6, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 7, myStream, -1);
+            }
+            if (i == 16) {
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 0, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+            }
         }
         
         // Bass
@@ -324,6 +341,36 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("a1#", (fMeasureLength * i) + m1Bass + spacer * 5, myStream, -1);
                 addObject("d2#", (fMeasureLength * i) + m1Bass + spacer * 6, myStream, -1);
                 addObject("a1#", (fMeasureLength * i) + m1Bass + spacer * 7, myStream, -1);
+            }
+            if (i == 13 || i == 14) {
+                addObject("f1", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("f2", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+                addObject("f1", (fMeasureLength * i) + m1Bass + spacer * 4, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 5, myStream, -1);
+                addObject("f2", (fMeasureLength * i) + m1Bass + spacer * 6, myStream, -1);
+                addObject("c2", (fMeasureLength * i) + m1Bass + spacer * 7, myStream, -1);
+            }
+            if (i == 15) {
+                addObject("g1#", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("g2#", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+                addObject("g1#", (fMeasureLength * i) + m1Bass + spacer * 4, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer * 5, myStream, -1);
+                addObject("g2#", (fMeasureLength * i) + m1Bass + spacer * 6, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer * 7, myStream, -1);
+            }
+            if (i == 16) {
+                addObject("a1#", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("f2", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("a2#", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("f2", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+                addObject("a1#", (fMeasureLength * i) + m1Bass + spacer * 4, myStream, -1);
+                addObject("f2", (fMeasureLength * i) + m1Bass + spacer * 5, myStream, -1);
+                addObject("a2#", (fMeasureLength * i) + m1Bass + spacer * 6, myStream, -1);
+                addObject("f2", (fMeasureLength * i) + m1Bass + spacer * 7, myStream, -1);
             }
         }
         

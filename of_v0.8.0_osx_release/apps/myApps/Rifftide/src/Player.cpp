@@ -123,7 +123,7 @@ void Player::fSetMaxSpeed() {
     if (gameState == 8) {
         maxVel = float( iScaler / 3.4483 ) * 0.75; // Yields 90bpm.
     } else {
-        maxVel = float( iScaler / 3.4483 ); // Yields 120bpm.
+        maxVel = float( iScaler / 3.4483 ) * 1.5; // Yields 120bpm.
     }
 }
 
