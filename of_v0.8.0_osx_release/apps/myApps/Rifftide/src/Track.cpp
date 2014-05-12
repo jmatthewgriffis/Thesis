@@ -313,9 +313,13 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 6, myStream, -1);
                 addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 7, myStream, -1);
             }
+            if (i == 15) {
+                addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 5, myStream, -1);
+            }
             if (i == 16) {
                 addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 0, myStream, -1);
-                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
             }
             if (i == 17 || i == 21) {
                 addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 0, myStream, -1);
@@ -335,6 +339,12 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 4, myStream, -1);
                 addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 6, myStream, -1);
                 addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 7, myStream, -1);
+            }
+            if (i == 20 || i == 24) {
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 4, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 5, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 6, myStream, -1);
             }
             if (i == 25) {
                 addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 0, myStream, -1);

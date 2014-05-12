@@ -177,7 +177,7 @@ void testApp::update(){
         if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
     }
     
-    if (gameState != 9)fApplyGravity(); // Find me
+    /*if (gameState != 9)*/fApplyGravity(); // Find me
     
     // Run collision detection.
     playerCollidesWithGroundOrSky();
@@ -448,7 +448,7 @@ void testApp::fLoadPrototype() {
         
     } else if (gameState >= 7) {
         // Surfin' USA
-        bCamZoomedIn = false; // find me
+        bCamZoomedIn = true; // find me
         
         if (gameState != 8) {
             myPlayer.vel.y = -iScaler * 0.75;
@@ -1515,7 +1515,7 @@ void testApp::playerCollidesWithObject() {
         }
         
         // Sound the note in proximity.
-        if ( gameState < 3 || gameState == 9 ) { // Find me
+        if ( gameState < 3 ) { // Find me
             if ( playerRight >= objectLeft && playerLeft <= objectRight) {
                 objectList[ i ].bIsTouched = true;
             }
