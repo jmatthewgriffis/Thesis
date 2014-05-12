@@ -2036,7 +2036,7 @@ void testApp::fDrawTutorialSigns() {
         ofRect(-margin, -iScaler * 2.75 - margin, iScaler * 44, iScaler * 3.25);
         ofSetColor(0);
         helveticaLarge.drawString("RIFFTIDE", 0, 0);
-        helveticaMed.drawString("a musical exploration game by J. MATTHEW GRIFFIS.\ncreator/composer: J.M.G. || feat. guest explorer: Y.O.U.", iScaler * 13.75, -iScaler * 1.35);
+        helveticaMed.drawString("a musical exploration game by J. MATTHEW GRIFFIS.\ncreated and composed by J.M.G. | explored by Y.O.U.", iScaler * 13.75, -iScaler * 1.35);
         ofPushMatrix();{
             ofTranslate(iScaler * 33, iScaler * 2);
             ofSetColor(0);
