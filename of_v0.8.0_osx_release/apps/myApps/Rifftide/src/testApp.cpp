@@ -342,6 +342,25 @@ void testApp::draw(){
         fDrawDebugUI();
         fDrawGround();
         
+        // Draw the progress bar.
+        if (gameState > 6 && gameState != 8) {
+            ofPushMatrix();{
+                ofSetLineWidth(3);
+                
+                ofTranslate(myCam.getPosition().x, myCam.getPosition().y + iScaler * 12);
+                float halfLine = ofGetWidth() / 3;
+                ofLine(-halfLine, 0, halfLine, 0);
+                float length = iScaler * 0.5;
+                float xPos = ofMap(myPlayer.pos.x, iScaler * 4, fMeasureLength * myTrack.iNumMeasures, -halfLine, halfLine);
+                if (xPos > halfLine) {
+                    xPos = halfLine;
+                }
+                ofLine(xPos, length, xPos, -length);
+                
+                ofSetLineWidth(1);
+            }ofPopMatrix();
+        }
+        
         if ( gameState == 1 ) {
             myTutorial.draw( helvetica );
         } else if ( gameState == 2 ) {
