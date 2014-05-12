@@ -258,6 +258,8 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             }
             
         }
+        
+        iNumMeasures = iNumMeasures - 1; // Hack to allow the finished jam position to register.
     } // End jam 1
     
     else if (gameState == 9) { // Start new jam 2

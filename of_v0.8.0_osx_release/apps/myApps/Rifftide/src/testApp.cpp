@@ -237,6 +237,12 @@ void testApp::update(){
         tmp = myPlayer.pos.y;
     }
     myPlayer.update( gameState, fReturnNote(tmp) );
+    // Check if finished jam.
+    if (gameState > 6 && gameState != 8) {
+        if (myPlayer.pos.x > fMeasureLength * myTrack.iNumMeasures) {
+            myPlayer.finishedJam = true;
+        }
+    }
     
     if ( bIsSecondPlayer ) {
         float tmp2;
@@ -450,20 +456,35 @@ void testApp::fLoadPrototype() {
         // Surfin' USA
         bCamZoomedIn = true; // find me
         
-        if (gameState != 8) {
-            myPlayer.vel.y = -iScaler * 0.75;
-        } else {
+        if (gameState == 7) {
+            myPlayer.vel.y = -iScaler * 0.7;
+        } else if (gameState >= 9) {
+            myPlayer.vel.y = -iScaler * 0.45;
+        } else if (gameState == 8) {
             if (bFromTheSky) {
                 myPlayer.pos.y = myCam.getPosition().y - ofGetHeight() * 0.5;
-                //if (myPlayer.currentStream == 7) { // Find me
-                myPlayer.pos.x = iScaler * 30;
-                //}
+                if (myPlayer.currentJam == 7) { // Find me
+                    if (myPlayer.finishedJam) {
+                        myPlayer.pos.x = fMeasureLength * 11.5;
+                    } else {
+                        myPlayer.pos.x = fMeasureLength * 9.5;
+                    }
+                }
+                if (myPlayer.currentJam == 9) { // Find me
+                    if (myPlayer.finishedJam) {
+                        myPlayer.pos.x = fMeasureLength * 2.25;
+                    } else {
+                        myPlayer.pos.x = fMeasureLength * 1;
+                    }
+                }
             } else {
                 myPlayer.vel.y = -iScaler * 0.4;
                 myPlayer.myShip.angle = 0;
             }
-            
+            myPlayer.currentJam = gameState;
         }
+        myPlayer.currentJam = gameState;
+        myPlayer.finishedJam = false;
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
