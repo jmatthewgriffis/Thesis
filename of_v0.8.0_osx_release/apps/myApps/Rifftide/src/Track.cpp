@@ -265,17 +265,41 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         iNumMeasures = 12;
         
         m1Bass = iScaler * 20 - fMeasureLength;
-        m1Treble = m1Bass + iScaler * 4;
+        m1Treble = m1Bass /*+ iScaler * 4*/;
         spacer = fMeasureLength / 8;
         
         // Treble
         myStream = 1;
-        for (int i = 1; i < iNumMeasures; i++) {
-            addObject("g4#", (fMeasureLength * i) + m1Treble, myStream, -1);
-            addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
-            addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
-            addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
-            addObject("g4#", (fMeasureLength * i) + m1Treble + iScaler * 24.4, myStream, -1);
+        for (int i = 1; i < iNumMeasures + 1; i++) {
+            if (i == 1 || i == 9) {
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 6, myStream, -1);
+            }
+            if (i == 2 || i == 6 || i == 10) {
+                addObject("d4", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("d4#", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("d4", (fMeasureLength * i) + m1Treble + spacer * 4, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 5, myStream, -1);
+            }
+            if (i == 3 || i == 7 || i == 11) {
+                addObject("a2#", (fMeasureLength * i) + m1Treble, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("c4", (fMeasureLength * i) + m1Treble + spacer * 6, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 7, myStream, -1);
+            }
+            if (i == 4 || i == 8 || i == 12) {
+                addObject("g3#", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 5, myStream, -1);
+                addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 7, myStream, -1);
+            }
+            if (i == 5) {
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 5, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 7, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 8, myStream, -1);
+            }
         }
         
         // Bass

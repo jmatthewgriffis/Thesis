@@ -177,7 +177,7 @@ void testApp::update(){
         if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
     }
     
-    fApplyGravity();
+    if (gameState != 9)fApplyGravity(); // Find me
     
     // Run collision detection.
     playerCollidesWithGroundOrSky();
@@ -1245,6 +1245,9 @@ float testApp::checkPrevStreamAngle(ofVec2f _currentNotePos) {
 void testApp::updateStream() {
     // Stream is generated dynamically based on the notes onscreen.
     float closeEnoughToTouch = powf(fMeasureLength * 0.33, 2);
+    if (gameState == 9) {
+        closeEnoughToTouch = powf(fMeasureLength * 0.5, 2);
+    }
     
     for (int i = 0; i < objectList.size(); i++) {
         
@@ -1512,7 +1515,7 @@ void testApp::playerCollidesWithObject() {
         }
         
         // Sound the note in proximity.
-        if ( gameState < 3 ) {
+        if ( gameState < 3 || gameState == 9 ) { // Find me
             if ( playerRight >= objectLeft && playerLeft <= objectRight) {
                 objectList[ i ].bIsTouched = true;
             }
