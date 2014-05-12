@@ -177,7 +177,7 @@ void testApp::update(){
         if ( getThisOne > objectList.size() - 1 ) getThisOne = 0;
     }
     
-    fApplyGravity();
+    /*if (gameState != 9)*/fApplyGravity(); // Find me
     
     // Run collision detection.
     playerCollidesWithGroundOrSky();
@@ -446,13 +446,13 @@ void testApp::fLoadPrototype() {
         // Solo--gym
         bCamZoomedIn = true;
         
-    } else if (gameState == 7 || gameState == 8) {
+    } else if (gameState >= 7) {
         // Surfin' USA
         bCamZoomedIn = true; // find me
         
-        if (gameState == 7) {
+        if (gameState != 8) {
             myPlayer.vel.y = -iScaler * 0.75;
-        } else if (gameState == 8) {
+        } else {
             if (bFromTheSky) {
                 myPlayer.pos.y = myCam.getPosition().y - ofGetHeight() * 0.5;
                 //if (myPlayer.currentStream == 7) { // Find me
@@ -499,7 +499,7 @@ void testApp::fApplyGravity() {
             fGravFactor = fBaseGrav;
         } else if ( gameState == 4 ) {
             fGravFactor = fBaseGrav * 0.65;
-        } else if ( gameState == 7 || gameState == 8 ) {
+        } else if ( gameState >= 7 ) {
             fGravFactor = fBaseGrav * 1.25;
         }
         
@@ -509,7 +509,7 @@ void testApp::fApplyGravity() {
             fGravity = fGravFactor * 3;
         } else if ( gameState == 4 ) {
             fGravity = fGravFactor * 0.4;
-        } else if ( gameState == 7 || gameState == 8 ) {
+        } else if ( gameState >= 7 ) {
             if (myPlayer.myShip.strongGrav) {
                 fGravity = fGravFactor * 3.5;
             } else {
@@ -1245,6 +1245,9 @@ float testApp::checkPrevStreamAngle(ofVec2f _currentNotePos) {
 void testApp::updateStream() {
     // Stream is generated dynamically based on the notes onscreen.
     float closeEnoughToTouch = powf(fMeasureLength * 0.33, 2);
+    if (gameState == 9) {
+        closeEnoughToTouch = powf(fMeasureLength * 0.5, 2);
+    }
     
     for (int i = 0; i < objectList.size(); i++) {
         
@@ -1512,7 +1515,7 @@ void testApp::playerCollidesWithObject() {
         }
         
         // Sound the note in proximity.
-        if ( gameState < 3 ) {
+        if ( gameState < 3 ) { // Find me
             if ( playerRight >= objectLeft && playerLeft <= objectRight) {
                 objectList[ i ].bIsTouched = true;
             }
