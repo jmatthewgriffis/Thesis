@@ -57,11 +57,11 @@ void Player::setup( int _gameState, int _frameRate, int _iScaler, bool _bUsingCo
     //angleVel = float( iScaler / 1.6667 );
     angleVel = 15;
     fNoteOffsetH = 0;
-    currentStream = -1;
+    currentStream = currentJam = -1;
     inStreamTimer = invisibleTimer = 0;
     jumpCounter = 0;
     
-    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = noteBoost = false;
+    up = left = down = right = onSurface = onStream = record = replay = bIsActing = bIsRecording = bIsReplaying = bIsEmpty = bIsFull = bModePlatformer = bModeSurf = bModeFlight = bIsOnlyOneRoom = bCanMakeNotes = bAutoplayBass = closeEnough = bGrabHat = bFlyingHat = bNoteFlyingHatAngle = onStreamPrev = noteBoost = finishedJam = false;
     allowMove = true;
     allowControl = true;
     allowJump = allowNoteBoost = bAllowRecord = bAllowReplay = drawPlayer = true;
@@ -658,6 +658,7 @@ void Player::fDrawCharacter() {
      else str = "false";
      ofSetColor(0);
      //ofDrawBitmapString(ofToString(myShip.angle), pos.x + 100, pos.y - 50);
+    //ofDrawBitmapString(ofToString(finishedJam), pos.x + 100, pos.y - 50);
     
     tall = wide * 1.35;
     bGrabHat = false;

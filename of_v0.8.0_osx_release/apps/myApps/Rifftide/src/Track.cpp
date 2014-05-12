@@ -258,6 +258,8 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             }
             
         }
+        
+        iNumMeasures = iNumMeasures - 1; // Hack to allow the finished jam position to register.
     } // End jam 1
     
     else if (gameState == 9) { // Start new jam 2
@@ -501,7 +503,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         iNumMeasures = 12;
     } // End old jam 2.
     
-    else if (gameState == 8) { // Start tutorial
+    else if (gameState == 8) { // Start tutorial / level select
         
         m1Bass = iScaler * 20 - fMeasureLength;
         m1Treble = m1Bass + iScaler * 4;
@@ -515,8 +517,8 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             // treble
             
             // go to jam 1
-            myStream = 9;
-            if (i == 2) {
+            myStream = 7;
+            if (i == 11) {
                 addObject("g4#", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
                 addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
@@ -531,28 +533,93 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             }
             
             // go to jam 2
-            myStream = 7;
-            if (i == 4) {
-                addObject("g4#", (fMeasureLength * i) + m1Treble, myStream, -1);
-                addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
-                addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
-                addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
-                addObject("g4#", (fMeasureLength * i) + m1Treble + iScaler * 24.4, myStream, -1);
-                
-                /*float nuSpacer = iScaler * 3;
-                 addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer, myStream, -1);
-                 addObject("g4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 2, myStream, -1);
-                 addObject("a4#", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 3, myStream, -1);
-                 addObject("b4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 4, myStream, -1);*/
+            myStream = 9;
+            if (i == 2) {
+                addObject("d4", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
+                addObject("d4#", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("d4", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("a3#", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
             }
             
             myStream = 1;
-            if (i <= 4) {
+            if (i == 1 || i == 5) {
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("b2", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3.5, myStream, -1);
+            }
+            if (i == 2) {
+                addObject("b2", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 2.5, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
-            } else if (i == 5 || i == 6) {
+            }
+            if (i == 3) {
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 0, myStream, -1);
+                addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
+                addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3.5, myStream, -1);
+            }
+            if (i == 4) {
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 0, myStream, -1);
+                addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
+                addObject("b2", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("b2", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+            }
+            if (i == 6) {
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 2.5, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 3.5, myStream, -1);
+            }
+            if (i == 7) {
+                addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
+                addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("b2", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3.5, myStream, -1);
+            }
+            if (i == 8) {
+                addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
+                addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+            }
+            if (i == 9) {
+                addObject("d3#", (fMeasureLength * i) + m1Treble, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
+                addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 3.5, myStream, -1);
+            }
+            if (i == 10) {
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 2.5, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+            } if (i == 11 || i == 12) {
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("b2", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                if (i == 11) {
+                    addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                    addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 3.5, myStream, -1);
+                }
+            }
+            /*else if (i == 5 || i == 6) {
                 addObject("d3", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
                 addObject("f3", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
@@ -597,11 +664,11 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
-            }
+            }*/
             
             // bass
-            myStream = 0;
-            /*if (i == 1 || i == 3 || i == 7 || i == 11) {
+            /*myStream = 0;
+            if (i == 1 || i == 3 || i == 7 || i == 11) {
                 addObject("c2", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("d2", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
                 addObject("e2", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);

@@ -59,6 +59,8 @@ public:
     float fHealth, fHealthMax, fHealthLossSpeed;
     float fNoteOffsetH;
     int currentStream;
+    int currentJam;
+    bool finishedJam;
     int inStreamTimer;
     int invisibleTimer;
     int jumpCounter;
