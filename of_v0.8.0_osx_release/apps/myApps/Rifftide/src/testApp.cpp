@@ -254,6 +254,10 @@ void testApp::update(){
         myPlayer2.update( gameState, fReturnNote(tmp2) );
     }
     
+    if (gameState > 6) {
+        myTrack.update(myPlayer.pos);
+    }
+    
     // Update the notes and the stream.
     updateObjectList();
     float splashWide = objectList[0].wide;
@@ -488,6 +492,10 @@ void testApp::fLoadPrototype() {
         
         float numReps = 1;
         addObject( myTrack.setup( iScaler, fMeasureLength, gameState ), myTrack.iNumMeasures, numReps );
+        if (gameState != 8) {
+            myTrack.nowPlaying = true;
+            myTrack.pos.x = ofGetWidth();
+        }
         
     }
     
@@ -1156,6 +1164,9 @@ void testApp::updateObjectList() {
             //objectList[ i ].vol = ofMap( myPlayer2.fHealth, 0, myPlayer2.fHealthMax, 0.0, 1.0 );
         }
         
+        if ( objectList[ i ].pos.y >= objectList[ i ].staffPosList[ 14 ] ) {
+            objectList[ i ].vol = 0.25; // Reduce bass volume.
+        }
         objectList[ i ].update( gameState, myPlayer.pos );
     }
 }

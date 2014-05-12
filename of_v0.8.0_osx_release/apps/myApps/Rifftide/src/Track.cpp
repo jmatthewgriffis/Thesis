@@ -28,6 +28,9 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
     fMeasureLength = _fMeasureLength;
     gameState = _gameState;
     
+    nowPlaying = false;
+    messageTimer = 0;
+    
     //m1
     
     //riff bass
@@ -697,15 +700,55 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
     return stringList;
 }
 
+void Track::update(ofVec2f _playerPos) {
+    if (nowPlaying) {
+        
+        int speed = int(iScaler / 12.5);
+        
+        if (pos.x > _playerPos.x) {
+            
+            pos.x -= speed * 2;
+        
+        } else {
+            
+            messageTimer++;
+            int timerMax = 180;
+            
+            if (messageTimer < timerMax) {
+                pos.x = _playerPos.x;
+            } else {
+                pos.x -= speed;
+            }
+        }
+        
+        if (pos.x < _playerPos.x - ofGetWidth()) {
+            nowPlaying = false;
+        }
+    }
+}
+
 void Track::draw( ofTrueTypeFont _font, ofVec2f _pos ) {
     if (gameState != 5 && gameState < 7) {
         _font.drawString( "Finished! Press R to restart.", iScaler * 800, ofGetHeight() / 2 );
-    } else if (gameState == 7) {
-        float margin = 2;
-        ofSetColor(0);
-        ofSetRectMode(OF_RECTMODE_CORNER);
-        ofRect(_pos.x - iScaler * 6 - margin * 2, _pos.y + iScaler * 9.75 - margin, iScaler * 12.25 + margin * 4, iScaler * 1.5 + margin * 2);
-        ofSetColor(255);
-        _font.drawString("''No Shaman, That''", _pos.x - iScaler * 6, _pos.y + iScaler * 11);
+    } else if (gameState > 6 && gameState != 8) {
+        if (nowPlaying) {
+            float margin = 4;
+            ofSetColor(0);
+            ofSetRectMode(OF_RECTMODE_CORNER);
+            ofPushMatrix();{
+                ofTranslate(pos.x, _pos.y);
+                
+                if (gameState == 9) {
+                    ofRect(-iScaler * 6 - margin * 2, iScaler * 9.75 - margin, iScaler * 24.25 + margin * 4, iScaler * 1.5 + margin * 2);
+                    ofSetColor(255);
+                    _font.drawString("Now Playing: 'Nostalgic for Adventure'", -iScaler * 6, iScaler * 11);
+                }
+                if (gameState == 7) {
+                    ofRect(-iScaler * 6 - margin * 2, iScaler * 9.75 - margin, iScaler * 23 + margin * 4, iScaler * 1.5 + margin * 2);
+                    ofSetColor(255);
+                    _font.drawString("Now Playing: 'No Shaman Dancing!'", -iScaler * 6, iScaler * 11);
+                }
+            }ofPopMatrix();
+        }
     }
 }
