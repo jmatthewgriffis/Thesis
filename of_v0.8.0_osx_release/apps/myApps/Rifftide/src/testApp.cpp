@@ -1930,39 +1930,39 @@ void testApp::fDrawTutorialSigns() {
     sign1b.draw(upperLeft, wide, tall);
     
     /*
-    // 3
-    
-    upperLeft = ofVec2f(fMeasureLength * 5, myCam.getPosition().y - iScaler * 15);
-    wide = sign3.getWidth() * 0.75;
-    tall = sign3.getHeight() * 0.75;
-    
-    ofSetColor(0);
-    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
-    ofSetColor(255);
-    sign3.draw(upperLeft, wide, tall);
-    
-    // 4
-    
-    upperLeft = ofVec2f(fMeasureLength * 7, myCam.getPosition().y - iScaler * 15);
-    wide = sign4.getWidth() * 0.5;
-    tall = sign4.getHeight() * 0.5;
-    
-    ofSetColor(0);
-    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
-    ofSetColor(255);
-    sign4.draw(upperLeft, wide, tall);
-    
-    // 5
-    
-    upperLeft = ofVec2f(fMeasureLength * 9, myCam.getPosition().y - iScaler * 15);
-    wide = sign5.getWidth() * 0.75;
-    tall = sign5.getHeight() * 0.75;
-    
-    ofSetColor(0);
-    ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
-    ofSetColor(255);
-    sign5.draw(upperLeft, wide, tall);
-    */
+     // 3
+     
+     upperLeft = ofVec2f(fMeasureLength * 5, myCam.getPosition().y - iScaler * 15);
+     wide = sign3.getWidth() * 0.75;
+     tall = sign3.getHeight() * 0.75;
+     
+     ofSetColor(0);
+     ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+     ofSetColor(255);
+     sign3.draw(upperLeft, wide, tall);
+     
+     // 4
+     
+     upperLeft = ofVec2f(fMeasureLength * 7, myCam.getPosition().y - iScaler * 15);
+     wide = sign4.getWidth() * 0.5;
+     tall = sign4.getHeight() * 0.5;
+     
+     ofSetColor(0);
+     ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+     ofSetColor(255);
+     sign4.draw(upperLeft, wide, tall);
+     
+     // 5
+     
+     upperLeft = ofVec2f(fMeasureLength * 9, myCam.getPosition().y - iScaler * 15);
+     wide = sign5.getWidth() * 0.75;
+     tall = sign5.getHeight() * 0.75;
+     
+     ofSetColor(0);
+     ofRect(upperLeft.x - margin, upperLeft.y - margin, wide + margin * 2, tall + margin * 2);
+     ofSetColor(255);
+     sign5.draw(upperLeft, wide, tall);
+     */
     
     // Title card and copyright (and camera).
     ofPushMatrix();{
@@ -1970,14 +1970,14 @@ void testApp::fDrawTutorialSigns() {
         ofTranslate(myCam.getPosition().x - iScaler * 23, myCam.getPosition().y + iScaler * 12);
         
         /*
-        ofVec2f cameraPos = ofVec2f(iScaler * 44, -iScaler * 11);
-        
-        ofSetColor(0);
-        ofSetLineWidth(3);
-        ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.1, cameraPos.y, iScaler * 43.75, 0);
-        ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.25, cameraPos.y, iScaler * 44.5, iScaler * 2);
-        ofSetLineWidth(1);
-        */
+         ofVec2f cameraPos = ofVec2f(iScaler * 44, -iScaler * 11);
+         
+         ofSetColor(0);
+         ofSetLineWidth(3);
+         ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.1, cameraPos.y, iScaler * 43.75, 0);
+         ofLine(cameraPos.x + camera.getWidth() / 2.5 * 0.25, cameraPos.y, iScaler * 44.5, iScaler * 2);
+         ofSetLineWidth(1);
+         */
         
         ofSetColor(0);
         ofRect(-margin * 2, -iScaler * 2.75 - margin * 2, iScaler * 44 + margin * 2, iScaler * 3.25 + margin * 2);
@@ -1997,17 +1997,17 @@ void testApp::fDrawTutorialSigns() {
         }ofPopMatrix();
         
         /*ofPushMatrix();{
-            ofSetColor(0);
-            // Have to offset the translation for this calculation.
-            ofVec2f player = myPlayer.pos - ofVec2f(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
-            ofVec2f tmp = cameraPos - player;
-            float tmpAngle = atan2(tmp.y, tmp.x);
-            ofSetRectMode(OF_RECTMODE_CENTER);
-            ofTranslate(cameraPos);
-            ofRotate(ofRadToDeg(tmpAngle));
-            ofSetColor(255);
-            camera.draw(0, 0, camera.getWidth() / 2.5, camera.getHeight() / 2.5);
-        }ofPopMatrix();*/
+         ofSetColor(0);
+         // Have to offset the translation for this calculation.
+         ofVec2f player = myPlayer.pos - ofVec2f(myCam.getPosition().x - iScaler * 27, myCam.getPosition().y + iScaler * 12.5);
+         ofVec2f tmp = cameraPos - player;
+         float tmpAngle = atan2(tmp.y, tmp.x);
+         ofSetRectMode(OF_RECTMODE_CENTER);
+         ofTranslate(cameraPos);
+         ofRotate(ofRadToDeg(tmpAngle));
+         ofSetColor(255);
+         camera.draw(0, 0, camera.getWidth() / 2.5, camera.getHeight() / 2.5);
+         }ofPopMatrix();*/
     }ofPopMatrix();
     
     // Individual track cards.
@@ -2015,14 +2015,29 @@ void testApp::fDrawTutorialSigns() {
     // Jam 1
     ofSetColor(0);
     ofSetRectMode(OF_RECTMODE_CORNER);
-    ofRect(fMeasureLength * 2 - margin * 2, -iScaler - margin, iScaler * 10.3 + margin * 4, iScaler * 1.25 + margin * 2);
-    ofSetColor(255);
-    helveticaMed.drawString("''No Shaman, That''", fMeasureLength * 2, 0);
-    // Draw up arrow for Jam 1.
     if (myPlayer.currentStream == 7 && myPlayer.myShip.onStream) {
-        float myAlpha = abs(sin(ofGetElapsedTimef())) * 255;
+    float xPos = fMeasureLength * 11;
+        ofRect(xPos - margin * 4, -iScaler - margin * 2, iScaler * 19 + margin * 8, iScaler * 1.25 + margin * 4);
+        ofSetColor(255);
+        helveticaMed.drawString("Go to track: 'No Shaman Dancing!'", xPos, 0);
+    }
+    // Draw up arrow for Jam 1.
+    float myAlpha = abs(sin(ofGetElapsedTimef())) * 255;
+    ofSetColor(255, myAlpha);
+    upArrow.draw(fMeasureLength * 10.75, -iScaler * 7, upArrow.getWidth() * 0.5, upArrow.getHeight() * 0.5);
+    
+    // Jam 2
+    ofSetColor(0);
+    ofSetRectMode(OF_RECTMODE_CORNER);
+    if (myPlayer.currentStream == 9 && myPlayer.myShip.onStream) {
+        float xPos = fMeasureLength * 2;
+        ofRect(xPos - margin * 4, -iScaler - margin * 2, iScaler * 20 + margin * 8, iScaler * 1.25 + margin * 4);
+        ofSetColor(255);
+        helveticaMed.drawString("Go to track: 'Nostalgic for Adventure'", xPos, 0);
+        
+        // Draw up arrow for Jam 2.
         ofSetColor(255, myAlpha);
-        upArrow.draw(fMeasureLength * 2.5, -iScaler * 7, upArrow.getWidth() * 0.5, upArrow.getHeight() * 0.5);
+        upArrow.draw(fMeasureLength * 1.75, -iScaler * 7, upArrow.getWidth() * 0.5, upArrow.getHeight() * 0.5);
     }
 }
 
