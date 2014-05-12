@@ -260,7 +260,52 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         }
     } // End jam 1
     
-    else if (gameState == 5) { // Start jam 2
+    else if (gameState == 9) { // Start new jam 2
+        
+        iNumMeasures = 12;
+        
+        m1Bass = iScaler * 20 - fMeasureLength;
+        m1Treble = m1Bass + iScaler * 4;
+        spacer = fMeasureLength / 8;
+        
+        // Treble
+        myStream = 1;
+        for (int i = 1; i < iNumMeasures; i++) {
+            addObject("g4#", (fMeasureLength * i) + m1Treble, myStream, -1);
+            addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+            addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
+            addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
+            addObject("g4#", (fMeasureLength * i) + m1Treble + iScaler * 24.4, myStream, -1);
+        }
+        
+        // Bass
+        myStream = 0;
+        for (int i = 1; i < iNumMeasures + 1; i++) {
+            if (i == 1 || i == 2 || i == 5 || i == 6 || i == 9 || i == 10) {
+                addObject("g1#", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("g2#", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+                addObject("g1#", (fMeasureLength * i) + m1Bass + spacer * 4, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer * 5, myStream, -1);
+                addObject("g2#", (fMeasureLength * i) + m1Bass + spacer * 6, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer * 7, myStream, -1);
+            }
+            if (i == 3 || i == 4 || i == 7 || i == 8 || i == 11 || i == 12) {
+                addObject("d1#", (fMeasureLength * i) + m1Bass, myStream, -1);
+                addObject("a1#", (fMeasureLength * i) + m1Bass + spacer, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer * 2, myStream, -1);
+                addObject("a1#", (fMeasureLength * i) + m1Bass + spacer * 3, myStream, -1);
+                addObject("d1#", (fMeasureLength * i) + m1Bass + spacer * 4, myStream, -1);
+                addObject("a1#", (fMeasureLength * i) + m1Bass + spacer * 5, myStream, -1);
+                addObject("d2#", (fMeasureLength * i) + m1Bass + spacer * 6, myStream, -1);
+                addObject("a1#", (fMeasureLength * i) + m1Bass + spacer * 7, myStream, -1);
+            }
+        }
+        
+    } // End new jam 2
+    
+    else if (gameState == 5) { // Start old jam 2
         
         spacer = fMeasureLength / 4;
         m1Bass = iScaler * 20 - fMeasureLength;
@@ -312,7 +357,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         
         
         iNumMeasures = 12;
-    } // End jam 2.
+    } // End old jam 2.
     
     else if (gameState == 8) { // Start tutorial
         
@@ -328,7 +373,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             // treble
             
             // go to jam 1
-            myStream = 7;
+            myStream = 9;
             if (i == 2) {
                 addObject("g4#", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
@@ -341,6 +386,22 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("g4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 2, myStream, -1);
                 addObject("a4#", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 3, myStream, -1);
                 addObject("b4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 4, myStream, -1);*/
+            }
+            
+            // go to jam 2
+            myStream = 7;
+            if (i == 4) {
+                addObject("g4#", (fMeasureLength * i) + m1Treble, myStream, -1);
+                addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
+                addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
+                addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 16, myStream, -1);
+                addObject("g4#", (fMeasureLength * i) + m1Treble + iScaler * 24.4, myStream, -1);
+                
+                /*float nuSpacer = iScaler * 3;
+                 addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer, myStream, -1);
+                 addObject("g4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 2, myStream, -1);
+                 addObject("a4#", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 3, myStream, -1);
+                 addObject("b4", (fMeasureLength * i) + m1Treble + iScaler * 24.4 + nuSpacer * 4, myStream, -1);*/
             }
             
             myStream = 1;

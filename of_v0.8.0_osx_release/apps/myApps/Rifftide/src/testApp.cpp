@@ -448,7 +448,7 @@ void testApp::fLoadPrototype() {
         
     } else if (gameState >= 7) {
         // Surfin' USA
-        bCamZoomedIn = true; // find me
+        bCamZoomedIn = false; // find me
         
         if (gameState != 8) {
             myPlayer.vel.y = -iScaler * 0.75;
