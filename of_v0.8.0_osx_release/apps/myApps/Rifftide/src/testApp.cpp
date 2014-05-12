@@ -1898,7 +1898,7 @@ void testApp::fDrawTutorialSigns() {
     
     // 1
     
-    upperLeft = ofVec2f(fMeasureLength, myCam.getPosition().y - iScaler * 10);
+    upperLeft = ofVec2f(fMeasureLength * 4, myCam.getPosition().y - iScaler * 10);
     wide = sign2.getWidth() * 0.75;
     tall = sign2.getHeight() * 0.75;
     
@@ -1909,7 +1909,7 @@ void testApp::fDrawTutorialSigns() {
     
     // 2a
     
-    upperLeft = ofVec2f(fMeasureLength * 3, myCam.getPosition().y - iScaler * 10);
+    upperLeft = ofVec2f(fMeasureLength * 7, myCam.getPosition().y - iScaler * 10);
     wide = sign1a.getWidth() * 0.75;
     tall = sign1a.getHeight() * 0.75;
     
@@ -1920,7 +1920,7 @@ void testApp::fDrawTutorialSigns() {
     
     // 2b
     
-    upperLeft = ofVec2f(fMeasureLength * 6, myCam.getPosition().y - iScaler * 10);
+    upperLeft = ofVec2f(fMeasureLength * 9, myCam.getPosition().y - iScaler * 10);
     wide = sign1b.getWidth() * 0.75;
     tall = sign1b.getHeight() * 0.75;
     

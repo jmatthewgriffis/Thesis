@@ -501,7 +501,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
         iNumMeasures = 12;
     } // End old jam 2.
     
-    else if (gameState == 8) { // Start tutorial
+    else if (gameState == 8) { // Start tutorial / level select
         
         m1Bass = iScaler * 20 - fMeasureLength;
         m1Treble = m1Bass + iScaler * 4;
@@ -515,8 +515,8 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             // treble
             
             // go to jam 1
-            myStream = 9;
-            if (i == 2) {
+            myStream = 7;
+            if (i == 11) {
                 addObject("g4#", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
                 addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
@@ -531,8 +531,8 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             }
             
             // go to jam 2
-            myStream = 7;
-            if (i == 4) {
+            myStream = 9;
+            if (i == 2) {
                 addObject("g4#", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("f4", (fMeasureLength * i) + m1Treble + iScaler * 4, myStream, -1);
                 addObject("d4#", (fMeasureLength * i) + m1Treble + iScaler * 12, myStream, -1);
@@ -547,12 +547,19 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
             }
             
             myStream = 1;
-            if (i <= 4) {
+            if (/*i <= 4*/ i != 6) {
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
-            } else if (i == 5 || i == 6) {
+            }
+            if (i == 6) {
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+            }
+            /*else if (i == 5 || i == 6) {
                 addObject("d3", (fMeasureLength * i) + m1Treble, myStream, -1);
                 addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
                 addObject("f3", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
@@ -597,7 +604,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
-            }
+            }*/
             
             // bass
             myStream = 0;
