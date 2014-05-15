@@ -496,7 +496,7 @@ void testApp::fLoadPrototype() {
                     if (myPlayer.finishedJam) {
                         myPlayer.pos.x = fMeasureLength * 11.5;
                     } else {
-                        myPlayer.pos.x = fMeasureLength * 9.5;
+                        myPlayer.pos.x = fMeasureLength * 9.75;
                     }
                 }
                 if (myPlayer.currentJam == 9) { // Find me
@@ -1977,7 +1977,7 @@ void testApp::fDrawTutorialSigns() {
     
     // 2b
     
-    upperLeft = ofVec2f(fMeasureLength * 9, myCam.getPosition().y - iScaler * 10);
+    upperLeft = ofVec2f(fMeasureLength * 8, myCam.getPosition().y - iScaler * 10);
     wide = sign1b.getWidth() * 0.75;
     tall = sign1b.getHeight() * 0.75;
     
@@ -2072,12 +2072,12 @@ void testApp::fDrawTutorialSigns() {
     // Jam 1
     ofSetColor(0);
     ofSetRectMode(OF_RECTMODE_CORNER);
-    if (myPlayer.currentStream == 7 && myPlayer.myShip.onStream) {
+    //if (myPlayer.currentStream == 7 && myPlayer.myShip.onStream) {
     float xPos = fMeasureLength * 11;
         ofRect(xPos - margin * 4, -iScaler - margin * 2, iScaler * 19 + margin * 8, iScaler * 1.25 + margin * 4);
         ofSetColor(255);
         helveticaMed.drawString("Go to track: 'No Shaman Dancing!'", xPos, 0);
-    }
+    //}
     // Draw up arrow for Jam 1.
     float myAlpha = abs(sin(ofGetElapsedTimef())) * 255;
     ofSetColor(255, myAlpha);
@@ -2086,8 +2086,8 @@ void testApp::fDrawTutorialSigns() {
     // Jam 2
     ofSetColor(0);
     ofSetRectMode(OF_RECTMODE_CORNER);
-    if (myPlayer.currentStream == 9 && myPlayer.myShip.onStream) {
-        float xPos = fMeasureLength * 2;
+    //if (myPlayer.currentStream == 9 && myPlayer.myShip.onStream) {
+        /*float*/ xPos = fMeasureLength * 2;
         ofRect(xPos - margin * 4, -iScaler - margin * 2, iScaler * 20 + margin * 8, iScaler * 1.25 + margin * 4);
         ofSetColor(255);
         helveticaMed.drawString("Go to track: 'Nostalgic for Adventure'", xPos, 0);
@@ -2095,7 +2095,7 @@ void testApp::fDrawTutorialSigns() {
         // Draw up arrow for Jam 2.
         ofSetColor(255, myAlpha);
         upArrow.draw(fMeasureLength * 1.75, -iScaler * 7, upArrow.getWidth() * 0.5, upArrow.getHeight() * 0.5);
-    }
+    //}
 }
 
 //--------------------------------------------------------------

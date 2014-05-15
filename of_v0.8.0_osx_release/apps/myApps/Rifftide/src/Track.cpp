@@ -577,8 +577,8 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
             }
             if (i == 6) {
-                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
-                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 0.85, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 1.40, myStream, -1);
                 addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
                 addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 2.5, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
@@ -591,12 +591,14 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
                 addObject("b2", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
                 addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 3.5, myStream, -1);
+                addObject("c3_middle", (fMeasureLength * i) + m1Treble + spacer * 4, myStream, -1);
             }
             if (i == 8) {
                 addObject("e3", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
                 addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
                 addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 1.5, myStream, -1);
                 addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
+                addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
             }
             if (i == 9) {
                 addObject("d3#", (fMeasureLength * i) + m1Treble, myStream, -1);
@@ -612,6 +614,7 @@ vector< string > Track::setup( int _iScaler, float _fMeasureLength, int _gameSta
                 addObject("g3", (fMeasureLength * i) + m1Treble + spacer * 2, myStream, -1);
                 addObject("f3", (fMeasureLength * i) + m1Treble + spacer * 2.5, myStream, -1);
                 addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 3, myStream, -1);
+                addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 4, myStream, -1);
             } if (i == 11 || i == 12) {
                 addObject("d3#", (fMeasureLength * i) + m1Treble + spacer * 0.5, myStream, -1);
                 addObject("d3", (fMeasureLength * i) + m1Treble + spacer * 1, myStream, -1);
