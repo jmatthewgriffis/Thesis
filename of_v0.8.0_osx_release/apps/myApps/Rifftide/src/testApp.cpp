@@ -9,16 +9,6 @@ void testApp::setup(){
     cleanup();
     staffPosList.clear();
     
-    // Load images.
-    sign1a.loadImage("images/signs/1_tilt_a.png");
-    sign1b.loadImage("images/signs/1_tilt_b.png");
-    sign2.loadImage("images/signs/2_jump.png");
-    //sign3.loadImage("images/signs/3_fall.png");
-    //sign4.loadImage("images/signs/4_boost.png");
-    //sign5.loadImage("images/signs/5_grav.png");
-    //camera.loadImage("images/signs/camera.png");
-    upArrow.loadImage("images/signs/up_arrow.png");
-    
     // Maintenance
     frameRate = 60;
     ofSetFrameRate( frameRate );
@@ -43,6 +33,22 @@ void testApp::setup(){
             bUsingController = false; // Matt: I added this too.
         }
     } // End ofxGamepad stuff
+    
+    // Load images.
+    if (bUsingController) {
+        sign1a.loadImage("images/signs/1_tilt_xbox_a.png");
+        sign1b.loadImage("images/signs/1_tilt_xbox_b.png");
+        sign2.loadImage("images/signs/2_jump_xbox.png");
+    } else {
+        sign1a.loadImage("images/signs/1_tilt_a.png");
+        sign1b.loadImage("images/signs/1_tilt_b.png");
+        sign2.loadImage("images/signs/2_jump.png");
+    }
+    //sign3.loadImage("images/signs/3_fall.png");
+    //sign4.loadImage("images/signs/4_boost.png");
+    //sign5.loadImage("images/signs/5_grav.png");
+    //camera.loadImage("images/signs/camera.png");
+    upArrow.loadImage("images/signs/up_arrow.png");
     
     { /*
        Precision placement is key in this game, so that the music sounds right. However, there's no way to know what size screen will be used. So everything is sized based on the screen, via a scaler factor calculated using this wizardry:
