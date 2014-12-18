@@ -686,7 +686,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
-					"/Users/jmatthewgriffis/Documents/GitHub\\ repos/Thesis/of_v0.8.0_osx_release/apps/myApps/Prototype_6_controller_and_new_mechanic/addons/ofxGamepad/libs/wgois/lib/osx",
+					addons/ofxGamepad/libs/wgois/lib/osx/,
 				);
 				PRODUCT_NAME = Prototype_6_controller_and_clean_codeDebug;
 				SDKROOT = macosx;
@@ -774,7 +774,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_49)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
-					"/Users/jmatthewgriffis/Documents/GitHub\\ repos/Thesis/of_v0.8.0_osx_release/apps/myApps/Prototype_6_controller_and_new_mechanic/addons/ofxGamepad/libs/wgois/lib/osx",
+					addons/ofxGamepad/libs/wgois/lib/osx/,
 				);
 				PRODUCT_NAME = Prototype_6_controller_and_clean_code;
 				SDKROOT = macosx;
